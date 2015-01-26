@@ -32,7 +32,7 @@ ini_set("display_errors", "off");
 chdir(__DIR__ . "/../../../../");
 
 // Include the composer autoloader
-include(__DIR__ . "/vendor/autoload.php");
+include("/vendor/autoload.php");
 
 // Initially we don't have an auto loader as this is handled by the modules. We need to load this first
 // module 'core' so that we have an auto loader for subsequent modules. There are also some other classes
