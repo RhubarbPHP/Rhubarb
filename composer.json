@@ -1,0 +1,7 @@
+{
+	"name": "phosphenephp/phosphene",
+	"description": "A modern enterprise ready PHP framework",
+	"keywords": [ "php", "framework" ],
+	"homepage": "http://www.phosphenephp.com/",
+	"license": "Apache-2.0"
+}
