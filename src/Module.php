@@ -189,10 +189,6 @@ abstract class Module
             unset(self::$modules[$moduleClassName]);
         }
 
-        if ($module->namespace == "") {
-            throw new Exceptions\ImplementationException("The module " . get_class($module) . ' does not supply the $namespace property');
-        }
-
         self::$modules[$moduleClassName] = $module;
     }
 
