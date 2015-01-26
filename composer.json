@@ -3,5 +3,11 @@
 	"description": "A modern enterprise ready PHP framework",
 	"keywords": [ "php", "framework" ],
 	"homepage": "http://www.rhubarbphp.com/",
-	"license": "Apache-2.0"
+	"license": "Apache-2.0",
+    "autoload": {
+		"psr-4": {
+			"Rhubarb/Crown": "src/",
+		    "Rhubarb/Crown/Tests": "tests/"
+		}
+	}
 }

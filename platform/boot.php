@@ -29,7 +29,10 @@ ini_set("display_errors", "off");
  */
 
 // Change the working directory to the top level folder.
-chdir(__DIR__ . "/../../../");
+chdir(__DIR__ . "/../../../../");
+
+// Include the composer autoloader
+include(__DIR__ . "/vendor/autoload.php");
 
 // Initially we don't have an auto loader as this is handled by the modules. We need to load this first
 // module 'core' so that we have an auto loader for subsequent modules. There are also some other classes
@@ -50,7 +53,7 @@ $appName = "app";
 // Is there an app environment setting? This allows the same project to serve multiple solutions
 // with one code base (e.g. tenant and landlord together). This is very rare in production systems, however
 // for the initial project phase this can be very useful.
-if ($envAppSetting = getenv("core_app")) {
+if ($envAppSetting = getenv("rhubarb_app")) {
     $appName .= "-" . $envAppSetting;
 }
 
