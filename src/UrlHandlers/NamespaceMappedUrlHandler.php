@@ -99,11 +99,11 @@ class NamespaceMappedUrlHandler extends UrlHandler
             return $response;
         }
 
-        if (stripos($url, $this->_url) !== 0) {
+        if (stripos($url, $this->url) !== 0) {
             return false;
         }
 
-        $relevantUrl = preg_replace("|^" . $this->_url . "|", "", $url);
+        $relevantUrl = preg_replace("|^" . $this->url . "|", "", $url);
 
         // Make sure the url we consider ends in a slash. Later we'll redirect the user
         // to this URL if we find a target (to make sure relative urls work properly in all

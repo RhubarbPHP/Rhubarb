@@ -48,7 +48,7 @@ class UrlCapturedDataUrlHandler extends ClassMappedUrlHandler
     {
         $uri = $currentUrlFragment;
 
-        if (preg_match("|^" . rtrim($this->_url, "/") . "/([^/]+)/|", $uri, $match)) {
+        if (preg_match("|^" . rtrim($this->url, "/") . "/([^/]+)/|", $uri, $match)) {
             $this->capturedData = $match[1];
             return $match[0];
         }

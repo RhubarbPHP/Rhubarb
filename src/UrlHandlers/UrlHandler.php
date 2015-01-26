@@ -19,15 +19,15 @@
 namespace Rhubarb\Crown\UrlHandlers;
 
 use Rhubarb\Crown\Context;
-use Rhubarb\Crown\Exceptions\CoreException;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
-use Rhubarb\Crown\IGeneratesResponse;
+use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\Request;
+use Rhubarb\Crown\Response\GeneratesResponse;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
 
-require_once __DIR__ . "/../IGeneratesResponse.class.php";
+require_once __DIR__ . "/../Response/GeneratesResponse.php";
 
 /**
  * The base class for URL Handlers.
@@ -39,21 +39,21 @@ require_once __DIR__ . "/../IGeneratesResponse.class.php";
  * We return false rather than an exception for performance reasons.
  *
  */
-abstract class UrlHandler implements IGeneratesResponse
+abstract class UrlHandler implements GeneratesResponse
 {
     /**
      * The URL stub which will allow this handler to consider a response
      *
      * @var string
      */
-    protected $_url = "";
+    protected $url = "";
 
     /**
      * The URL which the handler has decided to process
      *
      * @var string
      */
-    protected $_matchingUrl = "";
+    protected $matchingUrl = "";
 
     /**
      * The priority of this handler against it's siblings.
@@ -62,14 +62,14 @@ abstract class UrlHandler implements IGeneratesResponse
      *
      * @var int
      */
-    private $_priority = 0;
+    private $priority = 0;
 
     /**
      * If no priority is set the creation order is the next most important index
      *
      * @var int
      */
-    private $_creationOrder = 0;
+    private $creationOrder = 0;
 
     /**
      * Giving a handler a name will let it replace a previous handler completely.
@@ -79,57 +79,57 @@ abstract class UrlHandler implements IGeneratesResponse
      *
      * @var string
      */
-    private $_name = "";
+    private $name = "";
 
     /**
      * A reference to this handlers parent handler
      *
      * @var UrlHandler
      */
-    private $_parentHandler;
+    private $parentHandler;
 
     /**
      * A counter to enable population of $_creationOrder
      *
      * @var int
      */
-    private static $_creationOrderCount = 0;
+    private static $creationOrderCount = 0;
 
     /**
      * A collection of url handlers that will be given a chance to process a response before this one (the parent).
      *
      * @var UrlHandler[]
      */
-    protected $_childUrlHandlers = [];
+    protected $childUrlHandlers = [];
 
     /**
      * Contains the portion of the URL up to and including the fragment that caused this handler to match.
      * @var string
      */
-    protected $_handledUrl = "";
+    protected $handledUrl = "";
 
     /**
      * @var UrlHandler A reference to the currently executing URL Handler.
      */
-    protected static $_executingUrlHandler;
+    protected static $executingUrlHandler;
 
     function __construct($childUrlHandlers = [])
     {
-        self::$_creationOrderCount++;
+        self::$creationOrderCount++;
 
-        $this->_creationOrder = self::$_creationOrderCount;
+        $this->creationOrder = self::$creationOrderCount;
 
-        $this->AddChildUrlHandlers($childUrlHandlers);
+        $this->addChildUrlHandlers($childUrlHandlers);
     }
 
-    public static function SetExecutingUrlHandler(UrlHandler $handler)
+    public static function setExecutingUrlHandler(UrlHandler $handler)
     {
-        self::$_executingUrlHandler = $handler;
+        self::$executingUrlHandler = $handler;
     }
 
-    public static function GetExecutingUrlHandler()
+    public static function getExecutingUrlHandler()
     {
-        return self::$_executingUrlHandler;
+        return self::$executingUrlHandler;
     }
 
     /**
@@ -140,14 +140,14 @@ abstract class UrlHandler implements IGeneratesResponse
      *
      * @param $name
      */
-    public function SetName($name)
+    public function setName($name)
     {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
-    public function GetName()
+    public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -158,24 +158,24 @@ abstract class UrlHandler implements IGeneratesResponse
      *
      * @param $url
      */
-    public function SetUrl($url)
+    public function setUrl($url)
     {
-        $this->_url = $url;
+        $this->url = $url;
     }
 
-    public function GetUrl()
+    public function getUrl()
     {
-        return $this->_url;
+        return $this->url;
     }
 
-    public function GetParentHandler()
+    public function getParentHandler()
     {
-        return $this->_parentHandler;
+        return $this->parentHandler;
     }
 
-    protected function SetParentHandler($parentHandler)
+    protected function setParentHandler($parentHandler)
     {
-        $this->_parentHandler = $parentHandler;
+        $this->parentHandler = $parentHandler;
     }
 
     /**
@@ -184,31 +184,31 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param UrlHandler[] $childHandlers
      * @return $this
      */
-    private function AddChildUrlHandlers($childHandlers)
+    private function addChildUrlHandlers($childHandlers)
     {
         foreach ($childHandlers as $childUrl => $childHandler) {
-            $childHandler->SetUrl($childUrl);
-            $childHandler->SetParentHandler($this);
+            $childHandler->setUrl($childUrl);
+            $childHandler->setParentHandler($this);
 
-            $this->_childUrlHandlers[] = $childHandler;
+            $this->childUrlHandlers[] = $childHandler;
         }
 
         return $this;
     }
 
-    public function SetPriority($priority)
+    public function setPriority($priority)
     {
-        $this->_priority = $priority;
+        $this->priority = $priority;
     }
 
-    public function GetPriority()
+    public function getPriority()
     {
-        return $this->_priority;
+        return $this->priority;
     }
 
-    public function GetCreationOrder()
+    public function getCreationOrder()
     {
-        return $this->_creationOrder;
+        return $this->creationOrder;
     }
 
     /**
@@ -217,7 +217,7 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param mixed $request
      * @return bool
      */
-    protected abstract function GenerateResponseForRequest($request = null);
+    protected abstract function generateResponseForRequest($request = null);
 
     /**
      * Takes a URL fragment understood by a child handler and adds back the parents URL fragment to form a complete URL.
@@ -225,20 +225,20 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param $childUrlFragment
      * @return string
      */
-    protected function BuildCompleteChildUrl($childUrlFragment)
+    protected function buildCompleteChildUrl($childUrlFragment)
     {
-        if ($this->_parentHandler !== null) {
-            return $this->_parentHandler->_matchingUrl . $childUrlFragment;
+        if ($this->parentHandler !== null) {
+            return $this->parentHandler->matchingUrl . $childUrlFragment;
         } else {
             return $childUrlFragment;
         }
     }
 
-    protected function GetAbsoluteHandledUrl()
+    protected function getAbsoluteHandledUrl()
     {
-        $request = Context::CurrentRequest();
+        $request = Context::currentRequest();
 
-        return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->_handledUrl;
+        return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
     }
 
     /**
@@ -250,48 +250,48 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param bool|string $currentUrlFragment
      * @return bool
      */
-    public function GenerateResponse($request = null, $currentUrlFragment = false)
+    public function generateResponse($request = null, $currentUrlFragment = false)
     {
         if ($currentUrlFragment === false) {
             $currentUrlFragment = $request->UrlPath;
         }
 
-        if (!$this->MatchesRequest($request, $currentUrlFragment)) {
+        if (!$this->matchesRequest($request, $currentUrlFragment)) {
             return false;
         }
 
         $context = new Context();
         $context->UrlHandler = $this;
 
-        $this->_matchingUrl = $this->GetMatchingUrlFragment($request, $currentUrlFragment);
+        $this->matchingUrl = $this->getMatchingUrlFragment($request, $currentUrlFragment);
 
-        if ($this->_parentHandler) {
-            $this->_handledUrl = $this->_parentHandler->_handledUrl . $this->_matchingUrl;
+        if ($this->parentHandler) {
+            $this->handledUrl = $this->parentHandler->handledUrl . $this->matchingUrl;
         } else {
-            $this->_handledUrl = $this->_matchingUrl;
+            $this->handledUrl = $this->matchingUrl;
         }
 
-        $childUrlFragment = substr($currentUrlFragment, strlen($this->_matchingUrl));
+        $childUrlFragment = substr($currentUrlFragment, strlen($this->matchingUrl));
 
-        foreach ($this->_childUrlHandlers as $childHandler) {
-            $response = $childHandler->GenerateResponse($request, $childUrlFragment);
+        foreach ($this->childUrlHandlers as $childHandler) {
+            $response = $childHandler->generateResponse($request, $childUrlFragment);
 
             if ($response !== false) {
                 return $response;
             }
         }
 
-        UrlHandler::SetExecutingUrlHandler($this);
+        UrlHandler::setExecutingUrlHandler($this);
 
-        Log::Debug(function () {
+        Log::debug(function () {
             return "Handler " . get_class($this) . " selected to generate response";
         }, "ROUTER");
 
-        Log::Indent();
+        Log::indent();
 
-        $response = $this->GenerateResponseForRequest($request, $currentUrlFragment);
+        $response = $this->generateResponseForRequest($request, $currentUrlFragment);
 
-        Log::Debug(function () use ($response) {
+        Log::debug(function () use ($response) {
             if ($response !== false) {
                 return "Response generated by handler";
             }
@@ -299,15 +299,15 @@ abstract class UrlHandler implements IGeneratesResponse
             return "Handler deferred generation";
         }, "ROUTER");
 
-        Log::Outdent();
+        Log::outdent();
 
         return $response;
     }
 
-    public function GenerateResponseForException(CoreException $er)
+    public function generateResponseForException(RhubarbException $er)
     {
         $response = new HtmlResponse();
-        $response->SetContent($er->GetPublicMessage());
+        $response->setContent($er->getPublicMessage());
 
         return $response;
     }
@@ -319,7 +319,7 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param string $currentUrlFragment
      * @return bool
      */
-    protected function GetMatchingUrlFragment(Request $request, $currentUrlFragment = "")
+    protected function getMatchingUrlFragment(Request $request, $currentUrlFragment = "")
     {
         if ($currentUrlFragment[strlen($currentUrlFragment) - 1] != "/") {
             $currentUrlFragment .= "/";
@@ -327,12 +327,12 @@ abstract class UrlHandler implements IGeneratesResponse
 
         // Some URL Handlers don't have a url at all in which case we assume they apply
         // before even considering the url.
-        if ($this->_url == "") {
+        if ($this->url == "") {
             return "/";
         }
 
-        if (stripos($currentUrlFragment, $this->_url) === 0) {
-            return $this->_url;
+        if (stripos($currentUrlFragment, $this->url) === 0) {
+            return $this->url;
         }
 
         return false;
@@ -348,15 +348,15 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param string $currentUrlFragment
      * @return bool
      */
-    private function MatchesRequest(Request $request, $currentUrlFragment = "")
+    private function matchesRequest(Request $request, $currentUrlFragment = "")
     {
         // Some URL Handlers don't have a url at all in which case we assume they apply
         // before even considering the url.
-        if ($this->_url == "") {
+        if ($this->url == "") {
             return true;
         }
 
-        return (stripos($currentUrlFragment, $this->_url) === 0);
+        return (stripos($currentUrlFragment, $this->url) === 0);
     }
 
     /**
@@ -365,7 +365,7 @@ abstract class UrlHandler implements IGeneratesResponse
      * @param $url The URL to redirect to.
      * @throws \Rhubarb\Crown\Exceptions\ForceResponseException
      */
-    public static function RedirectToUrl($url)
+    public static function redirectToUrl($url)
     {
         throw new ForceResponseException(new RedirectResponse($url));
     }
