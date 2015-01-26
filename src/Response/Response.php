@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Response;
 
-require_once __DIR__ . "/../IGeneratesResponse.class.php";
+require_once __DIR__ . "/../Response/GeneratesResponse.php";
 
 /**
  * Encapsulates the response to be sent to the browser.
@@ -41,7 +41,7 @@ class Response
      * in complex rendering stacks where a response filter needs to know who generated the output to make an
      * appropriate response.
      *
-     * @var \Rhubarb\Crown\IGeneratesResponse
+     * @var \Rhubarb\Crown\Response\GeneratesResponse
      */
     protected $generator;
 
@@ -55,7 +55,7 @@ class Response
     /**
      * Get's a reference to the object that generated this response.
      *
-     * @return \Rhubarb\Crown\IGeneratesResponse
+     * @return \Rhubarb\Crown\Response\GeneratesResponse
      */
     public function getGenerator()
     {
