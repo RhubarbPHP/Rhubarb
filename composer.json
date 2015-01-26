@@ -1,7 +1,7 @@
 {
-	"name": "phosphenephp/phosphene",
+	"name": "rhubarbphp/rhubarb",
 	"description": "A modern enterprise ready PHP framework",
 	"keywords": [ "php", "framework" ],
-	"homepage": "http://www.phosphenephp.com/",
+	"homepage": "http://www.rhubarbphp.com/",
 	"license": "Apache-2.0"
 }
