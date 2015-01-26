@@ -20,8 +20,8 @@ namespace Rhubarb\Crown;
 
 require_once __DIR__."/Settings.php";
 
-use \Gcd\Core\Request;
-use Gcd\Core\UrlHandlers\UrlHandler;
+use \Rhubarb\Crown\Request;
+use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
  * A class providing the rest of the platform some contextual information
@@ -40,11 +40,11 @@ use Gcd\Core\UrlHandlers\UrlHandler;
  */
 class Context extends Settings
 {
-	protected function InitialiseDefaultValues()
+	protected function initialiseDefaultValues()
 	{
 		global $unitTesting;
 
-		parent::InitialiseDefaultValues();
+		parent::initialiseDefaultValues();
 
 		// $unitTesting is set in phpunit-bootstrap.php
 		$this->UnitTesting = ( isset( $unitTesting ) && $unitTesting ) ? true : false;
@@ -52,7 +52,7 @@ class Context extends Settings
 		$this->Live = false;
 	}
 
-	public function GetIsAjaxRequest()
+	public function getIsAjaxRequest()
 	{
 		if ( isset( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) == 'xmlhttprequest')
 		{
@@ -67,7 +67,7 @@ class Context extends Settings
 	 *
 	 * @return bool
 	 */
-	public function GetIsCliInvocation()
+	public function getIsCliInvocation()
 	{
 		if ( $this->SimulateNonCli )
 		{
@@ -80,9 +80,9 @@ class Context extends Settings
 	/**
 	 * A static accessor for the Request property
 	 *
-	 * @return \Gcd\Core\Request\Request The current Request
+	 * @return \Rhubarb\Crown\Request\Request The current Request
 	 */
-	public static function CurrentRequest()
+	public static function currentRequest()
 	{
 		$contextInstance = new static();
 
@@ -92,9 +92,9 @@ class Context extends Settings
 	/**
 	 * Lazily initialise and then return the current Request.
 	 *
-	 * @return \Gcd\Core\Request\Request
+	 * @return \Rhubarb\Crown\Request\Request
 	 */
-	public function GetRequest()
+	public function getRequest()
 	{
 		if ( !isset( $this->modelData[ 'Request'] ) )
 		{
@@ -131,7 +131,7 @@ class Context extends Settings
 	 *
 	 * @return bool|mixed|string
 	 */
-	public function GetRequestBody()
+	public function getRequestBody()
 	{
 		if ( $this->UnitTesting )
 		{
