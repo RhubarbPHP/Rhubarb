@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown;
 
-require_once __DIR__."/Modelling/ModelState.class.php";
+require_once __DIR__ . "/Modelling/ModelState.php";
 
 use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Modelling\ModelState;

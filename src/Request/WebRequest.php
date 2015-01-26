@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Request;
 
-require_once __DIR__ . "/Request.class.php";
+require_once __DIR__ . "/Request.php";
 
 use Rhubarb\Crown;
 

@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Response;
 
-require_once __DIR__ . "/Response.class.php";
+require_once __DIR__ . "/Response.php";
 
 class FileResponse extends Response
 {

@@ -18,35 +18,20 @@
 
 namespace Rhubarb\Crown\Response;
 
-use Rhubarb\Crown\Modelling\ModelState;
-
-require_once __DIR__ . "/Response.class.php";
+require_once __DIR__ . "/Response.php";
 
 /**
- * Encapsulates a JSON response.
+ * Encapsulates an XML response to be sent to the browser.
  *
- * The object or structure to encode should be set as the content of the request.
- *
+ * @author acuthbert
+ * @copyright GCD Technologies 2012
  */
-class JsonResponse extends Response
+class XmlResponse extends Response
 {
     public function __construct($generator = null)
     {
         parent::__construct($generator);
 
-        $this->setHeader('Content-Type', 'application/json');
-    }
-
-    public function formatContent()
-    {
-        $object = $this->getContent();
-
-        if (is_array($object) || $object instanceof ModelState || $object instanceof \stdClass) {
-            $jsonString = json_encode($object);
-
-            return $jsonString;
-        }
-
-        return false;
+        $this->setHeader('Content-Type', 'text/xml');
     }
 }

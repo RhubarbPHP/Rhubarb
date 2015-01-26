@@ -18,20 +18,22 @@
 
 namespace Rhubarb\Crown\Response;
 
-require_once __DIR__ . "/Response.class.php";
+require_once __DIR__ . "/Response.php";
 
 /**
- * Encapsulates an XML response to be sent to the browser.
+ * Encapsulates an HTML response to be sent to the browser.
  *
- * @author acuthbert
+ * Doesn't do anything special yet, but we might want it to.
+ *
+ * @author marramgrass
  * @copyright GCD Technologies 2012
  */
-class XmlResponse extends Response
+class HtmlResponse extends Response
 {
     public function __construct($generator = null)
     {
         parent::__construct($generator);
 
-        $this->setHeader('Content-Type', 'text/xml');
+        $this->setHeader('Content-Type', 'text/html');
     }
 }
