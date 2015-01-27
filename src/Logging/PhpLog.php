@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Logging;
 
+require_once __DIR__."/IndentedMessageLog.php";
+
 /**
  * A log implementation which outputs to the standard php error log
  */

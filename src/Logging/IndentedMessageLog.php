@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Logging;
 
+require_once __DIR__."/Log.php";
+
 /**
  * Provides additional abstraction of logging to handle indentation by adding
  * tab characters to the message.
