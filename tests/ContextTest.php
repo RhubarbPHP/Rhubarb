@@ -20,11 +20,6 @@ namespace Rhubarb\Crown\Tests;
 
 use Rhubarb\Crown\Context;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
 class ContextTest extends RhubarbTestCase
 {
 	protected $_context = null;
