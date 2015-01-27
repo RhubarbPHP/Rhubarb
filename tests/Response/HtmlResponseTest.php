@@ -6,7 +6,7 @@ namespace Gcd\Tests;
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class HtmlResponseTest extends \Rhubarb\Crown\UnitTesting\CoreTestCase
+class HtmlResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 {
     protected $_response = null;
 

@@ -3,9 +3,9 @@
 namespace Rhubarb\Crown\Response;
 
 use Rhubarb\Crown\Modelling\UnitTesting\User;
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class JsonResponseTest extends CoreTestCase
+class JsonResponseTest extends RhubarbTestCase
 {
     public function testResponseIsJsonEncoded()
     {

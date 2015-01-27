@@ -1,15 +1,15 @@
 <?php
 
-namespace Gcd\Core\Sessions\UnitTesting;
+namespace Rhubarb\Crown\Sessions\UnitTesting;
 
-use Gcd\Core\Sessions\SessionProviders\SessionProvider;
+use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class UnitTestingSessionProvider extends \Gcd\Core\Sessions\SessionProviders\PhpSessionProvider
+class UnitTestingSessionProvider extends \Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider
 {
 
 }

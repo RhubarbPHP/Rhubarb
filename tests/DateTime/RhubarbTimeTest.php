@@ -3,10 +3,10 @@
 
 namespace Rhubarb\Crown\DateTime;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
 
-class CoreTimeTest extends CoreTestCase
+class CoreTimeTest extends RhubarbTestCase
 {
 	public function testTimeAlwaysHasSameDay()
 	{

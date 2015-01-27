@@ -8,7 +8,7 @@ namespace Gcd\Tests;
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class EncryptionProviderTest extends \Gcd\Core\UnitTesting\CoreTestCase
+class EncryptionProviderTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 {
 
 	public function testDefaultEncryption()

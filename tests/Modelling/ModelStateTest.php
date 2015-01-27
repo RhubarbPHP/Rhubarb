@@ -1,16 +1,16 @@
 <?php
 
 namespace Gcd\Tests;
-use Gcd\Core\Modelling\ModelState;
-use Gcd\Core\Modelling\UnitTesting\Example;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\Modelling\ModelState;
+use Rhubarb\Crown\Modelling\UnitTesting\Example;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class ModelStateTest extends CoreTestCase
+class ModelStateTest extends RhubarbTestCase
 {
 	public function testUnsetValueReturnsNull()
 	{

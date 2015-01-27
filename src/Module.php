@@ -48,7 +48,7 @@ abstract class Module
      * @see RegisterModule()
      * @var Module[]
      */
-    private static $modules;
+    private static $modules = [];
 
     /**
      * An array of UrlHandlers
@@ -159,10 +159,6 @@ abstract class Module
      */
     public static function clearModules()
     {
-        foreach (self::$modules as $module) {
-            $module->unRegisterAutoLoad();
-        }
-
         self::$modules = array();
     }
 
@@ -319,7 +315,7 @@ abstract class Module
     /**
      * Generates the response content for the client.
      *
-     * This is normally called by platform/execute.php and must be called after all
+     * This is normally called by platform/execute-http.php and must be called after all
      * modules have been registered to guarantee the correct output.
      *
      * @static

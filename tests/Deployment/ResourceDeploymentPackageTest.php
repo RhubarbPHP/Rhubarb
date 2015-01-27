@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\Deployment;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class ResourceDeploymentPackageTest extends CoreTestCase
+class ResourceDeploymentPackageTest extends RhubarbTestCase
 {
 	public function testAllFilesDeployed()
 	{

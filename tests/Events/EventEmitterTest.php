@@ -100,7 +100,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase
 
 class TestEventEmitter
 {
-	use \Gcd\Core\Events\EventEmitter;
+	use \Rhubarb\Crown\Events\EventEmitter;
 
 	public function RaiseSomeEvent()
 	{

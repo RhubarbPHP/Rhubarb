@@ -1,16 +1,16 @@
 <?php
 
-namespace Gcd\Core\Encryption;
+namespace Rhubarb\Crown\Encryption;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-use Gcd\Core\Encryption\UnitTesting\UnitTestingAes256EncryptionProvider;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\Encryption\UnitTesting\UnitTestingAes256EncryptionProvider;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class Aes256EncryptionProviderTest extends CoreTestCase
+class Aes256EncryptionProviderTest extends RhubarbTestCase
 {
 	public static function setUpBeforeClass()
 	{

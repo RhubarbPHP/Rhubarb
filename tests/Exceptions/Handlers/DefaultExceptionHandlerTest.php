@@ -24,11 +24,11 @@ use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 use Rhubarb\Crown\UnitTesting\UnitTestLog;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
-class DefaultExceptionHandlerTest extends CoreTestCase
+class DefaultExceptionHandlerTest extends RhubarbTestCase
 {
 	/**
 	 * @var UnitTestLog

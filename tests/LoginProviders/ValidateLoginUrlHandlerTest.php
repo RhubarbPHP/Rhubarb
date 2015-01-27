@@ -1,18 +1,18 @@
 <?php
 
-namespace Gcd\Core\LoginProviders;
+namespace Rhubarb\Crown\LoginProviders;
 
-use Gcd\Core\Context;
-use Gcd\Core\Request\WebRequest;
-use Gcd\Core\UnitTesting\CoreTestCase;
-use Gcd\Core\UnitTesting\UnitTestingLoginProvider;
+use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\UnitTesting\UnitTestingLoginProvider;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class ValidateLoginUrlHandlerTest extends CoreTestCase
+class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 {
 	public function testInvalidLoginRedirects()
 	{
@@ -24,9 +24,9 @@ class ValidateLoginUrlHandlerTest extends CoreTestCase
 		$request = new WebRequest();
 		$request->Initialise();
 
-		$response = \Gcd\Core\Module::GenerateResponseForRequest( $request );
+		$response = \Rhubarb\Crown\Module::GenerateResponseForRequest( $request );
 
-		$this->assertInstanceOf( "\Gcd\Core\Response\RedirectResponse", $response );
+		$this->assertInstanceOf( "\Rhubarb\Crown\Response\RedirectResponse", $response );
 	}
 
 	public function testTheLoginUrlisExcludedFromRedirect()
@@ -39,8 +39,8 @@ class ValidateLoginUrlHandlerTest extends CoreTestCase
 
 		$request->Initialise();
 
-		$response = \Gcd\Core\Module::GenerateResponseForRequest( $request );
+		$response = \Rhubarb\Crown\Module::GenerateResponseForRequest( $request );
 
-		$this->assertInstanceOf( "\Gcd\Core\Response\HtmlResponse", $response );
+		$this->assertInstanceOf( "\Rhubarb\Crown\Response\HtmlResponse", $response );
 	}
 }

@@ -19,11 +19,6 @@
 namespace Rhubarb\Crown\Exceptions;
 
 /**
- *
- *
- * @package Rhubarb\Crown\Exceptions
- * @author      acuthbert
- * @copyright   2013 GCD Technologies Ltd.
  */
 class FileNotFoundException extends RhubarbException
 {

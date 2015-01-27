@@ -1,20 +1,20 @@
 <?php
 
-namespace Gcd\Core\UrlHandlers;
+namespace Rhubarb\Crown\UrlHandlers;
 
-use Gcd\Core\IGeneratesResponse;
-use Gcd\Core\Request\WebRequest;
-use Gcd\Core\Response\Response;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\IGeneratesResponse;
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Response\Response;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class ClassMappedHandlerTest extends CoreTestCase
+class ClassMappedHandlerTest extends RhubarbTestCase
 {
 	public function testUrlHandled()
 	{
 		$request = new WebRequest();
 		$request->UrlPath = "/wrong/path/";
 
-		$handler = new ClassMappedUrlHandler( "\Gcd\Core\UrlHandlers\TestTarget" );
+		$handler = new ClassMappedUrlHandler( "\Rhubarb\Crown\UrlHandlers\TestTarget" );
 		$handler->SetUrl( "/right/path/" );
 
 		$response = $handler->GenerateResponse( $request );

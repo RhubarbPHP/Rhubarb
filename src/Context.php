@@ -47,7 +47,7 @@ class Context extends Settings
 
         parent::initialiseDefaultValues();
 
-        // $unitTesting is set in phpunit-bootstrap.php
+        // $unitTesting is set in execute-test.php
         $this->UnitTesting = (isset($unitTesting) && $unitTesting) ? true : false;
         $this->DeveloperMode = false;
         $this->Live = false;

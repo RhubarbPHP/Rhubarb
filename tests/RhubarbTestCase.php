@@ -3,25 +3,11 @@
 namespace Rhubarb\Crown\Tests;
 
 use Rhubarb\Crown\Context;
-use Rhubarb\Crown\CoreModule;
-use Rhubarb\Crown\Encryption\EncryptionProvider;
-use Rhubarb\Crown\Encryption\HashProvider;
-use Rhubarb\Crown\Integration\Email\EmailProvider;
-use Rhubarb\Crown\Integration\IntegrationModule;
-use Rhubarb\Crown\Layout\LayoutModule;
-use Rhubarb\Crown\LoginProviders\ValidateLoginUrlHandler;
-use Rhubarb\Crown\Modelling\Models\Model;
-use Rhubarb\Crown\Modelling\Repositories\Repository;
-use Rhubarb\Crown\Modelling\Schema\SolutionSchema;
+use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
-use Rhubarb\Crown\Mvp\MvpModule;
-use Rhubarb\Crown\Patterns\PatternsModule;
-use Rhubarb\Crown\RestApi\Authentication\AuthenticationProvider;
-use Rhubarb\Crown\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
-use Rhubarb\Crown\Scaffolds\NavigationMenu\NavigationMenuModule;
-use Rhubarb\Crown\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
-use Rhubarb\Crown\StaticResource\UrlHandlers\StaticResourceUrlHandler;
+use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
+use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
 
 /**
@@ -39,7 +25,7 @@ class RhubarbTestCase extends \PHPUnit_Framework_TestCase
         Module::RegisterModule(new UnitTestingModule());
         Module::InitialiseModules();
 
-        $context = new \Rhubarb\Crown\Context();
+        $context = new Context();
         $context->UnitTesting = true;
         $context->SimulateNonCli = false;
 
@@ -85,7 +71,7 @@ class UnitTestingModule extends Module
                 "/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Mvp\Presenters",
                     [
                         "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\UnitTesting\NamespaceMappedHandlerTests"),
-                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/../../StaticResource/UnitTesting/")
+                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/fixtures/")
                     ])
             ]);
 
@@ -96,9 +82,6 @@ class UnitTestingModule extends Module
         $test->SetPriority(100);
 
         $this->AddUrlHandlers("/priority-test/", $test);
-
-        $this->AddClassPath(__DIR__ . "/../../Mvp/UnitTesting/Presenters", "Rhubarb\Crown\Mvp\Presenters");
-        $this->AddClassPath(__DIR__ . "/../../Mvp/UnitTesting/Presenters", "Rhubarb\Crown\Mvp\Views");
 
     }
 }

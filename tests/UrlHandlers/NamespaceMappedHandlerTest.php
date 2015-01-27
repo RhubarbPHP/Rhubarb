@@ -2,21 +2,21 @@
 
 namespace Gcd\Tests;
 
-use Gcd\Core\HttpHeaders;
-use Gcd\Core\Module;
+use Rhubarb\Crown\HttpHeaders;
+use Rhubarb\Crown\Module;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class NamespaceMappedHandlerTest extends \Gcd\Core\UnitTesting\CoreTestCase
+class NamespaceMappedHandlerTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 {
 	protected $_request = null;
 
 	protected function setUp()
 	{
-		$this->_request = \Gcd\Core\Context::CurrentRequest();
+		$this->_request = \Rhubarb\Crown\Context::CurrentRequest();
 		$this->_request->IsWebRequest = true;
 	}
 

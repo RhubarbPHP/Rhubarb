@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\Deployment;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class RelocationResourceDeploymentHandlerTest extends CoreTestCase
+class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 {
 	public function testUrlCreated()
 	{

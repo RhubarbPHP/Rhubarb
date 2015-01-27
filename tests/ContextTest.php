@@ -18,18 +18,20 @@
 
 namespace Rhubarb\Crown\Tests;
 
+use Rhubarb\Crown\Context;
+
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class ContextTest extends \Rhubarb\Crown\Tests\RhubarbTestCase
+class ContextTest extends RhubarbTestCase
 {
 	protected $_context = null;
 
 	protected function setUp()
 	{
-		$this->_context = new \Rhubarb\Crown\Context();
+		$this->_context = new Context();
 		$this->_context->Request = null;
 	}
 
@@ -75,10 +77,10 @@ class ContextTest extends \Rhubarb\Crown\Tests\RhubarbTestCase
 
 		unset( $this->context->Request );
 
-		$this->assertNotNull( \Rhubarb\Crown\Context::CurrentRequest(), "Static Request accessor returned NULL" );
+		$this->assertNotNull( Context::CurrentRequest(), "Static Request accessor returned NULL" );
 		$this->assertNotNull( $this->_context->Request, "Request accessor returned NULL" );
 
 
-		$this->assertInstanceOf( '\Rhubarb\Crown\Request\CliRequest', \Rhubarb\Crown\Context::CurrentRequest() );
+		$this->assertInstanceOf( '\Rhubarb\Crown\Request\CliRequest', Context::CurrentRequest() );
 	}
 }

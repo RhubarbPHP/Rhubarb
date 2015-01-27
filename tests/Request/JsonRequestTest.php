@@ -2,10 +2,10 @@
 
 namespace Gcd\Tests;
 
-use Gcd\Core\Context;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\Context;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class JsonRequestTest extends CoreTestCase
+class JsonRequestTest extends RhubarbTestCase
 {
 	/**
 	 * @var Context

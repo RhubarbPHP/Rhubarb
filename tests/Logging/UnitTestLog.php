@@ -1,8 +1,8 @@
 <?php
 
-namespace Gcd\Core\UnitTesting;
+namespace Rhubarb\Crown\UnitTesting;
 
-use Gcd\Core\Logging\Log;
+use Rhubarb\Crown\Logging\Log;
 
 class UnitTestLog extends Log
 {

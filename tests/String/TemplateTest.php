@@ -1,11 +1,11 @@
 <?php
 
-namespace Gcd\Core\String;
+namespace Rhubarb\Crown\String;
 
-use Gcd\Core\Modelling\UnitTesting\Example;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\Modelling\UnitTesting\Example;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class TemplateTest extends CoreTestCase
+class TemplateTest extends RhubarbTestCase
 {
 	public function testTemplateParsing()
 	{

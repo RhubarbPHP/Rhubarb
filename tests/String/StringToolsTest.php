@@ -1,10 +1,10 @@
 <?php
 
-namespace Gcd\Core\String;
+namespace Rhubarb\Crown\String;
 
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class StringToolsTest extends CoreTestCase
+class StringToolsTest extends RhubarbTestCase
 {
 	public function testStringsCanBeWordified()
 	{

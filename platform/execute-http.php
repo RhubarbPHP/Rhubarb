@@ -18,7 +18,7 @@
 
 
 /**
- * execute.php is the entry point for all HTTP requests for Rhubarb applications.
+ * execute-http.php is the entry point for all HTTP requests for Rhubarb applications.
  * The only exceptions to this are when webserver URL rewriting goes directly to
  * a resource for performance reasons, e.g. accessing static content like images
  * and CSS files.
@@ -27,8 +27,11 @@
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 
+// Change the working directory to the top level project folder.
+chdir(__DIR__ . "/../../../../../");
+
 // Initiate our bootstrap script to boot all libraries required.
-include("boot.php");
+require_once __DIR__ . "/boot.php";
 
 require_once __DIR__ . "/../src/Module.php";
 require_once __DIR__ . "/../src/Context.php";

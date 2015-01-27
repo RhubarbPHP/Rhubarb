@@ -3,10 +3,10 @@
 
 namespace Rhubarb\Crown\DateTime;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
 
-class RhubarbDateIntervalTest extends CoreTestCase
+class RhubarbDateIntervalTest extends RhubarbTestCase
 {
 	public function testTotals()
 	{

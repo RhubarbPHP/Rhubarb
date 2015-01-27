@@ -1,8 +1,8 @@
 <?php
 
-namespace Gcd\Core\Layout\UnitTesting;
+namespace Rhubarb\Crown\Layout\UnitTesting;
 
-use Gcd\Core\Layout\Layout;
+use Rhubarb\Crown\Layout\Layout;
 
 class TestLayout extends Layout
 {

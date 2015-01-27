@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\DateTime;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class RhubarbDateTimeTest extends CoreTestCase
+class RhubarbDateTimeTest extends RhubarbTestCase
 {
 	public function testDatesInitaliseProperly()
 	{

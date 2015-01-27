@@ -1,14 +1,14 @@
 <?php
 
-namespace Gcd\Core\UrlHandlers;
+namespace Rhubarb\Crown\UrlHandlers;
 
-use Gcd\Core\Module;
-use Gcd\Core\Request\Request;
-use Gcd\Core\Request\WebRequest;
-use Gcd\Core\Response\HtmlResponse;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\Module;
+use Rhubarb\Crown\Request\Request;
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Response\HtmlResponse;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class UrlHandlerTest extends CoreTestCase
+class UrlHandlerTest extends RhubarbTestCase
 {
 	public function testUrlPriorities()
 	{
@@ -18,13 +18,13 @@ class UrlHandlerTest extends CoreTestCase
 
 		$response = Module::GenerateResponseForRequest( $request );
 
-		$this->assertNotInstanceOf( "Gcd\Core\Response\RedirectResponse", $response );
+		$this->assertNotInstanceOf( "Rhubarb\Crown\Response\RedirectResponse", $response );
 	}
 
 	public function testChildHandler()
 	{
-		$child = new ClassMappedUrlHandler( "Gcd\Core\UnitTesting\NamespaceMappedHandlerTests\SubFolder\ObjectB" );
-		$parent = new ClassMappedUrlHandler( "Gcd\Core\UnitTesting\NamespaceMappedHandlerTests\ObjectA", [ "child/" => $child ] );
+		$child = new ClassMappedUrlHandler( "Rhubarb\Crown\UnitTesting\NamespaceMappedHandlerTests\SubFolder\ObjectB" );
+		$parent = new ClassMappedUrlHandler( "Rhubarb\Crown\UnitTesting\NamespaceMappedHandlerTests\ObjectA", [ "child/" => $child ] );
 		$parent->SetUrl( "/parent/" );
 
 		$request = new WebRequest();
@@ -72,7 +72,7 @@ class TestParentHandler extends UrlHandler
 	 *
 	 * Normally this involves testing the request URI.
 	 *
-	 * @param \Gcd\Core\Request\Request $request
+	 * @param \Rhubarb\Crown\Request\Request $request
 	 * @param string $currentUrlFragment
 	 * @return bool
 	 */
@@ -106,7 +106,7 @@ class TestChildHandler extends UrlHandler
 	 *
 	 * Normally this involves testing the request URI.
 	 *
-	 * @param \Gcd\Core\Request\Request $request
+	 * @param \Rhubarb\Crown\Request\Request $request
 	 * @param string $currentUrlFragment
 	 * @return bool
 	 */

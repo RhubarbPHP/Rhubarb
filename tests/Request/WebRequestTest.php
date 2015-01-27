@@ -6,7 +6,7 @@ namespace Gcd\Tests;
  * @author marramgrass
  * @copyright GCD Technologies 2012
  */
-class WebRequestTest extends \Gcd\Core\Request\UnitTesting\RequestTestCase
+class WebRequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 {
 	protected $_request = null;
 
@@ -28,7 +28,7 @@ class WebRequestTest extends \Gcd\Core\Request\UnitTesting\RequestTestCase
 		$_SESSION = [];
 		$_REQUEST = [];
 
-		$this->_request = new \Gcd\Core\Request\WebRequest();
+		$this->_request = new \Rhubarb\Crown\Request\WebRequest();
 	}
 
 	protected function tearDown()

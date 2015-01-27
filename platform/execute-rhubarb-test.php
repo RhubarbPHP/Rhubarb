@@ -16,15 +16,23 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Exceptions;
-
 /**
- *
+ * A bootstrapper to setup the Rhubarb platform when running without an attached
+ * project. Usually this is used when developing the Rhubarb platform itself.
  */
-class SettingMissingException extends RhubarbException
+
+global $unitTesting;
+
+$unitTesting = true;
+
+// Change the working directory to the top level project folder.
+chdir(__DIR__ . "/../");
+
+// Initiate our bootstrap script to boot all libraries required.
+require_once __DIR__ . "/boot.php";
+
+if ( isset( $argv[1] ) )
 {
-    public function __construct($namespace, $settingName)
-    {
-        parent::__construct("The setting $namespace.$settingName has not been set.");
-    }
+    $script = $argv[1];
+    include( $script );
 }

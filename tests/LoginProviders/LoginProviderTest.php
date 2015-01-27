@@ -1,11 +1,11 @@
 <?php
 
-namespace Gcd\Core\LoginProviders;
+namespace Rhubarb\Crown\LoginProviders;
 
-use Gcd\Core\UnitTesting\CoreTestCase;
-use Gcd\Core\UnitTesting\UnitTestingLoginProvider;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\UnitTesting\UnitTestingLoginProvider;
 
-class LoginProviderTest extends CoreTestCase
+class LoginProviderTest extends RhubarbTestCase
 {
     public function testForceLogin()
     {

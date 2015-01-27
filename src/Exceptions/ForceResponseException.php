@@ -26,9 +26,6 @@ use Rhubarb\Crown\Response\Response;
  * This should only be used if it does not have an easy way to suggest to the running code that the
  * response be returned. For example deep within MVP it would be impractical to signal all the way up
  * to the MVP entry point that a redirect response needs delivered.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
  */
 class ForceResponseException extends \Exception
 {

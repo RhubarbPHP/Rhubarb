@@ -1,6 +1,6 @@
 <?php
 
-use \Gcd\Core\Singleton;
+use \Rhubarb\Crown\Singleton;
 
 /**
  * @package Core

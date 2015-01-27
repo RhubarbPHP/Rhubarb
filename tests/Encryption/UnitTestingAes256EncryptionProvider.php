@@ -6,9 +6,9 @@
  * @copyright GCD Technologies 2013
  */
 
-namespace Gcd\Core\Encryption\UnitTesting;
+namespace Rhubarb\Crown\Encryption\UnitTesting;
 
-use Gcd\Core\Encryption\Aes256EncryptionProvider;
+use Rhubarb\Crown\Encryption\Aes256EncryptionProvider;
 
 class UnitTestingAes256EncryptionProvider extends Aes256EncryptionProvider
 {

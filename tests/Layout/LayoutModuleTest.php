@@ -1,23 +1,23 @@
 <?php
 
-namespace Gcd\Core\Layout;
+namespace Rhubarb\Crown\Layout;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-use Gcd\Core\ClientSide\ResourceLoader;
-use Gcd\Core\Exceptions\Handlers\ExceptionHandler;
-use Gcd\Core\Layout\LayoutModule;
-use Gcd\Core\Layout\ResponseFilters\LayoutFilter;
-use Gcd\Core\Modelling\UnitTesting\User;
-use Gcd\Core\Module;
-use Gcd\Core\Request\WebRequest;
-use Gcd\Core\Response\JsonResponse;
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\ClientSide\ResourceLoader;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
+use Rhubarb\Crown\Layout\LayoutModule;
+use Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter;
+use Rhubarb\Crown\Modelling\UnitTesting\User;
+use Rhubarb\Crown\Module;
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Response\JsonResponse;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class LayoutModuleTest extends CoreTestCase
+class LayoutModuleTest extends RhubarbTestCase
 {
 	public static function setUpBeforeClass()
 	{
@@ -28,10 +28,10 @@ class LayoutModuleTest extends CoreTestCase
 
 	public function testLayoutPathIsRemembered()
 	{
-		new LayoutModule( "Gcd\Core\Layout\UnitTesting\LayoutTest2" );
+		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
 
 		$this->assertEquals(
-			"Gcd\Core\Layout\UnitTesting\LayoutTest2",
+			"Rhubarb\Crown\Layout\UnitTesting\LayoutTest2",
 			LayoutModule::GetLayoutClassName() );
 	}
 
@@ -39,21 +39,21 @@ class LayoutModuleTest extends CoreTestCase
 	{
 		LayoutModule::EnableLayout();
 
-		new LayoutModule( "Gcd\Core\Layout\UnitTesting\LayoutTest2" );
+		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
 
 		// Normal request
 		$this->assertFalse( LayoutModule::IsDisabled() );
 
 		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "some-odd-request";
 
-		new LayoutModule( "Gcd\Core\Layout\UnitTesting\LayoutTest2" );
+		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
 
 		// Some odd request
 		$this->assertFalse( LayoutModule::IsDisabled() );
 
 		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "XMLHttpRequest";
 
-		new LayoutModule( "Gcd\Core\Layout\UnitTesting\LayoutTest2" );
+		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
 
 		// Ajax request
 		$this->assertTrue( LayoutModule::IsDisabled() );
@@ -76,15 +76,15 @@ class LayoutModuleTest extends CoreTestCase
 
 	public function testLayoutCanBeChanged()
 	{
-		new LayoutModule( "Gcd\Core\Layout\UnitTesting\TestLayout" );
-		LayoutModule::SetLayoutClassName( "Gcd\Core\Layout\UnitTesting\LayoutTest2" );
+		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
+		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
 
-		$this->assertEquals( "Gcd\Core\Layout\UnitTesting\LayoutTest2", LayoutModule::GetLayoutClassName() );
+		$this->assertEquals( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2", LayoutModule::GetLayoutClassName() );
 	}
 
 	public function testLayoutDoesntWorkForJsonResponse()
 	{
-		LayoutModule::SetLayoutClassName( "Gcd\Core\Layout\UnitTesting\TestLayout" );
+		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
 
 		$model = new User();
 		$model->Field = "Value";
@@ -100,7 +100,7 @@ class LayoutModuleTest extends CoreTestCase
 
 	public function testLayoutWorks()
 	{
-		LayoutModule::SetLayoutClassName( "Gcd\Core\Layout\UnitTesting\TestLayout" );
+		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
 
 		$request = new WebRequest();
 		$request->UrlPath = "/simple/";
@@ -113,13 +113,13 @@ class LayoutModuleTest extends CoreTestCase
 
 	public function testLayoutFilterThrowsException()
 	{
-		LayoutModule::SetLayoutClassName( "Gcd\Core\Layout\UnitTesting\NonExistant" );
+		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\NonExistant" );
 
 		$request = new WebRequest();
 		$request->UrlPath = "/simple/";
 		$request->IsWebRequest = true;
 
-		$this->setExpectedException( "Gcd\Core\Layout\Exceptions\LayoutNotFoundException" );
+		$this->setExpectedException( "Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException" );
 
 		ExceptionHandler::DisableExceptionTrapping();
 
@@ -130,7 +130,7 @@ class LayoutModuleTest extends CoreTestCase
     {
         LayoutModule::SetLayoutClassName( function()
         {
-            return "Gcd\Core\Layout\UnitTesting\TestLayout";
+            return "Rhubarb\Crown\Layout\UnitTesting\TestLayout";
         } );
 
         $request = new WebRequest();
@@ -172,7 +172,7 @@ this is more html", $head );
 	{
 		parent::tearDownAfterClass();
 
-		LayoutModule::SetLayoutClassName( "Gcd\Core\Layout\UnitTesting\TestLayout" );
+		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
 		LayoutModule::DisableLayout();
 	}
 }

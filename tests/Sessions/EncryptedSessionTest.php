@@ -1,25 +1,25 @@
 <?php
 
-namespace Gcd\Core\Sessions;
+namespace Rhubarb\Crown\Sessions;
 
-use Gcd\Core\Context;
-use Gcd\Core\CoreModule;
-use Gcd\Core\Encryption\EncryptionProvider;
-use Gcd\Core\Integration\IntegrationModule;
-use Gcd\Core\Layout\LayoutModule;
-use Gcd\Core\Modelling\Models\Model;
-use Gcd\Core\Modelling\Repositories\Repository;
-use Gcd\Core\Modelling\Schema\SolutionSchema;
-use Gcd\Core\Module;
-use Gcd\Core\Mvp\MvpModule;
-use Gcd\Core\Patterns\PatternsModule;
-use Gcd\Core\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
-use Gcd\Core\Scaffolds\NavigationMenu\NavigationMenuModule;
-use Gcd\Core\UnitTesting\CoreTestCase;
-use Gcd\Core\UnitTesting\UnitTestingModule;
+use Rhubarb\Crown\Context;
+use Rhubarb\Crown\CoreModule;
+use Rhubarb\Crown\Encryption\EncryptionProvider;
+use Rhubarb\Crown\Integration\IntegrationModule;
+use Rhubarb\Crown\Layout\LayoutModule;
+use Rhubarb\Crown\Modelling\Models\Model;
+use Rhubarb\Crown\Modelling\Repositories\Repository;
+use Rhubarb\Crown\Modelling\Schema\SolutionSchema;
+use Rhubarb\Crown\Module;
+use Rhubarb\Crown\Mvp\MvpModule;
+use Rhubarb\Crown\Patterns\PatternsModule;
+use Rhubarb\Crown\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
+use Rhubarb\Crown\Scaffolds\NavigationMenu\NavigationMenuModule;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\UnitTesting\UnitTestingModule;
 use PHPUnit_Framework_TestCase;
 
-class EncryptedSessionTest extends CoreTestCase
+class EncryptedSessionTest extends RhubarbTestCase
 {
 	private static $_oldEncryptionProvider = "";
 
@@ -27,7 +27,7 @@ class EncryptedSessionTest extends CoreTestCase
 	{
 		parent::setUpBeforeClass();
 
-		self::$_oldEncryptionProvider = EncryptionProvider::SetEncryptionProviderClassName( '\Gcd\Core\Encryption\Aes256ComputedKeyEncryptionProvider' );
+		self::$_oldEncryptionProvider = EncryptionProvider::SetEncryptionProviderClassName( '\Rhubarb\Crown\Encryption\Aes256ComputedKeyEncryptionProvider' );
 	}
 
 	public static function tearDownAfterClass()

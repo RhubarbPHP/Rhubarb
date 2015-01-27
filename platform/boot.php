@@ -16,6 +16,10 @@
  *  limitations under the License.
  */
 
+/**
+ * Sets up the working environment to provide a consistant and predictable ecosystem for user code
+ */
+
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Module;
 
@@ -23,13 +27,6 @@ error_reporting(E_ALL | E_STRICT);
 
 // As we preform our own exception handling we need to stop fatal errors from showing stack traces.
 ini_set("display_errors", "off");
-
-/**
- * Set's up the working environment to provide a consistant and predictable ecosystem for user code
- */
-
-// Change the working directory to the top level folder.
-chdir(__DIR__ . "/../../../../");
 
 // Include the composer autoloader
 include("vendor/autoload.php");

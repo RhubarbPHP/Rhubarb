@@ -19,9 +19,6 @@
 namespace Rhubarb\Crown\Exceptions;
 
 /**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class ResourceNotFound extends \Exception
 {

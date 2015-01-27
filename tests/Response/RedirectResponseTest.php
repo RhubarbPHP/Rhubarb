@@ -2,14 +2,14 @@
 
 namespace Rhubarb\Crown\Response;
 
-use Rhubarb\Crown\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class RedirectResponseTest extends CoreTestCase
+class RedirectResponseTest extends RhubarbTestCase
 {
     public function testRedirect()
     {

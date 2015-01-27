@@ -1,10 +1,10 @@
 <?php
 
-namespace Gcd\Core\Encryption;
+namespace Rhubarb\Crown\Encryption;
 
-use Gcd\Core\UnitTesting\CoreTestCase;
+use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
 
-class PlainTextHashProviderTest extends CoreTestCase
+class PlainTextHashProviderTest extends RhubarbTestCase
 {
 	public function testProvider()
 	{

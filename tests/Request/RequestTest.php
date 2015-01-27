@@ -6,7 +6,7 @@ namespace Gcd\Tests;
  * @author marramgrass
  * @copyright GCD Technologies 2012
  */
-class RequestTest extends \Gcd\Core\Request\UnitTesting\RequestTestCase
+class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 {
 	protected $_request = null;
 
@@ -47,7 +47,7 @@ class RequestTest extends \Gcd\Core\Request\UnitTesting\RequestTestCase
 	}
 
 	/**
-	 * @expectedException \Gcd\Core\Exceptions\AttemptToModifyReadOnlyPropertyException
+	 * @expectedException \Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException
 	 */
 	public function testMagicOriginalSetterException()
 	{
@@ -77,7 +77,7 @@ class RequestTest extends \Gcd\Core\Request\UnitTesting\RequestTestCase
 }
 
 // Request is an abstract class, so needs a concrete implementation for testing
-class TestRequest extends \Gcd\Core\Request\Request
+class TestRequest extends \Rhubarb\Crown\Request\Request
 {
 	public function Initialise()
 	{

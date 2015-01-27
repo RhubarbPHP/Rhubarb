@@ -18,13 +18,15 @@
 
 namespace Rhubarb\Crown\Exceptions;
 
+use Rhubarb\Crown\Exceptions\RhubarbException;
+
 /**
- *
+ * Thrown normally if a static resource didn't exist.
  */
-class SettingMissingException extends RhubarbException
+class StaticResourceNotFoundException extends RhubarbException
 {
-    public function __construct($namespace, $settingName)
+    public function __construct($path = "")
     {
-        parent::__construct("The setting $namespace.$settingName has not been set.");
+        parent::__construct("The static resource '" . $path . "' could not be found.");
     }
 }

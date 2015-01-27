@@ -1,12 +1,12 @@
 <?php
 
-namespace Gcd\Core\Request\UnitTesting;
+namespace Rhubarb\Crown\Request\UnitTesting;
 
 /**
  * @author    marramgrass
  * @copyright GCD Technologies 2012
  */
-class RequestTestCase extends \Gcd\Core\UnitTesting\CoreTestCase
+class RequestTestCase extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 {
 	protected $_stashSuperglobals = [];
 
@@ -36,7 +36,7 @@ class RequestTestCase extends \Gcd\Core\UnitTesting\CoreTestCase
 		$this->_stashSuperglobals = [];
 
 		// WebRequest as Request is an abstract class
-		\Gcd\Core\Request\WebRequest::ResetRequest();
+		\Rhubarb\Crown\Request\WebRequest::ResetRequest();
 	}
 
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Gcd\Core\Sessions\UnitTesting;
+namespace Rhubarb\Crown\Sessions\UnitTesting;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class UnitTestingSession extends \Gcd\Core\Sessions\Session
+class UnitTestingSession extends \Rhubarb\Crown\Sessions\Session
 {
 	/**
 	 * Simply exposes the protected GetSessionProvider() method.
