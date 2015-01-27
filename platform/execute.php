@@ -31,6 +31,7 @@ use Rhubarb\Crown\Module;
 include("boot.php");
 
 require_once __DIR__ . "/../src/Module.php";
+require_once __DIR__ . "/../src/Context.php";
 
 $request = \Rhubarb\Crown\Context::currentRequest();
 
