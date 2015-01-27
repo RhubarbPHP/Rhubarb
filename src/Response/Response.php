@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Response;
 
 require_once __DIR__ . "/../Response/GeneratesResponse.php";
+require_once __DIR__ . "/../HttpHeaders.php";
 
 /**
  * Encapsulates the response to be sent to the browser.
