@@ -38,7 +38,7 @@ class PhpLog extends IndentedMessageLog
         $category = ($category == "") ? "CORE" : $category;
 
         error_log($category .
-            str_pad($this->_uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
+            str_pad($this->uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
             str_pad($this->GetExecutionTime(), 7, ' ', STR_PAD_LEFT) .
             str_pad($this->GetTimeSinceLastLog(), 7, ' ', STR_PAD_LEFT) .
             str_pad($ip, 16, ' ', STR_PAD_LEFT) .
