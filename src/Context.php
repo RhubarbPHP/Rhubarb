@@ -18,9 +18,10 @@
 
 namespace Rhubarb\Crown;
 
-require_once __DIR__."/Settings.php";
+require_once __DIR__ . "/Settings.php";
+require_once __DIR__ . "/Request/Request.php";
 
-use \Rhubarb\Crown\Request;
+use Rhubarb\Crown\Request;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
@@ -29,117 +30,109 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
  * @property bool $UnitTesting
  * @property bool $IsAjaxRequest
  * @property bool $IsCliInvocation
- * @property bool $Live						True to indicate this is a live production server
- * @property bool $DeveloperMode			True to enable developer only functionality
- * @property bool $SimulateNonCli			True to pretend that the request is not a CLI request (even if it is - used by unit testing)
- * @property mixed $SimulatedRequestBody	For unit testing - simulates the request body instead of using php://input
- * @property UrlHandler $UrlHandler			The URL handler currently generating the response
+ * @property bool $Live                        True to indicate this is a live production server
+ * @property bool $DeveloperMode            True to enable developer only functionality
+ * @property bool $SimulateNonCli            True to pretend that the request is not a CLI request (even if it is - used by unit testing)
+ * @property mixed $SimulatedRequestBody    For unit testing - simulates the request body instead of using php://input
+ * @property UrlHandler $UrlHandler            The URL handler currently generating the response
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
 class Context extends Settings
 {
-	protected function initialiseDefaultValues()
-	{
-		global $unitTesting;
+    protected function initialiseDefaultValues()
+    {
+        global $unitTesting;
 
-		parent::initialiseDefaultValues();
+        parent::initialiseDefaultValues();
 
-		// $unitTesting is set in phpunit-bootstrap.php
-		$this->UnitTesting = ( isset( $unitTesting ) && $unitTesting ) ? true : false;
-		$this->DeveloperMode = false;
-		$this->Live = false;
-	}
+        // $unitTesting is set in phpunit-bootstrap.php
+        $this->UnitTesting = (isset($unitTesting) && $unitTesting) ? true : false;
+        $this->DeveloperMode = false;
+        $this->Live = false;
+    }
 
-	public function getIsAjaxRequest()
-	{
-		if ( isset( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) == 'xmlhttprequest')
-		{
-			return true;
-		}
+    public function getIsAjaxRequest()
+    {
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Check if the script was invoked via PHP's CLI
-	 *
-	 * @return bool
-	 */
-	public function getIsCliInvocation()
-	{
-		if ( $this->SimulateNonCli )
-		{
-			return false;
-		}
+    /**
+     * Check if the script was invoked via PHP's CLI
+     *
+     * @return bool
+     */
+    public function getIsCliInvocation()
+    {
+        if ($this->SimulateNonCli) {
+            return false;
+        }
 
-		return 'cli' === php_sapi_name();
-	}
+        return 'cli' === php_sapi_name();
+    }
 
-	/**
-	 * A static accessor for the Request property
-	 *
-	 * @return \Rhubarb\Crown\Request\Request The current Request
-	 */
-	public static function currentRequest()
-	{
-		$contextInstance = new static();
+    /**
+     * A static accessor for the Request property
+     *
+     * @return \Rhubarb\Crown\Request\Request The current Request
+     */
+    public static function currentRequest()
+    {
+        $contextInstance = new static();
 
-		return $contextInstance->Request;
-	}
+        return $contextInstance->Request;
+    }
 
-	/**
-	 * Lazily initialise and then return the current Request.
-	 *
-	 * @return \Rhubarb\Crown\Request\Request
-	 */
-	public function getRequest()
-	{
-		if ( !isset( $this->modelData[ 'Request'] ) )
-		{
-			if ( $this->IsCliInvocation )
-			{
-				$request = new Request\CliRequest();
-			}
-			else
-			{
-				$contentType = ( isset( $_SERVER[ "CONTENT_TYPE"] ) ) ? strtolower( $_SERVER[ "CONTENT_TYPE" ] ) : "";
+    /**
+     * Lazily initialise and then return the current Request.
+     *
+     * @return \Rhubarb\Crown\Request\Request
+     */
+    public function getRequest()
+    {
+        if (!isset($this->modelData['Request'])) {
+            if ($this->IsCliInvocation) {
+                $request = new Request\CliRequest();
+            } else {
+                $contentType = (isset($_SERVER["CONTENT_TYPE"])) ? strtolower($_SERVER["CONTENT_TYPE"]) : "";
 
-				switch( $contentType )
-				{
-					case "application/json":
-						$request = new Request\JsonRequest();
-						break;
-					default:
-						$request = new Request\WebRequest();
-						break;
-				}
-			}
+                switch ($contentType) {
+                    case "application/json":
+                        $request = new Request\JsonRequest();
+                        break;
+                    default:
+                        $request = new Request\WebRequest();
+                        break;
+                }
+            }
 
-			$this->modelData[ 'Request' ] = $request;
-		}
+            $this->modelData['Request'] = $request;
+        }
 
-		return $this->modelData[ 'Request' ];
-	}
+        return $this->modelData['Request'];
+    }
 
-	/**
-	 * Returns the body of the request.
-	 *
-	 * This is not automatically passed to the request as this might be an expensive operation
-	 * that may never actually get used (e.g. a File upload)
-	 *
-	 * @return bool|mixed|string
-	 */
-	public function getRequestBody()
-	{
-		if ( $this->UnitTesting )
-		{
-			return $this->SimulatedRequestBody;
-		}
+    /**
+     * Returns the body of the request.
+     *
+     * This is not automatically passed to the request as this might be an expensive operation
+     * that may never actually get used (e.g. a File upload)
+     *
+     * @return bool|mixed|string
+     */
+    public function getRequestBody()
+    {
+        if ($this->UnitTesting) {
+            return $this->SimulatedRequestBody;
+        }
 
-		$requestBody = file_get_contents( "php://input" );
+        $requestBody = file_get_contents("php://input");
 
-		return $requestBody;
-	}
+        return $requestBody;
+    }
 }

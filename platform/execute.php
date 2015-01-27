@@ -24,6 +24,8 @@
  * and CSS files.
  */
 
+require_once __DIR__ . "/../src/Module.php";
+
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 

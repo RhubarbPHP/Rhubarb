@@ -18,6 +18,11 @@
 
 namespace Rhubarb\Crown;
 
+require_once __DIR__."/Logging/Log.php";
+require_once __DIR__."/Request/WebRequest.php";
+require_once __DIR__."/Response/HtmlResponse.php";
+require_once __DIR__."/UrlHandlers/UrlHandler.php";
+
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
