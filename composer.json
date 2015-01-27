@@ -9,5 +9,8 @@
 			"Rhubarb\\Crown\\": "src/",
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
+	},
+  	"require-dev": {
+	  "phpunit/phpunit": "3.*"
 	}
 }
