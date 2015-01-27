@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\ClientSide;
+namespace Rhubarb\Crown\Html;
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\ResourceNotFound;
