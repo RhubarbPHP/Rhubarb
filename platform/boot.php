@@ -29,6 +29,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set("display_errors", "off");
 
 // Include the composer autoloader
+/** @noinspection PhpIncludeInspection */
 include("vendor/autoload.php");
 
 // Initially we don't have an auto loader as this is handled by the modules. We need to load this first

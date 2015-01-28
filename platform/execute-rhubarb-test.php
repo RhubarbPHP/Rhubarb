@@ -34,5 +34,6 @@ require_once __DIR__ . "/boot.php";
 if ( isset( $argv[1] ) )
 {
     $script = $argv[1];
+    /** @noinspection PhpIncludeInspection */
     include( $script );
 }

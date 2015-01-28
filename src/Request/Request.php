@@ -21,6 +21,7 @@ namespace Rhubarb\Crown\Request;
 require_once __DIR__ . "/../Settings.php";
 
 use Rhubarb\Crown;
+use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
 
 /**
  * Encapsulates the current request.
@@ -114,7 +115,7 @@ abstract class Request extends Crown\Settings
     public function __set($propertyName, $value)
     {
         if (substr($propertyName, 0, 8) === 'Original') {
-            throw new \Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException("Attempt to modify Original Data of a request");
+            throw new AttemptToModifyReadOnlyPropertyException("Attempt to modify Original Data of a request");
         }
 
         parent::__set($propertyName, $value);

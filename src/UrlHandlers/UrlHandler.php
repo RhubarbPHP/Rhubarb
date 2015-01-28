@@ -362,7 +362,7 @@ abstract class UrlHandler implements GeneratesResponse
     /**
      * Force a redirect response
      *
-     * @param $url The URL to redirect to.
+     * @param $url string The URL to redirect to.
      * @throws \Rhubarb\Crown\Exceptions\ForceResponseException
      */
     public static function redirectToUrl($url)

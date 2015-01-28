@@ -21,14 +21,7 @@ namespace Rhubarb\Crown\Response;
 require_once __DIR__ . "/../Response/GeneratesResponse.php";
 require_once __DIR__ . "/../HttpHeaders.php";
 
-/**
- * Encapsulates the response to be sent to the browser.
- *
- * @author marramgrass
- * @copyright GCD Technologies 2012
- */
 use Rhubarb\Crown\HttpHeaders;
-use Rhubarb\Crown\IGeneratesResponse;
 
 class Response
 {
@@ -42,7 +35,7 @@ class Response
      * in complex rendering stacks where a response filter needs to know who generated the output to make an
      * appropriate response.
      *
-     * @var \Rhubarb\Crown\Response\GeneratesResponse
+     * @var GeneratesResponse
      */
     protected $generator;
 

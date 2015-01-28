@@ -55,29 +55,10 @@ class NamespaceMappedUrlHandler extends UrlHandler
         $this->namespace = trim($namespace, "\\");
     }
 
-    private function generateResponseUrlAsAbsoluteNamespace($url = null, $request = null)
-    {
-        return false;
-
-        $objectClass = str_replace("/", "\\", $url);
-
-        if (!class_exists($objectClass)) {
-            return false;
-        }
-
-        $object = new $objectClass();
-
-        if (is_a($object, "\Rhubarb\Crown\IGeneratesResponse")) {
-            return $object->generateResponse($request);
-        }
-
-        return false;
-    }
-
     /**
      * Returns the name of the class that should handle the given page url.
      *
-     * @param $pageUrl The last part of the url.
+     * @param $pageUrl string The last part of the url.
      * @return mixed
      */
     protected function convertUrlToClassName($pageUrl)
@@ -91,12 +72,6 @@ class NamespaceMappedUrlHandler extends UrlHandler
             $url = $currentUrlFragment;
         } else {
             $url = null;
-        }
-
-        $response = $this->generateResponseUrlAsAbsoluteNamespace($url, $request);
-
-        if ($response !== false) {
-            return $response;
         }
 
         if (stripos($url, $this->url) !== 0) {

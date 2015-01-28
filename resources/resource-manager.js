@@ -168,7 +168,7 @@ window.resourceManager =
                                 alert( 'XML request error: ' + this.statusText + ' (' + this.status + ')' ) ;
                             }
                         }
-                    }
+                    };
 
                     xmlHttp.open( 'GET', request.url, true);
                     xmlHttp.send(null);
@@ -199,7 +199,7 @@ window.resourceManager =
                         {
                             request.onLoaded();
                         }
-                    }
+                    };
 
                     var parts = request.url.split( "." );
                     var extension = parts[ parts.length - 1 ].toLowerCase();
@@ -237,18 +237,21 @@ window.resourceManager =
 
                             for( var i in links )
                             {
-                                var link = links[i];
-
-                                if ( link.attributes && ( link.attributes[ "href" ].value == request.url ) )
+                                if ( links.hasOwnProperty(i ) )
                                 {
-                                    request.loaded = true;
+                                    var link = links[i];
 
-                                    if ( request.onLoaded )
+                                    if ( link.attributes && ( link.attributes[ "href" ].value == request.url ) )
                                     {
-                                        request.onLoaded();
-                                    }
+                                        request.loaded = true;
 
-                                    return;
+                                        if ( request.onLoaded )
+                                        {
+                                            request.onLoaded();
+                                        }
+
+                                        return;
+                                    }
                                 }
                             }
 

@@ -35,6 +35,7 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
  * @property bool $SimulateNonCli            True to pretend that the request is not a CLI request (even if it is - used by unit testing)
  * @property mixed $SimulatedRequestBody    For unit testing - simulates the request body instead of using php://input
  * @property UrlHandler $UrlHandler            The URL handler currently generating the response
+ * @property Request\Request Request
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012

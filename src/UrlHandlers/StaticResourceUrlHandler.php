@@ -90,7 +90,7 @@ class StaticResourceUrlHandler extends UrlHandler
 
 	public function setUrl( $url )
 	{
-		$this->_url = rtrim( $url, "/" );
+		$this->url = rtrim( $url, "/" );
 	}
 
 	/**
@@ -99,7 +99,7 @@ class StaticResourceUrlHandler extends UrlHandler
 	 * Normally this involves testing the request URI.
 	 *
 	 * @param \Rhubarb\Crown\Request\Request $request
-	 * @throws \Rhubarb\Crown\StaticResource\Exceptions\StaticResource404Exception
+	 * @throws \Rhubarb\Crown\Exceptions\StaticResource404Exception
 	 * @return bool
 	 */
 	protected function getMatchingUrlFragment( Request $request, $currentUrlFragment = '' )
@@ -109,8 +109,8 @@ class StaticResourceUrlHandler extends UrlHandler
 		if ( $this->isFolder ) {
 			$urlDirectory = dirname($url);
 
-			if (strpos($urlDirectory, $this->_url) === 0) {
-				$this->staticFile = $this->folderOrFilePath . str_replace($this->_url, "", $url);
+			if (strpos($urlDirectory, $this->url) === 0) {
+				$this->staticFile = $this->folderOrFilePath . str_replace($this->url, "", $url);
 
 				if (!file_exists($this->staticFile)) {
 					throw new StaticResource404Exception($url);
@@ -118,7 +118,7 @@ class StaticResourceUrlHandler extends UrlHandler
 			}
 		}
 		else {
-			if ($this->_url == $url) {
+			if ($this->url == $url) {
 				$this->staticFile = $this->folderOrFilePath;
 			}
 		}

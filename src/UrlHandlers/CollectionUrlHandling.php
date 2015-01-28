@@ -54,9 +54,9 @@ trait CollectionUrlHandling
     {
         $uri = $currentUrlFragment;
 
-        $this->matchedUrl = $this->_url;
+        $this->matchedUrl = $this->url;
 
-        if (preg_match("|^" . $this->_url . "/?([[:digit:]]+)/?|", $uri, $match)) {
+        if (preg_match("|^" . $this->url . "/?([[:digit:]]+)/?|", $uri, $match)) {
             $this->resourceIdentifier = $match[1];
             $this->isCollection = false;
 
