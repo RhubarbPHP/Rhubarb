@@ -16,156 +16,161 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Exceptions\Handlers;
+namespace Rhubarb\Crown\Tests\Exceptions\Handlers;
 
+use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Exceptions\RhubarbException;
-use Rhubarb\Crown\Layout\Layout;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
-use Rhubarb\Crown\UnitTesting\UnitTestLog;
+use Rhubarb\Crown\Tests\Logging\UnitTestLog;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 class DefaultExceptionHandlerTest extends RhubarbTestCase
 {
-	/**
-	 * @var UnitTestLog
-	 */
-	private static $_log;
+    /**
+     * @var UnitTestLog
+     */
+    private static $log;
 
-	public static function setUpBeforeClass()
-	{
-		parent::setUpBeforeClass();
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
 
-		Module::RegisterModule( new UnitTestExceptionModule() );
-		Module::InitialiseModules();
+        Module::registerModule(new UnitTestExceptionModule());
+        Module::initialiseModules();
 
-		self::$_rolesModule->ClearUrlHandlers();
+        self::$rolesModule->clearUrlHandlers();
 
-		Log::ClearLogs();
-		Log::AttachLog( self::$_log = new UnitTestLog( Log::ERROR_LEVEL ) );
-	}
+        Log::clearLogs();
+        Log::attachLog(self::$log = new UnitTestLog(Log::ERROR_LEVEL));
+    }
 
-	public function testExceptionCausesLogEntry()
-	{
-		$request = new WebRequest();
-		$request->UrlPath = "/test-exception/";
+    public function testExceptionCausesLogEntry()
+    {
+        $request = new WebRequest();
+        $request->UrlPath = "/test-exception/";
 
-		Module::GenerateResponseForRequest( $request );
+        Module::generateResponseForRequest($request);
 
-		$lastEntry = array_pop( self::$_log->entries );
+        $lastEntry = array_pop(self::$log->entries);
 
-		$this->assertEquals( "Unhandled CoreException `Things went wrong`", $lastEntry[0], "A CoreException should have been logged" );
+        $this->assertEquals("Unhandled CoreException `Things went wrong`", $lastEntry[0],
+            "A CoreException should have been logged");
 
-		ExceptionHandler::SetExceptionHandlerClassName( '\Rhubarb\Crown\Exceptions\Handlers\UnitTestSilentExceptionHandler' );
+        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestSilentExceptionHandler');
 
-		// Clear the log entries.
-		self::$_log->entries = [];
+        // Clear the log entries.
+        self::$log->entries = [];
 
-		Module::GenerateResponseForRequest( $request );
+        Module::generateResponseForRequest($request);
 
-		$this->assertCount( 0, self::$_log->entries, "The silent exception handler shouldn't log anything - exception handler injection is broken" );
+        $this->assertCount(0, self::$log->entries,
+            "The silent exception handler shouldn't log anything - exception handler injection is broken");
 
-		ExceptionHandler::SetExceptionHandlerClassName( '\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler' );
-	}
+        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\DefaultExceptionHandler');
+    }
 
-	public function testNonCoreExceptionCausesLogEntry()
-	{
-		$request = new WebRequest();
-		$request->UrlPath = "/test-exception-non-core/";
+    public function testNonCoreExceptionCausesLogEntry()
+    {
+        $request = new WebRequest();
+        $request->UrlPath = "/test-exception-non-core/";
 
-		Module::GenerateResponseForRequest( $request );
+        Module::generateResponseForRequest($request);
 
-		$lastEntry = array_pop( self::$_log->entries );
+        $lastEntry = array_pop(self::$log->entries);
 
-		$this->assertEquals( "Unhandled NonCoreException `OutOfBoundsException - Out of bounds`", $lastEntry[0], "A NonCoreException should have been logged" );
-	}
+        $this->assertEquals("Unhandled NonCoreException `OutOfBoundsException - Out of bounds`", $lastEntry[0],
+            "A NonCoreException should have been logged");
+    }
 
-	public function testPhpRuntimeErrorCausesLogEntry()
-	{
-		$request = new WebRequest();
-		$request->UrlPath = "/test-php-error/";
+    public function testPhpRuntimeErrorCausesLogEntry()
+    {
+        $request = new WebRequest();
+        $request->UrlPath = "/test-php-error/";
 
-		Module::GenerateResponseForRequest( $request );
+        Module::generateResponseForRequest($request);
 
-		$lastEntry = array_pop( self::$_log->entries );
+        $lastEntry = array_pop(self::$log->entries);
 
-		$this->assertEquals( "Unhandled NonCoreException `PHPUnit_Framework_Error_Warning - Division by zero`", $lastEntry[0], "A NonCoreException should have been logged for php run time errors" );
-	}
+        $this->assertEquals("Unhandled NonCoreException `PHPUnit_Framework_Error_Warning - Division by zero`",
+            $lastEntry[0], "A NonCoreException should have been logged for php run time errors");
+    }
 
-	public function testUrlHandlerGeneratesResponse()
-	{
-		// Enable layouts for this test as proof the URL handler has intercepted the response.
-		LayoutModule::EnableLayout();
+    public function testUrlHandlerGeneratesResponse()
+    {
+        // Enable layouts for this test as proof the URL handler has intercepted the response.
+        LayoutModule::enableLayout();
 
-		$request = new WebRequest();
-		$request->UrlPath = "/test-exception/";
+        $request = new WebRequest();
+        $request->UrlPath = "/test-exception/";
 
-		$response = Module::GenerateResponseForRequest( $request );
+        $response = Module::generateResponseForRequest($request);
 
-		$this->assertEquals( "TopSorry, something went wrong and we couldn't complete your request. The developers have
-been notified.Tail", $response->GetContent() );
+        $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have
+been notified.Tail", $response->getContent());
 
-		LayoutModule::DisableLayout();
-	}
+        LayoutModule::disableLayout();
+    }
 }
 
 class UnitTestExceptionModule extends Module
 {
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->namespace = __NAMESPACE__;
-	}
+        $this->namespace = __NAMESPACE__;
+    }
 
-	protected function RegisterUrlHandlers()
-	{
-		$this->AddUrlHandlers(
-			[
-				"/test-exception/" => $h1 = new UnitTestCrashingHandler(),
-				"/test-exception-non-core/" => $h2 = new UnitTestCrashingHandlerNonCoreException(),
-				"/test-php-error/" => $h3 = new UnitTestPhpErrorHandler()
-			]
-		);
+    protected function RegisterUrlHandlers()
+    {
+        $this->addUrlHandlers(
+            [
+                "/test-exception/" => $h1 = new UnitTestCrashingHandler(),
+                "/test-exception-non-core/" => $h2 = new UnitTestCrashingHandlerNonCoreException(),
+                "/test-php-error/" => $h3 = new UnitTestPhpErrorHandler()
+            ]
+        );
 
-		$h1->SetPriority( 100 );
-		$h2->SetPriority( 100 );
-		$h3->SetPriority( 100 );
-	}
+        $h1->setPriority(100);
+        $h2->setPriority(100);
+        $h3->setPriority(100);
+    }
 }
 
 class UnitTestCrashingHandler extends UrlHandler
 {
-	protected function GenerateResponseForRequest($request = null)
-	{
-		throw new RhubarbException( "Things went wrong" );
-	}
+    protected function generateResponseForRequest($request = null)
+    {
+        throw new RhubarbException("Things went wrong");
+    }
 }
 
 class UnitTestCrashingHandlerNonCoreException extends UrlHandler
 {
-	protected function GenerateResponseForRequest($request = null)
-	{
-		throw new \OutOfBoundsException( "Out of bounds" );
-	}
+    protected function generateResponseForRequest($request = null)
+    {
+        throw new \OutOfBoundsException("Out of bounds");
+    }
 }
 
 class UnitTestPhpErrorHandler extends UrlHandler
 {
-	protected function GenerateResponseForRequest($request = null)
-	{
-		// This will throw a run time error that we should be able to catch and handle.
-		$x = 9 / 0;
-	}
+    protected function generateResponseForRequest($request = null)
+    {
+        // This will throw a run time error that we should be able to catch and handle.
+        $x = 9 / 0;
+    }
 }
 
 class UnitTestSilentExceptionHandler extends DefaultExceptionHandler
 {
-	protected function HandleException(RhubarbException $er)
-	{
-		// Do nothing!
-	}
+    protected function handleException(RhubarbException $er)
+    {
+        // Do nothing!
+    }
 }

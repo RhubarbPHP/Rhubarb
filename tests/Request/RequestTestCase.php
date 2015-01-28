@@ -1,12 +1,15 @@
 <?php
 
-namespace Rhubarb\Crown\Request\UnitTesting;
+namespace Rhubarb\Crown\Tests\Request;
+
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  * @author    marramgrass
  * @copyright GCD Technologies 2012
  */
-class RequestTestCase extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class RequestTestCase extends RhubarbTestCase
 {
 	protected $_stashSuperglobals = [];
 
@@ -36,7 +39,7 @@ class RequestTestCase extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 		$this->_stashSuperglobals = [];
 
 		// WebRequest as Request is an abstract class
-		\Rhubarb\Crown\Request\WebRequest::ResetRequest();
+		WebRequest::ResetRequest();
 	}
 
 }

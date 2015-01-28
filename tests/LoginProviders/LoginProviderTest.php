@@ -1,18 +1,17 @@
 <?php
 
-namespace Rhubarb\Crown\LoginProviders;
+namespace Rhubarb\Crown\Tests\LoginProviders;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
-use Rhubarb\Crown\UnitTesting\UnitTestingLoginProvider;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class LoginProviderTest extends RhubarbTestCase
 {
     public function testForceLogin()
     {
         $loginProvider = new UnitTestingLoginProvider();
-        $loginProvider->ForceLogin();
+        $loginProvider->forceLogin();
 
-        $this->assertTrue( $loginProvider->IsLoggedIn() );
+        $this->assertTrue( $loginProvider->isLoggedIn() );
     }
 }
  

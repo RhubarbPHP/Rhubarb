@@ -1,15 +1,16 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Request;
+
+use Rhubarb\Crown\Request\WebRequest;
 
 /**
  * @author    marramgrass
  * @copyright GCD Technologies 2012
  */
-class WebRequestSSLOnTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
+class WebRequestSSLOnTest extends RequestTestCase
 {
-
-	protected $_request = null;
+	protected $request = null;
 
 	protected function setUp()
 	{
@@ -29,18 +30,18 @@ class WebRequestSSLOnTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTest
 		$_SESSION = [];
 		$_REQUEST = [];
 
-		$this->_request = new \Rhubarb\Crown\Request\WebRequest();
+		$this->request = new WebRequest();
 	}
 
 	protected function tearDown()
 	{
-		$this->_request = null;
+		$this->request = null;
 
 		parent::tearDown();
 	}
 
 	public function testSSL()
 	{
-		$this->assertTrue( $this->_request->IsSSL );
+		$this->assertTrue( $this->request->IsSSL );
 	}
 }

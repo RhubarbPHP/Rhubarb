@@ -1,41 +1,45 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Encryption;
+
+use Rhubarb\Crown\Encryption\Sha512HashProvider;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2013
  */
-class Sha512HashProviderTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class Sha512HashProviderTest extends RhubarbTestCase
 {
-	public function testHash()
-	{
-		$hasher = new \Rhubarb\Crown\Encryption\Sha512HashProvider();
-		$result = $hasher->CreateHash( "abc123", "saltyfish" );
+    public function testHash()
+    {
+        $hasher = new Sha512HashProvider();
+        $result = $hasher->createHash("abc123", "saltyfish");
 
-		$this->assertEquals( '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0', $result );
-	}
+        $this->assertEquals('$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0',
+            $result);
+    }
 
-	public function testHashesAreCompared()
-	{
-		$hasher = new \Rhubarb\Crown\Encryption\Sha512HashProvider();
+    public function testHashesAreCompared()
+    {
+        $hasher = new Sha512HashProvider();
 
-		$hash = $hasher->CreateHash( "abc123", "saltyfish" );
+        $hash = $hasher->createHash("abc123", "saltyfish");
 
-		$result = $hasher->CompareHash( "abc123", $hash );
-		$this->assertTrue( $result );
+        $result = $hasher->compareHash("abc123", $hash);
+        $this->assertTrue($result);
 
-		$result = $hasher->CompareHash( "dep456", $hash );
-		$this->assertFalse( $result );
+        $result = $hasher->compareHash("dep456", $hash);
+        $this->assertFalse($result);
 
-		// Repeat the tests with an automated salt.
-		$hash = $hasher->CreateHash( "abc123" );
+        // Repeat the tests with an automated salt.
+        $hash = $hasher->createHash("abc123");
 
-		$result = $hasher->CompareHash( "abc123", $hash );
-		$this->assertTrue( $result );
+        $result = $hasher->compareHash("abc123", $hash);
+        $this->assertTrue($result);
 
-		$result = $hasher->CompareHash( "dep456", $hash );
-		$this->assertFalse( $result );
-	}
+        $result = $hasher->compareHash("dep456", $hash);
+        $this->assertFalse($result);
+    }
 }

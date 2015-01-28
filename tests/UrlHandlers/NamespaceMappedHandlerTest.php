@@ -1,69 +1,60 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\UrlHandlers;
 
+use Rhubarb\Crown\Context;
 use Rhubarb\Crown\HttpHeaders;
+use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
-class NamespaceMappedHandlerTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class NamespaceMappedHandlerTest extends RhubarbTestCase
 {
-	protected $_request = null;
+    protected $request = null;
 
-	protected function setUp()
-	{
-		$this->_request = \Rhubarb\Crown\Context::CurrentRequest();
-		$this->_request->IsWebRequest = true;
-	}
+    protected function setUp()
+    {
+        $this->request = Context::CurrentRequest();
+        $this->request->IsWebRequest = true;
 
-	public function testHandlerFindsTestObject()
-	{
-		$this->_request->UrlPath = "/nmh/ObjectA/";
+        LayoutModule::disableLayout();
+    }
 
-		$response = Module::GenerateResponseForRequest( $this->_request );
-		$this->assertEquals( "ObjectA Response", $response->GetContent() );
+    public function testHandlerFindsTestObject()
+    {
+        $this->request->UrlPath = "/nmh/ObjectA/";
 
-		$this->_request->UrlPath = "/nmh/SubFolder/ObjectB/";
+        $response = Module::generateResponseForRequest($this->request);
+        $this->assertEquals("ObjectA Response", $response->getContent());
 
-		$response = Module::GenerateResponseForRequest( $this->_request );
-		$this->assertEquals( "ObjectB Response", $response->GetContent() );
-	}
+        $this->request->UrlPath = "/nmh/SubFolder/ObjectB/";
 
-	public function testHandlerRedirectsWhenTrailingSlashMissing()
-	{
-		$this->_request->UrlPath = "/nmh/ObjectA";
+        $response = Module::generateResponseForRequest($this->request);
+        $this->assertEquals("ObjectB Response", $response->getContent());
+    }
 
-		$response = Module::GenerateResponseForRequest( $this->_request );
+    public function testHandlerRedirectsWhenTrailingSlashMissing()
+    {
+        $this->request->UrlPath = "/nmh/ObjectA";
 
-		$headers = $response->GetHeaders();
+        $response = Module::generateResponseForRequest($this->request);
 
-		$this->assertEquals( "/nmh/ObjectA/", $headers[ "Location" ] );
-	}
+        $headers = $response->getHeaders();
 
-	public function testHandlerRedirectsToIndexPage()
-	{
-		HttpHeaders::ClearHeaders();
+        $this->assertEquals("/nmh/ObjectA/", $headers["Location"]);
+    }
 
-		// This folder does contain an index so it should redirect.
-		$this->_request->UrlPath = "/nmh/SubFolder/";
+    public function testHandlerRedirectsToIndexPage()
+    {
+        HttpHeaders::clearHeaders();
 
-		$response = Module::GenerateResponseForRequest( $this->_request );
+        // This folder does contain an index so it should redirect.
+        $this->request->UrlPath = "/nmh/SubFolder/";
 
-		$headers = $response->GetHeaders();
+        $response = Module::generateResponseForRequest($this->request);
 
-		$this->assertEquals( "/nmh/SubFolder/index/", $headers[ "Location" ] );
-	}
+        $headers = $response->getHeaders();
 
-	public function testHandlerFindsAbsoluteClassName()
-	{
-		$this->_request->UrlPath = "/Gcd/Core/UnitTesting/NamespaceMappedHandlerTests/ObjectA";
-
-		$response = Module::GenerateResponseForRequest( $this->_request );
-
-		$this->assertEquals( "ObjectA Response", $response->GetContent() );
-	}
+        $this->assertEquals("/nmh/SubFolder/index/", $headers["Location"]);
+    }
 }

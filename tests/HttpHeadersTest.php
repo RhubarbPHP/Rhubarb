@@ -43,7 +43,6 @@ class HttpHeadersTest extends RhubarbTestCase
 
         $headers = HttpHeaders::getHeaders();
 
-        $this->assertCount(2, $headers);
         $this->assertEquals("text/xml", $headers["Content-type"]);
     }
 

@@ -1,14 +1,16 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Request;
+
+use Rhubarb\Crown\Request\WebRequest;
 
 /**
  * @author marramgrass
  * @copyright GCD Technologies 2012
  */
-class WebRequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
+class WebRequestTest extends RequestTestCase
 {
-	protected $_request = null;
+	protected $request = null;
 
 	protected function setUp()
 	{
@@ -28,38 +30,38 @@ class WebRequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 		$_SESSION = [];
 		$_REQUEST = [];
 
-		$this->_request = new \Rhubarb\Crown\Request\WebRequest();
+		$this->request = new WebRequest();
 	}
 
 	protected function tearDown()
 	{
-		$this->_request = null;
+		$this->request = null;
 
 		parent::tearDown();
 	}
 
 	public function testIsWebRequest()
 	{
-		$this->assertTrue( $this->_request->IsWebRequest );
+		$this->assertTrue( $this->request->IsWebRequest );
 	}
 
 	public function testHostValue()
 	{
-		$this->assertEquals( 'gcdtech.com', $this->_request->Host );
+		$this->assertEquals( 'gcdtech.com', $this->request->Host );
 	}
 
 	public function testURIValue()
 	{
-		$this->assertEquals( 'http://gcdtech.com/foo', $this->_request->URI );
+		$this->assertEquals( 'http://gcdtech.com/foo', $this->request->URI );
 	}
 
 	public function testPathValue()
 	{
-		$this->assertEquals( '/foo', $this->_request->UrlPath );
+		$this->assertEquals( '/foo', $this->request->UrlPath );
 	}
 
 	public function testNoSSL()
 	{
-		$this->assertFalse( $this->_request->IsSSL );
+		$this->assertFalse( $this->request->IsSSL );
 	}
 }

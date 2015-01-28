@@ -1,121 +1,123 @@
 <?php
 
-namespace Rhubarb\Crown\DateTime;
+namespace Rhubarb\Crown\Tests\DateTime;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\DateTime\RhubarbDate;
+use Rhubarb\Crown\DateTime\RhubarbDateTime;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class RhubarbDateTimeTest extends RhubarbTestCase
 {
-	public function testDatesInitaliseProperly()
-	{
-		$now = time();
+    public function testDatesInitaliseProperly()
+    {
+        $now = time();
 
-		$date = new RhubarbDateTime( $now );
-		$this->assertEquals( date( "Y-m-d", $now ), $date->format( "Y-m-d" ) );
+        $date = new RhubarbDateTime($now);
+        $this->assertEquals(date("Y-m-d", $now), $date->format("Y-m-d"));
 
-		$date = new RhubarbDateTime( "2013-09-03" );
-		$this->assertEquals( "2013-09-03", $date->format( "Y-m-d" ) );
+        $date = new RhubarbDateTime("2013-09-03");
+        $this->assertEquals("2013-09-03", $date->format("Y-m-d"));
 
-		$date = new RhubarbDateTime( new \DateTime( "2013-09-03" ) );
-		$this->assertEquals( "2013-09-03", $date->format( "Y-m-d" ) );
+        $date = new RhubarbDateTime(new \DateTime("2013-09-03"));
+        $this->assertEquals("2013-09-03", $date->format("Y-m-d"));
 
-		$date = new RhubarbDateTime( new \DateTime( "0001-01-01" ) );
-		$this->assertEquals( "0001-01-01", $date->format( "Y-m-d" ) );
+        $date = new RhubarbDateTime(new \DateTime("0001-01-01"));
+        $this->assertEquals("0001-01-01", $date->format("Y-m-d"));
 
-		$date = new RhubarbDateTime( "now" );
-		$this->assertEquals( date( "Y-m-d", $now ), $date->format( "Y-m-d" ) );
+        $date = new RhubarbDateTime("now");
+        $this->assertEquals(date("Y-m-d", $now), $date->format("Y-m-d"));
 
-		$date = new RhubarbDateTime( "tomorrow" );
-		$this->assertEquals( date( "Y-m-d", $now + 86400 ), $date->format( "Y-m-d" ) );
-		
-	}
+        $date = new RhubarbDateTime("tomorrow");
+        $this->assertEquals(date("Y-m-d", $now + 86400), $date->format("Y-m-d"));
 
-	public function testInvalidDates()
-	{
-		$date = new RhubarbDateTime();
+    }
 
-		$this->assertFalse( $date->IsValidDateTime() );
+    public function testInvalidDates()
+    {
+        $date = new RhubarbDateTime();
 
-		$date = new RhubarbDateTime( "now" );
+        $this->assertFalse($date->IsValidDateTime());
 
-		$this->assertTrue( $date->IsValidDateTime() );
+        $date = new RhubarbDateTime("now");
 
-		$date = new RhubarbDateTime( "czcvz-23-122" );
+        $this->assertTrue($date->IsValidDateTime());
 
-		$this->assertFalse( $date->IsValidDateTime() );
+        $date = new RhubarbDateTime("czcvz-23-122");
 
-		$date = new RhubarbDateTime( "0000-00-00" );
+        $this->assertFalse($date->IsValidDateTime());
 
-		$this->assertFalse( $date->IsValidDateTime() );
+        $date = new RhubarbDateTime("0000-00-00");
 
-		$date = new RhubarbDateTime( "0000-00-00 00:00:00" );
+        $this->assertFalse($date->IsValidDateTime());
 
-		$this->assertFalse( $date->IsValidDateTime() );
+        $date = new RhubarbDateTime("0000-00-00 00:00:00");
 
-		ob_start();
+        $this->assertFalse($date->IsValidDateTime());
 
-		print $date;
+        ob_start();
 
-		$string = ob_get_clean();
+        print $date;
 
-		$this->assertEquals( "", $string );
+        $string = ob_get_clean();
 
-		$this->assertEquals( "", $date->format( "Y-m-d" ) );
-	}
+        $this->assertEquals("", $string);
 
-	public function testDatePrints()
-	{
-		$date = new RhubarbDateTime( "2013-09-03" );
+        $this->assertEquals("", $date->format("Y-m-d"));
+    }
 
-		ob_start();
+    public function testDatePrints()
+    {
+        $date = new RhubarbDateTime("2013-09-03");
 
-		print $date;
+        ob_start();
 
-		$dateString = ob_get_clean();
+        print $date;
 
-		$this->assertEquals( "03-Sep-2013", $dateString );
+        $dateString = ob_get_clean();
 
-		$date = new RhubarbDateTime( "abcdefg" );
+        $this->assertEquals("03-Sep-2013", $dateString);
 
-		ob_start();
+        $date = new RhubarbDateTime("abcdefg");
 
-		print $date;
+        ob_start();
 
-		$dateString = ob_get_clean();
+        print $date;
 
-		$this->assertEquals( "", $dateString, "Invalid dates should print an empty string." );
-	}
+        $dateString = ob_get_clean();
 
-	public function testJsonEncode()
-	{
-		$date = new RhubarbDateTime( "2013-09-03" );
-		$encoded = json_encode( $date );
+        $this->assertEquals("", $dateString, "Invalid dates should print an empty string.");
+    }
 
-		$this->assertEquals( '"'.$date->format( \DateTime::ISO8601 ).'"', $encoded );
+    public function testJsonEncode()
+    {
+        $date = new RhubarbDateTime("2013-09-03");
+        $encoded = json_encode($date);
 
-		$date = new RhubarbDateTime( str_replace( '"', "", $encoded ) );
+        $this->assertEquals('"' . $date->format(\DateTime::ISO8601) . '"', $encoded);
 
-		$this->assertEquals( "2013-09-03", $date->format( "Y-m-d" ) );
-	}
+        $date = new RhubarbDateTime(str_replace('"', "", $encoded));
 
-	public function testPreviousMonday()
-	{
-		$refDate = new RhubarbDate( "2014-03-31" );
+        $this->assertEquals("2013-09-03", $date->format("Y-m-d"));
+    }
 
-		$newDate = RhubarbDateTime::PreviousMonday( $refDate );
+    public function testPreviousMonday()
+    {
+        $refDate = new RhubarbDate("2014-03-31");
 
-		$this->assertEquals( $refDate->format( "Ymd" ), $newDate->format( "Ymd" ) );
+        $newDate = RhubarbDateTime::PreviousMonday($refDate);
 
-		$refDate = new RhubarbDate( "2014-04-02" );
+        $this->assertEquals($refDate->format("Ymd"), $newDate->format("Ymd"));
 
-		$newDate = RhubarbDateTime::PreviousMonday( $refDate );
+        $refDate = new RhubarbDate("2014-04-02");
 
-		$this->assertEquals( "20140331", $newDate->format( "Ymd" ) );
+        $newDate = RhubarbDateTime::PreviousMonday($refDate);
 
-		$refDate = new RhubarbDate( "2014-03-30" );
+        $this->assertEquals("20140331", $newDate->format("Ymd"));
 
-		$newDate = RhubarbDateTime::PreviousMonday( $refDate );
+        $refDate = new RhubarbDate("2014-03-30");
 
-		$this->assertEquals( "20140324", $newDate->format( "Ymd" ) );
-	}
+        $newDate = RhubarbDateTime::PreviousMonday($refDate);
+
+        $this->assertEquals("20140324", $newDate->format("Ymd"));
+    }
 }

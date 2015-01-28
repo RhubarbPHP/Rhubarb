@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Crown\Layout\UnitTesting;
+namespace Rhubarb\Crown\Tests\Layout;
 
 use Rhubarb\Crown\Layout\Layout;
 

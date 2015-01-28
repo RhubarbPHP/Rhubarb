@@ -1,12 +1,10 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Request;
 
-/**
- * @author marramgrass
- * @copyright GCD Technologies 2012
- */
-class CliRequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
+use Rhubarb\Crown\Request\CliRequest;
+
+class CliRequestTest extends RequestTestCase
 {
 	protected $_request = null;
 
@@ -14,7 +12,7 @@ class CliRequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 	{
 		parent::setUp();
 
-		$this->_request = new \Rhubarb\Crown\Request\CliRequest();
+		$this->_request = new CliRequest();
 	}
 
 	protected function tearDown()

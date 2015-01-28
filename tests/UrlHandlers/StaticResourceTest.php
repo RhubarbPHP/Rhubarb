@@ -1,118 +1,116 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\UrlHandlers;
 
-use Gcd\Core\StaticResource\UrlHandlers\StaticResourceUrlHandler;
+use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Layout\LayoutModule;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
+use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
-class StaticResourceTest extends \Gcd\Core\UnitTesting\CoreTestCase
+class StaticResourceTest extends RhubarbTestCase
 {
-	protected $_request = null;
+	protected $request = null;
 
 	public function setUp()
 	{
-		$this->_request = \Gcd\Core\Context::CurrentRequest();
-		$this->_request->IsWebRequest = true;
+		$this->request = Context::currentRequest();
+		$this->request->IsWebRequest = true;
 	}
 
 	public function tearDown()
 	{
-		$this->_request = null;
+		$this->request = null;
 	}
 
 	public function testStaticFileReturned()
 	{
-		$handler = new StaticResourceUrlHandler( __DIR__."/../UnitTesting/test.txt" );
-		$handler->SetUrl( "/test.txt" );
+		$handler = new StaticResourceUrlHandler( __DIR__."/Fixtures/test.txt" );
+		$handler->setUrl( "/test.txt" );
 
-		$this->_request->UrlPath = "/";
+		$this->request->UrlPath = "/";
 
-		$response = $handler->GenerateResponse( $this->_request );
+		$response = $handler->generateResponse( $this->request );
 
 		$this->assertFalse( $response );
 
-		$this->_request->UrlPath = "/test.txt";
-		$response = $handler->GenerateResponse( $this->_request );
+		$this->request->UrlPath = "/test.txt";
+		$response = $handler->generateResponse( $this->request );
 
-		$this->assertEquals( "This is a static resource", $response->GetContent() );
+		$this->assertEquals( "This is a static resource", $response->getContent() );
 	}
 
 	public function testStaticFileDisablesLayout()
 	{
-		\Gcd\Core\Layout\LayoutModule::EnableLayout();
+		LayoutModule::enableLayout();
 
-		$handler = new StaticResourceUrlHandler( __DIR__."/../UnitTesting/test.txt" );
-		$handler->SetUrl( "/test.txt" );
-		$this->_request->UrlPath = "/test.txt";
+		$handler = new StaticResourceUrlHandler( __DIR__."/Fixtures/test.txt" );
+		$handler->setUrl( "/test.txt" );
+		$this->request->UrlPath = "/test.txt";
 
-		$handler->GenerateResponse( $this->_request );
+		$handler->generateResponse( $this->request );
 
-		$this->assertTrue( \Gcd\Core\Layout\LayoutModule::IsDisabled() );
+		$this->assertTrue( LayoutModule::isDisabled() );
 	}
 
 	public function testStaticFolderFindsAndReturnsFiles()
 	{
-		$handler = new StaticResourceUrlHandler( __DIR__."/../UnitTesting/" );
-		$handler->SetUrl( "/files/" );
-		$this->_request->UrlPath = "/files/test2.txt";
+		$handler = new StaticResourceUrlHandler( __DIR__."/Fixtures/" );
+		$handler->setUrl( "/files/" );
+		$this->request->UrlPath = "/files/test2.txt";
 
-		$response = $handler->GenerateResponse( $this->_request );
-		$this->assertEquals( "This is another static resource", $response->GetContent() );
+		$response = $handler->generateResponse( $this->request );
+		$this->assertEquals( "This is another static resource", $response->getContent() );
 
-		$this->_request->UrlPath = "/files/subfolder/test3.txt";
-		$response = $handler->GenerateResponse( $this->_request );
-		$this->assertEquals( "test3", $response->GetContent() );
+		$this->request->UrlPath = "/files/subfolder/test3.txt";
+		$response = $handler->generateResponse( $this->request );
+		$this->assertEquals( "test3", $response->getContent() );
 	}
 
 	public function testExceptionThrownIfPathDoesntExist()
 	{
-		$this->setExpectedException( "\Gcd\Core\StaticResource\Exceptions\StaticResourceNotFoundException" );
+		$this->setExpectedException( "\Rhubarb\Crown\Exceptions\StaticResourceNotFoundException" );
 
-		new StaticResourceUrlHandler( __DIR__."/../UnitTesting/non-extant-file.txt" );
+		new StaticResourceUrlHandler( __DIR__."/Fixtures/non-extant-file.txt" );
 	}
 
 	public function testExceptionThrownIfFileNotFoundInDirectory()
 	{
-		$this->setExpectedException( "\Gcd\Core\StaticResource\Exceptions\StaticResource404Exception" );
+		$this->setExpectedException( "\Rhubarb\Crown\Exceptions\StaticResource404Exception" );
 
-		$handler = new StaticResourceUrlHandler( __DIR__."/../UnitTesting/" );
-		$handler->SetUrl( "/files/" );
+		$handler = new StaticResourceUrlHandler( __DIR__."/Fixtures/" );
+		$handler->setUrl( "/files/" );
 
-		$this->_request->UrlPath = "/files/non-extant.txt";
+		$this->request->UrlPath = "/files/non-extant.txt";
 
-		$handler->GenerateResponse( $this->_request );
+		$handler->generateResponse( $this->request );
 	}
 
 	public function testMimeTypeSetCorrectly()
 	{
-		$handler = new StaticResourceUrlHandler( __DIR__."/../UnitTesting/" );
-		$handler->SetUrl( "/files/" );
+		$handler = new StaticResourceUrlHandler( __DIR__."/Fixtures/" );
+		$handler->setUrl( "/files/" );
 
-		$this->_request->UrlPath = "/files/test.txt";
-		$response = $handler->GenerateResponse( $this->_request );
-		$headers = $response->GetHeaders();
+		$this->request->UrlPath = "/files/test.txt";
+		$response = $handler->generateResponse( $this->request );
+		$headers = $response->getHeaders();
 
 		$this->assertArrayHasKey( "Content-Type", $headers );
 		$this->assertEquals( "text/plain; charset=us-ascii", $headers[ "Content-Type" ] );
 
-		$this->_request->UrlPath = "/files/base.css";
-		$response = $handler->GenerateResponse( $this->_request );
-		$headers = $response->GetHeaders();
+		$this->request->UrlPath = "/files/base.css";
+		$response = $handler->generateResponse( $this->request );
+		$headers = $response->getHeaders();
 
 		$this->assertArrayHasKey( "Content-Type", $headers );
 		$this->assertEquals( "text/css", $headers[ "Content-Type" ] );
 
-		$handler = new StaticResourceUrlHandler( __DIR__."/../../ClientSide/Resources/resource-manager.js" );
-		$handler->SetUrl( "/js/resource-manager.js" );
+		$handler = new StaticResourceUrlHandler( __DIR__."/../../resources/resource-manager.js" );
+		$handler->setUrl( "/js/resource-manager.js" );
 
-		$this->_request->UrlPath = "/js/resource-manager.js";
+		$this->request->UrlPath = "/js/resource-manager.js";
 
-		$response = $handler->GenerateResponse( $this->_request );
-		$headers = $response->GetHeaders();
+		$response = $handler->generateResponse( $this->request );
+		$headers = $response->getHeaders();
 
 		$this->assertEquals( "application/javascript; charset=us-ascii", $headers[ "Content-Type" ] );
 	}

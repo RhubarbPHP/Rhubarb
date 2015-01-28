@@ -1,12 +1,12 @@
 <?php
 
-namespace Rhubarb\Crown\Layout\UnitTesting;
+namespace Rhubarb\Crown\Tests\Layout;
 
 use Rhubarb\Crown\Layout\Layout;
 
 class TestLayout extends Layout
 {
-	protected function PrintLayout( $content )
+	protected function printLayout( $content )
 	{
 		?>Top<?=$content;?>Tail<?php
 	}

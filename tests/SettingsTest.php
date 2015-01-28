@@ -1,7 +1,9 @@
 <?php
 
-namespace Gcd\Tests;
-use Rhubarb\Crown\UnitTesting\UnitTestingSettings;
+namespace Rhubarb\Crown\Tests;
+
+use Rhubarb\Crown\Settings;
+use Rhubarb\Crown\Tests\Fixtures\UnitTestingSettings;
 
 /**
  * Settings test suite.
@@ -11,53 +13,53 @@ use Rhubarb\Crown\UnitTesting\UnitTestingSettings;
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class SettingsTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class SettingsTest extends RhubarbTestCase
 {
-	public function testSettingsHaveNamespace()
-	{
-		$settings = new \Rhubarb\Crown\UnitTesting\UnitTestingSettings();
-		$this->assertEquals( "UnitTesting", $settings->GetNamespace() );
-	}
+    public function testSettingsHaveNamespace()
+    {
+        $settings = new UnitTestingSettings();
+        $this->assertEquals("UnitTesting", $settings->getNamespace());
+    }
 
-	public function testSettingsAreSingletons()
-	{
-		$settings = new \Rhubarb\Crown\UnitTesting\UnitTestingSettings();
-		$settings->Foo = "abc";
+    public function testSettingsAreSingletons()
+    {
+        $settings = new UnitTestingSettings();
+        $settings->Foo = "abc";
 
-		$settings = new \Rhubarb\Crown\UnitTesting\UnitTestingSettings();
-		$this->assertEquals( "abc", $settings->Foo );
+        $settings = new UnitTestingSettings();
+        $this->assertEquals("abc", $settings->Foo);
 
-		\Rhubarb\Crown\Settings::DeleteSettingNamespace( "UnitTesting" );
+        Settings::deleteSettingNamespace("UnitTesting");
 
-		$settings = new \Rhubarb\Crown\UnitTesting\UnitTestingSettings();
-		$this->assertEquals( null, $settings->Foo );
-	}
+        $settings = new UnitTestingSettings();
+        $this->assertEquals(null, $settings->Foo);
+    }
 
-	public function testValuesCanBeAccessedStatically()
-	{
-		$settings = new \Rhubarb\Crown\UnitTesting\UnitTestingSettings();
-		$settings->Foo = "abc";
+    public function testValuesCanBeAccessedStatically()
+    {
+        $settings = new UnitTestingSettings();
+        $settings->Foo = "abc";
 
-		$this->assertEquals( "abc", \Rhubarb\Crown\Settings::GetSetting( 'UnitTesting', "Foo" ) );
+        $this->assertEquals("abc", Settings::getSetting('UnitTesting', "Foo"));
 
-		// No exception thrown as a default is supplied.
-		$return = \Rhubarb\Crown\Settings::GetSetting( 'UnitTesting', "Bar", "123" );
-		$this->assertEquals( "123", $return );
+        // No exception thrown as a default is supplied.
+        $return = Settings::getSetting('UnitTesting', "Bar", "123");
+        $this->assertEquals("123", $return);
 
-		$this->setExpectedException( "\Rhubarb\Crown\Exceptions\SettingMissingException" );
-		\Rhubarb\Crown\Settings::GetSetting( 'UnitTesting', "Bar" );
-	}
+        $this->setExpectedException("\Rhubarb\Crown\Exceptions\SettingMissingException");
+        Settings::getSetting('UnitTesting', "Bar");
+    }
 
-	public function testDefaultsAreSet()
-	{
-		$settings = new UnitTestingSettings();
+    public function testDefaultsAreSet()
+    {
+        $settings = new UnitTestingSettings();
 
-		$this->assertEquals( "default", $settings->SettingWithDefault );
+        $this->assertEquals("default", $settings->SettingWithDefault);
 
-		$settings->SettingWithDefault = "abc";
+        $settings->SettingWithDefault = "abc";
 
-		$settings = new UnitTestingSettings();
+        $settings = new UnitTestingSettings();
 
-		$this->assertEquals( "abc", $settings->SettingWithDefault );
-	}
+        $this->assertEquals("abc", $settings->SettingWithDefault);
+    }
 }

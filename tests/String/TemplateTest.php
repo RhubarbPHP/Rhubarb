@@ -1,25 +1,21 @@
 <?php
 
-namespace Rhubarb\Crown\String;
+namespace Rhubarb\Crown\Tests\String;
 
-use Rhubarb\Crown\Modelling\UnitTesting\Example;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\String\Template;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class TemplateTest extends RhubarbTestCase
 {
-	public function testTemplateParsing()
-	{
-		$plainTextTemplate = "Nothing in here to parse";
+    public function testTemplateParsing()
+    {
+        $plainTextTemplate = "Nothing in here to parse";
 
-		$this->assertEquals( $plainTextTemplate, Template::ParseTemplate( $plainTextTemplate, array() ) );
+        $this->assertEquals($plainTextTemplate, Template::parseTemplate($plainTextTemplate, array()));
 
-		$template = "Ah something to process! {Forename}";
+        $template = "Ah something to process! {Forename}";
 
-		$this->assertEquals( "Ah something to process! Andrew", Template::ParseTemplate( $template, array( "Forename" => "Andrew" ) ) );
-
-		$susan = new Example();
-		$susan->Forename = "Susan";
-
-		$this->assertEquals( "Ah something to process! Susan", Template::ParseTemplate( $template, $susan ) );
-	}
+        $this->assertEquals("Ah something to process! Andrew",
+            Template::parseTemplate($template, array("Forename" => "Andrew")));
+    }
 }

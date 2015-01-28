@@ -1,178 +1,172 @@
 <?php
 
-namespace Rhubarb\Crown\Layout;
+namespace Rhubarb\Crown\Tests\Layout;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
-use Rhubarb\Crown\ClientSide\ResourceLoader;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter;
-use Rhubarb\Crown\Modelling\UnitTesting\User;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\JsonResponse;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class LayoutModuleTest extends RhubarbTestCase
 {
-	public static function setUpBeforeClass()
-	{
-		parent::setUpBeforeClass();
-
-		LayoutModule::EnableLayout();
-	}
-
-	public function testLayoutPathIsRemembered()
-	{
-		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
-
-		$this->assertEquals(
-			"Rhubarb\Crown\Layout\UnitTesting\LayoutTest2",
-			LayoutModule::GetLayoutClassName() );
-	}
-
-	public function testAjaxRequestDisablesLayout()
-	{
-		LayoutModule::EnableLayout();
-
-		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
-
-		// Normal request
-		$this->assertFalse( LayoutModule::IsDisabled() );
-
-		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "some-odd-request";
-
-		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
-
-		// Some odd request
-		$this->assertFalse( LayoutModule::IsDisabled() );
-
-		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "XMLHttpRequest";
-
-		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
-
-		// Ajax request
-		$this->assertTrue( LayoutModule::IsDisabled() );
-
-		unset( $_SERVER[ "HTTP_X_REQUESTED_WITH" ] );
-
-		LayoutModule::EnableLayout();
-	}
-
-	public function testLayoutCanBeDisabled()
-	{
-		LayoutModule::DisableLayout();
-
-		$this->assertTrue( LayoutModule::IsDisabled() );
-
-		LayoutModule::EnableLayout();
-
-		$this->assertFalse( LayoutModule::IsDisabled() );
-	}
-
-	public function testLayoutCanBeChanged()
-	{
-		new LayoutModule( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
-		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2" );
-
-		$this->assertEquals( "Rhubarb\Crown\Layout\UnitTesting\LayoutTest2", LayoutModule::GetLayoutClassName() );
-	}
-
-	public function testLayoutDoesntWorkForJsonResponse()
-	{
-		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
-
-		$model = new User();
-		$model->Field = "Value";
-
-		$response = new JsonResponse();
-		$response->SetContent( $model );
-
-		$layoutFilter = new LayoutFilter();
-		$layoutFilter->ProcessResponse( $response );
-
-		$this->assertEquals( $model, $response->GetContent() );
-	}
-
-	public function testLayoutWorks()
-	{
-		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
-
-		$request = new WebRequest();
-		$request->UrlPath = "/simple/";
-		$request->IsWebRequest = true;
-
-		$response = Module::GenerateResponseForRequest( $request );
-
-		$this->assertEquals( "TopDon't change this content - it should match the unit test.Tail", $response->GetContent() );
-	}
-
-	public function testLayoutFilterThrowsException()
-	{
-		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\NonExistant" );
-
-		$request = new WebRequest();
-		$request->UrlPath = "/simple/";
-		$request->IsWebRequest = true;
-
-		$this->setExpectedException( "Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException" );
-
-		ExceptionHandler::DisableExceptionTrapping();
-
-		Module::GenerateResponseForRequest( $request );
-	}
-
-    public function testLayoutCanBeAnonymousFunction()
+    public static function setUpBeforeClass()
     {
-        LayoutModule::SetLayoutClassName( function()
-        {
-            return "Rhubarb\Crown\Layout\UnitTesting\TestLayout";
-        } );
+        parent::setUpBeforeClass();
+
+        LayoutModule::enableLayout();
+    }
+
+    public function testLayoutPathIsRemembered()
+    {
+        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+
+        $this->assertEquals(
+            "Rhubarb\Crown\Tests\Layout\LayoutTest2",
+            LayoutModule::getLayoutClassName());
+    }
+
+    public function testAjaxRequestDisablesLayout()
+    {
+        LayoutModule::enableLayout();
+
+        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+
+        // Normal request
+        $this->assertFalse(LayoutModule::isDisabled());
+
+        $_SERVER["HTTP_X_REQUESTED_WITH"] = "some-odd-request";
+
+        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+
+        // Some odd request
+        $this->assertFalse(LayoutModule::isDisabled());
+
+        $_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
+
+        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+
+        // Ajax request
+        $this->assertTrue(LayoutModule::isDisabled());
+
+        unset($_SERVER["HTTP_X_REQUESTED_WITH"]);
+
+        LayoutModule::enableLayout();
+    }
+
+    public function testLayoutCanBeDisabled()
+    {
+        LayoutModule::disableLayout();
+
+        $this->assertTrue(LayoutModule::isDisabled());
+
+        LayoutModule::enableLayout();
+
+        $this->assertFalse(LayoutModule::isDisabled());
+    }
+
+    public function testLayoutCanBeChanged()
+    {
+        new LayoutModule("Rhubarb\Crown\Tests\Layout\TestLayout");
+        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+
+        $this->assertEquals("Rhubarb\Crown\Tests\Layout\LayoutTest2", LayoutModule::getLayoutClassName());
+    }
+
+    public function testLayoutDoesntWorkForJsonResponse()
+    {
+        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
+
+        $model = new \stdClass();
+        $model->Field = "Value";
+
+        $response = new JsonResponse();
+        $response->setContent($model);
+
+        $layoutFilter = new LayoutFilter();
+        $layoutFilter->processResponse($response);
+
+        $this->assertEquals("Value", $response->getContent()->Field);
+    }
+
+    public function testLayoutWorks()
+    {
+        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
         $request->IsWebRequest = true;
 
-        $response = Module::GenerateResponseForRequest( $request );
+        $response = Module::generateResponseForRequest($request);
 
-        $this->assertEquals( "TopDon't change this content - it should match the unit test.Tail", $response->GetContent() );
+        $this->assertEquals("TopDon't change this content - it should match the unit test.Tail",
+            $response->getContent());
     }
 
-	public function testHeadItems()
-	{
-		// Reenable this as it was disabled in the previous test.
-		ExceptionHandler::EnableExceptionTrapping();
+    public function testLayoutFilterThrowsException()
+    {
+        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\NonExistant");
 
-		LayoutModule::AddHeadItem( "this is some html" );
-		LayoutModule::AddHeadItem( "this is more html" );
+        $request = new WebRequest();
+        $request->UrlPath = "/simple/";
+        $request->IsWebRequest = true;
 
-		$head = LayoutModule::GetHeadItemsAsHtml();
+        $this->setExpectedException("Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException");
 
-		$this->assertEquals( "this is some html
-this is more html", $head );
+        ExceptionHandler::disableExceptionTrapping();
 
-	}
+        Module::generateResponseForRequest($request);
+    }
 
-	public function testBodyItems()
-	{
-		LayoutModule::AddBodyItem( "this is some html" );
-		LayoutModule::AddBodyItem( "this is more html" );
+    public function testLayoutCanBeAnonymousFunction()
+    {
+        LayoutModule::setLayoutClassName(function () {
+            return "Rhubarb\Crown\Tests\Layout\TestLayout";
+        });
 
-		$head = LayoutModule::GetBodyItemsAsHtml();
+        $request = new WebRequest();
+        $request->UrlPath = "/simple/";
+        $request->IsWebRequest = true;
 
-		$this->assertEquals( "this is some html
-this is more html", $head );
-	}
+        $response = Module::generateResponseForRequest($request);
 
-	public static function tearDownAfterClass()
-	{
-		parent::tearDownAfterClass();
+        $this->assertEquals("TopDon't change this content - it should match the unit test.Tail",
+            $response->GetContent());
+    }
 
-		LayoutModule::SetLayoutClassName( "Rhubarb\Crown\Layout\UnitTesting\TestLayout" );
-		LayoutModule::DisableLayout();
-	}
+    public function testHeadItems()
+    {
+        // Reenable this as it was disabled in the previous test.
+        ExceptionHandler::enableExceptionTrapping();
+
+        LayoutModule::addHeadItem("this is some html");
+        LayoutModule::addHeadItem("this is more html");
+
+        $head = LayoutModule::getHeadItemsAsHtml();
+
+        $this->assertEquals("this is some html
+this is more html", $head);
+
+    }
+
+    public function testBodyItems()
+    {
+        LayoutModule::addBodyItem("this is some html");
+        LayoutModule::addBodyItem("this is more html");
+
+        $head = LayoutModule::getBodyItemsAsHtml();
+
+        $this->assertEquals("this is some html
+this is more html", $head);
+    }
+
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+
+        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
+        LayoutModule::disableLayout();
+    }
 }

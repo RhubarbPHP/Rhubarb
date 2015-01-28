@@ -1,57 +1,58 @@
 <?php
 
-namespace Rhubarb\Crown\Deployment;
+namespace Rhubarb\Crown\Tests\Deployment;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Deployment\RelocationResourceDeploymentHandler;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 {
-	public function testUrlCreated()
-	{
-		$deploymentPackage = new RelocationResourceDeploymentHandler();
-		$url = $deploymentPackage->GetDeployedResourceUrl( __FILE__ );
+    public function testUrlCreated()
+    {
+        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $url = $deploymentPackage->getDeployedResourceUrl(__FILE__);
 
-		$cwd = getcwd();
-		$deployedUrl = "/deployed/".str_replace( "\\", "/", str_replace( $cwd, "", __FILE__ ) );
+        $cwd = getcwd();
+        $deployedUrl = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", __FILE__));
 
-		$this->assertEquals( $deployedUrl, $url );
-	}
+        $this->assertEquals($deployedUrl, $url);
+    }
 
-	public function testDeploymentCopiesFiles()
-	{
-		$cwd = getcwd();
+    public function testDeploymentCopiesFiles()
+    {
+        $cwd = getcwd();
 
-		$deploymentPackage = new RelocationResourceDeploymentHandler();
-		$deploymentPackage->DeployResource( __FILE__ );
+        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage->deployResource(__FILE__);
 
-		$deployedFile = "deployed/".str_replace( $cwd, "", __FILE__ );
+        $deployedFile = "deployed/" . str_replace($cwd, "", __FILE__);
 
-		$this->assertFileExists( $deployedFile );
+        $this->assertFileExists($deployedFile);
 
-		unlink( $deployedFile );
-	}
+        unlink($deployedFile);
+    }
 
-	public function testDeploymentThrowsExceptions()
-	{
-		$this->setExpectedException( "Rhubarb\Crown\Exceptions\DeploymentException" );
+    public function testDeploymentThrowsExceptions()
+    {
+        $this->setExpectedException("Rhubarb\Crown\Exceptions\DeploymentException");
 
-		$deploymentPackage = new RelocationResourceDeploymentHandler();
-		$deploymentPackage->DeployResource( "a/b/c.txt" );
-	}
+        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage->deployResource("a/b/c.txt");
+    }
 
-	public function testDeploymentCreateFiles()
-	{
-		$deploymentPackage = new RelocationResourceDeploymentHandler();
-		$deploymentPackage->DeployResourceContent( "This is a test", "temp/folder/file.txt" );
+    public function testDeploymentCreateFiles()
+    {
+        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage->deployResourceContent("This is a test", "temp/folder/file.txt");
 
-		$deployedFile = "deployed/temp/folder/file.txt";
+        $deployedFile = "deployed/temp/folder/file.txt";
 
-		$this->assertFileExists( $deployedFile );
+        $this->assertFileExists($deployedFile);
 
-		$content = file_get_contents( $deployedFile );
+        $content = file_get_contents($deployedFile);
 
-		$this->assertEquals( "This is a test", $content );
+        $this->assertEquals("This is a test", $content);
 
-		unlink( $deployedFile );
-	}
+        unlink($deployedFile);
+    }
 }

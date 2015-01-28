@@ -1,14 +1,12 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Request;
 
-/**
- * @author marramgrass
- * @copyright GCD Technologies 2012
- */
-class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
+use Rhubarb\Crown\Request\Request;
+
+class RequestTest extends RequestTestCase
 {
-	protected $_request = null;
+	protected $request = null;
 
     protected $testEnvKey = 'REQUEST_TEST';
     protected $testEnvValue = 42;
@@ -19,12 +17,12 @@ class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 
 		$_ENV[ $this->testEnvKey ] = 42;
 
-        $this->_request = new TestRequest();
+        $this->request = new TestRequest();
 	}
 
 	protected function tearDown()
 	{
-		$this->_request = null;
+		$this->request = null;
 
 		unset( $_ENV[ $this->testEnvKey ] );
 
@@ -33,17 +31,17 @@ class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 
 	public function testInstantiation()
 	{
-		$this->assertInstanceOf( '\Gcd\Tests\TestRequest', $this->_request );
+		$this->assertInstanceOf( '\Rhubarb\Crown\Tests\Request\TestRequest', $this->request );
 	}
 
 	public function testMagicOriginalGetter()
 	{
-		$this->assertEquals( 42, $this->_request->AnotherTestProperty );
+		$this->assertEquals( 42, $this->request->AnotherTestProperty );
 
-		$this->_request->AnotherTestProperty = 1337;
-		$this->assertEquals( 1337, $this->_request->AnotherTestProperty );
+		$this->request->AnotherTestProperty = 1337;
+		$this->assertEquals( 1337, $this->request->AnotherTestProperty );
 
-		$this->assertEquals( 42, $this->_request->OriginalAnotherTestProperty );
+		$this->assertEquals( 42, $this->request->OriginalAnotherTestProperty );
 	}
 
 	/**
@@ -51,15 +49,15 @@ class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 	 */
 	public function testMagicOriginalSetterException()
 	{
-        $this->_request->OriginalATestProperty = 'Two';
+        $this->request->OriginalATestProperty = 'Two';
 	}
 
     public function testStaticData()
     {
         // check test ENV - currently == 42 from setUp()
-        $this->assertEquals( $this->testEnvValue, $this->_request->EnvData[ $this->testEnvKey ] );
-        $this->assertEquals( $this->testEnvValue, $this->_request->OriginalEnvData[ $this->testEnvKey ] );
-		$this->assertEquals( $this->testEnvValue, $this->_request->Env( $this->testEnvKey ) );
+        $this->assertEquals( $this->testEnvValue, $this->request->EnvData[ $this->testEnvKey ] );
+        $this->assertEquals( $this->testEnvValue, $this->request->OriginalEnvData[ $this->testEnvKey ] );
+		$this->assertEquals( $this->testEnvValue, $this->request->Env( $this->testEnvKey ) );
 
 	    /*
 	     * Static data does now reparse the global arrays each time a request is created.
@@ -77,9 +75,9 @@ class RequestTest extends \Rhubarb\Crown\Request\UnitTesting\RequestTestCase
 }
 
 // Request is an abstract class, so needs a concrete implementation for testing
-class TestRequest extends \Rhubarb\Crown\Request\Request
+class TestRequest extends Request
 {
-	public function Initialise()
+	public function initialise()
 	{
 		$this->ATestProperty = 'One';
 		$this->AnotherTestProperty = 42;

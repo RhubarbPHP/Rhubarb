@@ -1,20 +1,23 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Events;
+
+use Rhubarb\Crown\Events\EventEmitter;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  *
  * @author acuthbert
  * @copyright GCD Technologies 2012
  */
-class EventEmitterTest extends \PHPUnit_Framework_TestCase
+class EventEmitterTest extends RhubarbTestCase
 {
 	public function testEventsCanBeEmitted()
 	{
 		$emitter = new TestEventEmitter();
 
-		$emitter->AttachEventHandler( "SomeEvent", array( $this, "OnSomeEvent" ) );
-		$emitter->RaiseSomeEvent();
+		$emitter->attachEventHandler( "SomeEvent", array( $this, "OnSomeEvent" ) );
+		$emitter->raiseSomeEvent();
 
 		$this->assertTrue( $this->eventWasRaised );
 	}
@@ -26,12 +29,12 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase
 		self::$callbackTriggered = false;
 
 		$emitter = new TestEventEmitter();
-		$emitter->AttachEventHandler( "CallBackEvent", function()
+		$emitter->attachEventHandler( "CallBackEvent", function()
 		{
 			return true;
 		});
 
-		$emitter->RaiseCallbackEvent( function( $response )
+		$emitter->raiseCallbackEvent( function( $response )
 		{
 			self::$callbackTriggered = $response;
 		});
@@ -42,12 +45,12 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase
 	public function testEventReturnsResponse()
 	{
 		$emitter = new TestEventEmitter();
-		$emitter->AttachEventHandler( "SomeEvent", function()
+		$emitter->attachEventHandler( "SomeEvent", function()
 		{
 			return "abc123";
 		});
 
-		$response = $emitter->RaiseSomeEvent();
+		$response = $emitter->raiseSomeEvent();
 
 		$this->assertEquals( "abc123", $response );
 	}
@@ -66,12 +69,12 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase
 	public function testHasAttachedEventHandlers()
 	{
 		$emitter = new TestEventEmitter();
-		$emitter->AttachEventHandler( "CallBackEvent", function()
+		$emitter->attachEventHandler( "CallBackEvent", function()
 		{
 			return true;
 		});
 
-		$this->assertTrue( $emitter->HasAttachedEventHandlers() );
+		$this->assertTrue( $emitter->hasAttachedEventHandlers() );
 	}
 
 	public function testEventsCanBeReplaced()
@@ -80,35 +83,34 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase
 		$b = false;
 
 		$emitter = new TestEventEmitter();
-		$emitter->AttachEventHandler( "SomeEvent", function() use (&$a)
+		$emitter->attachEventHandler( "SomeEvent", function() use (&$a)
 		{
 			$a = true;
 		});
 
-		$emitter->ReplaceEventHandler( "SomeEvent", function() use (&$b)
+		$emitter->replaceEventHandler( "SomeEvent", function() use (&$b)
 		{
 			$b = true;
 		});
 
-		$emitter->RaiseSomeEvent();
+		$emitter->raiseSomeEvent();
 
 		$this->assertFalse( $a );
 		$this->assertTrue( $b );
 	}
-
 }
 
 class TestEventEmitter
 {
-	use \Rhubarb\Crown\Events\EventEmitter;
+	use EventEmitter;
 
-	public function RaiseSomeEvent()
+	public function raiseSomeEvent()
 	{
-		return $this->RaiseEvent( "SomeEvent", "a", "b", "c" );
+		return $this->raiseEvent( "SomeEvent", "a", "b", "c" );
 	}
 
-	public function RaiseCallbackEvent( $callback )
+	public function raiseCallbackEvent( $callback )
 	{
-		return $this->RaiseEvent( "CallBackEvent", $callback );
+		return $this->raiseEvent( "CallBackEvent", $callback );
 	}
 }

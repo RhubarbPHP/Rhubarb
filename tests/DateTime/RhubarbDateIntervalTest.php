@@ -1,9 +1,11 @@
 <?php
 
 
-namespace Rhubarb\Crown\DateTime;
+namespace Rhubarb\Crown\Tests\DateTime;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\DateTime\RhubarbDateInterval;
+use Rhubarb\Crown\DateTime\RhubarbDateTime;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 
 class RhubarbDateIntervalTest extends RhubarbTestCase

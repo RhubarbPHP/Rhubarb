@@ -2,35 +2,33 @@
 
 namespace Rhubarb\Crown\Response;
 
-use Rhubarb\Crown\Modelling\UnitTesting\User;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class JsonResponseTest extends RhubarbTestCase
 {
     public function testResponseIsJsonEncoded()
     {
         $response = new JsonResponse();
-        $test = new User();
+        $test = new \stdClass();
         $test->Forename = "abc";
         $test->Surname = "123";
-        $test->Save();
-        $response->SetContent($test);
+        $response->setContent($test);
 
         ob_start();
-        $response->Send();
+        $response->send();
         $buffer = ob_get_clean();
 
-        $this->assertEquals('{"UserID":' . $test->UserID . ',"FullName":"abc 123"}', $buffer);
+        $this->assertEquals('{"Forename":"' . $test->Forename . '","Surname":"123"}', $buffer);
     }
 
     public function testResponseCanCodeNonModels()
     {
         $response = new JsonResponse();
         $test = ["abc", "123"];
-        $response->SetContent($test);
+        $response->setContent($test);
 
         ob_start();
-        $response->Send();
+        $response->send();
         $buffer = ob_get_clean();
 
         $this->assertEquals('["abc","123"]', $buffer);
@@ -39,10 +37,10 @@ class JsonResponseTest extends RhubarbTestCase
         $test = new \stdClass();
         $test->abc = "123";
 
-        $response->SetContent($test);
+        $response->setContent($test);
 
         ob_start();
-        $response->Send();
+        $response->send();
         $buffer = ob_get_clean();
 
         $this->assertEquals('{"abc":"123"}', $buffer);

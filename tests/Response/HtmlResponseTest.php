@@ -1,18 +1,17 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Response;
 
-/**
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
-class HtmlResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+use Rhubarb\Crown\Response\HtmlResponse;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
+
+class HtmlResponseTest extends RhubarbTestCase
 {
     protected $_response = null;
 
     protected function setUp()
     {
-        $this->_response = new \Rhubarb\Crown\Response\HtmlResponse();
+        $this->_response = new HtmlResponse();
     }
 
     protected function tearDown()
@@ -22,7 +21,7 @@ class HtmlResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 
     public function testDefaultContentTypeHeader()
     {
-        $this->assertEquals($this->_response->GetHeaders()['Content-Type'], 'text/html',
+        $this->assertEquals($this->_response->getHeaders()['Content-Type'], 'text/html',
             "Content-Type header is not set to text/html");
     }
 }

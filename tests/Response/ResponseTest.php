@@ -1,50 +1,49 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Response;
 
-/**
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
-class ResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+use Rhubarb\Crown\Response\Response;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
+
+class ResponseTest extends RhubarbTestCase
 {
-    protected $_response = null;
+    protected $response = null;
 
     protected function setUp()
     {
-        $this->_response = new \Rhubarb\Crown\Response\Response();
+        $this->response = new Response();
     }
 
     protected function tearDown()
     {
-        $this->_response = null;
+        $this->response = null;
     }
 
     public function testConstructed()
     {
-        $this->assertNotNull($this->_response, "Failed to instantiate Response object");
+        $this->assertNotNull($this->response, "Failed to instantiate Response object");
     }
 
     public function testClearHeaders()
     {
-        $this->_response->SetHeader('Content-Type', 'application/json');
-        $this->_response->ClearHeaders();
-        $this->assertCount(0, $this->_response->GetHeaders(), "Cleared header array was not empty");
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->response->clearHeaders();
+        $this->assertCount(0, $this->response->getHeaders(), "Cleared header array was not empty");
     }
 
     public function testSetAndGetHeader()
     {
-        $this->_response->ClearHeaders();
+        $this->response->clearHeaders();
 
-        $this->_response->SetHeader('Content-Type', 'application/json');
-        $this->assertEquals($this->_response->GetHeaders(),
+        $this->response->setHeader('Content-Type', 'application/json');
+        $this->assertEquals($this->response->getHeaders(),
             [
                 'Content-Type' => 'application/json'
             ],
             "Got headers did not equal set headers");
 
-        $this->_response->SetHeader('Content-Encoding', 'gzip');
-        $this->assertEquals($this->_response->GetHeaders(),
+        $this->response->setHeader('Content-Encoding', 'gzip');
+        $this->assertEquals($this->response->getHeaders(),
             [
                 'Content-Type' => 'application/json',
                 'Content-Encoding' => 'gzip'
@@ -54,16 +53,16 @@ class ResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 
     public function testUnsetHeader()
     {
-        $this->_response->ClearHeaders();
+        $this->response->clearHeaders();
 
-        $this->_response->SetHeader('Foo', 'Bar');
-        $this->_response->UnsetHeader('Foo');
-        $this->assertCount(0, $this->_response->GetHeaders(), "Failed to unset header");
+        $this->response->setHeader('Foo', 'Bar');
+        $this->response->unsetHeader('Foo');
+        $this->assertCount(0, $this->response->getHeaders(), "Failed to unset header");
     }
 
     public function testDefaultContentTypeHeader()
     {
-        $this->assertEquals($this->_response->GetHeaders()['Content-Type'], 'text/plain',
+        $this->assertEquals($this->response->getHeaders()['Content-Type'], 'text/plain',
             "Content-Type header is not set to text/plain");
     }
 
@@ -75,18 +74,18 @@ class ResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
         $object_content->foo = 'bar';
         $object_content->baz = 1;
 
-        $this->assertNull($this->_response->GetContent(), "Content hasn't been set yet, should be NULL");
+        $this->assertNull($this->response->getContent(), "Content hasn't been set yet, should be NULL");
 
-        $this->_response->SetContent($string_content);
-        $this->assertEquals($this->_response->GetContent(), $string_content,
+        $this->response->setContent($string_content);
+        $this->assertEquals($this->response->getContent(), $string_content,
             "Got content did not equal set string content");
 
-        $this->_response->SetContent($array_content);
-        $this->assertEquals($this->_response->GetContent(), $array_content,
+        $this->response->setContent($array_content);
+        $this->assertEquals($this->response->getContent(), $array_content,
             "Got content did not equal set array content");
 
-        $this->_response->SetContent($object_content);
-        $this->assertEquals($this->_response->GetContent(), $object_content,
+        $this->response->setContent($object_content);
+        $this->assertEquals($this->response->getContent(), $object_content,
             "Got content did not equal set object content");
     }
 
@@ -94,11 +93,11 @@ class ResponseTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
     {
         $string_content = "This is some string content";
 
-        $this->_response->SetContent($string_content);
+        $this->response->setContent($string_content);
 
         ob_start();
 
-        $this->_response->send();
+        $this->response->send();
 
         $body = ob_get_clean();
 

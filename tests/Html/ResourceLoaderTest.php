@@ -1,98 +1,99 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Html;
 
-use \Rhubarb\Crown\ClientSide\ResourceLoader;
+use Rhubarb\Crown\Html\ResourceLoader;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-class ResourceLoaderTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class ResourceLoaderTest extends RhubarbTestCase
 {
     public function testLoadScript()
     {
-		\Rhubarb\Crown\ClientSide\ResourceLoader::AddScriptCode( "alert(123)" );
-	    $scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        ResourceLoader::addScriptCode("alert(123)");
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-	    $this->assertEquals( "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
 window.resourceManager.runWhenDocumentReady( function()
 {
 	alert(123)
 } );
-</script>", $scripts );
+</script>", $scripts);
 
-	    \Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
-	    \Rhubarb\Crown\ClientSide\ResourceLoader::AddScriptCode( "doThis();", array( "a.js", "b.js" ) );
-	    $scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        ResourceLoader::clearResources();
+        ResourceLoader::addScriptCode("doThis();", array("a.js", "b.js"));
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-	    $this->assertEquals( "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
 window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 {
 	doThis();
 } );
-</script>", $scripts );
+</script>", $scripts);
     }
 
-	public function testLoadJquery()
-	{
-		\Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
+    public function testLoadJquery()
+    {
+        ResourceLoader::clearResources();
 
-		ResourceLoader::LoadJquery( "1.8.3", false );
+        ResourceLoader::loadJquery("1.8.3", false);
 
-		$scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-		$this->assertEquals( "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
 window.resourceManager.loadResources( [ \"/client/jquery/jquery-1.8.3.js\" ] );
-</script>", $scripts );
+</script>", $scripts);
 
-		\Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
+        ResourceLoader::clearResources();
 
-		ResourceLoader::LoadJquery( "1.8.3", true );
+        ResourceLoader::loadJquery("1.8.3", true);
 
-		$scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-		$this->assertEquals( "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
 window.resourceManager.loadResources( [ \"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\" ] );
-</script>", $scripts );
+</script>", $scripts);
 
-		\Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
+        ResourceLoader::clearResources();
 
-		$this->setExpectedException( "\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound" );
+        $this->setExpectedException("\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound");
 
-		// A very large version number that won't exist locally.
-		ResourceLoader::LoadJquery( "1991.8.3", false );
-	}
+        // A very large version number that won't exist locally.
+        ResourceLoader::loadJquery("1991.8.3", false);
+    }
 
     public function testLoadingStylesheetTwice()
     {
-        \Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
+        ResourceLoader::clearResources();
 
-        ResourceLoader::LoadResource( "/css/base.css" );
-        ResourceLoader::LoadResource( "/css/base.css" );
+        ResourceLoader::loadResource("/css/base.css");
+        ResourceLoader::loadResource("/css/base.css");
 
-        $scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        $this->assertEquals( '<script src="/client/resource-manager.js" type="text/javascript"></script>
-<link type="text/css" rel="stylesheet" href="/css/base.css" />', $scripts );
+        $this->assertEquals('<script src="/client/resource-manager.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="/css/base.css" />', $scripts);
     }
 
-	public function testLoadingMultipleScriptsWithSameDependancies()
-	{
-		\Rhubarb\Crown\ClientSide\ResourceLoader::ClearResources();
+    public function testLoadingMultipleScriptsWithSameDependancies()
+    {
+        ResourceLoader::clearResources();
 
-		ResourceLoader::AddScriptCode( "doThis();", [ "/a.js", "/b.js" ] );
-		ResourceLoader::AddScriptCode( "doThat();", [ "/a.js", "/b.js" ] );
+        ResourceLoader::addScriptCode("doThis();", ["/a.js", "/b.js"]);
+        ResourceLoader::addScriptCode("doThat();", ["/a.js", "/b.js"]);
 
-		$scripts = \Rhubarb\Crown\ClientSide\ResourceLoader::GetResourceInjectionHtml();
+        $scripts = ResourceLoader::getResourceInjectionHtml();
 
-		$this->assertEquals( "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
 window.resourceManager.loadResources( [ \"/a.js\", \"/b.js\" ], function()
 {
 	doThis();
 	doThat();
 } );
-</script>", $scripts );
-	}
+</script>", $scripts);
+    }
 }

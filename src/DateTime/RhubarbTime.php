@@ -23,7 +23,7 @@ use DateTimeZone;
 /**
  * Models a time, and always sets the date to be the same.
  */
-class CoreTime extends RhubarbDateTime
+class RhubarbTime extends RhubarbDateTime
 {
 	private static $yearMustAlwaysBe = 2000;
 	private static $monthMustAlwaysBe = 1;

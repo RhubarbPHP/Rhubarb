@@ -1,52 +1,53 @@
 <?php
 
+namespace Rhubarb\Crown\Tests\DateTime;
 
-namespace Rhubarb\Crown\DateTime;
-
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\DateTime\RhubarbDateTime;
+use Rhubarb\Crown\DateTime\RhubarbTime;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 
 class CoreTimeTest extends RhubarbTestCase
 {
-	public function testTimeAlwaysHasSameDay()
-	{
-		$time = new CoreTime( "10:00:00" );
+    public function testTimeAlwaysHasSameDay()
+    {
+        $time = new RhubarbTime("10:00:00");
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
 
-		$time = new CoreTime( new RhubarbDateTime( "10:00" ) );
+        $time = new RhubarbTime(new RhubarbDateTime("10:00"));
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
-	}
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
+    }
 
-	public function testTimeAlwaysHasSameDayEvenIfDeveloperSpecifiesDate()
-	{
-		$time = new CoreTime( "10:00:00" );
+    public function testTimeAlwaysHasSameDayEvenIfDeveloperSpecifiesDate()
+    {
+        $time = new RhubarbTime("10:00:00");
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
 
-		$time = new CoreTime( new RhubarbDateTime( "2010-01-01 10:00" ) );
+        $time = new RhubarbTime(new RhubarbDateTime("2010-01-01 10:00"));
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
-	}
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
+    }
 
-	public function testTimeAlwaysHasSameDayEvenIfDeveloperSpecifiesDateAfterConstructor()
-	{
-		$time = new CoreTime( "10:00:00" );
+    public function testTimeAlwaysHasSameDayEvenIfDeveloperSpecifiesDateAfterConstructor()
+    {
+        $time = new RhubarbTime("10:00:00");
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
 
-		$time = new CoreTime( new RhubarbDateTime( "2010-01-01 10:00" ) );
-		$time->setDate( 2010,02,05 );
+        $time = new RhubarbTime(new RhubarbDateTime("2010-01-01 10:00"));
+        $time->setDate(2010, 02, 05);
 
-		$this->assertEquals( "2000-01-01 10:00:00", $time->format( "Y-m-d H:i:s" ) );
-	}
+        $this->assertEquals("2000-01-01 10:00:00", $time->format("Y-m-d H:i:s"));
+    }
 
     public function testTimesGetCompared()
     {
-        $time1 = new CoreTime( "17:00:00" );
-        $time2 = new CoreTime( "18:00:00" );
+        $time1 = new RhubarbTime("17:00:00");
+        $time2 = new RhubarbTime("18:00:00");
 
-        $this->assertNotEquals( (string) $time1, (string) $time2 );
+        $this->assertNotEquals((string)$time1, (string)$time2);
     }
 }

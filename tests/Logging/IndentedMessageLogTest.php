@@ -16,9 +16,11 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Logging;
+namespace Rhubarb\Crown\Tests\Logging;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Logging\IndentedMessageLog;
+use Rhubarb\Crown\Logging\Log;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class IndentedMessageLogTest extends RhubarbTestCase
 {

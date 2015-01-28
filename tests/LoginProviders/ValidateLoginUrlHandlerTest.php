@@ -1,11 +1,11 @@
 <?php
 
-namespace Rhubarb\Crown\LoginProviders;
+namespace Rhubarb\Crown\Tests\LoginProviders;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
-use Rhubarb\Crown\UnitTesting\UnitTestingLoginProvider;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  *
@@ -17,14 +17,14 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 	public function testInvalidLoginRedirects()
 	{
 		$login = new UnitTestingLoginProvider();
-		$login->Logout();
+		$login->logout();
 
 		$_SERVER[ "SCRIPT_NAME" ] = "/cant/be/here";
 
 		$request = new WebRequest();
-		$request->Initialise();
+		$request->initialise();
 
-		$response = \Rhubarb\Crown\Module::GenerateResponseForRequest( $request );
+		$response = Module::generateResponseForRequest( $request );
 
 		$this->assertInstanceOf( "\Rhubarb\Crown\Response\RedirectResponse", $response );
 	}
@@ -37,9 +37,9 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 		$context = new Context();
 		$context->Request = $request;
 
-		$request->Initialise();
+		$request->initialise();
 
-		$response = \Rhubarb\Crown\Module::GenerateResponseForRequest( $request );
+		$response = Module::generateResponseForRequest( $request );
 
 		$this->assertInstanceOf( "\Rhubarb\Crown\Response\HtmlResponse", $response );
 	}

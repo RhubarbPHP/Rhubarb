@@ -1,21 +1,20 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Sessions;
+
 use Rhubarb\Crown\Sessions\Session;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  *
  * Note for unit tests for loading and saving of sessions look to the
  * test cases for the individual session provider type.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
  */
-class SessionTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
+class SessionTest extends RhubarbTestCase
 {
 	public function setUp()
 	{
-		Session::SetDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider" );
+		Session::setDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider" );
 
 		parent::setUp();
 	}
@@ -24,28 +23,28 @@ class SessionTest extends \Rhubarb\Crown\UnitTesting\RhubarbTestCase
 	{
 		$this->assertEquals( "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider", Session::GetDefaultSessionProviderClassName() );
 
-		Session::SetDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSessionProvider" );
+		Session::setDefaultSessionProviderClassName( "Rhubarb\Crown\Tests\Sessions\UnitTestingSessionProvider" );
 
-		$this->assertEquals( "Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSessionProvider", Session::GetDefaultSessionProviderClassName() );
+		$this->assertEquals( "Rhubarb\Crown\Tests\Sessions\UnitTestingSessionProvider", Session::GetDefaultSessionProviderClassName() );
 
 		$this->setExpectedException( "Rhubarb\Crown\Sessions\Exceptions\SessionProviderNotFoundException" );
 
-		Session::SetDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\UnknownProvider" );
+		Session::setDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\UnknownProvider" );
 	}
 
 	public function testSessionGetsProvider()
 	{
-		Session::SetDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSessionProvider" );
+		Session::setDefaultSessionProviderClassName( "Rhubarb\Crown\Tests\Sessions\UnitTestingSessionProvider" );
 
-		$session = new \Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSession();
+		$session = new UnitTestingSession();
 
-		$this->assertInstanceOf( "Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSessionProvider", $session->TestGetSessionProvider() );
+		$this->assertInstanceOf( "Rhubarb\Crown\Tests\Sessions\UnitTestingSessionProvider", $session->testGetSessionProvider() );
 
-		Session::SetDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider" );
+		Session::setDefaultSessionProviderClassName( "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider" );
 
 		// Although we have changed the default provider, we already instantiated the session so the provider will not
 		// have changed
-		$this->assertInstanceOf( "Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSessionProvider", $session->TestGetSessionProvider() );
+		$this->assertInstanceOf( "Rhubarb\Crown\Tests\Sessions\UnitTestingSessionProvider", $session->testGetSessionProvider() );
 	}
 
 

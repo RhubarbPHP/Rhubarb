@@ -1,14 +1,15 @@
 <?php
 
-namespace Rhubarb\Crown\String;
+namespace Rhubarb\Crown\Tests\String;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\String\StringTools;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class StringToolsTest extends RhubarbTestCase
 {
 	public function testStringsCanBeWordified()
 	{
-		$this->assertEquals( "This Is My Full Name", StringTools::WordifyStringByUpperCase( "ThisIsMyFullName" ) );
+		$this->assertEquals( "This Is My Full Name", StringTools::wordifyStringByUpperCase( "ThisIsMyFullName" ) );
 	}
 
 	public function testSingularisation()
@@ -22,7 +23,7 @@ class StringToolsTest extends RhubarbTestCase
 
 		foreach( $words as $plural => $singular )
 		{
-			$this->assertEquals( $singular, StringTools::MakeSingular( $plural ) );
+			$this->assertEquals( $singular, StringTools::makeSingular( $plural ) );
 		}
 	}
 
@@ -39,7 +40,7 @@ class StringToolsTest extends RhubarbTestCase
 
 		foreach( $words as $singular => $plural )
 		{
-			$this->assertEquals( $plural, StringTools::MakePlural( $singular ) );
+			$this->assertEquals( $plural, StringTools::makePlural( $singular ) );
 		}
 	}
 }

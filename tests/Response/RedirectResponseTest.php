@@ -1,8 +1,9 @@
 <?php
 
-namespace Rhubarb\Crown\Response;
+namespace Rhubarb\Crown\Tests\Response;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Response\RedirectResponse;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 /**
  *
@@ -15,7 +16,7 @@ class RedirectResponseTest extends RhubarbTestCase
     {
         $response = new RedirectResponse("/go/to/here");
 
-        $headers = $response->GetHeaders();
+        $headers = $response->getHeaders();
 
         $this->assertEquals("/go/to/here", $headers["Location"]);
     }

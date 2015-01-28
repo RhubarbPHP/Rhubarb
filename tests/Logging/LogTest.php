@@ -16,10 +16,10 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Logging;
+namespace Rhubarb\Crown\Tests\Logging;
 
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
-use Rhubarb\Crown\UnitTesting\UnitTestLog;
+use Rhubarb\Crown\Logging\Log;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class LogTest extends RhubarbTestCase
 {

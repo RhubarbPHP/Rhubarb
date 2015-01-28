@@ -3,6 +3,7 @@
 namespace Rhubarb\Crown\Tests;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
@@ -18,7 +19,7 @@ use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
  */
 class RhubarbTestCase extends \PHPUnit_Framework_TestCase
 {
-    protected static $_rolesModule;
+    protected static $rolesModule;
 
     public static function setUpBeforeClass()
     {
@@ -43,6 +44,13 @@ class RhubarbTestCase extends \PHPUnit_Framework_TestCase
 
 class UnitTestingModule extends Module
 {
+    protected function registerDependantModules()
+    {
+        parent::registerDependantModules();
+
+        Module::registerModule( new LayoutModule( '\Rhubarb\Crown\Tests\Layout\TestLayout' ) );
+    }
+
     protected function Initialise()
     {
         parent::Initialise();
@@ -56,7 +64,7 @@ class UnitTestingModule extends Module
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/defo/not/here/login/index/",
             [
-                "login/index/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Mvp\Presenters\Simple")
+                "login/index/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent")
                 // We have to give it something to render!
             ]);
 
@@ -68,12 +76,25 @@ class UnitTestingModule extends Module
 
         $this->AddUrlHandlers(
             [
+                "/" => new ClassMappedUrlHandler( "\Rhubarb\Crown\Tests\Fixtures\SimpleContent",
+                    [
+                        "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests"),
+                        "simple/" => new ClassMappedUrlHandler( "\Rhubarb\Crown\Tests\Fixtures\SimpleContent" ),
+                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
+                    ])
+            ]
+        );
+
+        /*
+        $this->AddUrlHandlers(
+            [
                 "/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Mvp\Presenters",
                     [
-                        "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\UnitTesting\NamespaceMappedHandlerTests"),
-                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/fixtures/")
+                        "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\NamespaceMappedHandlerTests"),
+                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
                     ])
             ]);
+        */
 
         $this->AddUrlHandlers("/priority-test/",
             new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Crown\UnitTesting;
+namespace Rhubarb\Crown\Tests\Logging;
 
 use Rhubarb\Crown\Logging\Log;
 

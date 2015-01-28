@@ -1,9 +1,9 @@
 <?php
 
-namespace Gcd\Tests;
+namespace Rhubarb\Crown\Tests\Request;
 
 use Rhubarb\Crown\Context;
-use Rhubarb\Crown\UnitTesting\RhubarbTestCase;
+use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class JsonRequestTest extends RhubarbTestCase
 {
@@ -31,9 +31,9 @@ class JsonRequestTest extends RhubarbTestCase
 
 		$this->_context->SimulatedRequestBody = json_encode( $testPayload );
 
-		$request = Context::CurrentRequest();
+		$request = Context::currentRequest();
 
-		$this->assertEquals( $testPayload, $request->GetPayload() );
+		$this->assertEquals( $testPayload, $request->getPayload() );
 	}
 }
  

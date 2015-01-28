@@ -1,35 +1,27 @@
 <?php
 
-use \Rhubarb\Crown\Singleton;
+namespace Rhubarb\Crown\Tests;
 
-/**
- * @package Core
- */
+use Rhubarb\Crown\Singleton;
 
-/**
- * Test of Singleton
- *
- * @see Singleton
- * @package Core
- */
-class SingletonTest extends PHPUnit_Framework_TestCase
+class SingletonTest extends RhubarbTestCase
 {
-	public function testSingletonClassName()
-	{
-		$testSingleton = SingletonExample::GetSingleton();
+    public function testSingletonClassName()
+    {
+        $testSingleton = SingletonExample::getSingleton();
 
-		$this->assertInstanceOf( "SingletonExample", $testSingleton );
-	}
+        $this->assertInstanceOf("Rhubarb\Crown\Tests\SingletonExample", $testSingleton);
+    }
 
-	public function testSingletonIsSingleton()
-	{
-		$singleton1 = SingletonExample::GetSingleton();
-		$singleton1->attribute = "abc";
+    public function testSingletonIsSingleton()
+    {
+        $singleton1 = SingletonExample::getSingleton();
+        $singleton1->attribute = "abc";
 
-		$singleton2 = SingletonExample::GetSingleton();
+        $singleton2 = SingletonExample::getSingleton();
 
-		$this->assertEquals( $singleton2->attribute, "abc" );
-	}
+        $this->assertEquals($singleton2->attribute, "abc");
+    }
 }
 
 /**
@@ -40,5 +32,5 @@ class SingletonTest extends PHPUnit_Framework_TestCase
  */
 class SingletonExample extends Singleton
 {
-	public $attribute;
+    public $attribute;
 }
