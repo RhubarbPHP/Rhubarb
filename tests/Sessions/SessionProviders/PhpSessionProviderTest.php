@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\Sessions\SessionProviders;
 
-use Rhubarb\Crown\Sessions\UnitTesting\UnitTestingSession;
+use Rhubarb\Crown\Tests\Sessions\UnitTestingSession;
 use Rhubarb\Crown\Settings;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 

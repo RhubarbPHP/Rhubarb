@@ -43,10 +43,10 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         Module::registerModule(new UnitTestExceptionModule());
         Module::initialiseModules();
 
-        self::$rolesModule->clearUrlHandlers();
-
         Log::clearLogs();
         Log::attachLog(self::$log = new UnitTestLog(Log::ERROR_LEVEL));
+
+        ExceptionHandler::enableExceptionTrapping();
     }
 
     public function testExceptionCausesLogEntry()
@@ -58,7 +58,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertEquals("Unhandled CoreException `Things went wrong`", $lastEntry[0],
+        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`", $lastEntry[0],
             "A CoreException should have been logged");
 
         ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestSilentExceptionHandler');
@@ -71,7 +71,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $this->assertCount(0, self::$log->entries,
             "The silent exception handler shouldn't log anything - exception handler injection is broken");
 
-        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\DefaultExceptionHandler');
+        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler');
     }
 
     public function testNonCoreExceptionCausesLogEntry()
@@ -83,7 +83,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertEquals("Unhandled NonCoreException `OutOfBoundsException - Out of bounds`", $lastEntry[0],
+        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`", $lastEntry[0],
             "A NonCoreException should have been logged");
     }
 
@@ -96,7 +96,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertEquals("Unhandled NonCoreException `PHPUnit_Framework_Error_Warning - Division by zero`",
+        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`",
             $lastEntry[0], "A NonCoreException should have been logged for php run time errors");
     }
 

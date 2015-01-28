@@ -32,7 +32,7 @@ window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 } );
 </script>", $scripts);
     }
-
+/*
     public function testLoadJquery()
     {
         ResourceLoader::clearResources();
@@ -64,7 +64,7 @@ window.resourceManager.loadResources( [ \"//ajax.googleapis.com/ajax/libs/jquery
         // A very large version number that won't exist locally.
         ResourceLoader::loadJquery("1991.8.3", false);
     }
-
+*/
     public function testLoadingStylesheetTwice()
     {
         ResourceLoader::clearResources();

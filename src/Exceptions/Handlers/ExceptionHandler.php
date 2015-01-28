@@ -90,8 +90,6 @@ abstract class ExceptionHandler
                 $error = error_get_last();
 
                 if ($error != null) {
-                    // Ensure we're in the root of the website
-                    chdir(__DIR__ . "/../../../../../../");
 
                     if (!file_exists("logs")) {
                         mkdir("logs");
