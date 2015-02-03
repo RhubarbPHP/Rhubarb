@@ -1,6 +1,6 @@
 <?php
 
-namespace Gcd\Core\Find\Me;
+namespace Rhubarb\Crown\Find\Me;
 
 /**
  *

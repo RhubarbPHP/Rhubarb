@@ -62,7 +62,7 @@ abstract class ExceptionHandler
         // Register the exception handler. Not that this is only to catch exceptions that happen
         // outside of the normal Module response generation pipeline which should be very rare.
         set_exception_handler($exceptionHandler = function ($er) {
-            // Upscale non core exceptions to CoreExceptions (via NonCoreException)
+            // Upscale non core exceptions to RhubarbExceptions (via NonRhubarbException)
             if (!($er instanceof RhubarbException)) {
                 $er = new NonRhubarbException($er);
             }

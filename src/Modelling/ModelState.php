@@ -266,7 +266,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     {
         $differences = [];
         /**
-         * array_diff_assoc couldn't tell that two CoreDateTimes were different
+         * array_diff_assoc couldn't tell that two RhubarbDateTimes were different
          * so we're not using that any more.
          * */
         foreach ($this->modelData as $key => $modelDataValue) {

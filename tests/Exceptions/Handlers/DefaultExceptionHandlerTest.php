@@ -59,7 +59,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`", $lastEntry[0],
-            "A CoreException should have been logged");
+            "A RhubarbException should have been logged");
 
         ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestSilentExceptionHandler');
 
@@ -74,7 +74,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler');
     }
 
-    public function testNonCoreExceptionCausesLogEntry()
+    public function testNonRhubarbExceptionCausesLogEntry()
     {
         $request = new WebRequest();
         $request->UrlPath = "/test-exception-non-core/";
@@ -84,7 +84,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`", $lastEntry[0],
-            "A NonCoreException should have been logged");
+            "A NonRhubarbException should have been logged");
     }
 
     public function testPhpRuntimeErrorCausesLogEntry()
@@ -97,7 +97,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`",
-            $lastEntry[0], "A NonCoreException should have been logged for php run time errors");
+            $lastEntry[0], "A NonRhubarbException should have been logged for php run time errors");
     }
 
     public function testUrlHandlerGeneratesResponse()
@@ -131,7 +131,7 @@ class UnitTestExceptionModule extends Module
         $this->addUrlHandlers(
             [
                 "/test-exception/" => $h1 = new UnitTestCrashingHandler(),
-                "/test-exception-non-core/" => $h2 = new UnitTestCrashingHandlerNonCoreException(),
+                "/test-exception-non-core/" => $h2 = new UnitTestCrashingHandlerNonRhubarbException(),
                 "/test-php-error/" => $h3 = new UnitTestPhpErrorHandler()
             ]
         );
@@ -150,7 +150,7 @@ class UnitTestCrashingHandler extends UrlHandler
     }
 }
 
-class UnitTestCrashingHandlerNonCoreException extends UrlHandler
+class UnitTestCrashingHandlerNonRhubarbException extends UrlHandler
 {
     protected function generateResponseForRequest($request = null)
     {

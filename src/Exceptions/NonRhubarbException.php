@@ -25,11 +25,11 @@ use Exception;
  */
 class NonRhubarbException extends RhubarbException
 {
-    public function __construct(Exception $nonCoreException)
+    public function __construct(Exception $nonRhubarbException)
     {
-        parent::__construct(basename(get_class($nonCoreException)) . " - " . $nonCoreException->getMessage());
+        parent::__construct(basename(get_class($nonRhubarbException)) . " - " . $nonRhubarbException->getMessage());
 
-        $this->line = $nonCoreException->getLine();
-        $this->file = $nonCoreException->getFile();
+        $this->line = $nonRhubarbException->getLine();
+        $this->file = $nonRhubarbException->getFile();
     }
 } 
