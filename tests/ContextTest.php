@@ -22,26 +22,26 @@ use Rhubarb\Crown\Context;
 
 class ContextTest extends RhubarbTestCase
 {
-	protected $_context = null;
+	protected $context = null;
 
 	protected function setUp()
 	{
-		$this->_context = new Context();
-		$this->_context->Request = null;
+		$this->context = new Context();
+		$this->context->Request = null;
 	}
 
 	protected function tearDown()
 	{
-		$this->_context = null;
+		$this->context = null;
 	}
 
 	public function testAjaxDetection()
 	{
-		$this->assertFalse( $this->_context->IsAjaxRequest );
+		$this->assertFalse( $this->context->IsAjaxRequest );
 
 		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "xmlhttprequest";
 
-		$this->assertTrue( $this->_context->IsAjaxRequest );
+		$this->assertTrue( $this->context->IsAjaxRequest );
 	}
 
 	public function testCliDetection()
@@ -50,7 +50,7 @@ class ContextTest extends RhubarbTestCase
 		// are run from the CLI and PHP's SAPI checking isn't something
 		// we can hook in and modify
 
-		$this->assertTrue( $this->_context->IsCliInvocation );
+		$this->assertTrue( $this->context->IsCliInvocation );
 	}
 
 	public function testJsonContentTypeDetection()
@@ -73,7 +73,7 @@ class ContextTest extends RhubarbTestCase
 		unset( $this->context->Request );
 
 		$this->assertNotNull( Context::CurrentRequest(), "Static Request accessor returned NULL" );
-		$this->assertNotNull( $this->_context->Request, "Request accessor returned NULL" );
+		$this->assertNotNull( $this->context->Request, "Request accessor returned NULL" );
 
 
 		$this->assertInstanceOf( '\Rhubarb\Crown\Request\CliRequest', Context::CurrentRequest() );

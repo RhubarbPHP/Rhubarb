@@ -22,20 +22,20 @@ require_once __DIR__ . "/Response.php";
 
 class FileResponse extends Response
 {
-    private $_filePath;
-    private $_fileName;
+    private $filePath;
+    private $fileName;
 
     public function __construct($filePath, $fileName = "", $generator = null)
     {
         parent::__construct($generator);
 
-        $this->_filePath = $filePath;
+        $this->filePath = $filePath;
 
         if ($fileName == "") {
             $fileName = basename($filePath);
         }
 
-        $this->_fileName = $fileName;
+        $this->fileName = $fileName;
 
         clearstatcache($filePath);
 
@@ -52,6 +52,6 @@ class FileResponse extends Response
     {
         ob_clean();
 
-        readfile($this->_filePath);
+        readfile($this->filePath);
     }
 }

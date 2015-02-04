@@ -6,23 +6,23 @@ use Rhubarb\Crown\Request\CliRequest;
 
 class CliRequestTest extends RequestTestCase
 {
-	protected $_request = null;
+	protected $request = null;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->_request = new CliRequest();
+		$this->request = new CliRequest();
 	}
 
 	protected function tearDown()
 	{
-		$this->_request = null;
+		$this->request = null;
 	}
 
 	public function testIsCliInvocation()
 	{
-		$this->assertTrue( $this->_request->IsCliInvocation );
+		$this->assertTrue( $this->request->IsCliInvocation );
 
 		parent::tearDown();
 	}

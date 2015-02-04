@@ -11,32 +11,32 @@ use Rhubarb\Crown\Tests\RhubarbTestCase;
  */
 class RequestTestCase extends RhubarbTestCase
 {
-	protected $_stashSuperglobals = [];
+	protected $stashSuperglobals = [];
 
 	protected function setUp()
 	{
-		$this->_stashSuperglobals[ 'env' ] = isset( $_ENV ) ? $_ENV : [];
-		$this->_stashSuperglobals[ 'server' ] = isset( $_SERVER ) ? $_SERVER : [];
-		$this->_stashSuperglobals[ 'get' ] = isset( $_GET ) ? $_GET : [];
-		$this->_stashSuperglobals[ 'post' ] = isset( $_POST ) ? $_POST : [];
-		$this->_stashSuperglobals[ 'files' ] = isset( $_FILES ) ? $_FILES : [];
-		$this->_stashSuperglobals[ 'cookie' ] = isset( $_COOKIE ) ? $_COOKIE : [];
-		$this->_stashSuperglobals[ 'session' ] = isset( $_SESSION ) ? $_SESSION : [];
-		$this->_stashSuperglobals[ 'request' ] = isset( $_REQUEST ) ? $_REQUEST : [];
+		$this->stashSuperglobals[ 'env' ] = isset( $_ENV ) ? $_ENV : [];
+		$this->stashSuperglobals[ 'server' ] = isset( $_SERVER ) ? $_SERVER : [];
+		$this->stashSuperglobals[ 'get' ] = isset( $_GET ) ? $_GET : [];
+		$this->stashSuperglobals[ 'post' ] = isset( $_POST ) ? $_POST : [];
+		$this->stashSuperglobals[ 'files' ] = isset( $_FILES ) ? $_FILES : [];
+		$this->stashSuperglobals[ 'cookie' ] = isset( $_COOKIE ) ? $_COOKIE : [];
+		$this->stashSuperglobals[ 'session' ] = isset( $_SESSION ) ? $_SESSION : [];
+		$this->stashSuperglobals[ 'request' ] = isset( $_REQUEST ) ? $_REQUEST : [];
 	}
 
 	protected function tearDown()
 	{
-		$_ENV = $this->_stashSuperglobals[ 'env' ];
-		$_SERVER = $this->_stashSuperglobals[ 'server' ];
-		$_GET = $this->_stashSuperglobals[ 'get' ];
-		$_POST = $this->_stashSuperglobals[ 'post' ];
-		$_FILES = $this->_stashSuperglobals[ 'files' ];
-		$_COOKIE = $this->_stashSuperglobals[ 'cookie' ];
-		$_SESSION = $this->_stashSuperglobals[ 'session' ];
-		$_REQUEST = $this->_stashSuperglobals[ 'request' ];
+		$_ENV = $this->stashSuperglobals[ 'env' ];
+		$_SERVER = $this->stashSuperglobals[ 'server' ];
+		$_GET = $this->stashSuperglobals[ 'get' ];
+		$_POST = $this->stashSuperglobals[ 'post' ];
+		$_FILES = $this->stashSuperglobals[ 'files' ];
+		$_COOKIE = $this->stashSuperglobals[ 'cookie' ];
+		$_SESSION = $this->stashSuperglobals[ 'session' ];
+		$_REQUEST = $this->stashSuperglobals[ 'request' ];
 
-		$this->_stashSuperglobals = [];
+		$this->stashSuperglobals = [];
 
 		// WebRequest as Request is an abstract class
 		WebRequest::ResetRequest();

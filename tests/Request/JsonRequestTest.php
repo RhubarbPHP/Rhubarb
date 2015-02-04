@@ -10,15 +10,15 @@ class JsonRequestTest extends RhubarbTestCase
 	/**
 	 * @var Context
 	 */
-	private $_context;
+	private $context;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->_context = new Context();
-		$this->_context->Request = null;
-		$this->_context->SimulateNonCli = true;
+		$this->context = new Context();
+		$this->context->Request = null;
+		$this->context->SimulateNonCli = true;
 
 		$_SERVER[ "CONTENT_TYPE" ] = "application/json";
 	}
@@ -29,7 +29,7 @@ class JsonRequestTest extends RhubarbTestCase
 		$testPayload->a = 1;
 		$testPayload->b = 2;
 
-		$this->_context->SimulatedRequestBody = json_encode( $testPayload );
+		$this->context->SimulatedRequestBody = json_encode( $testPayload );
 
 		$request = Context::currentRequest();
 

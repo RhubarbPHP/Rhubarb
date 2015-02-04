@@ -29,11 +29,11 @@ use Rhubarb\Crown\Response\Response;
  */
 class ForceResponseException extends \Exception
 {
-    private $_response;
+    private $response;
 
     public function __construct(Response $response)
     {
-        $this->_response = $response;
+        $this->response = $response;
     }
 
     /**
@@ -43,6 +43,6 @@ class ForceResponseException extends \Exception
      */
     public function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 }
