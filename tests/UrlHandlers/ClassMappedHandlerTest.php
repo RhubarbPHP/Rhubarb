@@ -25,7 +25,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
 		$request = new WebRequest();
 		$request->UrlPath = "/right/path/";
 
-		$response = $handler->GenerateResponse( $request );
+		$response = $handler->generateResponse( $request );
 
 		$this->assertEquals( "bing bang bong", $response->getContent() );
 	}

@@ -88,7 +88,7 @@ class UnitTestingModule extends Module
         /*
         $this->AddUrlHandlers(
             [
-                "/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Mvp\Presenters",
+                "/" => new NamespaceMappedUrlHandler("Rhubarb\Leaf\Presenters",
                     [
                         "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\NamespaceMappedHandlerTests"),
                         "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
@@ -99,7 +99,7 @@ class UnitTestingModule extends Module
         $this->AddUrlHandlers("/priority-test/",
             new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
 
-        $test = new NamespaceMappedUrlHandler("Rhubarb\Crown\Mvp\Presenters");
+        $test = new NamespaceMappedUrlHandler("Rhubarb\Leaf\Presenters");
         $test->SetPriority(100);
 
         $this->AddUrlHandlers("/priority-test/", $test);
