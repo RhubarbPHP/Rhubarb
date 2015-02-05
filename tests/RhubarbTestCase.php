@@ -3,6 +3,7 @@
 namespace Rhubarb\Crown\Tests;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Email\EmailProvider;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
@@ -103,6 +104,8 @@ class UnitTestingModule extends Module
         $test->SetPriority(100);
 
         $this->AddUrlHandlers("/priority-test/", $test);
+
+        EmailProvider::setDefaultEmailProviderClassName( '\Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider');
 
     }
 }

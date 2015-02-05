@@ -132,7 +132,7 @@ class Response
     }
 
     /**
-     * Send the response by printing to the output buffer.
+     * send the response by printing to the output buffer.
      */
     public final function send()
     {

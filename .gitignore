@@ -5,3 +5,6 @@ vendor/
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
 /.idea/
+/deployed/
+/logs/
+/composer.lock

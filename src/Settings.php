@@ -82,7 +82,7 @@ abstract class Settings extends ModelState
 			self::$cachedModelData[ $this->namespace ] = array();
 
 			// If the model data didn't exist before we know that we are being used for
-			// the first time and we should call the InitialiseDefaultValues() function.
+			// the first time and we should call the initialiseDefaultValues() function.
 			$needsInitialised = true;
 		}
 
