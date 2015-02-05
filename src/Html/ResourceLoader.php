@@ -19,6 +19,9 @@
 namespace Rhubarb\Crown\Html;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Deployment\DeploymentPackage;
+use Rhubarb\Crown\Deployment\ResourceDeploymentHandler;
+use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
 use Rhubarb\Crown\Exceptions\ResourceNotFound;
 
 class ResourceLoader
@@ -50,16 +53,19 @@ class ResourceLoader
 
     public static function addScriptCodeOnReady($scriptCode, $dependantResourceUrls = [])
     {
+        // Deploy the composer jquery libraries.
+        $package = new ResourceDeploymentPackage();
+        $package->resourcesToDeploy[] = "vendor/components/jquery/jquery.min.js";
+        $package->resourcesToDeploy[] = "vendor/components/jqueryui/jquery-ui.min.js";
+        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
+        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/theme.css";
+        $jQueryUrls = $package->deploy();
+
         array_splice(
             $dependantResourceUrls,
             0,
             0,
-            array(
-                self::getJqueryUrl("1.9.1"),
-                self::getJqueryUIUrl("1.10.0"),
-                "/client/jquery/css/jquery-ui.css",
-                "/client/jquery/css/jquery.ui.theme.css"
-            )
+            $jQueryUrls
         );
 
         self::addScriptCode($scriptCode, $dependantResourceUrls);
@@ -101,7 +107,11 @@ class ResourceLoader
      */
     public static function getResourceInjectionHtml()
     {
-        $html = "<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>";
+        $package = new ResourceDeploymentPackage();
+        $package->resourcesToDeploy[] = __DIR__."/../../resources/resource-manager.js";
+        $urls = $package->deploy();
+
+        $html = "<script src=\"".$urls[0]."\" type=\"text/javascript\"></script>";
 
         $context = new Context();
 

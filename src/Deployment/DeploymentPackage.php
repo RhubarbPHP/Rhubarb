@@ -25,11 +25,11 @@ class DeploymentPackage
      */
     protected function onDeploy()
     {
-
+        return [];
     }
 
     public final function deploy()
     {
-        $this->onDeploy();
+        return $this->onDeploy();
     }
 }

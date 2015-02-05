@@ -10,6 +10,10 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
+	"require": {
+	  "components/jquery": "*",
+	  "components/jqueryui": "*"
+	},
   	"require-dev": {
 	  "phpunit/phpunit": "3.*"
 	}

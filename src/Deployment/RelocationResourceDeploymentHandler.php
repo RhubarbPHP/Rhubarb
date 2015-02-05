@@ -55,6 +55,11 @@ class RelocationResourceDeploymentHandler extends ResourceDeploymentHandler
 
         $resourceFilePath = realpath($resourceFilePath);
 
+        if ( $resourceFilePath === false )
+        {
+            throw new DeploymentException("The file $originalResourceFilePath could not be found. Please check the file exists.");
+        }
+
         if (!file_exists("deployed")) {
             if (!mkdir("deployed", 0777, true)) {
                 throw new DeploymentException("The deployment folder could not be created. Check file permissions to the 'deployed' folder.");

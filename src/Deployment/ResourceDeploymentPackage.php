@@ -47,8 +47,12 @@ class ResourceDeploymentPackage extends DeploymentPackage
     {
         $deploymentHandler = ResourceDeploymentHandler::getResourceDeploymentHandler();
 
+        $urls = [];
+
         foreach ($this->resourcesToDeploy as $path) {
-            $deploymentHandler->deployResource($path);
+            $urls[] = $deploymentHandler->deployResource($path);
         }
+
+        return $urls;
     }
 }
