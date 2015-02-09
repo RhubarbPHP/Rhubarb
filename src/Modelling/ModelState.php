@@ -119,8 +119,8 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     public function __get($propertyName)
     {
-        if (method_exists($this, "Get" . $propertyName)) {
-            return call_user_func(array($this, "Get" . $propertyName));
+        if (method_exists($this, "get" . $propertyName)) {
+            return call_user_func(array($this, "get" . $propertyName));
         }
 
         if (isset($this->modelData[$propertyName])) {
@@ -142,7 +142,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
         if ($isset) {
             return true;
         } else {
-            if (method_exists($this, "Get" . $name)) {
+            if (method_exists($this, "get" . $name)) {
                 return true;
             }
         }

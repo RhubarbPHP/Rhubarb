@@ -28,7 +28,7 @@ class UrlHandlerTest extends RhubarbTestCase
         $child = new ClassMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests\SubFolder\ObjectB");
         $parent = new ClassMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests\ObjectA",
             ["child/" => $child]);
-        $parent->SetUrl("/parent/");
+        $parent->setUrl("/parent/");
 
         $request = new WebRequest();
         $request->UrlPath = "/parent/child/";

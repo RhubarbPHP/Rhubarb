@@ -24,6 +24,6 @@ class BasicAuthorisationRequiredResponse extends NotAuthorisedResponse
     {
         parent::__construct($generator);
 
-        $this->setHeader("WWW-Authenticate", "Basic realm=\"" . $realm . "\"");
+        $this->setHeader("WWW-authenticate", "Basic realm=\"" . $realm . "\"");
     }
 }

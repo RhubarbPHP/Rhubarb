@@ -24,7 +24,6 @@ class NotAuthorisedResponse extends Response
     {
         parent::__construct($generator);
 
-        // [sic] Americans spelling preserved - probably not important but let's not be pedantic!
         $this->setHeader("HTTP/1.1 401 Unauthorized", false);
         $this->setContent("Sorry, you are not authorised to access this resource.");
     }
