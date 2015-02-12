@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Tests\Http;
+namespace Rhubarb\Crown\Tests\Fixtures;
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Http\HttpClient;
