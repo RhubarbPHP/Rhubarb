@@ -84,7 +84,7 @@ class UnitTestingHttpClient extends HttpClient
 		$rawResponse = Module::GenerateResponseForRequest( $simulatedRequest );
 
 		$response = new HttpResponse();
-		$response->setResponseBody( $rawResponse->FormatContent() );
+		$response->setResponseBody( $rawResponse->formatContent() );
 
 		return $response;
 	}

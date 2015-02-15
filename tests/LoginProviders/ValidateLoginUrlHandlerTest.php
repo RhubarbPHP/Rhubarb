@@ -17,7 +17,7 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 	public function testInvalidLoginRedirects()
 	{
 		$login = new UnitTestingLoginProvider();
-		$login->logout();
+		$login->logOut();
 
 		$_SERVER[ "SCRIPT_NAME" ] = "/cant/be/here";
 

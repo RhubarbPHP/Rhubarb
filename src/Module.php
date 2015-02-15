@@ -186,7 +186,6 @@ abstract class Module
         // If a module has already been registered the old one should be deregistered and this
         // one registered in its place as it may have settings that superseed the old one.
         if (isset(self::$modules[$moduleClassName])) {
-            self::$modules[$moduleClassName]->unRegisterAutoLoad();
             unset(self::$modules[$moduleClassName]);
         }
 
