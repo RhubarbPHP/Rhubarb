@@ -49,6 +49,13 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         ExceptionHandler::enableExceptionTrapping();
     }
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler');
+    }
+
     public function testExceptionCausesLogEntry()
     {
         $request = new WebRequest();
@@ -70,8 +77,6 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $this->assertCount(0, self::$log->entries,
             "The silent exception handler shouldn't log anything - exception handler injection is broken");
-
-        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler');
     }
 
     public function testNonRhubarbExceptionCausesLogEntry()
@@ -83,7 +88,8 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`", $lastEntry[0],
+        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`",
+            $lastEntry[0],
             "A NonRhubarbException should have been logged");
     }
 
@@ -112,6 +118,42 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have
 been notified.Tail", $response->getContent());
+
+        LayoutModule::disableLayout();
+    }
+
+    public function testDisablingTrapping()
+    {
+        ExceptionHandler::disableExceptionTrapping();
+
+        try {
+            // Enable layouts for this test as proof the URL handler has intercepted the response.
+            LayoutModule::enableLayout();
+
+            $request = new WebRequest();
+            $request->UrlPath = "/test-exception/";
+
+            $response = Module::generateResponseForRequest($request);
+            $this->fail("Without exception trapping this line should not be reached.");
+        } catch (RhubarbException $er) {
+        }
+
+        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestDisobedientExceptionHandler');
+
+        try {
+            // Enable layouts for this test as proof the URL handler has intercepted the response.
+            LayoutModule::enableLayout();
+
+            $request = new WebRequest();
+            $request->UrlPath = "/test-exception/";
+
+            $response = Module::generateResponseForRequest($request);
+
+        } catch (RhubarbException $er) {
+            $this->fail("The extended exception handler should force handling of exceptions even if trapping is disabled.");
+        }
+
+        ExceptionHandler::enableExceptionTrapping();
 
         LayoutModule::disableLayout();
     }
@@ -172,5 +214,14 @@ class UnitTestSilentExceptionHandler extends DefaultExceptionHandler
     protected function handleException(RhubarbException $er)
     {
         // Do nothing!
+    }
+}
+
+class UnitTestDisobedientExceptionHandler extends DefaultExceptionHandler
+{
+    protected static function shouldTrapException(RhubarbException $er)
+    {
+        // Force handling of exceptions - even if disabled! Naughty!
+        return true;
     }
 }

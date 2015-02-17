@@ -132,6 +132,20 @@ abstract class ExceptionHandler
     }
 
     /**
+     * Returns true if the handler should handle the exception.
+     *
+     * Normally this is controlled by enableExceptionTrapping() and disableExceptionTrapping() but this
+     * can be modified by an extending class.
+     *
+     * @param RhubarbException $er
+     * @return bool
+     */
+    protected static function shouldTrapException(RhubarbException $er)
+    {
+        return self::$exceptionTrappingOn;
+    }
+
+    /**
      * Passes an exception object to the currently registered exception handler.
      *
      * @param RhubarbException $er
@@ -140,7 +154,7 @@ abstract class ExceptionHandler
      */
     public final static function processException(RhubarbException $er)
     {
-        if (self::$exceptionTrappingOn) {
+        if (self::shouldTrapException($er)) {
             $exceptionHandler = self::getExceptionHandler();
             return $exceptionHandler->handleException($er);
         } else {
