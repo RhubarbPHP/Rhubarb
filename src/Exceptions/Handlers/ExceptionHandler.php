@@ -138,7 +138,7 @@ abstract class ExceptionHandler
      * @return Response
      * @throws RhubarbException
      */
-    public static function processException(RhubarbException $er)
+    public final static function processException(RhubarbException $er)
     {
         if (self::$exceptionTrappingOn) {
             $exceptionHandler = self::getExceptionHandler();
