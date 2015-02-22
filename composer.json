@@ -1,7 +1,25 @@
 {
-	"name": "phosphenephp/phosphene",
+	"name": "rhubarbphp/rhubarb",
 	"description": "A modern enterprise ready PHP framework",
 	"keywords": [ "php", "framework" ],
-	"homepage": "http://www.phosphenephp.com/",
-	"license": "Apache-2.0"
+	"homepage": "http://www.rhubarbphp.com/",
+	"license": "Apache-2.0",
+    "autoload": {
+		"psr-4": {
+			"Rhubarb\\Crown\\": "src/",
+		    "Rhubarb\\Crown\\Tests\\": "tests/"
+		}
+	},
+	"require": {
+	  "components/jquery": ">=1.9",
+	  "components/jqueryui": ">=1.10"
+	},
+  	"require-dev": {
+	  "phpunit/phpunit": "3.*"
+	},
+    "scripts": {
+      "post-create-project-cmd": [
+          "Rhubarb\\Crown\\Scripts\\ProjectTemplates::createMinimumProject"
+      ]
+    }
 }
