@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\Scripts;
 
 class ProjectTemplates
 {
-    public function createMinimumProject()
+    public static function createMinimumProject()
     {
         mkdir( "settings" );
         file_put_contents( "settings/app.config.php", '<?php
