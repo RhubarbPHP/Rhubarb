@@ -23,6 +23,16 @@ require_once __DIR__ . '/DataStream.php';
 
 use Rhubarb\Crown\Exceptions\EndOfStreamException;
 
+/**
+ * A Stream for reading and writing CSV files
+ *
+ * This CSV reader and writer is rfc4180 compliant and will handle encapsulated contents containing the
+ * escaped encapsulation character and carriage returns.
+ *
+ * If the CSV file you need to parse is not rfc4180 compliant and uses an escape character before the
+ * enclosure character if it appears in the cell contents, then you should set the $escapeCharacter
+ * property before starting to read your stream.
+ */
 class CsvStream extends DataStream
 {
     private $filePath;
@@ -37,11 +47,32 @@ class CsvStream extends DataStream
 
     private $needToWriteHeaders = true;
 
-    private $enclosure = "\"";
-
-    private $delimiter = ",";
-
     private $remnantBuffer = "";
+
+    /**
+     * The character used to enclose string values that might contain the delimiter.
+     * @var string
+     */
+    public $enclosure = "\"";
+
+    /**
+     * The delimiter character, normally a comma or semicolon.
+     *
+     * @var string
+     */
+    public $delimiter = ",";
+
+    /**
+     * The escape character that precedes legitimate occurrences of the enclosure character within the
+     * cell content.
+     *
+     * Note an RFC4180 compliant CSV file will escape the enclosure character by repeating it so for example
+     * the value Summer "Time" becomes Summer ""Time"". In this case you should leave $escapeCharacter null
+     * in which case the RFC behaviour will be adopted.
+     *
+     * @var string|bool
+     */
+    public $escapeCharacter = null;
 
     public function __construct($filePath)
     {
@@ -87,11 +118,13 @@ class CsvStream extends DataStream
         $values = [];
 
         $addValue = function (&$value) use (&$values) {
-            $values[] = utf8_encode(str_replace("@@@escapedenclosure@@@", $this->enclosure, $value));
+            $values[] = utf8_encode($value);
             $value = "";
         };
 
         $valueBuffer = "";
+
+        $escapeCharacter = ( $this->escapeCharacter !== null ) ? $this->escapeCharacter : $this->enclosure;
 
         while (!$readFullLine) {
             if (feof($this->fileStream) && ($this->remnantBuffer == "")) {
@@ -106,10 +139,6 @@ class CsvStream extends DataStream
                 $csvData = $this->remnantBuffer;
             }
 
-            if ($this->enclosure != "") {
-                $csvData = str_replace($this->enclosure . $this->enclosure, "@@@escapedenclosure@@@", $csvData);
-            }
-
             // Be sure to clear the remnant buffer.
             $this->remnantBuffer = "";
 
@@ -117,6 +146,17 @@ class CsvStream extends DataStream
 
             for ($i = 0; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
+
+                if ( $i < $csvDataLength - 1 )
+                {
+                    // Look for 2 byte escaped enclosure syntax
+                    if ( ( $byte == $escapeCharacter ) && ( $csvData[ $i + 1 ] == $this->enclosure ) )
+                    {
+                        $valueBuffer .= $this->enclosure;
+                        $i++;
+                        continue;
+                    }
+                }
 
                 switch ($byte) {
                     case $this->enclosure:

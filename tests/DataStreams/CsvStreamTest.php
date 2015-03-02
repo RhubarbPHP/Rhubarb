@@ -32,6 +32,11 @@ class CsvStreamTest extends RhubarbTestCase
 1,\"2,4\",\"3
 5\"" );
 
+		// Create a non standards compliant text file to stream.
+		file_put_contents( "cache/unit-test-csv-stream-non-rfc.csv", "a,\\\"b\\\",c
+1,\"2,\\\"4\",\"3
+5\"" );
+
 	}
 
 	public function testStreamReading()
@@ -42,6 +47,23 @@ class CsvStreamTest extends RhubarbTestCase
 
 		$this->assertEquals( "1", $item[ "a" ] );
 		$this->assertEquals( "2,4", $item[ "\"b\"" ] );
+		$this->assertEquals( "3
+5", $item[ "c" ] );
+
+		$response = $stream->readNextItem();
+
+		$this->assertFalse( $response );
+	}
+
+	public function testStreamReadingNonRfcCsv()
+	{
+		$stream = new CsvStream( "cache/unit-test-csv-stream-non-rfc.csv" );
+		$stream->escapeCharacter = "\\";
+
+		$item = $stream->readNextItem();
+
+		$this->assertEquals( "1", $item[ "a" ] );
+		$this->assertEquals( "2,\"4", $item[ "\"b\"" ] );
 		$this->assertEquals( "3
 5", $item[ "c" ] );
 
