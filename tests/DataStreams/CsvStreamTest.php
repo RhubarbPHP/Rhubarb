@@ -88,6 +88,23 @@ class CsvStreamTest extends RhubarbTestCase
 		$this->assertEquals( "a,\"\"b\"\",c\n1,\"2,4\",\"3\n5\"\nalan,\"ry\"\"an\",john", $content );
 	}
 
+	public function testStreamWritingNonStandards()
+	{
+		$stream = new CsvStream( "cache/unit-test-csv-stream-non-rfc.csv" );
+		$stream->escapeCharacter = "\\";
+		$stream->appendItem( [
+			"a" => "alan",
+			"\"b\"" => "ry\"an",
+			"c" => "john"
+		]);
+		$stream->close();
+
+		$content = file_get_contents( "cache/unit-test-csv-stream-non-rfc.csv" );
+		$content = str_replace( "\r\n", "\n", $content );
+
+		$this->assertEquals( "a,\\\"b\\\",c\n1,\"2,\\\"4\",\"3\n5\"\nalan,\"ry\\\"an\",john", $content );
+	}
+
 	public function testStreamWritingNewFile()
 	{
 		@unlink( "cache/unit-test-csv-stream-new.csv" );

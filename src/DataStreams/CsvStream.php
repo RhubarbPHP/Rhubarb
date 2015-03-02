@@ -302,6 +302,8 @@ class CsvStream extends DataStream
             }
         }
 
+        $escapeCharacter = ( $this->escapeCharacter !== null ) ? $this->escapeCharacter : $this->enclosure;
+
         if ($this->enclosure == "") {
             $enclosedData = $dataToWrite;
         } else {
@@ -309,7 +311,7 @@ class CsvStream extends DataStream
 
             foreach ($dataToWrite as $value) {
                 if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos($value, $this->delimiter) !== false)) {
-                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure, $this->enclosure . $this->enclosure, $value) . $this->enclosure;
+                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure, $escapeCharacter . $this->enclosure, $value) . $this->enclosure;
                 } else {
                     $enclosedData[] = $value;
                 }
