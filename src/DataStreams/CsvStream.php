@@ -124,7 +124,7 @@ class CsvStream extends DataStream
 
         $valueBuffer = "";
 
-        $escapeCharacter = ( $this->escapeCharacter !== null ) ? $this->escapeCharacter : $this->enclosure;
+        $escapeCharacter = ($this->escapeCharacter !== null) ? $this->escapeCharacter : $this->enclosure;
 
         while (!$readFullLine) {
             if (feof($this->fileStream) && ($this->remnantBuffer == "")) {
@@ -147,11 +147,9 @@ class CsvStream extends DataStream
             for ($i = 0; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
 
-                if ( $i < $csvDataLength - 1 )
-                {
+                if ($i < $csvDataLength - 1) {
                     // Look for 2 byte escaped enclosure syntax
-                    if ( ( $byte == $escapeCharacter ) && ( $csvData[ $i + 1 ] == $this->enclosure ) )
-                    {
+                    if (($byte == $escapeCharacter) && ($csvData[$i + 1] == $this->enclosure)) {
                         $valueBuffer .= $this->enclosure;
                         $i++;
                         continue;
@@ -302,7 +300,7 @@ class CsvStream extends DataStream
             }
         }
 
-        $escapeCharacter = ( $this->escapeCharacter !== null ) ? $this->escapeCharacter : $this->enclosure;
+        $escapeCharacter = ($this->escapeCharacter !== null) ? $this->escapeCharacter : $this->enclosure;
 
         if ($this->enclosure == "") {
             $enclosedData = $dataToWrite;
@@ -310,8 +308,11 @@ class CsvStream extends DataStream
             $enclosedData = [];
 
             foreach ($dataToWrite as $value) {
-                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos($value, $this->delimiter) !== false)) {
-                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure, $escapeCharacter . $this->enclosure, $value) . $this->enclosure;
+                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos($value,
+                            $this->delimiter) !== false)
+                ) {
+                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure,
+                            $escapeCharacter . $this->enclosure, $value) . $this->enclosure;
                 } else {
                     $enclosedData[] = $value;
                 }
