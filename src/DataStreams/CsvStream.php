@@ -113,7 +113,9 @@ class CsvStream extends DataStream
             // Be sure to clear the remnant buffer.
             $this->remnantBuffer = "";
 
-            for ($i = 0; $i < strlen($csvData); $i++) {
+            $csvDataLength = strlen($csvData);
+
+            for ($i = 0; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
 
                 switch ($byte) {
@@ -134,7 +136,7 @@ class CsvStream extends DataStream
                         if (!$inEnclosure) {
                             $i++;
 
-                            if ((strlen($csvData) > $i) && ($csvData[$i] == "\r" || $csvData[$i] == "\n")) {
+                            if (($csvDataLength > $i) && ($csvData[$i] == "\r" || $csvData[$i] == "\n")) {
                                 $i++;
                             }
 
