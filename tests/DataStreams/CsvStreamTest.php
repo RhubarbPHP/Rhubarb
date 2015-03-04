@@ -28,14 +28,14 @@ class CsvStreamTest extends RhubarbTestCase
 		parent::setUpBeforeClass();
 
 		// Create a text file to stream.
-		file_put_contents( "cache/unit-test-csv-stream.csv", "a,\"\"b\"\",c
-1,\"2,4\",\"3
-5\"" );
+		file_put_contents( "cache/unit-test-csv-stream.csv", 'a,"""b""",c,d
+1,"2,4","3
+5",""' );
 
 		// Create a non standards compliant text file to stream.
-		file_put_contents( "cache/unit-test-csv-stream-non-rfc.csv", "a,\\\"b\\\",c
-1,\"2,\\\"4\",\"3
-5\"" );
+		file_put_contents( "cache/unit-test-csv-stream-non-rfc.csv", 'a,"\"b\"",c
+1,"2,\"4","3
+5"' );
 
 	}
 
@@ -49,6 +49,7 @@ class CsvStreamTest extends RhubarbTestCase
 		$this->assertEquals( "2,4", $item[ "\"b\"" ] );
 		$this->assertEquals( "3
 5", $item[ "c" ] );
+		$this->assertEquals( "", $item[ "d" ] );
 
 		$response = $stream->readNextItem();
 
@@ -85,7 +86,7 @@ class CsvStreamTest extends RhubarbTestCase
 		$content = file_get_contents( "cache/unit-test-csv-stream.csv" );
 		$content = str_replace( "\r\n", "\n", $content );
 
-		$this->assertEquals( "a,\"\"b\"\",c\n1,\"2,4\",\"3\n5\"\nalan,\"ry\"\"an\",john", $content );
+		$this->assertEquals( "a,\"\"\"b\"\"\",c,d\n1,\"2,4\",\"3\n5\",\"\"\nalan,\"ry\"\"an\",john,", $content );
 	}
 
 	public function testStreamWritingNonStandards()
@@ -102,7 +103,7 @@ class CsvStreamTest extends RhubarbTestCase
 		$content = file_get_contents( "cache/unit-test-csv-stream-non-rfc.csv" );
 		$content = str_replace( "\r\n", "\n", $content );
 
-		$this->assertEquals( "a,\\\"b\\\",c\n1,\"2,\\\"4\",\"3\n5\"\nalan,\"ry\\\"an\",john", $content );
+		$this->assertEquals( "a,\"\\\"b\\\"\",c\n1,\"2,\\\"4\",\"3\n5\"\nalan,\"ry\\\"an\",john", $content );
 	}
 
 	public function testStreamWritingNewFile()

@@ -132,11 +132,17 @@ class CsvStream extends DataStream
             }
 
             // Read the next set of bytes and prepend with any remaining buffer from the last read.
-
             if (strlen($this->remnantBuffer) < 1024) {
                 $csvData = $this->remnantBuffer . fread($this->fileStream, 1024);
             } else {
                 $csvData = $this->remnantBuffer;
+            }
+
+            // If the last character of the data read is our escape character we need to read one more
+            // character from the stream as we may have encountered an escape sequence. Without the second
+            // character we wouldn't handle this properly.
+            if ($csvData[strlen($csvData) - 1] == $escapeCharacter) {
+                $csvData .= fread($this->fileStream, 1);
             }
 
             // Be sure to clear the remnant buffer.
@@ -147,7 +153,7 @@ class CsvStream extends DataStream
             for ($i = 0; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
 
-                if ($i < $csvDataLength - 1) {
+                if ($i < $csvDataLength - 1 && $inEnclosure) {
                     // Look for 2 byte escaped enclosure syntax
                     if (($byte == $escapeCharacter) && ($csvData[$i + 1] == $this->enclosure)) {
                         $valueBuffer .= $this->enclosure;
@@ -296,7 +302,11 @@ class CsvStream extends DataStream
             $dataToWrite = [];
 
             foreach ($this->headers as $key => $value) {
-                $dataToWrite[] = $itemData[$value];
+                if (isset($itemData[$value])) {
+                    $dataToWrite[] = $itemData[$value];
+                } else {
+                    $dataToWrite[] = "";
+                }
             }
         }
 
