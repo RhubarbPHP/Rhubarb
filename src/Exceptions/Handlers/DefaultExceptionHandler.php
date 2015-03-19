@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
+use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
@@ -38,7 +39,17 @@ class DefaultExceptionHandler extends ExceptionHandler
 
     protected function generateResponseForException(RhubarbException $er)
     {
-        return UrlHandler::getExecutingUrlHandler()->generateResponseForException($er);
+        $urlHandler = UrlHandler::getExecutingUrlHandler();
+
+        if ($urlHandler){
+            return $urlHandler->generateResponseForException($er);
+        }
+        else {
+            $response = new HtmlResponse();
+            $response->setContent( "<p>The application failed to start. Please consult the shutdown error log for more details" );
+
+            return $response;
+        }
     }
 
     protected function handleException(RhubarbException $er)

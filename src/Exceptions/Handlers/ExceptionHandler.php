@@ -91,11 +91,12 @@ abstract class ExceptionHandler
 
                 if ($error != null) {
 
-                    if (!file_exists("logs")) {
-                        mkdir("logs");
+                    $logsPath = __DIR__.'/../../../../../../logs';
+                    if (!file_exists($logsPath)) {
+                        mkdir($logsPath);
                     }
 
-                    file_put_contents("logs/shutdown_errors.txt", "[" . date("Y-m-d H:i:s") . "]
+                    file_put_contents($logsPath."/shutdown_errors.txt", "[" . date("Y-m-d H:i:s") . "]
 					Type: {$error["type"]}
 					Message: {$error["message"]}
 					File: {$error["file"]}
