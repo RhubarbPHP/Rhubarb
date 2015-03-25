@@ -20,37 +20,37 @@ namespace Rhubarb\Crown\Deployment;
 
 use Rhubarb\Crown\Exceptions\DeploymentException;
 
-abstract class ResourceDeploymentHandler
+abstract class ResourceDeploymentProvider
 {
-    private static $resourceDeploymentHandler = null;
+    private static $resourceDeploymentProvider = null;
 
-    private static $resourceDeploymentHandlerClassName = "Rhubarb\Crown\Deployment\RelocationResourceDeploymentHandler";
+    private static $resourceDeploymentProviderClassName = "Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider";
 
-    public static function setResourceDeploymentHandlerClassName($resourceDeploymentHandlerClassName)
+    public static function setResourceDeploymentProviderClassName($resourceDeploymentProviderClassName)
     {
-        self::$resourceDeploymentHandlerClassName = $resourceDeploymentHandlerClassName;
-        self::$resourceDeploymentHandler = null;
+        self::$resourceDeploymentProviderClassName = $resourceDeploymentProviderClassName;
+        self::$resourceDeploymentProvider = null;
     }
 
-    public static function getResourceDeploymentHandler()
+    public static function getResourceDeploymentProvider()
     {
-        if (self::$resourceDeploymentHandler == null) {
-            $class = self::$resourceDeploymentHandlerClassName;
+        if (self::$resourceDeploymentProvider == null) {
+            $class = self::$resourceDeploymentProviderClassName;
 
             if (!class_exists($class)) {
-                throw new DeploymentException("The resource deployment handler class " . $class . " could not be found");
+                throw new DeploymentException("The resource deployment Provider class " . $class . " could not be found");
             }
 
-            $handler = new $class();
+            $Provider = new $class();
 
-            if (!($handler instanceof ResourceDeploymentHandler)) {
-                throw new DeploymentException("The resource deployment handler class " . $class . " is not a ResourceDeploymentHandler.");
+            if (!($Provider instanceof ResourceDeploymentProvider)) {
+                throw new DeploymentException("The resource deployment Provider class " . $class . " is not a ResourceDeploymentProvider.");
             }
 
-            self::$resourceDeploymentHandler = $handler;
+            self::$resourceDeploymentProvider = $Provider;
         }
 
-        return self::$resourceDeploymentHandler;
+        return self::$resourceDeploymentProvider;
     }
 
 

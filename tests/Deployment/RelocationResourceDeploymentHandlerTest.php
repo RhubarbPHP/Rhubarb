@@ -2,14 +2,14 @@
 
 namespace Rhubarb\Crown\Tests\Deployment;
 
-use Rhubarb\Crown\Deployment\RelocationResourceDeploymentHandler;
+use Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 {
     public function testUrlCreated()
     {
-        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage = new RelocationResourceDeploymentProvider();
         $url = $deploymentPackage->getDeployedResourceUrl(__FILE__);
 
         $cwd = getcwd();
@@ -22,7 +22,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
     {
         $cwd = getcwd();
 
-        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource(__FILE__);
 
         $deployedFile = "deployed/" . str_replace($cwd, "", __FILE__);
@@ -36,13 +36,13 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
     {
         $this->setExpectedException("Rhubarb\Crown\Exceptions\DeploymentException");
 
-        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource("a/b/c.txt");
     }
 
     public function testDeploymentCreateFiles()
     {
-        $deploymentPackage = new RelocationResourceDeploymentHandler();
+        $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResourceContent("This is a test", "temp/folder/file.txt");
 
         $deployedFile = "deployed/temp/folder/file.txt";

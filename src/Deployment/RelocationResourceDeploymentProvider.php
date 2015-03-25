@@ -18,14 +18,14 @@
 
 namespace Rhubarb\Crown\Deployment;
 
-require_once __DIR__ . "/ResourceDeploymentHandler.php";
+require_once __DIR__ . "/ResourceDeploymentProvider.php";
 
 use Rhubarb\Crown\Exceptions\DeploymentException;
 
 /**
  * A simple resource deployment handler that simply moves resources to a central, publically available deployed folder.
  */
-class RelocationResourceDeploymentHandler extends ResourceDeploymentHandler
+class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 {
     private $alreadyDeployed = [];
 

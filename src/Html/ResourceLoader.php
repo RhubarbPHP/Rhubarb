@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\Html;
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Deployment\DeploymentPackage;
-use Rhubarb\Crown\Deployment\ResourceDeploymentHandler;
+use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
 use Rhubarb\Crown\Exceptions\ResourceNotFound;
 
