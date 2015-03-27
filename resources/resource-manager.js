@@ -207,6 +207,27 @@ window.resourceManager =
                     switch( extension )
                     {
                         case "js":
+
+                            // Check if it's already loaded.
+                            var scripts = document.getElementsByTagName( 'script' );
+
+                            for( var s in scripts )
+                            {
+                                var scriptToCheck = scripts[s];
+
+                                if ( scriptToCheck.attributes && scriptToCheck.attributes[ "src" ] && ( scriptToCheck.attributes[ "src" ].value == request.url ) )
+                                {
+                                    request.loaded = true;
+
+                                    if ( request.onLoaded )
+                                    {
+                                        request.onLoaded();
+                                    }
+
+                                    return;
+                                }
+                            }
+
                             var script = document.createElement('script');
 
                             head.appendChild( script );

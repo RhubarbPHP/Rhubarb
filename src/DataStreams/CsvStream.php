@@ -273,7 +273,7 @@ class CsvStream extends DataStream
         return $data;
     }
 
-    public function appendItem($itemData)
+    public function appendItem($itemData,$allCells = false)
     {
         $this->open(true);
 
@@ -289,10 +289,10 @@ class CsvStream extends DataStream
             }
         }
 
-        $this->writeItem($itemData);
+        $this->writeItem($itemData,$allCells);
     }
 
-    private function writeItem($itemData)
+    private function writeItem($itemData, $allCells = false)
     {
         $this->open(true);
 
@@ -301,11 +301,18 @@ class CsvStream extends DataStream
         if ($this->hasHeaders) {
             $dataToWrite = [];
 
-            foreach ($this->headers as $key => $value) {
-                if (isset($itemData[$value])) {
-                    $dataToWrite[] = $itemData[$value];
-                } else {
-                    $dataToWrite[] = "";
+            if ( $allCells )
+            {
+                $dataToWrite = $itemData;
+            }
+            else {
+
+                foreach ($this->headers as $key => $value) {
+                    if (isset($itemData[$value])) {
+                        $dataToWrite[] = $itemData[$value];
+                    } else {
+                        $dataToWrite[] = "";
+                    }
                 }
             }
         }
