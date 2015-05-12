@@ -42,7 +42,7 @@ class Sha512HashProvider extends HashProvider
     public function createHash($data, $salt = false)
     {
         if ($salt === false) {
-            $salt = crypt("a34t" . $data . "zxcv@");
+            $salt = crypt("a34t" . $data . "zxcv@", microtime());
             $parts = explode('$', $salt);
             $salt = $parts[sizeof($parts) - 1];
         }
