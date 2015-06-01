@@ -11,6 +11,7 @@ use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
+use Rhubarb\Stem\Repositories\Repository;
 
 /**
  * This base class adds basic setup and teardown for unit testing within the Core
@@ -55,6 +56,8 @@ class UnitTestingModule extends Module
     protected function Initialise()
     {
         parent::Initialise();
+
+        Repository::setDefaultRepositoryClassName( '\Rhubarb\Stem\Repositories\Offline\Offline' );
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
         $login->SetPriority(20);
