@@ -259,6 +259,12 @@ class ModelState implements \ArrayAccess, JsonSerializable
     {
         $this->changeSnapshotData = $this->modelData;
 
+        foreach ($this->changeSnapshotData as $key => $value) {
+            if (is_object($value)) {
+                $this->changeSnapshotData[$key] = clone $value;
+            }
+        }
+
         return $this->changeSnapshotData;
     }
 
