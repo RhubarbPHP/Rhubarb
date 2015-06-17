@@ -81,13 +81,18 @@ class CsvStream extends DataStream
         parent::__construct();
     }
 
+    public function GetFilePath()
+    {
+        return $this->filePath;
+    }
+
     public function setHeaders($headers)
     {
         $this->headers = $headers;
         $this->hasHeaders = true;
     }
 
-    private function readHeaders()
+    public function readHeaders()
     {
         $this->close();
 
@@ -104,6 +109,8 @@ class CsvStream extends DataStream
 
         $this->headers = $rawCsvData;
         $this->needToWriteHeaders = false;
+
+        return $this->headers;
     }
 
     private function readCsvLine()
