@@ -19,6 +19,8 @@
 namespace Rhubarb\Crown\Modelling;
 
 use JsonSerializable;
+use Rhubarb\Crown\Events\EventEmitter;
+use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
  * A starting point for modelling objects, not necessarily just those connected to databases.
@@ -31,6 +33,10 @@ use JsonSerializable;
  */
 class ModelState implements \ArrayAccess, JsonSerializable
 {
+    use EventEmitter {
+        raiseEvent as traitRaiseEvent;
+    }
+
     /**
      * The dictionary of current model data.
      *
@@ -87,6 +93,24 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     public function __set($propertyName, $value)
     {
+        if (method_exists($this, "set" . $propertyName)) {
+            call_user_func(array($this, "set" . $propertyName), $value);
+            return;
+        }
+
+        $this->setModelValue( $propertyName, $value );
+    }
+
+    /**
+     * Sets a models property value while also raising property changed notifications if appropriate.
+     *
+     * This should be used from setters instead of changing $this->modelData directly.
+     *
+     * @param $propertyName
+     * @param $value
+     */
+    protected final function setModelValue( $propertyName, $value )
+    {
         try {
             $oldValue = $this->$propertyName;
         } catch (\Exception $ex) {
@@ -95,18 +119,24 @@ class ModelState implements \ArrayAccess, JsonSerializable
             $oldValue = null;
         }
 
-        if (method_exists($this, "set" . $propertyName)) {
-            call_user_func(array($this, "set" . $propertyName), $value);
-            return;
-        }
-
         $this->modelData[$propertyName] = $value;
 
+        if ( $value instanceof ModelState ){
+            $this->attachChangeListenerToModelProperty( $propertyName, $value );
+        }
+
         if ($oldValue != $value) {
-            if (isset($this->propertyChangedCallbacks[$propertyName])) {
-                foreach ($this->propertyChangedCallbacks[$propertyName] as $callBack) {
-                    $callBack($value, $propertyName, $oldValue);
-                }
+            $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
+
+            $this->traitRaiseEvent( "AfterChange", $this );
+        }
+    }
+
+    protected function raisePropertyChangedCallbacks( $propertyName, $newValue, $oldValue )
+    {
+        if (isset($this->propertyChangedCallbacks[$propertyName])) {
+            foreach ($this->propertyChangedCallbacks[$propertyName] as $callBack) {
+                $callBack($newValue, $propertyName, $oldValue);
             }
         }
     }
@@ -328,6 +358,12 @@ class ModelState implements \ArrayAccess, JsonSerializable
             $this->modelData = array_merge($this->modelData, $data);
         }
 
+        foreach( $data as $propertyName => $item ){
+            if ( $item instanceof ModelState ){
+                $this->attachChangeListenerToModelProperty( $propertyName, $item );
+            }
+        }
+
         $this->onDataImported();
     }
 
@@ -343,10 +379,31 @@ class ModelState implements \ArrayAccess, JsonSerializable
     {
         $this->modelData = $data;
 
+        foreach( $data as $propertyName => $item ){
+            if ( $item instanceof ModelState ){
+                $this->attachChangeListenerToModelProperty( $propertyName, $item );
+            }
+        }
+
         // Make sure we can track changes in existing models.
         $this->takeChangeSnapshot();
 
         $this->onDataImported();
+    }
+
+    /**
+     * Attaches a change listener to the model state item and raises a property changed notification when that happens.
+     *
+     * @param $propertyName
+     * @param ModelState $item
+     */
+    private function attachChangeListenerToModelProperty( $propertyName, ModelState $item )
+    {
+        $item->clearEventHandlers();
+        $item->attachEventHandler( "AfterChange", function() use( $propertyName, $item )
+        {
+            $this->raisePropertyChangedCallbacks( $propertyName, $item, null );
+        });
     }
 
     /**
