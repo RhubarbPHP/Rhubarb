@@ -14,10 +14,10 @@ use Rhubarb\Crown\Settings;
  */
 class UnitTestingSettings extends Settings
 {
-	protected function initialiseDefaultValues()
-	{
-		parent::initialiseDefaultValues();
+    protected function initialiseDefaultValues()
+    {
+        parent::initialiseDefaultValues();
 
-		$this->SettingWithDefault = "default";
-	}
+        $this->SettingWithDefault = "default";
+    }
 }

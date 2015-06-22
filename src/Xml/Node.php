@@ -20,9 +20,9 @@ namespace Rhubarb\Crown\Xml;
 
 class Node
 {
-	public $name;
-	public $text;
-	public $children = [];
-	public $attributes = [];
-	public $depth = 0;
+    public $name;
+    public $text;
+    public $children = [];
+    public $attributes = [];
+    public $depth = 0;
 }

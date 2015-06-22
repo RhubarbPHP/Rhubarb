@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Email;
 
-require_once __DIR__. '/../Settings.php';
+require_once __DIR__ . '/../Settings.php';
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Settings;

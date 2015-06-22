@@ -28,64 +28,61 @@ use Rhubarb\Crown\Request\WebRequest;
 
 class UnitTestingHttpClient extends HttpClient
 {
-	/**
-	 * Executes an HTTP transaction and returns the response.
-	 *
-	 * @param HttpRequest $request
-	 * @return HttpResponse
-	 */
-	public function getResponse(HttpRequest $request)
-	{
-		$context = new Context();
-		$context->SimulatedRequestBody = "";
+    /**
+     * Executes an HTTP transaction and returns the response.
+     *
+     * @param HttpRequest $request
+     * @return HttpResponse
+     */
+    public function getResponse(HttpRequest $request)
+    {
+        $context = new Context();
+        $context->SimulatedRequestBody = "";
 
-		$headers = $request->getHeaders();
+        $headers = $request->getHeaders();
 
-		foreach( $headers as $header => $value )
-		{
-			$_SERVER[ "HTTP_".strtoupper( $header ) ] = $value;
-		}
+        foreach ($headers as $header => $value) {
+            $_SERVER["HTTP_" . strtoupper($header)] = $value;
+        }
 
-		$_SERVER[ "REQUEST_METHOD" ] = "GET";
+        $_SERVER["REQUEST_METHOD"] = "GET";
 
-		switch( $request->getMethod() )
-		{
-			case "head":
-				$_SERVER[ "REQUEST_METHOD" ] = "HEAD";
-				break;
-			case "delete":
-				$_SERVER[ "REQUEST_METHOD" ] = "DELETE";
-				break;
-			case "post":
-				$_SERVER[ "REQUEST_METHOD" ] = "POST";
-				$context->SimulatedRequestBody = $request->getPayload();
-				break;
-			case "put":
-				$_SERVER[ "REQUEST_METHOD" ] = "PUT";
-				$context->SimulatedRequestBody = $request->getPayload();
-				break;
-		}
+        switch ($request->getMethod()) {
+            case "head":
+                $_SERVER["REQUEST_METHOD"] = "HEAD";
+                break;
+            case "delete":
+                $_SERVER["REQUEST_METHOD"] = "DELETE";
+                break;
+            case "post":
+                $_SERVER["REQUEST_METHOD"] = "POST";
+                $context->SimulatedRequestBody = $request->getPayload();
+                break;
+            case "put":
+                $_SERVER["REQUEST_METHOD"] = "PUT";
+                $context->SimulatedRequestBody = $request->getPayload();
+                break;
+        }
 
-		switch( $headers[ "Accept" ] )
-		{
-			case "application/xml":
-				$simulatedRequest = new JsonRequest();
-				break;
-			default:
-				$simulatedRequest = new WebRequest();
-				break;
-		}
+        switch ($headers["Accept"]) {
+            case "application/xml":
+                $simulatedRequest = new JsonRequest();
+                break;
+            default:
+                $simulatedRequest = new WebRequest();
+                break;
+        }
 
-		$simulatedRequest->URI = $request->getUrl();
-		$simulatedRequest->UrlPath = $request->getUrl();
+        $simulatedRequest->URI = $request->getUrl();
+        $simulatedRequest->UrlPath = $request->getUrl();
 
-		$context->Request = $simulatedRequest;
+        $context->Request = $simulatedRequest;
 
-		$rawResponse = Module::GenerateResponseForRequest( $simulatedRequest );
+        $rawResponse = Module::GenerateResponseForRequest($simulatedRequest);
 
-		$response = new HttpResponse();
-		$response->setResponseBody( $rawResponse->formatContent() );
+        $response = new HttpResponse();
+        $response->setResponseBody($rawResponse->formatContent());
 
-		return $response;
-	}
+        return $response;
+    }
 }

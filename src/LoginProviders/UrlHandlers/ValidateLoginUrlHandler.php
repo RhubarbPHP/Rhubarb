@@ -53,10 +53,10 @@ class ValidateLoginUrlHandler extends UrlHandler
             $redirectUrl = $this->loginUrl;
 
             // Capture the existing URL to allow us to redirect to the original page.
-            if ( $request->UrlPath != "/" ) {
+            if ($request->UrlPath != "/") {
                 $url = base64_encode($request->UrlPath);
 
-                $redirectUrl .= "?rd=".$url;
+                $redirectUrl .= "?rd=" . $url;
             }
 
             // This is a restricted path - redirect to the login page.

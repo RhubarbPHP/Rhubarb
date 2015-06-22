@@ -42,7 +42,7 @@ class StringTools
             }
         }
 
-        $keys = array($keysToInclude);
+        $keys = [$keysToInclude];
 
         for ($i = 4; $i < func_num_args(); $i++) {
             $keys[] = func_get_arg($i);
@@ -237,7 +237,8 @@ class StringTools
         $caseSensitive = true,
         $includeSearch = false,
         $returnIfNoMatch = false
-    ) {
+    )
+    {
         $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
         $start = $posFunction($string, $search);
         if ($start === false) {

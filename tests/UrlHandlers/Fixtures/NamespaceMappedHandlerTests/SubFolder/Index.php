@@ -6,8 +6,8 @@ use Rhubarb\Crown\Response\GeneratesResponse;
 
 class index implements GeneratesResponse
 {
-	public function generateResponse( $request = null )
-	{
-		return "index";
-	}
+    public function generateResponse($request = null)
+    {
+        return "index";
+    }
 }

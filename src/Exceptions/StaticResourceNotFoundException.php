@@ -18,8 +18,6 @@
 
 namespace Rhubarb\Crown\Exceptions;
 
-use Rhubarb\Crown\Exceptions\RhubarbException;
-
 /**
  * Thrown normally if a static resource didn't exist.
  */

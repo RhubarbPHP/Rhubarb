@@ -91,7 +91,7 @@ abstract class Request extends Crown\Settings
     {
         if (substr($propertyName, 0, 8) === 'Original') {
             if (method_exists($this, "get" . $propertyName)) {
-                return call_user_func(array($this, "get" . $propertyName));
+                return call_user_func([$this, "get" . $propertyName]);
             }
 
             $originalPropertyName = substr($propertyName, 8);

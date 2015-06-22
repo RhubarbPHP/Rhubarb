@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Logging;
 
-require_once __DIR__."/Log.php";
+require_once __DIR__ . "/Log.php";
 
 /**
  * Provides additional abstraction of logging to handle indentation by adding

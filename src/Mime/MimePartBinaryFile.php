@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Mime;
 
-require_once __DIR__.'/MimePart.php';
+require_once __DIR__ . '/MimePart.php';
 
 class MimePartBinaryFile extends MimePart
 {
@@ -47,4 +47,4 @@ class MimePartBinaryFile extends MimePart
 
         return $part;
     }
-} 
+}

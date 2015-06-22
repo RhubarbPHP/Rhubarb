@@ -31,70 +31,65 @@ namespace Rhubarb\Crown;
  */
 class HttpHeaders
 {
-	/**
-	 * Set to true to indicate headers have already been flushed.
-	 *
-	 * @var bool
-	 */
-	public static $flushed = false;
+    /**
+     * Set to true to indicate headers have already been flushed.
+     *
+     * @var bool
+     */
+    public static $flushed = false;
 
-	/**
-	 * The collection of headers to output.
-	 *
-	 * @var array
-	 */
-	private static $headers = array();
+    /**
+     * The collection of headers to output.
+     *
+     * @var array
+     */
+    private static $headers = [];
 
-	/**
-	 * Sets a header
-	 *
-	 * @param $name
-	 * @param $value
-	 */
-	public static function setHeader( $name, $value )
-	{
-		self::$headers[ $name ] = $value;
-	}
+    /**
+     * Sets a header
+     *
+     * @param $name
+     * @param $value
+     */
+    public static function setHeader($name, $value)
+    {
+        self::$headers[$name] = $value;
+    }
 
-	/**
-	 * Returns the headers currently set.
-	 *
-	 * @return array
-	 */
-	public static function getHeaders()
-	{
-		return self::$headers;
-	}
+    /**
+     * Returns the headers currently set.
+     *
+     * @return array
+     */
+    public static function getHeaders()
+    {
+        return self::$headers;
+    }
 
-	/**
-	 * Clears any headers already set.
-	 */
-	public static function clearHeaders()
-	{
-		self::$headers = array();
-	}
+    /**
+     * Clears any headers already set.
+     */
+    public static function clearHeaders()
+    {
+        self::$headers = [];
+    }
 
-	/**
-	 * Flushes any registered headers to the output buffer.
-	 */
-	public static function flushHeaders()
-	{
-		foreach( self::$headers as $name => $content )
-		{
-			// We can't set headers when unit testing.
-			if ( !Settings::getSetting( "Context", "UnitTesting", false ) )
-			{
-				if ( $content === false )
-				{
-					header( $name );
-				}
-				else
-				{
-					header( $name.": ".$content );
-				}
-			}
-		}
+    /**
+     * Flushes any registered headers to the output buffer.
+     */
+    public static function flushHeaders()
+    {
+        foreach (self::$headers as $name => $content) {
+            // We can't set headers when unit testing.
+            if (!Settings::getSetting("Context", "UnitTesting", false)) {
+                if ($content === false) {
+                    header($name);
+                } else {
+                    header($name . ": " . $content);
+                }
+            }
+        }
 
-		self::$flushed = true;
-	}
+        self::$flushed = true;
+    }
 }

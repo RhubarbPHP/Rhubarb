@@ -49,14 +49,14 @@ class LayoutModule extends Module
      *
      * @var array
      */
-    private static $headItems = array();
+    private static $headItems = [];
 
     /**
      * A collection of items to add to the body
      *
      * @var array
      */
-    private static $bodyItems = array();
+    private static $bodyItems = [];
 
     public function __construct($defaultLayoutClassName)
     {

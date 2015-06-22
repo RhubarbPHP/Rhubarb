@@ -2,33 +2,33 @@
 
 namespace Rhubarb\Crown\Tests\Sessions\SessionProviders;
 
-use Rhubarb\Crown\Tests\Sessions\UnitTestingSession;
 use Rhubarb\Crown\Settings;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
+use Rhubarb\Crown\Tests\Sessions\UnitTestingSession;
 
 class PhpSessionProviderTest extends RhubarbTestCase
 {
-	public function testSessionStorage()
-	{
-		$session = new UnitTestingSession();
-		$session->TestValue = "abc123";
-		$session->storeSession();
+    public function testSessionStorage()
+    {
+        $session = new UnitTestingSession();
+        $session->TestValue = "abc123";
+        $session->storeSession();
 
-		$this->assertEquals( "abc123", $_SESSION[ "UnitTestingSession" ][ "TestValue" ] );
-	}
+        $this->assertEquals("abc123", $_SESSION["UnitTestingSession"]["TestValue"]);
+    }
 
-	public function testSessionRestore()
-	{
-		$session = new UnitTestingSession();
-		$session->TestValue = "abc123";
-		$session->storeSession();
+    public function testSessionRestore()
+    {
+        $session = new UnitTestingSession();
+        $session->TestValue = "abc123";
+        $session->storeSession();
 
-		// We can't test PHP sessions properly within the same script. However we can verify
-		// that it at least restores the data from the $_SESSION array
-		Settings::deleteSettingNamespace( "UnitTestingSession" );
+        // We can't test PHP sessions properly within the same script. However we can verify
+        // that it at least restores the data from the $_SESSION array
+        Settings::deleteSettingNamespace("UnitTestingSession");
 
-		$session = new UnitTestingSession();
+        $session = new UnitTestingSession();
 
-		$this->assertEquals( "abc123", $session->TestValue );
-	}
+        $this->assertEquals("abc123", $session->TestValue);
+    }
 }

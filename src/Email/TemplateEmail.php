@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Email;
 
-require_once __DIR__.'/Email.php';
+require_once __DIR__ . '/Email.php';
 
 use Rhubarb\Crown\String\Template;
 
@@ -33,59 +33,59 @@ use Rhubarb\Crown\String\Template;
  */
 abstract class TemplateEmail extends Email
 {
-	private $recipientData = [];
+    private $recipientData = [];
 
-	public function __construct( $recipientData = [] )
-	{
-		$this->recipientData = $recipientData;
-	}
+    public function __construct($recipientData = [])
+    {
+        $this->recipientData = $recipientData;
+    }
 
-	/**
-	 * Optionally returns a text string to surround the HTML content with.
-	 *
-	 * The content should be marked using a placeholder of {Content}
-	 */
-	protected function getTextLayout()
-	{
-		return "{Content}";
-	}
+    /**
+     * Optionally returns a text string to surround the HTML content with.
+     *
+     * The content should be marked using a placeholder of {Content}
+     */
+    protected function getTextLayout()
+    {
+        return "{Content}";
+    }
 
-	/**
-	 * Optionally returns a layout string to surround the HTML content with.
-	 *
-	 * The content should be marked using a placeholder of {Content}
-	 */
-	protected function getHtmlLayout()
-	{
-		return "{Content}";
-	}
+    /**
+     * Optionally returns a layout string to surround the HTML content with.
+     *
+     * The content should be marked using a placeholder of {Content}
+     */
+    protected function getHtmlLayout()
+    {
+        return "{Content}";
+    }
 
-	protected abstract function getTextTemplateBody();
+    protected abstract function getTextTemplateBody();
 
-	protected abstract function getHtmlTemplateBody();
+    protected abstract function getHtmlTemplateBody();
 
-	protected abstract function getSubjectTemplate();
+    protected abstract function getSubjectTemplate();
 
-	public function getSubject()
-	{
-		return Template::parseTemplate( $this->getSubjectTemplate(), $this->recipientData );
-	}
+    public function getSubject()
+    {
+        return Template::parseTemplate($this->getSubjectTemplate(), $this->recipientData);
+    }
 
-	public function getText()
-	{
-		$body = Template::parseTemplate( $this->getTextTemplateBody(), $this->recipientData );
-		$data = $this->recipientData;
-		$data[ "Content" ] = $body;
+    public function getText()
+    {
+        $body = Template::parseTemplate($this->getTextTemplateBody(), $this->recipientData);
+        $data = $this->recipientData;
+        $data["Content"] = $body;
 
-		return Template::parseTemplate( $this->getTextLayout(), $data );
-	}
+        return Template::parseTemplate($this->getTextLayout(), $data);
+    }
 
-	public function getHtml()
-	{
-		$body = Template::parseTemplate( $this->getHtmlTemplateBody(), $this->recipientData );
-		$data = $this->recipientData;
-		$data[ "Content" ] = $body;
+    public function getHtml()
+    {
+        $body = Template::parseTemplate($this->getHtmlTemplateBody(), $this->recipientData);
+        $data = $this->recipientData;
+        $data["Content"] = $body;
 
-		return Template::parseTemplate( $this->getHtmlLayout(), $data );
-	}
+        return Template::parseTemplate($this->getHtmlLayout(), $data);
+    }
 }

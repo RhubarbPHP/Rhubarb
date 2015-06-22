@@ -53,100 +53,96 @@ use Rhubarb\Crown\Modelling\ModelState;
  */
 abstract class Settings extends ModelState
 {
-	/**
-	 * The private collection of cached model state data for all the sessions.
-	 *
-	 * This provides the Settings class with it's Singleton like behavour.
-	 *
-	 * @var array
-	 */
-	private static $cachedModelData = array();
+    /**
+     * The private collection of cached model state data for all the sessions.
+     *
+     * This provides the Settings class with it's Singleton like behavour.
+     *
+     * @var array
+     */
+    private static $cachedModelData = [];
 
-	/**
-	 * The namespace for this settings object.
-	 *
-	 * @var string
-	 */
-	private $namespace = "";
+    /**
+     * The namespace for this settings object.
+     *
+     * @var string
+     */
+    private $namespace = "";
 
-	public function __construct()
-	{
-		$className = basename( str_replace( "\\", "/", get_class( $this ) ) );
-		$this->namespace = str_replace( "Settings", "", $className );
+    public function __construct()
+    {
+        $className = basename(str_replace("\\", "/", get_class($this)));
+        $this->namespace = str_replace("Settings", "", $className);
 
-		$needsInitialised = false;
+        $needsInitialised = false;
 
-		// Get the model data by using the class name
-		if ( !isset( self::$cachedModelData[ $this->namespace ] ) )
-		{
-			self::$cachedModelData[ $this->namespace ] = array();
+        // Get the model data by using the class name
+        if (!isset(self::$cachedModelData[$this->namespace])) {
+            self::$cachedModelData[$this->namespace] = [];
 
-			// If the model data didn't exist before we know that we are being used for
-			// the first time and we should call the initialiseDefaultValues() function.
-			$needsInitialised = true;
-		}
+            // If the model data didn't exist before we know that we are being used for
+            // the first time and we should call the initialiseDefaultValues() function.
+            $needsInitialised = true;
+        }
 
-		$this->modelData = &self::$cachedModelData[ $this->namespace ];
+        $this->modelData = &self::$cachedModelData[$this->namespace];
 
-		if ( $needsInitialised )
-		{
-			$this->initialiseDefaultValues();
-		}
-	}
+        if ($needsInitialised) {
+            $this->initialiseDefaultValues();
+        }
+    }
 
-	/**
-	 * Returns the namespace for this settings class.
-	 *
-	 * @return string
-	 */
-	public function getNamespace()
-	{
-		return $this->namespace;
-	}
+    /**
+     * Returns the namespace for this settings class.
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
 
-	/**
-	 * Override this class to set default values for settings.
-	 */
-	protected function initialiseDefaultValues()
-	{
+    /**
+     * Override this class to set default values for settings.
+     */
+    protected function initialiseDefaultValues()
+    {
 
-	}
+    }
 
-	/**
-	 * Get's a setting without having to use the relevant settings object.
-	 *
-	 * This is a convenience method used to keep code fast and tidy.
-	 *
-	 * @param $namespace
-	 * @param $settingName
-	 * @param null $defaultValue
-	 * @throws Exceptions\SettingMissingException
-	 * @return mixed
-	 */
-	public static function getSetting( $namespace, $settingName, $defaultValue = null )
-	{
-		if ( isset( self::$cachedModelData[ $namespace ][ $settingName ] ) )
-		{
-			return self::$cachedModelData[ $namespace ][ $settingName ];
-		}
+    /**
+     * Get's a setting without having to use the relevant settings object.
+     *
+     * This is a convenience method used to keep code fast and tidy.
+     *
+     * @param $namespace
+     * @param $settingName
+     * @param null $defaultValue
+     * @throws Exceptions\SettingMissingException
+     * @return mixed
+     */
+    public static function getSetting($namespace, $settingName, $defaultValue = null)
+    {
+        if (isset(self::$cachedModelData[$namespace][$settingName])) {
+            return self::$cachedModelData[$namespace][$settingName];
+        }
 
-		if ( $defaultValue === null )
-		{
-			throw new SettingMissingException( $namespace, $settingName );
-		}
+        if ($defaultValue === null) {
+            throw new SettingMissingException($namespace, $settingName);
+        }
 
-		return $defaultValue;
-	}
+        return $defaultValue;
+    }
 
-	/**
-	 * Removes all the settings for a particular namespace.
-	 *
-	 * Very rarely needed, usually by unit tests.
-	 *
-	 * @param $namespace
-	 */
-	public static function deleteSettingNamespace( $namespace )
-	{
-		unset( self::$cachedModelData[ $namespace ] );
-	}
+    /**
+     * Removes all the settings for a particular namespace.
+     *
+     * Very rarely needed, usually by unit tests.
+     *
+     * @param $namespace
+     */
+    public static function deleteSettingNamespace($namespace)
+    {
+        unset(self::$cachedModelData[$namespace]);
+    }
 }

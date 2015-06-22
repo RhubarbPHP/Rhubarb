@@ -11,11 +11,11 @@ class TemplateTest extends RhubarbTestCase
     {
         $plainTextTemplate = "Nothing in here to parse";
 
-        $this->assertEquals($plainTextTemplate, Template::parseTemplate($plainTextTemplate, array()));
+        $this->assertEquals($plainTextTemplate, Template::parseTemplate($plainTextTemplate, []));
 
         $template = "Ah something to process! {Forename}";
 
         $this->assertEquals("Ah something to process! Andrew",
-            Template::parseTemplate($template, array("Forename" => "Andrew")));
+            Template::parseTemplate($template, ["Forename" => "Andrew"]));
     }
 }

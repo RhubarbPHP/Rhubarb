@@ -55,8 +55,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
         $resourceFilePath = realpath($resourceFilePath);
 
-        if ( $resourceFilePath === false )
-        {
+        if ($resourceFilePath === false) {
             throw new DeploymentException("The file $originalResourceFilePath could not be found. Please check the file exists.");
         }
 

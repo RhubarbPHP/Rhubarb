@@ -11,8 +11,8 @@ use Rhubarb\Crown\LoginProviders\LoginProvider;
  */
 class UnitTestingLoginProvider extends LoginProvider
 {
-	public function Login()
-	{
-		$this->LoggedIn = true;
-	}
+    public function Login()
+    {
+        $this->LoggedIn = true;
+    }
 }

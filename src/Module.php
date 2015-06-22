@@ -18,15 +18,15 @@
 
 namespace Rhubarb\Crown;
 
-require_once __DIR__."/Logging/Log.php";
-require_once __DIR__."/Request/WebRequest.php";
-require_once __DIR__."/Response/HtmlResponse.php";
-require_once __DIR__."/UrlHandlers/UrlHandler.php";
+require_once __DIR__ . "/Logging/Log.php";
+require_once __DIR__ . "/Request/WebRequest.php";
+require_once __DIR__ . "/Response/HtmlResponse.php";
+require_once __DIR__ . "/UrlHandlers/UrlHandler.php";
 
-use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
+use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\CliRequest;
@@ -55,14 +55,14 @@ abstract class Module
      *
      * @var \Rhubarb\Crown\UrlHandlers\UrlHandler[]
      */
-    protected $urlHandlers = array();
+    protected $urlHandlers = [];
 
     /**
      * An array of ResponseFilters
      *
      * @var array
      */
-    protected $responseFilters = array();
+    protected $responseFilters = [];
 
     /**
      * @var string The name of the module. Normally the module class name minus the word Module
@@ -159,7 +159,7 @@ abstract class Module
      */
     public static function clearModules()
     {
-        self::$modules = array();
+        self::$modules = [];
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class Module
     public static function getAllResponseFilters()
     {
         $modules = self::getAllModules();
-        $filters = array();
+        $filters = [];
 
         foreach ($modules as $module) {
             $filters = array_merge($filters, $module->responseFilters);
@@ -253,7 +253,7 @@ abstract class Module
     public static function getAllUrlHandlers()
     {
         $modules = self::getAllModules();
-        $handlers = array();
+        $handlers = [];
 
         foreach ($modules as $module) {
             $handlers = array_merge($handlers, $module->getUrlHandlers());

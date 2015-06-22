@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Email;
 
-require_once __DIR__.'/Email.php';
+require_once __DIR__ . '/Email.php';
 
 /**
  * Provides a simple Email implementation letting the user set the text for
@@ -79,4 +79,4 @@ class SimpleEmail extends Email
 
         return $this;
     }
-} 
+}
