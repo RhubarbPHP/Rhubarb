@@ -22,60 +22,60 @@ use Rhubarb\Crown\Context;
 
 class ContextTest extends RhubarbTestCase
 {
-	protected $context = null;
+    protected $context = null;
 
-	protected function setUp()
-	{
-		$this->context = new Context();
-		$this->context->Request = null;
-	}
+    protected function setUp()
+    {
+        $this->context = new Context();
+        $this->context->Request = null;
+    }
 
-	protected function tearDown()
-	{
-		$this->context = null;
-	}
+    protected function tearDown()
+    {
+        $this->context = null;
+    }
 
-	public function testAjaxDetection()
-	{
-		$this->assertFalse( $this->context->IsAjaxRequest );
+    public function testAjaxDetection()
+    {
+        $this->assertFalse($this->context->IsAjaxRequest);
 
-		$_SERVER[ "HTTP_X_REQUESTED_WITH" ] = "xmlhttprequest";
+        $_SERVER["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest";
 
-		$this->assertTrue( $this->context->IsAjaxRequest );
-	}
+        $this->assertTrue($this->context->IsAjaxRequest);
+    }
 
-	public function testCliDetection()
-	{
-		// not sure we can test the negative for this, as the unit tests
-		// are run from the CLI and PHP's SAPI checking isn't something
-		// we can hook in and modify
+    public function testCliDetection()
+    {
+        // not sure we can test the negative for this, as the unit tests
+        // are run from the CLI and PHP's SAPI checking isn't something
+        // we can hook in and modify
 
-		$this->assertTrue( $this->context->IsCliInvocation );
-	}
+        $this->assertTrue($this->context->IsCliInvocation);
+    }
 
-	public function testJsonContentTypeDetection()
-	{
-		$context = new Context();
-		$context->SimulateNonCli = true;
+    public function testJsonContentTypeDetection()
+    {
+        $context = new Context();
+        $context->SimulateNonCli = true;
 
-		$_SERVER[ "CONTENT_TYPE" ] = "application/json";
+        $_SERVER["CONTENT_TYPE"] = "application/json";
 
-		$request = Context::CurrentRequest();
+        $request = Context::CurrentRequest();
 
-		$this->assertInstanceOf( "\Rhubarb\Crown\Request\JsonRequest", $request );
-	}
+        $this->assertInstanceOf("\Rhubarb\Crown\Request\JsonRequest", $request);
+    }
 
-	public function testRequestAccess()
-	{
-		$context = new Context();
-		$context->SimulateNonCli = false;
+    public function testRequestAccess()
+    {
+        $context = new Context();
+        $context->SimulateNonCli = false;
 
-		unset( $this->context->Request );
+        unset($this->context->Request);
 
-		$this->assertNotNull( Context::CurrentRequest(), "Static Request accessor returned NULL" );
-		$this->assertNotNull( $this->context->Request, "Request accessor returned NULL" );
+        $this->assertNotNull(Context::CurrentRequest(), "Static Request accessor returned NULL");
+        $this->assertNotNull($this->context->Request, "Request accessor returned NULL");
 
 
-		$this->assertInstanceOf( '\Rhubarb\Crown\Request\CliRequest', Context::CurrentRequest() );
-	}
+        $this->assertInstanceOf('\Rhubarb\Crown\Request\CliRequest', Context::CurrentRequest());
+    }
 }

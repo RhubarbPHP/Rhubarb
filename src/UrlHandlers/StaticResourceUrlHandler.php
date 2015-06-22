@@ -18,111 +18,109 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
-require_once __DIR__."/UrlHandler.php";
+require_once __DIR__ . "/UrlHandler.php";
 
+use Rhubarb\Crown\Exceptions\StaticResource404Exception;
+use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
 use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Response\Response;
-use Rhubarb\Crown\Exceptions\StaticResource404Exception;
-use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
-use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
  * Recognises and retrieves static resources according to the mapping parameters defined in the constructor.
  */
 class StaticResourceUrlHandler extends UrlHandler
 {
-	private $folderOrFilePath = "";
+    private $folderOrFilePath = "";
 
-	private $isFolder = false;
+    private $isFolder = false;
 
-	private $staticFile = false;
+    private $staticFile = false;
 
-	public function __construct( $folderOrFilePath, $children = [] )
-	{
-		parent::__construct( $children );
+    public function __construct($folderOrFilePath, $children = [])
+    {
+        parent::__construct($children);
 
-		$this->folderOrFilePath = rtrim( $folderOrFilePath, "/" );
+        $this->folderOrFilePath = rtrim($folderOrFilePath, "/");
 
-		if ( !file_exists( $this->folderOrFilePath ) ) {
-			throw new StaticResourceNotFoundException($this->folderOrFilePath);
-		}
+        if (!file_exists($this->folderOrFilePath)) {
+            throw new StaticResourceNotFoundException($this->folderOrFilePath);
+        }
 
-		if ( is_dir( $this->folderOrFilePath ) ) {
-			$this->isFolder = true;
-		}
-	}
+        if (is_dir($this->folderOrFilePath)) {
+            $this->isFolder = true;
+        }
+    }
 
-	protected function generateResponseForRequest( $request = false )
-	{
-		if ( $this->staticFile !== false ) {
-			$response = new Response();
-			LayoutModule::disableLayout();
+    protected function generateResponseForRequest($request = false)
+    {
+        if ($this->staticFile !== false) {
+            $response = new Response();
+            LayoutModule::disableLayout();
 
-			if (substr($this->staticFile, -4) == ".css") {
-				$mime = "text/css";
-			} else {
-				$info = new \finfo(FILEINFO_MIME);
-				$mime = $info->file($this->staticFile);
-			}
+            if (substr($this->staticFile, -4) == ".css") {
+                $mime = "text/css";
+            } else {
+                $info = new \finfo(FILEINFO_MIME);
+                $mime = $info->file($this->staticFile);
+            }
 
-			if ($mime !== false) {
-				if (substr($this->staticFile, -3) == ".js") {
-					$mime = str_replace("text/plain", "application/javascript", $mime);
-				}
+            if ($mime !== false) {
+                if (substr($this->staticFile, -3) == ".js") {
+                    $mime = str_replace("text/plain", "application/javascript", $mime);
+                }
 
-				HttpHeaders::setHeader("Content-type", $mime);
-				$response->setHeader('Content-Type', $mime);
-			}
+                HttpHeaders::setHeader("Content-type", $mime);
+                $response->setHeader('Content-Type', $mime);
+            }
 
-			ob_start();
+            ob_start();
 
-			readfile($this->staticFile);
+            readfile($this->staticFile);
 
-			$response->setContent(ob_get_clean());
+            $response->setContent(ob_get_clean());
 
-			return $response;
-		}
+            return $response;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function setUrl( $url )
-	{
-		$this->url = rtrim( $url, "/" );
-	}
+    public function setUrl($url)
+    {
+        $this->url = rtrim($url, "/");
+    }
 
-	/**
-	 * Should be implemented to return a true or false as to whether this handler supports the given request.
-	 *
-	 * Normally this involves testing the request URI.
-	 *
-	 * @param \Rhubarb\Crown\Request\Request $request
-	 * @throws \Rhubarb\Crown\Exceptions\StaticResource404Exception
-	 * @return bool
-	 */
-	protected function getMatchingUrlFragment( Request $request, $currentUrlFragment = '' )
-	{
-		$url = $request->UrlPath;
+    /**
+     * Should be implemented to return a true or false as to whether this handler supports the given request.
+     *
+     * Normally this involves testing the request URI.
+     *
+     * @param \Rhubarb\Crown\Request\Request $request
+     * @throws \Rhubarb\Crown\Exceptions\StaticResource404Exception
+     * @return bool
+     */
+    protected function getMatchingUrlFragment(Request $request, $currentUrlFragment = '')
+    {
+        $url = $request->UrlPath;
 
-		if ( $this->isFolder ) {
-			$urlDirectory = dirname($url);
+        if ($this->isFolder) {
+            $urlDirectory = dirname($url);
 
-			if (strpos($urlDirectory, $this->url) === 0) {
-				$this->staticFile = $this->folderOrFilePath . str_replace($this->url, "", $url);
+            if (strpos($urlDirectory, $this->url) === 0) {
+                $this->staticFile = $this->folderOrFilePath . str_replace($this->url, "", $url);
 
-				if (!file_exists($this->staticFile)) {
-					throw new StaticResource404Exception($url);
-				}
-			}
-		}
-		else {
-			if ($this->url == $url) {
-				$this->staticFile = $this->folderOrFilePath;
-			}
-		}
+                if (!file_exists($this->staticFile)) {
+                    throw new StaticResource404Exception($url);
+                }
+            }
+        } else {
+            if ($this->url == $url) {
+                $this->staticFile = $this->folderOrFilePath;
+            }
+        }
 
-		return ( $this->staticFile !== false );
-	}
+        return ($this->staticFile !== false);
+    }
 }

@@ -21,11 +21,10 @@ namespace Rhubarb\Crown\Html;
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
 use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
-use Rhubarb\Crown\Exceptions\ResourceNotFound;
 
 class ResourceLoader
 {
-    private static $resources = array();
+    private static $resources = [];
 
     /**
      * Adds javascript script code to the collection
@@ -37,7 +36,7 @@ class ResourceLoader
     {
         $dependantResourceUrls = array_unique($dependantResourceUrls);
 
-        self::$resources[] = array($scriptCode, $dependantResourceUrls);
+        self::$resources[] = [$scriptCode, $dependantResourceUrls];
     }
 
     public static function addScriptCodeOnReady($scriptCode, $dependantResourceUrls = [])
@@ -197,7 +196,7 @@ $tags</script>";
     public static function getJqueryUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource( "vendor/components/jquery/jquery.min.js" );
+        return $deployer->deployResource("vendor/components/jquery/jquery.min.js");
     }
 
     public static function loadJquery()
@@ -208,14 +207,14 @@ $tags</script>";
     public static function getJqueryUIUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource( "vendor/components/jqueryui/jquery-ui.min.js" );
+        return $deployer->deployResource("vendor/components/jqueryui/jquery-ui.min.js");
     }
 
     public static function loadJqueryUI()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
 
-        self::loadResource( $deployer->deployResource( "vendor/components/jqueryui/themes/base/jquery-ui.css" ) );
+        self::loadResource($deployer->deployResource("vendor/components/jqueryui/themes/base/jquery-ui.css"));
         self::loadResource(self::getJqueryUIUrl());
     }
 }

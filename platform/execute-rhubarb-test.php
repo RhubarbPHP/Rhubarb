@@ -31,9 +31,8 @@ chdir(__DIR__ . "/../");
 // Initiate our bootstrap script to boot all libraries required.
 require_once __DIR__ . "/boot.php";
 
-if ( isset( $argv[1] ) )
-{
+if (isset($argv[1])) {
     $script = $argv[1];
     /** @noinspection PhpIncludeInspection */
-    include( $script );
+    include($script);
 }

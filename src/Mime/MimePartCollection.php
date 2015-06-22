@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Mime;
 
-require_once __DIR__.'/MimePart.php';
+require_once __DIR__ . '/MimePart.php';
 
 /**
  * Represents a nested collection of mime parts.
@@ -26,4 +26,4 @@ require_once __DIR__.'/MimePart.php';
 class MimePartCollection extends MimePart
 {
 
-} 
+}

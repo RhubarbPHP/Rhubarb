@@ -9,8 +9,8 @@ use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
-use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
+use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
 use Rhubarb\Stem\Repositories\Repository;
 
 /**
@@ -50,14 +50,14 @@ class UnitTestingModule extends Module
     {
         parent::registerDependantModules();
 
-        Module::registerModule( new LayoutModule( '\Rhubarb\Crown\Tests\Layout\TestLayout' ) );
+        Module::registerModule(new LayoutModule('\Rhubarb\Crown\Tests\Layout\TestLayout'));
     }
 
     protected function Initialise()
     {
         parent::Initialise();
 
-        Repository::setDefaultRepositoryClassName( '\Rhubarb\Stem\Repositories\Offline\Offline' );
+        Repository::setDefaultRepositoryClassName('\Rhubarb\Stem\Repositories\Offline\Offline');
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
         $login->SetPriority(20);
@@ -80,10 +80,10 @@ class UnitTestingModule extends Module
 
         $this->AddUrlHandlers(
             [
-                "/" => new ClassMappedUrlHandler( "\Rhubarb\Crown\Tests\Fixtures\SimpleContent",
+                "/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent",
                     [
                         "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests"),
-                        "simple/" => new ClassMappedUrlHandler( "\Rhubarb\Crown\Tests\Fixtures\SimpleContent" ),
+                        "simple/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent"),
                         "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
                     ])
             ]
@@ -108,7 +108,7 @@ class UnitTestingModule extends Module
 
         $this->AddUrlHandlers("/priority-test/", $test);
 
-        EmailProvider::setDefaultEmailProviderClassName( '\Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider');
+        EmailProvider::setDefaultEmailProviderClassName('\Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider');
 
     }
 }

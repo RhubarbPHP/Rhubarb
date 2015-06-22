@@ -25,16 +25,15 @@ namespace Rhubarb\Crown;
  */
 class Singleton
 {
-	private static $singleton = null;
+    private static $singleton = null;
 
-	public static function getSingleton()
-	{
-		if ( self::$singleton == null )
-		{
-			$class = get_called_class();
-			self::$singleton = new $class();
-		}
+    public static function getSingleton()
+    {
+        if (self::$singleton == null) {
+            $class = get_called_class();
+            self::$singleton = new $class();
+        }
 
-		return self::$singleton;
-	}
+        return self::$singleton;
+    }
 }

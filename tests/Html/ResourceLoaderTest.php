@@ -21,7 +21,7 @@ window.resourceManager.runWhenDocumentReady( function()
 </script>", $scripts);
 
         ResourceLoader::clearResources();
-        ResourceLoader::addScriptCode("doThis();", array("a.js", "b.js"));
+        ResourceLoader::addScriptCode("doThis();", ["a.js", "b.js"]);
         $scripts = ResourceLoader::getResourceInjectionHtml();
 
         $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
@@ -32,39 +32,40 @@ window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 } );
 </script>", $scripts);
     }
-/*
-    public function testLoadJquery()
-    {
-        ResourceLoader::clearResources();
 
-        ResourceLoader::loadJquery("1.8.3", false);
+    /*
+        public function testLoadJquery()
+        {
+            ResourceLoader::clearResources();
 
-        $scripts = ResourceLoader::getResourceInjectionHtml();
+            ResourceLoader::loadJquery("1.8.3", false);
 
-        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
-<script type=\"text/javascript\">
-window.resourceManager.loadResources( [ \"/client/jquery/jquery-1.8.3.js\" ] );
-</script>", $scripts);
+            $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        ResourceLoader::clearResources();
+            $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+    <script type=\"text/javascript\">
+    window.resourceManager.loadResources( [ \"/client/jquery/jquery-1.8.3.js\" ] );
+    </script>", $scripts);
 
-        ResourceLoader::loadJquery("1.8.3", true);
+            ResourceLoader::clearResources();
 
-        $scripts = ResourceLoader::getResourceInjectionHtml();
+            ResourceLoader::loadJquery("1.8.3", true);
 
-        $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
-<script type=\"text/javascript\">
-window.resourceManager.loadResources( [ \"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\" ] );
-</script>", $scripts);
+            $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        ResourceLoader::clearResources();
+            $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
+    <script type=\"text/javascript\">
+    window.resourceManager.loadResources( [ \"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\" ] );
+    </script>", $scripts);
 
-        $this->setExpectedException("\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound");
+            ResourceLoader::clearResources();
 
-        // A very large version number that won't exist locally.
-        ResourceLoader::loadJquery("1991.8.3", false);
-    }
-*/
+            $this->setExpectedException("\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound");
+
+            // A very large version number that won't exist locally.
+            ResourceLoader::loadJquery("1991.8.3", false);
+        }
+    */
     public function testLoadingStylesheetTwice()
     {
         ResourceLoader::clearResources();

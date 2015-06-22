@@ -23,35 +23,35 @@ namespace Rhubarb\Crown\Http;
  */
 abstract class HttpClient
 {
-	private static $defaultHttpClientClassName = '\Rhubarb\Crown\Http\CurlHttpClient';
+    private static $defaultHttpClientClassName = '\Rhubarb\Crown\Http\CurlHttpClient';
 
-	/**
-	 * Executes an HTTP transaction and returns the response.
-	 *
-	 * @param HttpRequest $request
-	 * @return HttpResponse
-	 */
-	public abstract function getResponse( HttpRequest $request );
+    /**
+     * Executes an HTTP transaction and returns the response.
+     *
+     * @param HttpRequest $request
+     * @return HttpResponse
+     */
+    public abstract function getResponse(HttpRequest $request);
 
-	/**
-	 * Sets the name of the class to use for the default HttpClient
-	 *
-	 * @param $defaultHttpClientClassName
-	 */
-	public static function setDefaultHttpClientClassName( $defaultHttpClientClassName )
-	{
-		self::$defaultHttpClientClassName = $defaultHttpClientClassName;
-	}
+    /**
+     * Sets the name of the class to use for the default HttpClient
+     *
+     * @param $defaultHttpClientClassName
+     */
+    public static function setDefaultHttpClientClassName($defaultHttpClientClassName)
+    {
+        self::$defaultHttpClientClassName = $defaultHttpClientClassName;
+    }
 
-	/**
-	 * Returns an instance of the default HttpClient
-	 *
-	 * @return HttpClient
-	 */
-	public static function getDefaultHttpClient()
-	{
-		$class = self::$defaultHttpClientClassName;
+    /**
+     * Returns an instance of the default HttpClient
+     *
+     * @return HttpClient
+     */
+    public static function getDefaultHttpClient()
+    {
+        $class = self::$defaultHttpClientClassName;
 
-		return new $class();
-	}
-} 
+        return new $class();
+    }
+}

@@ -28,6 +28,6 @@ class AllPublicModelState extends ModelState
 {
     protected function getPublicPropertyList()
     {
-        return array_keys( $this->modelData );
+        return array_keys($this->modelData);
     }
 }

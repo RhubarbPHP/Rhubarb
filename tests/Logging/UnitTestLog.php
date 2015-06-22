@@ -6,7 +6,7 @@ use Rhubarb\Crown\Logging\Log;
 
 class UnitTestLog extends Log
 {
-	public $entries = [];
+    public $entries = [];
 
     /**
      * The logger should implement this method to perform the actual log committal.
@@ -18,25 +18,23 @@ class UnitTestLog extends Log
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-	protected function WriteEntry($message, $indent, $category = "", $additionalData = [])
-	{
-		$this->entries[] = [ $message, $category, $indent, $additionalData ];
-	}
+    protected function WriteEntry($message, $indent, $category = "", $additionalData = [])
+    {
+        $this->entries[] = [$message, $category, $indent, $additionalData];
+    }
 
-	protected function ShouldLog( $category )
-	{
-		global $logFilter;  // Yes, it's a global - it's a unit test. Get over it.
+    protected function ShouldLog($category)
+    {
+        global $logFilter;  // Yes, it's a global - it's a unit test. Get over it.
 
-        if ( $category == "ignore" )
-        {
+        if ($category == "ignore") {
             return false;
         }
 
-		if ( isset( $logFilter ) && $logFilter )
-		{
-			return false;
-		}
+        if (isset($logFilter) && $logFilter) {
+            return false;
+        }
 
-		return parent::ShouldLog( $category );
-	}
+        return parent::ShouldLog($category);
+    }
 }

@@ -191,10 +191,10 @@ class ModelStateTest extends RhubarbTestCase
         $test->Forename = "Andrew";
         $test->Town = "Belfast";
 
-        $data = array(
+        $data = [
             "Forename" => "John",
             "Surname" => "Smith"
-        );
+        ];
 
         $test->importRawData($data);
 
@@ -209,10 +209,10 @@ class ModelStateTest extends RhubarbTestCase
         $test->Forename = "Andrew";
         $test->Town = "Belfast";
 
-        $data = array(
+        $data = [
             "Forename" => "John",
             "Surname" => "Smith"
-        );
+        ];
 
         $test->mergeRawData($data);
 

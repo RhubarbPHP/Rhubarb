@@ -10,34 +10,34 @@ use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 
 class ClassMappedHandlerTest extends RhubarbTestCase
 {
-	public function testUrlHandled()
-	{
-		$request = new WebRequest();
-		$request->UrlPath = "/wrong/path/";
+    public function testUrlHandled()
+    {
+        $request = new WebRequest();
+        $request->UrlPath = "/wrong/path/";
 
-		$handler = new ClassMappedUrlHandler( "\Rhubarb\Crown\Tests\UrlHandlers\TestTarget" );
-		$handler->setUrl( "/right/path/" );
+        $handler = new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\UrlHandlers\TestTarget");
+        $handler->setUrl("/right/path/");
 
-		$response = $handler->generateResponse( $request );
+        $response = $handler->generateResponse($request);
 
-		$this->assertFalse( $response );
+        $this->assertFalse($response);
 
-		$request = new WebRequest();
-		$request->UrlPath = "/right/path/";
+        $request = new WebRequest();
+        $request->UrlPath = "/right/path/";
 
-		$response = $handler->generateResponse( $request );
+        $response = $handler->generateResponse($request);
 
-		$this->assertEquals( "bing bang bong", $response->getContent() );
-	}
+        $this->assertEquals("bing bang bong", $response->getContent());
+    }
 }
 
 class TestTarget implements GeneratesResponse
 {
-	public function generateResponse( $request = null )
-	{
-		$response = new Response();
-		$response->setContent( "bing bang bong" );
+    public function generateResponse($request = null)
+    {
+        $response = new Response();
+        $response->setContent("bing bang bong");
 
-		return $response;
-	}
+        return $response;
+    }
 }

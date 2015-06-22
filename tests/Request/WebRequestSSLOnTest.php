@@ -10,38 +10,38 @@ use Rhubarb\Crown\Request\WebRequest;
  */
 class WebRequestSSLOnTest extends RequestTestCase
 {
-	protected $request = null;
+    protected $request = null;
 
-	protected function setUp()
-	{
-		parent::setUp();
+    protected function setUp()
+    {
+        parent::setUp();
 
-		// inject some data for testing and cover the absence of web server-type
-		// superglobals in the testing CLI context
-		$_SERVER[ 'HTTP_HOST' ] = 'gcdtech.com';
-		$_SERVER[ 'SCRIPT_URI' ] = 'http://gcdtech.com/foo';
-		$_SERVER[ 'SCRIPT_URL' ] = '/foo';
-		$_SERVER[ 'HTTPS' ] = 'https';
+        // inject some data for testing and cover the absence of web server-type
+        // superglobals in the testing CLI context
+        $_SERVER['HTTP_HOST'] = 'gcdtech.com';
+        $_SERVER['SCRIPT_URI'] = 'http://gcdtech.com/foo';
+        $_SERVER['SCRIPT_URL'] = '/foo';
+        $_SERVER['HTTPS'] = 'https';
 
-		$_GET = [];
-		$_POST = [];
-		$_FILES = [];
-		$_COOKIE = [];
-		$_SESSION = [];
-		$_REQUEST = [];
+        $_GET = [];
+        $_POST = [];
+        $_FILES = [];
+        $_COOKIE = [];
+        $_SESSION = [];
+        $_REQUEST = [];
 
-		$this->request = new WebRequest();
-	}
+        $this->request = new WebRequest();
+    }
 
-	protected function tearDown()
-	{
-		$this->request = null;
+    protected function tearDown()
+    {
+        $this->request = null;
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
-	public function testSSL()
-	{
-		$this->assertTrue( $this->request->IsSSL );
-	}
+    public function testSSL()
+    {
+        $this->assertTrue($this->request->IsSSL);
+    }
 }

@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Mime;
 
-require_once __DIR__.'/MimePart.php';
+require_once __DIR__ . '/MimePart.php';
 
 class MimePartImage extends MimePart
 {

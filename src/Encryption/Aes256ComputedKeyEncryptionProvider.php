@@ -23,8 +23,8 @@ namespace Rhubarb\Crown\Encryption;
  */
 class Aes256ComputedKeyEncryptionProvider extends Aes256EncryptionProvider
 {
-	protected function getEncryptionKey($keySalt = "")
-	{
-		return sha1( sha1( "._%fD".$keySalt."#';" ) );
-	}
+    protected function getEncryptionKey($keySalt = "")
+    {
+        return sha1(sha1("._%fD" . $keySalt . "#';"));
+    }
 }
