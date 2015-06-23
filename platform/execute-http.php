@@ -33,8 +33,11 @@ chdir(__DIR__ . "/../../../../");
 // Initiate our bootstrap script to boot all libraries required.
 require_once __DIR__ . "/boot.php";
 
+require_once __DIR__ . "/../src/Logging/Log.php";
 require_once __DIR__ . "/../src/Module.php";
 require_once __DIR__ . "/../src/Context.php";
+
+Log::performance( "Rhubarb booted", "ROUTER" );
 
 $request = \Rhubarb\Crown\Context::currentRequest();
 
@@ -42,7 +45,9 @@ try {
     // Pass control to the Module class and ask it to generate a response for the
     // incoming request.
     $response = Module::generateResponseForRequest($request);
+    Log::performance( "Response generated", "ROUTER" );
     $response->send();
+    Log::performance( "Response sent", "ROUTER" );
 } catch (\Exception $er) {
     $context = new \Rhubarb\Crown\Context();
 

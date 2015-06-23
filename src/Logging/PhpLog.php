@@ -39,7 +39,7 @@ class PhpLog extends IndentedMessageLog
         $ip = self::getRemoteIP();
         $category = ($category == "") ? "CORE" : $category;
 
-        error_log($category .
+        error_log(str_pad($category, 8, ' ', STR_PAD_RIGHT ) .
             str_pad($this->uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
             str_pad($this->GetExecutionTime(), 7, ' ', STR_PAD_LEFT) .
             str_pad($this->GetTimeSinceLastLog(), 7, ' ', STR_PAD_LEFT) .
