@@ -53,6 +53,13 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     private $propertyChangedCallbacks = [];
 
+    /**
+     * True to disable property changes firing events.
+     *
+     * @var bool
+     */
+    protected $propertyChangeEventsDisabled = false;
+
     public function __construct()
     {
         $this->attachPropertyChangedNotificationHandlers();
@@ -122,9 +129,11 @@ class ModelState implements \ArrayAccess, JsonSerializable
         }
 
         if ($oldValue != $value) {
-            $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
-
-            $this->traitRaiseEvent("AfterChange", $this);
+            if (!$this->propertyChangeEventsDisabled) {
+               // Don't fire changes if they are disabled.
+                $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
+                $this->traitRaiseEvent("AfterChange", $this);
+            }
         }
     }
 
