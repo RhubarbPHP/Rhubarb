@@ -3,6 +3,7 @@
 namespace Rhubarb\Crown\Tests\Deployment;
 
 use Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider;
+use Rhubarb\Crown\Exceptions\DeploymentException;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
@@ -34,7 +35,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 
     public function testDeploymentThrowsExceptions()
     {
-        $this->setExpectedException("Rhubarb\Crown\Exceptions\DeploymentException");
+        $this->setExpectedException(DeploymentException::class);
 
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource("a/b/c.txt");

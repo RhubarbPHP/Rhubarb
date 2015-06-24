@@ -20,11 +20,6 @@ namespace Rhubarb\Crown\Encryption;
 
 require_once __DIR__ . "/EncryptionProvider.php";
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 abstract class Aes256EncryptionProvider extends EncryptionProvider
 {
     /**

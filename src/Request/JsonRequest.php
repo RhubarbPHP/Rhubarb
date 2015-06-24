@@ -24,10 +24,6 @@ use Rhubarb\Crown\Context;
  * Represents a Json request
  *
  * Normally created when the Content-Type of the request is application/json
- *
- * @package Rhubarb\Crown\Request
- * @author      acuthbert
- * @copyright   2013 GCD Technologies Ltd.
  */
 class JsonRequest extends WebRequest
 {

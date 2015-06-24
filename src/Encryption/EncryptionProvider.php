@@ -22,9 +22,6 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
  * Provides a framework for providing encryption services.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
  */
 abstract class EncryptionProvider
 {

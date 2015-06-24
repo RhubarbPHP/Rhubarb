@@ -20,11 +20,6 @@ namespace Rhubarb\Crown\Response;
 
 require_once __DIR__ . "/Response.php";
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class RedirectResponse extends Response
 {
     private $url;

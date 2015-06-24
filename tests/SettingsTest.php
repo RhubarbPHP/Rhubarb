@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests;
 
+use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Settings;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingSettings;
 
@@ -9,9 +10,6 @@ use Rhubarb\Crown\Tests\Fixtures\UnitTestingSettings;
  * Settings test suite.
  *
  * Note that settings extend Model so we don't need to test all of that plumbing again.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class SettingsTest extends RhubarbTestCase
 {
@@ -46,7 +44,7 @@ class SettingsTest extends RhubarbTestCase
         $return = Settings::getSetting('UnitTesting', "Bar", "123");
         $this->assertEquals("123", $return);
 
-        $this->setExpectedException("\Rhubarb\Crown\Exceptions\SettingMissingException");
+        $this->setExpectedException(SettingMissingException::class);
         Settings::getSetting('UnitTesting', "Bar");
     }
 

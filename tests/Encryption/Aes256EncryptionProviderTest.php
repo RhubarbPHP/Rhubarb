@@ -2,11 +2,6 @@
 
 namespace Rhubarb\Crown\Tests\Encryption;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class Aes256EncryptionProviderTest extends RhubarbTestCase

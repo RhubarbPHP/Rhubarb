@@ -331,8 +331,34 @@ class StringTools
     public static function listToSentence($wordList)
     {
         $wordList = array_filter($wordList);
-        $sentence = implode("< ", $wordList);
+        $sentence = implode(", ", $wordList);
 
         return preg_replace('/^(.+)(, )([^,]+)$/', '$1 and $3', $sentence);
+    }
+
+    /**
+     * Returns the namespace from a full class name, conveniently accessed from ClassName::class
+     *
+     * e.g. "Rhubarb\Crown\String\StringTools" will return "Rhubarb\Crown\String"
+     *
+     * @param string $fullyQualifiedClassName
+     * @return string
+     */
+    public static function getNamespaceFromClass($fullyQualifiedClassName)
+    {
+        return dirname(str_replace('/', '\\', $fullyQualifiedClassName));
+    }
+
+    /**
+     * Removes the namespace from a full class name and returns the short class name
+     *
+     * e.g. "Rhubarb\Crown\String\StringTools" will return "StringTools"
+     *
+     * @param string $fullyQualifiedClassName
+     * @return string
+     */
+    public static function getShortClassNameFromNamespace($fullyQualifiedClassName)
+    {
+        return basename(str_replace('/', '\\', $fullyQualifiedClassName));
     }
 }

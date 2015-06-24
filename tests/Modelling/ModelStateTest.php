@@ -5,11 +5,6 @@ namespace Rhubarb\Crown\Tests\Modelling;
 use Rhubarb\Crown\Modelling\ModelState;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
 class ModelStateTest extends RhubarbTestCase
 {
     public function testUnsetValueReturnsNull()

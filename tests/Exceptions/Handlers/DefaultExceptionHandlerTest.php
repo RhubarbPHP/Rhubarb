@@ -53,7 +53,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler');
+        ExceptionHandler::setExceptionHandlerClassName(DefaultExceptionHandler::class);
     }
 
     public function testExceptionCausesLogEntry()
@@ -65,10 +65,10 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`", $lastEntry[0],
+        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`', $lastEntry[0],
             "A RhubarbException should have been logged");
 
-        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestSilentExceptionHandler');
+        ExceptionHandler::setExceptionHandlerClassName(UnitTestSilentExceptionHandler::class);
 
         // Clear the log entries.
         self::$log->entries = [];
@@ -88,7 +88,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`",
+        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`',
             $lastEntry[0],
             "A NonRhubarbException should have been logged");
     }
@@ -102,7 +102,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains("Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`",
+        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`',
             $lastEntry[0], "A NonRhubarbException should have been logged for php run time errors");
     }
 
@@ -116,8 +116,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have
-been notified.Tail", $response->getContent());
+        $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have been notified.Tail", $response->getContent());
 
         LayoutModule::disableLayout();
     }
@@ -138,7 +137,7 @@ been notified.Tail", $response->getContent());
         } catch (RhubarbException $er) {
         }
 
-        ExceptionHandler::setExceptionHandlerClassName('\Rhubarb\Crown\Tests\Exceptions\Handlers\UnitTestDisobedientExceptionHandler');
+        ExceptionHandler::setExceptionHandlerClassName(UnitTestDisobedientExceptionHandler::class);
 
         try {
             // Enable layouts for this test as proof the URL handler has intercepted the response.

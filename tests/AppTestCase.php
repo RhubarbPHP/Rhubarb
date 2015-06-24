@@ -4,9 +4,6 @@ namespace Rhubarb\Crown\Tests;
 
 /**
  * This test case class should be used for unit testing site specific code.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 use Rhubarb\Crown\Context;
 

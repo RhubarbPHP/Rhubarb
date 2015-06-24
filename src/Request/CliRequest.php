@@ -27,9 +27,6 @@ use Rhubarb\Crown\Settings;
  * Encapsulates the current CLI-invoked request.
  *
  * @property-read bool $IsCliInvocation
- *
- * @author marramgrass
- * @copyright GCD Technologies 2012
  */
 class CliRequest extends Request
 {

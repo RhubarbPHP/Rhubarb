@@ -15,7 +15,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->UrlPath = "/wrong/path/";
 
-        $handler = new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\UrlHandlers\TestTarget");
+        $handler = new ClassMappedUrlHandler(TestTarget::class);
         $handler->setUrl("/right/path/");
 
         $response = $handler->generateResponse($request);

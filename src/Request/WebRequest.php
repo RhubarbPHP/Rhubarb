@@ -40,9 +40,6 @@ use Rhubarb\Crown;
  * @property string $URI
  * @property string $Host
  * @property string $UrlPath
- *
- * @author marramgrass
- * @copyright GCD Technologies 2012
  */
 class WebRequest extends Request
 {

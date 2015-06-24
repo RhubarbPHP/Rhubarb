@@ -5,11 +5,6 @@ namespace Rhubarb\Crown\Tests\Events;
 use Rhubarb\Crown\Events\EventEmitter;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
 class EventEmitterTest extends RhubarbTestCase
 {
     public function testEventsCanBeEmitted()

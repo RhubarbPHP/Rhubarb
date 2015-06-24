@@ -21,11 +21,6 @@ namespace Rhubarb\Crown\LoginProviders\Exceptions;
 use Exception;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class LoginFailedException extends RhubarbException
 {
     public function __construct($privateMessage = "", \Exception $previous = null)

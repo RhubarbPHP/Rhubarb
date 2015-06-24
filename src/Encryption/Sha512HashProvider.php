@@ -20,11 +20,6 @@ namespace Rhubarb\Crown\Encryption;
 
 require_once __DIR__ . "/HashProvider.php";
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class Sha512HashProvider extends HashProvider
 {
 

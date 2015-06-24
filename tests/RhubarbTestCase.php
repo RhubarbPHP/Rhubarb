@@ -7,17 +7,17 @@ use Rhubarb\Crown\Email\EmailProvider;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
+use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
+use Rhubarb\Crown\Tests\UrlHandlers\NamespaceMappedHandlerTest;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
+use Rhubarb\Stem\Repositories\Offline\Offline;
 use Rhubarb\Stem\Repositories\Repository;
 
 /**
- * This base class adds basic setup and teardown for unit testing within the Core
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
+ * This base class adds basic setup and teardown for unit testing within Rhubarb's core
  */
 class RhubarbTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -50,14 +50,14 @@ class UnitTestingModule extends Module
     {
         parent::registerDependantModules();
 
-        Module::registerModule(new LayoutModule('\Rhubarb\Crown\Tests\Layout\TestLayout'));
+        Module::registerModule(new LayoutModule(Layout\TestLayout::class));
     }
 
     protected function Initialise()
     {
         parent::Initialise();
 
-        Repository::setDefaultRepositoryClassName('\Rhubarb\Stem\Repositories\Offline\Offline');
+        Repository::setDefaultRepositoryClassName(Offline::class);
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
         $login->SetPriority(20);
@@ -68,7 +68,7 @@ class UnitTestingModule extends Module
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/defo/not/here/login/index/",
             [
-                "login/index/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent")
+                "login/index/" => new ClassMappedUrlHandler(Fixtures\SimpleContent::class)
                 // We have to give it something to render!
             ]);
 
@@ -80,10 +80,10 @@ class UnitTestingModule extends Module
 
         $this->AddUrlHandlers(
             [
-                "/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent",
+                "/" => new ClassMappedUrlHandler(Fixtures\SimpleContent::class,
                     [
-                        "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests"),
-                        "simple/" => new ClassMappedUrlHandler("\Rhubarb\Crown\Tests\Fixtures\SimpleContent"),
+                        "nmh/" => new NamespaceMappedUrlHandler(NamespaceMappedHandlerTest::class),
+                        "simple/" => new ClassMappedUrlHandler(Fixtures\SimpleContent::class),
                         "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
                     ])
             ]
@@ -103,12 +103,12 @@ class UnitTestingModule extends Module
         $this->AddUrlHandlers("/priority-test/",
             new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
 
-        $test = new NamespaceMappedUrlHandler("Rhubarb\Leaf\Presenters");
+        $test = new NamespaceMappedUrlHandler('Rhubarb\Leaf\Presenters');
         $test->SetPriority(100);
 
         $this->AddUrlHandlers("/priority-test/", $test);
 
-        EmailProvider::setDefaultEmailProviderClassName('\Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider');
+        EmailProvider::setDefaultEmailProviderClassName(UnitTestingEmailProvider::class);
 
     }
 }

@@ -18,11 +18,6 @@
 
 namespace Rhubarb\Crown\Sessions\Exceptions;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class SessionProviderNotFoundException extends \Exception
 {
     public function __construct($providerName)

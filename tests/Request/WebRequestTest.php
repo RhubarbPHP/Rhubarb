@@ -4,10 +4,6 @@ namespace Rhubarb\Crown\Tests\Request;
 
 use Rhubarb\Crown\Request\WebRequest;
 
-/**
- * @author marramgrass
- * @copyright GCD Technologies 2012
- */
 class WebRequestTest extends RequestTestCase
 {
     protected $request = null;

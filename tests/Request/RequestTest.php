@@ -31,7 +31,7 @@ class RequestTest extends RequestTestCase
 
     public function testInstantiation()
     {
-        $this->assertInstanceOf('\Rhubarb\Crown\Tests\Request\TestRequest', $this->request);
+        $this->assertInstanceOf(TestRequest::class, $this->request);
     }
 
     public function testMagicOriginalGetter()

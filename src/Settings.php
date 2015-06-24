@@ -47,9 +47,6 @@ use Rhubarb\Crown\Modelling\ModelState;
  *
  * Note that this means you cannot have two settings classes with the same name - even if they have
  * different PHP namespaces.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 abstract class Settings extends ModelState
 {

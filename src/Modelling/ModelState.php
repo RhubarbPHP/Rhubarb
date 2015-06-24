@@ -26,9 +26,6 @@ use Rhubarb\Crown\Events\EventEmitter;
  *
  * This class provides an implementation of magical setters and getters providing access to a
  * dictionary of underlying model data
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class ModelState implements \ArrayAccess, JsonSerializable
 {

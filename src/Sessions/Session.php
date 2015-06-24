@@ -32,8 +32,6 @@ require_once __DIR__ . "/../Settings.php";
  * Simply call StoreSession() to save the session. The session is restored upon first use automatically.
  *
  * @see StoreSession()
- * @author acuthbert
- * @copyright GCD Technologies 2013
  */
 class Session extends Settings
 {

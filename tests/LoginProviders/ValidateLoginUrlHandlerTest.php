@@ -5,13 +5,10 @@ namespace Rhubarb\Crown\Tests\LoginProviders;
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Response\HtmlResponse;
+use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 {
     public function testInvalidLoginRedirects()
@@ -26,7 +23,7 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertInstanceOf("\Rhubarb\Crown\Response\RedirectResponse", $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
     }
 
     public function testTheLoginUrlisExcludedFromRedirect()
@@ -41,6 +38,6 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertInstanceOf("\Rhubarb\Crown\Response\HtmlResponse", $response);
+        $this->assertInstanceOf(HtmlResponse::class, $response);
     }
 }

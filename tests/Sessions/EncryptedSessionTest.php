@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\Sessions;
 
+use Rhubarb\Crown\Encryption\Aes256ComputedKeyEncryptionProvider;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 use Rhubarb\Crown\Sessions\EncryptedSession;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
@@ -14,7 +15,7 @@ class EncryptedSessionTest extends RhubarbTestCase
     {
         parent::setUpBeforeClass();
 
-        self::$oldEncryptionProvider = EncryptionProvider::setEncryptionProviderClassName('\Rhubarb\Crown\Encryption\Aes256ComputedKeyEncryptionProvider');
+        self::$oldEncryptionProvider = EncryptionProvider::setEncryptionProviderClassName(Aes256ComputedKeyEncryptionProvider::class);
     }
 
     public static function tearDownAfterClass()

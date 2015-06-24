@@ -5,10 +5,6 @@ namespace Rhubarb\Crown\Tests\Request;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- * @author    marramgrass
- * @copyright GCD Technologies 2012
- */
 class RequestTestCase extends RhubarbTestCase
 {
     protected $stashSuperglobals = [];
@@ -41,5 +37,4 @@ class RequestTestCase extends RhubarbTestCase
         // WebRequest as Request is an abstract class
         WebRequest::ResetRequest();
     }
-
 }

@@ -10,7 +10,7 @@ class SingletonTest extends RhubarbTestCase
     {
         $testSingleton = SingletonExample::getSingleton();
 
-        $this->assertInstanceOf("Rhubarb\Crown\Tests\SingletonExample", $testSingleton);
+        $this->assertInstanceOf(SingletonExample::class, $testSingleton);
     }
 
     public function testSingletonIsSingleton()

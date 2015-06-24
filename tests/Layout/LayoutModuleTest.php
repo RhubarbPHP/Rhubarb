@@ -3,6 +3,7 @@
 namespace Rhubarb\Crown\Tests\Layout;
 
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
+use Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter;
 use Rhubarb\Crown\Module;
@@ -21,10 +22,10 @@ class LayoutModuleTest extends RhubarbTestCase
 
     public function testLayoutPathIsRemembered()
     {
-        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+        new LayoutModule(TestLayout2::class);
 
         $this->assertEquals(
-            "Rhubarb\Crown\Tests\Layout\LayoutTest2",
+            TestLayout2::class,
             LayoutModule::getLayoutClassName());
     }
 
@@ -32,21 +33,21 @@ class LayoutModuleTest extends RhubarbTestCase
     {
         LayoutModule::enableLayout();
 
-        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+        new LayoutModule(TestLayout2::class);
 
         // Normal request
         $this->assertFalse(LayoutModule::isDisabled());
 
         $_SERVER["HTTP_X_REQUESTED_WITH"] = "some-odd-request";
 
-        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+        new LayoutModule(TestLayout2::class);
 
         // Some odd request
         $this->assertFalse(LayoutModule::isDisabled());
 
         $_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
 
-        new LayoutModule("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+        new LayoutModule(TestLayout2::class);
 
         // Ajax request
         $this->assertTrue(LayoutModule::isDisabled());
@@ -69,15 +70,15 @@ class LayoutModuleTest extends RhubarbTestCase
 
     public function testLayoutCanBeChanged()
     {
-        new LayoutModule("Rhubarb\Crown\Tests\Layout\TestLayout");
-        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\LayoutTest2");
+        new LayoutModule(TestLayout::class);
+        LayoutModule::setLayoutClassName(TestLayout2::class);
 
-        $this->assertEquals("Rhubarb\Crown\Tests\Layout\LayoutTest2", LayoutModule::getLayoutClassName());
+        $this->assertEquals(TestLayout2::class, LayoutModule::getLayoutClassName());
     }
 
     public function testLayoutDoesntWorkForJsonResponse()
     {
-        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
+        LayoutModule::setLayoutClassName(TestLayout::class);
 
         $model = new \stdClass();
         $model->Field = "Value";
@@ -93,7 +94,7 @@ class LayoutModuleTest extends RhubarbTestCase
 
     public function testLayoutWorks()
     {
-        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
+        LayoutModule::setLayoutClassName(TestLayout::class);
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
@@ -107,13 +108,13 @@ class LayoutModuleTest extends RhubarbTestCase
 
     public function testLayoutFilterThrowsException()
     {
-        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\NonExistant");
+        LayoutModule::setLayoutClassName('\Rhubarb\Crown\Tests\Layout\NonExistant');
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
         $request->IsWebRequest = true;
 
-        $this->setExpectedException("Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException");
+        $this->setExpectedException(LayoutNotFoundException::class);
 
         ExceptionHandler::disableExceptionTrapping();
 
@@ -123,7 +124,7 @@ class LayoutModuleTest extends RhubarbTestCase
     public function testLayoutCanBeAnonymousFunction()
     {
         LayoutModule::setLayoutClassName(function () {
-            return "Rhubarb\Crown\Tests\Layout\TestLayout";
+            return TestLayout::class;
         });
 
         $request = new WebRequest();
@@ -166,7 +167,7 @@ this is more html", $head);
     {
         parent::tearDownAfterClass();
 
-        LayoutModule::setLayoutClassName("Rhubarb\Crown\Tests\Layout\TestLayout");
+        LayoutModule::setLayoutClassName(TestLayout::class);
         LayoutModule::disableLayout();
     }
 }

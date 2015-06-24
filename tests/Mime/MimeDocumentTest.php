@@ -3,6 +3,8 @@
 namespace Rhubarb\Crown\Tests\Mime;
 
 use Rhubarb\Crown\Mime\MimeDocument;
+use Rhubarb\Crown\Mime\MimePartImage;
+use Rhubarb\Crown\Mime\MimePartText;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
 class MimeDocumentTest extends RhubarbTestCase
@@ -86,8 +88,8 @@ class MimeDocumentTest extends RhubarbTestCase
     {
         $document = MimeDocument::FromString($this->message2);
 
-        $this->assertInstanceOf('\Rhubarb\Crown\Mime\MimePartText', $document->GetParts()[0]);
-        $this->assertInstanceOf('\Rhubarb\Crown\Mime\MimePartImage', $document->GetParts()[2]);
+        $this->assertInstanceOf(MimePartText::class, $document->GetParts()[0]);
+        $this->assertInstanceOf(MimePartImage::class, $document->GetParts()[2]);
     }
 
     public function testBase64TransferEncoding()

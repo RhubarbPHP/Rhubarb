@@ -33,9 +33,6 @@ use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
  * This is an abstract class.
  *
  * @property-read array EnvData
- *
- * @author marramgrass
- * @copyright GCD Technologies 2012
  */
 abstract class Request extends Crown\Settings
 {

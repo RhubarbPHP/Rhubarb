@@ -25,9 +25,6 @@ namespace Rhubarb\Crown;
  * if certain headers have been set.
  *
  * Note this class can not be unit tested as the header function has no effect in the PHP CLI
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class HttpHeaders
 {

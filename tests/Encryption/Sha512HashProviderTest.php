@@ -5,11 +5,6 @@ namespace Rhubarb\Crown\Tests\Encryption;
 use Rhubarb\Crown\Encryption\Sha512HashProvider;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class Sha512HashProviderTest extends RhubarbTestCase
 {
     public function testHash()

@@ -36,9 +36,6 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
  * @property mixed $SimulatedRequestBody    For unit testing - simulates the request body instead of using php://input
  * @property UrlHandler $UrlHandler            The URL handler currently generating the response
  * @property Request\Request Request
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class Context extends Settings
 {

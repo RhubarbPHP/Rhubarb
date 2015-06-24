@@ -27,9 +27,6 @@ require_once __DIR__ . "/UrlHandler.php";
  *
  * The handler explodes the url and explores it folder at a time (to allow for passing
  * control to another handler)
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class NamespaceMappedUrlHandler extends UrlHandler
 {

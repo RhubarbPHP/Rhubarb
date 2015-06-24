@@ -6,7 +6,6 @@ use Rhubarb\Crown\Request\WebRequest;
 
 class WebRequestSSLOffWindowsTest extends RequestTestCase
 {
-
     protected $request = null;
 
     protected function setUp()

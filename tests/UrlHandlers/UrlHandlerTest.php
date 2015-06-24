@@ -6,6 +6,7 @@ use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\HtmlResponse;
+use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
@@ -20,13 +21,13 @@ class UrlHandlerTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertNotInstanceOf("Rhubarb\Crown\Response\RedirectResponse", $response);
+        $this->assertNotInstanceOf(RedirectResponse::class, $response);
     }
 
     public function testChildHandler()
     {
-        $child = new ClassMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests\SubFolder\ObjectB");
-        $parent = new ClassMappedUrlHandler("Rhubarb\Crown\Tests\UrlHandlers\Fixtures\NamespaceMappedHandlerTests\ObjectA",
+        $child = new ClassMappedUrlHandler(Fixtures\NamespaceMappedHandlerTests\SubFolder\ObjectB::class);
+        $parent = new ClassMappedUrlHandler(Fixtures\NamespaceMappedHandlerTests\ObjectA::class,
             ["child/" => $child]);
         $parent->setUrl("/parent/");
 

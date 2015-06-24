@@ -19,6 +19,8 @@
 namespace Rhubarb\Crown\Tests;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Request\CliRequest;
+use Rhubarb\Crown\Request\JsonRequest;
 
 class ContextTest extends RhubarbTestCase
 {
@@ -62,7 +64,7 @@ class ContextTest extends RhubarbTestCase
 
         $request = Context::CurrentRequest();
 
-        $this->assertInstanceOf("\Rhubarb\Crown\Request\JsonRequest", $request);
+        $this->assertInstanceOf(JsonRequest::class, $request);
     }
 
     public function testRequestAccess()
@@ -76,6 +78,6 @@ class ContextTest extends RhubarbTestCase
         $this->assertNotNull($this->context->Request, "Request accessor returned NULL");
 
 
-        $this->assertInstanceOf('\Rhubarb\Crown\Request\CliRequest', Context::CurrentRequest());
+        $this->assertInstanceOf(CliRequest::class, Context::CurrentRequest());
     }
 }

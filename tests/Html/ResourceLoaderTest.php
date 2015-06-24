@@ -60,7 +60,7 @@ window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 
             ResourceLoader::clearResources();
 
-            $this->setExpectedException("\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound");
+            $this->setExpectedException(\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound::class);
 
             // A very large version number that won't exist locally.
             ResourceLoader::loadJquery("1991.8.3", false);

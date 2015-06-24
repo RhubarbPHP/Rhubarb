@@ -25,10 +25,7 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
  *
  * While you can instantiate an instance of an individual hash provider, the best
  * practice is to call the static HashProvider::GetHashProvider() method so that the hashing
- * provider can be set with a dependancy injection.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
+ * provider can be set with a dependency injection.
  */
 abstract class HashProvider
 {

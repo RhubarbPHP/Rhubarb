@@ -3,6 +3,8 @@
 namespace Rhubarb\Crown\Tests\UrlHandlers;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Exceptions\StaticResource404Exception;
+use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Tests\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
@@ -68,14 +70,14 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function testExceptionThrownIfPathDoesntExist()
     {
-        $this->setExpectedException("\Rhubarb\Crown\Exceptions\StaticResourceNotFoundException");
+        $this->setExpectedException(StaticResourceNotFoundException::class);
 
         new StaticResourceUrlHandler(__DIR__ . "/Fixtures/non-extant-file.txt");
     }
 
     public function testExceptionThrownIfFileNotFoundInDirectory()
     {
-        $this->setExpectedException("\Rhubarb\Crown\Exceptions\StaticResource404Exception");
+        $this->setExpectedException(StaticResource404Exception::class);
 
         $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/");
         $handler->setUrl("/files/");

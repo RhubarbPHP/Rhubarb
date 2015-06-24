@@ -6,5 +6,4 @@ use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
 
 class UnitTestingSessionProvider extends PhpSessionProvider
 {
-
 }

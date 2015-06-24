@@ -30,7 +30,7 @@ class ModuleTest extends RhubarbTestCase
         $modules = Module::getAllModules();
 
         $this->assertCount(2, $modules);
-        $this->assertEquals("Rhubarb\Crown\Tests\TestModule2", get_class($modules["Rhubarb\Crown\Tests\TestModule2"]));
+        $this->assertEquals(TestModule2::class, get_class($modules[TestModule2::class]));
     }
 
     public function testAllResponseFiltersReturned()
@@ -45,8 +45,8 @@ class ModuleTest extends RhubarbTestCase
 
         // Note that the layout module registers a response filter.
         $this->assertCount(2, $allFilters);
-        $this->assertInstanceOf("\Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter", $allFilters[0]);
-        $this->assertInstanceOf("\Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter", $allFilters[1]);
+        $this->assertInstanceOf(LayoutFilter::class, $allFilters[0]);
+        $this->assertInstanceOf(LayoutFilter::class, $allFilters[1]);
     }
 
     public function testCanRegisterDependantModules()
@@ -57,13 +57,13 @@ class ModuleTest extends RhubarbTestCase
 
         $modules = Module::getAllModules();
 
-        $this->assertArrayHasKey("Rhubarb\Crown\Tests\TestModule5", $modules);
-        $this->assertArrayHasKey("Rhubarb\Crown\Tests\TestModule4", $modules);
+        $this->assertArrayHasKey(TestModule5::class, $modules);
+        $this->assertArrayHasKey(TestModule4::class, $modules);
 
         $values = array_values($modules);
         // Make sure the order is right too!
-        $this->assertInstanceOf("Rhubarb\Crown\Tests\TestModule5", $values[0]);
-        $this->assertInstanceOf("Rhubarb\Crown\Tests\TestModule4", $values[1]);
+        $this->assertInstanceOf(TestModule5::class, $values[0]);
+        $this->assertInstanceOf(TestModule4::class, $values[1]);
     }
 }
 
