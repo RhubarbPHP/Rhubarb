@@ -346,7 +346,7 @@ class StringTools
      */
     public static function getNamespaceFromClass($fullyQualifiedClassName)
     {
-        return dirname(str_replace('/', '\\', $fullyQualifiedClassName));
+        return substr($fullyQualifiedClassName, 0, strrpos($fullyQualifiedClassName, '\\'));
     }
 
     /**
@@ -359,6 +359,6 @@ class StringTools
      */
     public static function getShortClassNameFromNamespace($fullyQualifiedClassName)
     {
-        return basename(str_replace('/', '\\', $fullyQualifiedClassName));
+        return substr($fullyQualifiedClassName, strrpos($fullyQualifiedClassName, '\\') + 1);
     }
 }
