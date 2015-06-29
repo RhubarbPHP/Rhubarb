@@ -81,6 +81,16 @@ abstract class LoginProvider extends Session
     }
 
     /**
+     * Called to enable "remember me" functionality
+     *
+     * Extending classes should implement this to enable auto-login.
+     */
+    public function rememberLogin()
+    {
+
+    }
+
+    /**
      * Returns the default login provider, if one is configured
      *
      * @throws \Rhubarb\Crown\Exceptions\ImplementationException Thrown if no default is configured
