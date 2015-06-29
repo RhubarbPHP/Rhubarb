@@ -32,7 +32,15 @@ use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
  *
  * This is an abstract class.
  *
- * @property-read array EnvData
+ * @method mixed env(string $name, mixed $value = null) access an environment value
+ * @method mixed server(string $name, mixed $value = null) access a server value
+ * @method mixed get(string $name, mixed $value = null) access a GET value
+ * @method mixed post(string $name, mixed $value = null) access a POST value
+ * @method mixed files(string $name, mixed $value = null) access details of a posted file
+ * @method mixed cookie(string $name, mixed $value = null) access a cookie value
+ * @method mixed session(string $name, mixed $value = null) access a session value
+ * @method mixed request(string $name, mixed $value = null) access a request value (get/post/cookie)
+ * @method mixed header(string $name, mixed $value = null) access a header value
  */
 abstract class Request extends Crown\Settings
 {
@@ -108,6 +116,7 @@ abstract class Request extends Crown\Settings
      *
      * @param string $propertyName
      * @param mixed $value
+     * @throws AttemptToModifyReadOnlyPropertyException
      */
     public function __set($propertyName, $value)
     {
@@ -123,22 +132,23 @@ abstract class Request extends Crown\Settings
      *
      * @param string $name
      * @param array $arguments
+     * @return mixed
      */
     public function __call($name, array $arguments)
     {
         $superglobalMethodNames = [
-            'Env',
-            'Server',
-            'Get',
-            'Post',
-            'Files',
-            'Cookie',
-            'Session',
-            'Request',
-            'Header'
+            'env',
+            'server',
+            'get',
+            'post',
+            'files',
+            'cookie',
+            'session',
+            'request',
+            'header'
         ];
 
-        if (in_array($name, $superglobalMethodNames)) {
+        if (in_array(strtolower($name), $superglobalMethodNames)) {
             if (count($arguments) == 1) {
                 return $this->getSuperglobalValue($name, $arguments[0]);
             } else {
@@ -159,7 +169,7 @@ abstract class Request extends Crown\Settings
      */
     protected function getSuperglobalValue($superglobal, $index)
     {
-        $propertyName = ucfirst($superglobal) . 'Data';
+        $propertyName = ucfirst(strtolower($superglobal)) . 'Data';
 
         if (!isset($this->modelData[$propertyName]) ||
             !isset($this->modelData[$propertyName][$index])
@@ -181,7 +191,7 @@ abstract class Request extends Crown\Settings
      */
     protected function setSuperglobalValue($superglobal, $index, $value = null)
     {
-        $propertyName = ucfirst($superglobal) . 'Data';
+        $propertyName = ucfirst(strtolower($superglobal)) . 'Data';
 
         if (!isset($this->modelData[$propertyName])) {
             $this->modelData[$propertyName] = [];

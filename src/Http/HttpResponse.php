@@ -63,7 +63,7 @@ class HttpResponse
     {
         setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
         $request = Context::currentRequest();
-        $request->Cookie($name, $value);
+        $request->cookie($name, $value);
     }
 
     /**
