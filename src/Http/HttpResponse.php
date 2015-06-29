@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Http;
 
+use Rhubarb\Crown\Context;
+
 class HttpResponse
 {
     private $headers = [];
@@ -48,5 +50,29 @@ class HttpResponse
     public function getResponseBody()
     {
         return $this->responseBody;
+    }
+
+    /**
+     * @param string $name Cookie name
+     * @param string $value Cookie value
+     * @param int $expirySecondsFromNow Time the cookie should last for in seconds. Defaults to 2 weeks.
+     * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
+     * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
+     */
+    public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
+    {
+        setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
+        $request = Context::currentRequest();
+        $request->Cookie($name, $value);
+    }
+
+    /**
+     * @param string $name Cookie name
+     * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
+     * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
+     */
+    public static function unsetCookie($name, $path = "/", $domain = null)
+    {
+        self::setCookie($name, null, -1000, $path, $domain);
     }
 }
