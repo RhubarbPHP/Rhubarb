@@ -185,9 +185,13 @@ class ResourceLoader
         );
 
         if (trim($tags) != "") {
-            $html .= "
-<script type=\"text/javascript\">
-$tags</script>";
+            $html .= <<<HTML
+<script type="text/javascript">
+//<![CDATA[
+$tags
+//]]>
+</script>
+HTML;
         }
 
         return $html;

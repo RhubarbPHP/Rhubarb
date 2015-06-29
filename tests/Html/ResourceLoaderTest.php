@@ -14,10 +14,12 @@ class ResourceLoaderTest extends RhubarbTestCase
 
         $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
+//<![CDATA[
 window.resourceManager.runWhenDocumentReady( function()
 {
 	alert(123)
 } );
+//]]>
 </script>", $scripts);
 
         ResourceLoader::clearResources();
@@ -26,10 +28,12 @@ window.resourceManager.runWhenDocumentReady( function()
 
         $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
+//<![CDATA[
 window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 {
 	doThis();
 } );
+//]]>
 </script>", $scripts);
     }
 
@@ -90,11 +94,13 @@ window.resourceManager.loadResources( [ \"a.js\", \"b.js\" ], function()
 
         $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\">
+//<![CDATA[
 window.resourceManager.loadResources( [ \"/a.js\", \"/b.js\" ], function()
 {
 	doThis();
 	doThat();
 } );
+//]]>
 </script>", $scripts);
     }
 }
