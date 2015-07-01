@@ -260,6 +260,14 @@ abstract class UrlHandler implements GeneratesResponse
             return false;
         }
 
+        UrlHandler::setExecutingUrlHandler($this);
+
+        Log::debug(function () {
+            return "Handler " . get_class($this) . " selected to generate response";
+        }, "ROUTER");
+
+        Log::indent();
+
         $context = new Context();
         $context->UrlHandler = $this;
 
@@ -280,14 +288,6 @@ abstract class UrlHandler implements GeneratesResponse
                 return $response;
             }
         }
-
-        UrlHandler::setExecutingUrlHandler($this);
-
-        Log::debug(function () {
-            return "Handler " . get_class($this) . " selected to generate response";
-        }, "ROUTER");
-
-        Log::indent();
 
         $response = $this->generateResponseForRequest($request, $currentUrlFragment);
 
