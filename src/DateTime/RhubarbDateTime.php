@@ -136,19 +136,18 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
     }
 
     /**
-     * Applies an $interval of $unit to the provided $dateTime
+     * Applies an $interval of $unit
      *
-     * @param \DateTime $dateTime
      * @param int $interval
      * @param string $unit DateInterval unit eg 'Y' for year, 'D' for day
      */
-    public static function ApplyDateInterval(\DateTime &$dateTime, $interval, $unit)
+    public function applyDateInterval($interval, $unit)
     {
         if ($interval > 0) {
-            $dateTime->add(new \DateInterval("P{$interval}{$unit}"));
+            $this->add(new RhubarbDateInterval("P{$interval}{$unit}"));
         } elseif ($interval < 0) {
             $interval *= -1;
-            $dateTime->sub(new \DateInterval("P{$interval}{$unit}"));
+            $this->sub(new RhubarbDateInterval("P{$interval}{$unit}"));
         }
     }
 }
