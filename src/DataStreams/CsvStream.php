@@ -49,6 +49,10 @@ class CsvStream extends DataStream
 
     private $remnantBuffer = "";
 
+    public $trimHeadings = true;
+
+    public $trimValues = false;
+
     /**
      * The character used to enclose string values that might contain the delimiter.
      * @var string
@@ -98,14 +102,12 @@ class CsvStream extends DataStream
 
         if (!file_exists($this->filePath)) {
             $this->needToWriteHeaders = true;
-            $this->headers = [];
-
-            return;
+            return $this->headers = [];
         }
 
         $this->fileStream = fopen($this->filePath, "r");
 
-        $rawCsvData = $this->readCsvLine();
+        $rawCsvData = $this->readCsvLine($this->trimHeadings);
 
         $this->headers = $rawCsvData;
         $this->needToWriteHeaders = false;
@@ -113,7 +115,7 @@ class CsvStream extends DataStream
         return $this->headers;
     }
 
-    private function readCsvLine()
+    private function readCsvLine($trimValues = false)
     {
         if (feof($this->fileStream) && ($this->remnantBuffer == "")) {
             throw new EndOfStreamException();
@@ -124,8 +126,8 @@ class CsvStream extends DataStream
 
         $values = [];
 
-        $addValue = function (&$value) use (&$values) {
-            $values[] = utf8_encode($value);
+        $addValue = function (&$value) use (&$values, $trimValues) {
+            $values[] = utf8_encode($trimValues ? trim($value) : $value);
             $value = "";
         };
 
@@ -242,7 +244,7 @@ class CsvStream extends DataStream
                 $this->close();
             } else {
                 $this->writable = false;
-                return;
+                return false;
             }
         }
 
@@ -251,6 +253,7 @@ class CsvStream extends DataStream
         $this->remnantBuffer = "";
         $this->fileStream = fopen($this->filePath, $mode);
         $this->writable = $allowWriting;
+        return $this->fileStream;
     }
 
     public function readNextItem()
@@ -258,7 +261,7 @@ class CsvStream extends DataStream
         $this->open();
 
         try {
-            $data = $this->readCsvLine();
+            $data = $this->readCsvLine($this->trimValues);
         } catch (EndOfStreamException $er) {
             return false;
         }
