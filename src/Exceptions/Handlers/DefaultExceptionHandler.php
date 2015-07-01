@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
+use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
@@ -42,7 +43,10 @@ class DefaultExceptionHandler extends ExceptionHandler
         if ($urlHandler != null) {
             return $urlHandler->generateResponseForException($er);
         }
-        return "Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")";
+
+        $response = new Response();
+        $response->SetContent("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
+        return $response;
     }
 
     protected function handleException(RhubarbException $er)
