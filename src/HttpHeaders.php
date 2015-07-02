@@ -28,6 +28,24 @@ namespace Rhubarb\Crown;
  */
 class HttpHeaders
 {
+    const MIME_TYPE_APPLICATION_JSON = 'application/json';
+    const MIME_TYPE_IMAGE_GIF = 'image/gif';
+    const MIME_TYPE_IMAGE_JPEG = 'image/jpeg';
+    const MIME_TYPE_IMAGE_PNG = 'image/png';
+    const MIME_TYPE_TEXT_PLAIN = 'text/plain';
+    const MIME_TYPE_TEXT_HTML = 'text/html';
+    const MIME_TYPE_TEXT_CSS = 'text/css';
+
+    const HTTP_STATUS_SUCCESS_OK = 200;
+    const HTTP_STATUS_REDIRECTION_PERMANENT = 301;
+    const HTTP_STATUS_REDIRECTION_TEMPORARY = 302;
+    const HTTP_STATUS_CLIENT_ERROR_BAD_REQUEST = 400;
+    const HTTP_STATUS_CLIENT_ERROR_UNAUTHORIZED = 401;
+    const HTTP_STATUS_CLIENT_ERROR_FORBIDDEN = 403;
+    const HTTP_STATUS_CLIENT_ERROR_NOT_FOUND = 404;
+    const HTTP_STATUS_CLIENT_ERROR_CONFLICT = 409;
+    const HTTP_STATUS_SERVER_ERROR_GENERIC = 500;
+
     /**
      * Set to true to indicate headers have already been flushed.
      *
@@ -51,6 +69,18 @@ class HttpHeaders
     public static function setHeader($name, $value)
     {
         self::$headers[$name] = $value;
+    }
+
+    /**
+     * Sets the MIME content type and optionally character set of the response.
+     * Common MIME content types are provided as constants in this class.
+     *
+     * @param string $contentMimeType MIME type of the response content
+     * @param string $charset Optional character set specification. If empty, it will not be sent in the header. Defaults to utf-8
+     */
+    public static function setContentType($contentMimeType, $charset = 'utf-8')
+    {
+        self::setHeader('Content-Type', $contentMimeType . (empty($charset) ? '' : '; ' . $charset));
     }
 
     /**
