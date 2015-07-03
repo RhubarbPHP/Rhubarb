@@ -4,17 +4,11 @@
 namespace Rhubarb\Crown\Request;
 
 
-use Rhubarb\Crown\Context;
-
-class MultiformDataRequest extends WebRequest {
+class MultiPartFormDataRequest extends WebRequest {
 
     public function getPayload()
     {
-        $context = new Context();
-        $requestBody = $context->getRequestBody();
-
-        // merge between POST and File values
-
+        $requestBody = array_merge( $_FILES, $_POST);
         return $requestBody;
     }
 }

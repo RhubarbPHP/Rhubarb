@@ -99,9 +99,19 @@ class Context extends Settings
             } else {
                 $contentType = (isset($_SERVER["CONTENT_TYPE"])) ? strtolower($_SERVER["CONTENT_TYPE"]) : "";
 
+                // special check for multipart, because the header could be multipart/form-data
+                // followed by boundary
+                $multipartType = "multipart/form-data";
+                if (strpos( $contentType, $multipartType ) === 0) {
+                    $contentType = $multipartType;
+                }
+
                 switch ($contentType) {
                     case "application/json":
                         $request = new Request\JsonRequest();
+                        break;
+                    case "multipart/form-data":
+                        $request = new Request\MultiPartFormDataRequest();
                         break;
                     default:
                         $request = new Request\WebRequest();
