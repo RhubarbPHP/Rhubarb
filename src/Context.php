@@ -104,18 +104,18 @@ class Context extends Settings
                 $multipartType = "multipart/form-data";
                 if (strpos( $contentType, $multipartType ) === 0) {
                     $contentType = $multipartType;
-                } else {
-                    switch ($contentType) {
-                        case "application/json":
-                            $request = new Request\JsonRequest();
-                            break;
-                        case "multipart/form-data":
-                            $request = new Request\MultiPartFormDataRequest();
-                            break;
-                        default:
-                            $request = new Request\WebRequest();
-                            break;
-                    }
+                }
+
+                switch ($contentType) {
+                    case "application/json":
+                        $request = new Request\JsonRequest();
+                        break;
+                    case "multipart/form-data":
+                        $request = new Request\MultiPartFormDataRequest();
+                        break;
+                    default:
+                        $request = new Request\WebRequest();
+                        break;
                 }
             }
 
