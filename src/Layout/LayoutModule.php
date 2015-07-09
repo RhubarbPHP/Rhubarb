@@ -156,8 +156,7 @@ class LayoutModule extends Module
      */
     public static function getHeadItemsAsHtml()
     {
-        return implode("
-", self::$headItems);
+        return implode("\n", self::$headItems);
     }
 
     /**
