@@ -9,7 +9,7 @@ The purpose of Rhubarb is to generate a "Response" to a "Request". Starting with
 files and folders we learn about how to generate responses by matching requests to url handlers and then
 surrounding those responses with a layout.
 
-* [Essential Files and Folders](files-folders)
+* [Essential Files and Directories](files-and-directories)
 * [Processing Pipeline](processing-pipeline)
 * [Response Generators](response-generating)
 * [UrlHandler](url-handlers)
