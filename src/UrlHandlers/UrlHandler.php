@@ -165,7 +165,9 @@ abstract class UrlHandler implements GeneratesResponse
 
     public function getUrl()
     {
-        return $this->url;
+        $parentUrl = ( $this->parentHandler ) ? $this->parentHandler->matchingUrl : "";
+
+        return $parentUrl.$this->url;
     }
 
     public function getParentHandler()

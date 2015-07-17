@@ -42,7 +42,7 @@ class JsonResponse extends Response
         $object = $this->getContent();
 
         if (is_array($object) || $object instanceof ModelState || $object instanceof \stdClass) {
-            $jsonString = json_encode($object);
+            $jsonString = json_encode($object, JSON_PRETTY_PRINT);
 
             return $jsonString;
         }
