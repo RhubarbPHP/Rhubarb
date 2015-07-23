@@ -9,6 +9,7 @@ use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\LoginProviders\UnitTestingLoginProvider;
+use Rhubarb\Crown\Tests\UrlHandlers\UnitTestComputedUrlHandler;
 use Rhubarb\Crown\Tests\UrlHandlers\NamespaceMappedHandlerTest;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
@@ -76,6 +77,12 @@ class UnitTestingModule extends Module
 
         $this->AddUrlHandlers(
             ["/defo/not/here/" => $login]
+        );
+
+        $this->addUrlHandlers(
+            [
+                new UnitTestComputedUrlHandler()
+            ]
         );
 
         $this->AddUrlHandlers(

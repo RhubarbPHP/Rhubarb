@@ -50,6 +50,35 @@ class UrlHandlerTest extends RhubarbTestCase
 
         $this->assertFalse($response);
     }
+
+    public function testUrlExtractedFromHandler()
+    {
+        $request = new WebRequest();
+        $request->UrlPath = "/computed-url/test/";
+
+        $response = Module::generateResponseForRequest($request);
+
+        $this->assertEquals("TopComputed URL ResponseTail", $response->getContent());
+    }
+}
+
+class UnitTestComputedUrlHandler extends UrlHandler
+{
+    public function getUrl()
+    {
+        return "/computed-url/test/";
+    }
+
+    /**
+     * Return the response if appropriate or false if no response could be generated.
+     *
+     * @param mixed $request
+     * @return bool
+     */
+    protected function generateResponseForRequest($request = null)
+    {
+        return "Computed URL Response";
+    }
 }
 
 class TestParentHandler extends UrlHandler
