@@ -90,16 +90,22 @@ abstract class ExceptionHandler
                 $error = error_get_last();
 
                 if ($error != null) {
+                    // Ensure we're in the project root directory, as some webservers (e.g. apache) can change
+                    // the working directory during shutdown.
+                    chdir(__DIR__.'/../../../../../../');
 
-                    if (!file_exists("logs")) {
-                        mkdir("logs");
+                    if (!file_exists("shutdown_logs")) {
+                        mkdir("shutdown_logs");
                     }
 
-                    file_put_contents("logs/shutdown_errors.txt", "[" . date("Y-m-d H:i:s") . "]
-					Type: {$error["type"]}
-					Message: {$error["message"]}
-					File: {$error["file"]}
-					Line: {$error["line"]}\r\n\r\n", FILE_APPEND);
+                    file_put_contents(
+                        'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
+                        "Type: {$error["type"]}\n".
+                        "Message: {$error["message"]}\n".
+                        "File: {$error["file"]}\n".
+                        "Line: {$error["line"]}\n\n",
+                        FILE_APPEND
+                    );
                 }
 
                 if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
