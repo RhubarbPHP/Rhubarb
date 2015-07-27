@@ -322,7 +322,7 @@ abstract class Module
      *
      * @static
      * @param Request\Request $request
-     * @return string
+     * @return string|Response
      */
     public static function generateResponseForRequest(Request\Request $request)
     {

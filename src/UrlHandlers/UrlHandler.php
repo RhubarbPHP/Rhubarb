@@ -26,6 +26,7 @@ use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Response\GeneratesResponse;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
+use Rhubarb\Crown\Response\Response;
 
 require_once __DIR__ . "/../Response/GeneratesResponse.php";
 
@@ -217,7 +218,7 @@ abstract class UrlHandler implements GeneratesResponse
      * Return the response if appropriate or false if no response could be generated.
      *
      * @param mixed $request
-     * @return bool
+     * @return bool|Response
      */
     protected abstract function generateResponseForRequest($request = null);
 
@@ -250,7 +251,7 @@ abstract class UrlHandler implements GeneratesResponse
      *
      * @param mixed $request
      * @param bool|string $currentUrlFragment
-     * @return bool
+     * @return bool|Response
      */
     public function generateResponse($request = null, $currentUrlFragment = false)
     {
