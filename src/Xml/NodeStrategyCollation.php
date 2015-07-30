@@ -18,49 +18,15 @@
 
 namespace Rhubarb\Crown\Xml;
 
-require_once __DIR__ . '/NodeStrategy.php';
-
-class NodeStrategyCollation extends NodeStrategy
+class NodeStrategyCollation extends NodeStrategyRead
 {
-    private $callBack;
 
-    public function __construct($callBack)
+    /**
+     * @param callable|null $callBack
+     */
+    public function __construct($callBack = null)
     {
-        $this->callBack = $callBack;
+        parent::__construct($callBack, true);
     }
 
-    public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
-    {
-        $node = new Node();
-        $node->name = $xmlReader->name;
-        $node->depth = $xmlReader->depth;
-        $node->text = $xmlReader->readString();
-
-        if ($xmlReader->moveToFirstAttribute()) {
-            do {
-                $node->attributes[$xmlReader->name] = $xmlReader->value;
-            } while ($xmlReader->moveToNextAttribute());
-        }
-
-        $children = [];
-
-        $scanner = new NodeStrategyTraversal();
-        $scanner->addNodeHandler("*", new self(function ($node) use (&$children) {
-            $children[] = $node;
-        }));
-
-        $scanner->parse($xmlReader, $startingDepth);
-
-        $node->children = $children;
-
-        $node = $this->processNode($node);
-
-        $callBack = $this->callBack;
-        $callBack($node);
-    }
-
-    protected function processNode(Node $node)
-    {
-        return $node;
-    }
 }
