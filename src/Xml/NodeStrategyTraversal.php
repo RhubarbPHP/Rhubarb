@@ -18,31 +18,44 @@
 
 namespace Rhubarb\Crown\Xml;
 
-require_once __DIR__ . '/NodeStrategy.php';
-
-class NodeStrategyTraversal extends NodeStrategy
+class NodeStrategyTraversal extends NodeStrategyRead
 {
-    private $nodeHandlers = [];
+    /** @var NodeStrategy[] */
+    protected $nodeHandlers = [];
+
+    /**
+     * @param callable|null $callBack
+     * @param bool          $collateChildren
+     */
+    public function __construct($callBack = null, $collateChildren = false)
+    {
+        parent::__construct($callBack, $collateChildren);
+    }
 
     public function addNodeHandler($nodeName, NodeStrategy $strategy)
     {
-        $this->nodeHandlers[$nodeName] = $strategy;
+        $this->nodeHandlers[ $nodeName ] = $strategy;
 
         return $this;
     }
 
     public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
     {
-        // Keep scanning elements while we have elements to scan and we are still within our scope
-        // namely that the depth is greater than our own depth.
-        while ($xmlReader->read() && ($xmlReader->depth > $startingDepth)) {
-            if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
-                foreach ($this->nodeHandlers as $name => $strategy) {
-                    if ($name == "*" || $name == $xmlReader->name) {
-                        $strategy->parse($xmlReader, $xmlReader->depth);
-
-                        if ($parseOne) {
-                            return true;
+        if ($this->callBack !== null) {
+            parent::parse($xmlReader, $startingDepth, $parseOne);
+        }
+        // If children are collated, then the reader has already moved on past them which makes the following irrelevant
+        if (!$this->collateChildren) {
+            // Keep scanning elements while we have elements to scan and we are still within our scope
+            // namely that the depth is greater than our own depth.
+            while ($xmlReader->read() && ( $xmlReader->depth > $startingDepth )) {
+                if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
+                    foreach ($this->nodeHandlers as $name => $strategy) {
+                        if ($name == "*" || $name == $xmlReader->name) {
+                            $strategy->parse($xmlReader, $xmlReader->depth);
+                            if ($parseOne) {
+                                return true;
+                            }
                         }
                     }
                 }
