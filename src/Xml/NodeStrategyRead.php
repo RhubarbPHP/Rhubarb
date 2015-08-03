@@ -49,10 +49,10 @@ class NodeStrategyRead extends NodeStrategy
         $children = [];
         if ($this->collateChildren) {
             $scanner = new NodeStrategyTraversal();
-            $scanner->addNodeHandler('*', new self(function ($node) use (&$children) {
-                $children[] = $node;
-            }));
-            $scanner->parse($xmlReader, $startingDepth);
+            $scanner->addNodeHandler( '*', new NodeStrategyCollation( function ( $node ) use ( &$children ) {
+                $children[ ] = $node;
+            } ) );
+            $scanner->parse( $xmlReader, $startingDepth );
         }
         $node->children = $children;
         $node = $this->processNode($node);
