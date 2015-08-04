@@ -36,7 +36,7 @@ class NodeStrategyCollation extends NodeStrategy
         $node->depth = $xmlReader->depth;
         $node->text = $xmlReader->readString();
 
-        if ($xmlReader->moveToFirstAttribute()) {
+        if ($xmlReader->hasAttributes && $xmlReader->moveToFirstAttribute()) {
             do {
                 $node->attributes[$xmlReader->name] = $xmlReader->value;
             } while ($xmlReader->moveToNextAttribute());
