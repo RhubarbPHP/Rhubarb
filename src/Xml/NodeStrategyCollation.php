@@ -45,12 +45,13 @@ class NodeStrategyCollation extends NodeStrategy
 
         $children = [];
 
-        $scanner = new NodeStrategyTraversal();
-        $scanner->addNodeHandler("*", new self(function ($node) use (&$children) {
-            $children[] = $node;
-        }));
-
-        $scanner->parse($xmlReader, $startingDepth);
+        if (!$xmlReader->isEmptyElement) {
+            $scanner = new NodeStrategyTraversal();
+            $scanner->addNodeHandler("*", new self(function ($node) use (&$children) {
+                $children[] = $node;
+            }));
+            $scanner->parse($xmlReader, $startingDepth);
+        }
 
         $node->children = $children;
 
