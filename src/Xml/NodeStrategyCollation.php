@@ -40,6 +40,7 @@ class NodeStrategyCollation extends NodeStrategy
             do {
                 $node->attributes[$xmlReader->name] = $xmlReader->value;
             } while ($xmlReader->moveToNextAttribute());
+            $xmlReader->moveToElement();
         }
 
         $children = [];
