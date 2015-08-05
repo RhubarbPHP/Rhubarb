@@ -31,14 +31,31 @@ class NodeStrategyCollationDictionary extends NodeStrategyCollation
 
     }
 
-    protected function processNode(Node $node)
+    /**
+     * @param Node       $node
+     * @param \XMLReader $xmlReader
+     *
+     * @return array Dictionary is passed to callback
+     */
+    protected function processNode(Node $node, \XMLReader $xmlReader)
+    {
+        $node = parent::processNode( $node, $xmlReader );
+        return $this->nodeToDictionary( $node );
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return array
+     */
+    protected function nodeToDictionary( Node $node )
     {
         $result = $node->attributes;
 
         $containerKeys = [];
 
         foreach ($node->children as $child) {
-            $arrayChild = $this->processNode($child);
+            $arrayChild = $this->nodeToDictionary($child);
 
             $childName = $child->name;
             $childValue = $arrayChild;
@@ -47,18 +64,19 @@ class NodeStrategyCollationDictionary extends NodeStrategyCollation
                 $childValue = $child->text;
             }
 
-            if (isset($result[$childName])) {
+            if (isset( $result[ $childName ] )) {
                 if (!in_array($childName, $containerKeys)) {
-                    $result[$childName] = [$result[$childName]];
+                    $result[ $childName ] = [$result[ $childName ]];
                     $containerKeys[] = $childName;
                 }
 
-                $result[$childName][] = $childValue;
+                $result[ $childName ][] = $childValue;
             } else {
-                $result[$childName] = $childValue;
+                $result[ $childName ] = $childValue;
             }
         }
 
         return $result;
     }
+
 }
