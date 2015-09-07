@@ -266,15 +266,29 @@ class ModelState implements \ArrayAccess, JsonSerializable
     public function hasChanged()
     {
         foreach ($this->modelData as $key => $value) {
-            if (!isset($this->changeSnapshotData[$key]) || $this->changeSnapshotData[$key] != $value) {
-                // Something was added or changed.
+            if (!isset( $this->changeSnapshotData[ $key ] )) {
+                if ($value === null) {
+                    // Value is NULL so isset will have failed. Setting a previously unset key to NULL is treated as no change
+                    continue;
+                }
+
+                // Key added
+                return true;
+            }
+            if ($this->changeSnapshotData[ $key ] != $value) {
+                // Key changed
                 return true;
             }
         }
 
         foreach ($this->changeSnapshotData as $key => $value) {
-            if (!isset($this->modelData[$key])) {
-                // Something was removed.
+            if (!isset( $this->modelData[ $key ] )) {
+                if ($value === null) {
+                    // Isset fails for NULL values. Setting a key to NULL is treated the same as un-setting it
+                    continue;
+                }
+
+                // Key removed.
                 return true;
             }
         }
