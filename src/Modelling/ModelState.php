@@ -325,11 +325,19 @@ class ModelState implements \ArrayAccess, JsonSerializable
          * so we're not using that any more.
          * */
         foreach ($this->modelData as $key => $modelDataValue) {
-            if (
-                (!isset($this->changeSnapshotData[$key]) && $modelDataValue) ||
-                (isset($this->changeSnapshotData[$key]) && $this->changeSnapshotData[$key] != $modelDataValue)
-            ) {
-                $differences[$key] = $modelDataValue;
+
+            if (!isset( $this->changeSnapshotData[ $key ] )) {
+                if ($modelDataValue === null) {
+                    // Value is NULL so isset will have failed. Setting a previously unset key to NULL is treated as no change
+                    continue;
+                }
+
+                // Key added
+                $differences[ $key ] = $modelDataValue;
+            }
+            elseif ($modelDataValue !== null && $this->changeSnapshotData[ $key ] != $modelDataValue) {
+                // Key changed
+                $differences[ $key ] = $modelDataValue;
             }
         }
         return $differences;
