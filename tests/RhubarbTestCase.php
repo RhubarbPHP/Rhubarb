@@ -56,6 +56,8 @@ class UnitTestingModule extends Module
 
     protected function Initialise()
     {
+        require_once __DIR__ . '\UrlHandlers\UrlHandlerTestUnitTest.php';
+
         parent::Initialise();
 
         Repository::setDefaultRepositoryClassName(Offline::class);
