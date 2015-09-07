@@ -44,7 +44,28 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->takeChangeSnapshot();
 
+        $model->NewProperty = null;
+
+        $this->assertTrue($model->hasChanged());
+
+        $model->takeChangeSnapshot();
+
+        // Check when a property is set to null when it's already null - null safety
+        $model->NewProperty = null;
+
+        $this->assertFalse($model->hasChanged());
+
         unset($model->NewProperty);
+
+        $this->assertFalse($model->hasChanged());
+
+        $model->NewProperty = 'abc';
+
+        $this->assertTrue($model->hasChanged());
+
+        $model->takeChangeSnapshot();
+
+        unset( $model->NewProperty );
 
         $this->assertTrue($model->hasChanged());
     }
