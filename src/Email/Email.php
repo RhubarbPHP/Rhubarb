@@ -124,6 +124,13 @@ abstract class Email
 
     public function getRecipients()
     {
+        $emailSettings = new EmailSettings();
+
+        if ($emailSettings->OnlyRecipient) {
+            // Only send emails to a test recipient, to prevent emailing real customers from a development environment
+            return [$emailSettings->OnlyRecipient];
+        }
+
         return $this->recipients;
     }
 
