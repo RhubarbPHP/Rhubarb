@@ -44,7 +44,29 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->takeChangeSnapshot();
 
+        $model->NewProperty = null;
+
+        $this->assertTrue($model->hasChanged());
+
+        $model->takeChangeSnapshot();
+
+        // Check when a property is set to null when it's already null - null safety
+        $model->NewProperty = null;
+
+        $this->assertFalse($model->hasChanged());
+
+        // un-setting a null should result in no change
         unset($model->NewProperty);
+
+        $this->assertFalse($model->hasChanged());
+
+        $model->NewProperty = 'abc';
+
+        $this->assertTrue($model->hasChanged());
+
+        $model->takeChangeSnapshot();
+        // un-setting some other value is a change
+        unset( $model->NewProperty );
 
         $this->assertTrue($model->hasChanged());
     }
@@ -97,6 +119,33 @@ class ModelStateTest extends RhubarbTestCase
         $model->NewProperty = "12323";
 
         $this->assertTrue($model->hasPropertyChanged("NewProperty"));
+
+        $model->takeChangeSnapshot();
+
+        $model->NewProperty = null;
+
+        $this->assertTrue($model->hasPropertyChanged("NewProperty"));
+
+        $model->takeChangeSnapshot();
+
+        // Setting null to null should result in no change
+        $model->NewProperty = null;
+
+        $this->assertFalse($model->hasPropertyChanged("NewProperty"));
+
+        $model->NewProperty = "12323";
+        $this->assertTrue($model->hasPropertyChanged("NewProperty"));
+
+        $model->takeChangeSnapshot();
+
+        unset( $model->NewProperty );
+
+        $this->assertTrue($model->hasPropertyChanged("NewProperty"));
+
+        $model->takeChangeSnapshot();
+
+        $model->NewProperty = "12323";
+        $this->assertTrue($model->hasPropertyChanged("NewProperty"));
     }
 
     public function testGetModelChanges()
@@ -107,6 +156,7 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->A = 1;
         $model->B = 2;
+        $model->C = null;
 
         $this->assertEquals(["A" => 1, "B" => 2], $model->getModelChanges());
 
@@ -117,6 +167,31 @@ class ModelStateTest extends RhubarbTestCase
         $model->A = 2;
 
         $this->assertEquals(["A" => 2], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        // Ensure that setting a value that is not set to null results in no change
+        $model->C = null;
+
+        $this->assertEquals([], $model->getModelChanges());
+
+        $model->C = 3;
+        $model->takeChangeSnapshot();
+
+        // Remove C by setting to null
+        $model->C = null;
+
+        $this->assertEquals(['C' => null], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        $model->C = 3;
+        $model->takeChangeSnapshot();
+
+        // Remove C via unset
+        unset( $model->C );
+
+        $this->assertEquals(['C' => null], $model->getModelChanges());
     }
 
     public function testSupportsGetters()
