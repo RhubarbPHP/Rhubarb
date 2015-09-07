@@ -128,6 +128,7 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->A = 1;
         $model->B = 2;
+        $model->C = null;
 
         $this->assertEquals(["A" => 1, "B" => 2], $model->getModelChanges());
 
@@ -138,6 +139,30 @@ class ModelStateTest extends RhubarbTestCase
         $model->A = 2;
 
         $this->assertEquals(["A" => 2], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        $model->C = 3;
+
+        $this->assertEquals(["C" => 3], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        $model->C = null;
+
+        $this->assertEquals([], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        $model->C = 3;
+
+        $this->assertEquals(["C" => 3], $model->getModelChanges());
+
+        $model->takeChangeSnapshot();
+
+        unset( $model->C );
+
+        $this->assertEquals([], $model->getModelChanges());
     }
 
     public function testSupportsGetters()
