@@ -33,7 +33,7 @@ class NodeStrategyCollation extends NodeStrategyRead
         parent::__construct($callBack);
     }
 
-    protected function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
+    public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
     {
         $this->startDepth = $startingDepth;
         parent::parse($xmlReader, $startingDepth, $parseOne);
