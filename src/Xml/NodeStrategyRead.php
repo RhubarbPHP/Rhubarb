@@ -37,7 +37,7 @@ class NodeStrategyRead extends NodeStrategy
         $this->callback = $callback;
     }
 
-    protected function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
+    public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
     {
         if ($this->callback !== null) {
             $node = new Node();
