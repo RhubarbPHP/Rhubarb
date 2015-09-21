@@ -171,6 +171,23 @@ window.rhubarb.validation.EqualToModelProperty = function (name, settings) {
 window.rhubarb.validation.EqualToModelProperty.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualToModelProperty.prototype.constructor = window.rhubarb.validation.EqualToModelProperty;
 
+window.rhubarb.validation.ExactLength = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.exactLength = settings.exactLength;
+
+    this.validate = function (value) {
+        if (value.length != this.exactLength) {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+
+        return true;
+    }
+}
+
+window.rhubarb.validation.ExactLength.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.ExactLength.prototype.constructor = window.rhubarb.validation.ExactLength;
+
 window.rhubarb.validation.HasValue = function (name, settings) {
     window.rhubarb.validation.BaseValidation.apply(this, arguments);
 
