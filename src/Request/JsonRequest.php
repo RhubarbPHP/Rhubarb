@@ -32,6 +32,6 @@ class JsonRequest extends WebRequest
         $context = new Context();
         $requestBody = trim($context->getRequestBody());
 
-        return json_decode($requestBody);
+        return json_decode($requestBody, true);
     }
 }
