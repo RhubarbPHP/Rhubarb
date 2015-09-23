@@ -61,6 +61,16 @@ trait EventEmitter
     }
 
     /**
+     * Removes all previously attached handlers for a given event.
+     *
+     * @param $event
+     */
+    public function detachEventHandlers($event)
+    {
+        $this->eventHandlers[$event] = [];
+    }
+
+    /**
      * Returns true if the object has attached event handlers.
      *
      * @return bool
