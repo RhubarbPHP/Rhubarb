@@ -119,7 +119,7 @@ abstract class Email
 
     public function getRecipientList()
     {
-        return implode(", ", $this->recipients);
+        return implode(", ", $this->getRecipients());
     }
 
     public function getRecipients()
