@@ -36,6 +36,16 @@ class UrlCapturedDataUrlHandler extends ClassMappedUrlHandler
     }
 
     /**
+     * Returns the data captured by the handler.
+     *
+     * @return mixed
+     */
+    public function getCapturedData()
+    {
+        return $this->capturedData;
+    }
+
+    /**
      * Should be implemented to return a true or false as to whether this handler supports the given request.
      *
      * Normally this involves testing the request URI.
