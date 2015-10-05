@@ -99,12 +99,16 @@ class Context extends Settings
             } else {
                 $contentType = (isset($_SERVER["CONTENT_TYPE"])) ? strtolower($_SERVER["CONTENT_TYPE"]) : "";
 
-                // special check for multipart, because the header could be multipart/form-data
+                // Special check for multipart, because the header could be multipart/form-data
                 // followed by boundary
                 $multipartType = "multipart/form-data";
                 if (strpos( $contentType, $multipartType ) === 0) {
                     $contentType = $multipartType;
                 }
+
+                // Firefox puts a charset on the end of the content type line
+                $parts = explode( ";", $contentType );
+                $contentType = $parts[0];
 
                 switch ($contentType) {
                     case "application/json":
