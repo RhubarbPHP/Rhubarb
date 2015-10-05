@@ -41,6 +41,7 @@ window.rhubarb.validation.ValidationError = function (name, error) {
                 window.rhubarb.validation.Scrolled = true;
             }
             placeHolder.innerHTML = this.error;
+            placeHolder.className = 'validation-placeholder validation-error';
         }
 
         for (var i in this.subErrors) {
