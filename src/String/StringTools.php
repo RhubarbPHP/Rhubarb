@@ -361,4 +361,26 @@ class StringTools
     {
         return substr($fullyQualifiedClassName, strrpos($fullyQualifiedClassName, '\\') + 1);
     }
+
+    /**
+     * Replaces only the first matched instance of a string
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @param bool $caseSensitive
+     * @return mixed
+     */
+    public static function replaceFirst($search, $replace, $subject, $caseSensitive = true)
+    {
+        if ($caseSensitive) {
+            $pos = strpos($subject, $search);
+        } else {
+            $pos = stripos($subject, $search);
+        }
+        if ($pos !== false) {
+            return substr_replace($subject, $replace, $pos, strlen($search));
+        }
+        return $subject;
+    }
 }
