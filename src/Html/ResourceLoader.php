@@ -43,10 +43,10 @@ class ResourceLoader
     {
         // Deploy the composer jquery libraries.
         $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = "vendor/components/jquery/jquery.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/jquery-ui.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/theme.css";
+        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jquery/jquery.min.js";
+        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/jquery-ui.min.js";
+        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
+        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/themes/ui-lightness/theme.css";
         $jQueryUrls = $package->deploy();
 
         array_splice(
@@ -200,7 +200,7 @@ HTML;
     public static function getJqueryUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource("vendor/components/jquery/jquery.min.js");
+        return $deployer->deployResource(__DIR__."/../../../../components/jquery/jquery.min.js");
     }
 
     public static function loadJquery()
@@ -211,14 +211,14 @@ HTML;
     public static function getJqueryUIUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource("vendor/components/jqueryui/jquery-ui.min.js");
+        return $deployer->deployResource(__DIR__."/../../../../components/jqueryui/jquery-ui.min.js");
     }
 
     public static function loadJqueryUI()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
 
-        self::loadResource($deployer->deployResource("vendor/components/jqueryui/themes/base/jquery-ui.css"));
+        self::loadResource($deployer->deployResource(__DIR__."/../../../../components/jqueryui/themes/base/jquery-ui.css"));
         self::loadResource(self::getJqueryUIUrl());
     }
 }

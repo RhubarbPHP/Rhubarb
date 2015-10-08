@@ -46,17 +46,21 @@ if (!isset($unitTesting) || !$unitTesting) {
     ExceptionHandler::EnableExceptionTrapping();
 }
 
-$appName = "app";
+$appName = false;
 
 // Is there an app environment setting? This allows the same project to serve multiple solutions
 // with one code base (e.g. tenant and landlord together). This is very rare in production systems, however
 // for the initial project phase this can be very useful.
 if ($envAppSetting = getenv("rhubarb_app")) {
-    $appName .= "-" . $envAppSetting;
+    $appName = $envAppSetting;
 }
 
-if (file_exists("settings/" . $appName . ".config.php")) {
-    include("settings/" . $appName . ".config.php");
+if (!preg_match("/\./",$appName)){
+    chdir($appName."/");
+}
+
+if (file_exists("settings/app.config.php")) {
+    include("settings/app.config.php");
 }
 
 // Now auto loaders are in place we can initialise the modules properly.
