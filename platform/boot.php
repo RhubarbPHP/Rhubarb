@@ -55,7 +55,7 @@ if ($envAppSetting = getenv("rhubarb_app")) {
     $appName = $envAppSetting;
 }
 
-if (!preg_match("/\./",$appName)){
+if ($appName && !preg_match("/\./",$appName)){
     chdir($appName."/");
 }
 

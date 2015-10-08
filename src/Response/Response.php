@@ -27,6 +27,8 @@ class Response
 {
     protected $headers;
     protected $content;
+    protected $responseCode;
+    protected $responseMessage;
 
     /**
      * Records a reference to the object that generated this response.
@@ -44,6 +46,7 @@ class Response
         $this->headers = ['Content-Type' => 'text/plain'];
         $this->content = null;
         $this->generator = $generator;
+        $this->responseCode = HttpHeaders::HTTP_STATUS_SUCCESS_OK;
     }
 
     /**
@@ -102,6 +105,10 @@ class Response
      */
     private function processHeaders()
     {
+        if ( $this->responseCode ){
+            HttpHeaders::setHeader("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage(), false);
+        }
+
         foreach ($this->headers as $name => $value) {
             HttpHeaders::setHeader($name, $value);
         }
@@ -158,5 +165,43 @@ class Response
     public function formatContent()
     {
         return $this->getContent();
+    }
+
+    /**
+     * Gets the current response code for the response
+     * @return int
+     */
+    public function getResponseCode()
+    {
+        return $this->responseCode;
+    }
+
+    /**
+     * Sets the current response code for the response
+     * @param int $responseCode
+     */
+    public function setResponseCode($responseCode)
+    {
+        $this->responseCode = $responseCode;
+    }
+
+    /**
+     * Gets the current response code message for the response
+     *
+     * @return string
+     */
+    public function getResponseMessage()
+    {
+        return $this->responseMessage;
+    }
+
+    /**
+     * Sets the current response code message for the response
+     *
+     * @param string $responseMessage
+     */
+    public function setResponseMessage($responseMessage)
+    {
+        $this->responseMessage = $responseMessage;
     }
 }

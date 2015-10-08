@@ -98,17 +98,6 @@ class UnitTestingModule extends Module
             ]
         );
 
-        /*
-        $this->AddUrlHandlers(
-            [
-                "/" => new NamespaceMappedUrlHandler("Rhubarb\Leaf\Presenters",
-                    [
-                        "nmh/" => new NamespaceMappedUrlHandler("Rhubarb\Crown\Tests\NamespaceMappedHandlerTests"),
-                        "files/" => new StaticResourceUrlHandler(__DIR__ . "/UrlHandlers/Fixtures/")
-                    ])
-            ]);
-        */
-
         $this->AddUrlHandlers("/priority-test/",
             new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
 
@@ -118,6 +107,5 @@ class UnitTestingModule extends Module
         $this->AddUrlHandlers("/priority-test/", $test);
 
         EmailProvider::setDefaultEmailProviderClassName(UnitTestingEmailProvider::class);
-
     }
 }
