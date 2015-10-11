@@ -20,8 +20,13 @@ use Rhubarb\Stem\Repositories\Repository;
 /**
  * This base class adds basic setup and teardown for unit testing within Rhubarb's core
  */
-class RhubarbTestCase extends \PHPUnit_Framework_TestCase
+class RhubarbTestCase extends \Codeception\TestCase\Test
 {
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
     protected static $rolesModule;
 
     public static function setUpBeforeClass()
