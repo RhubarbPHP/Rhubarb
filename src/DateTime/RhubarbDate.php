@@ -34,4 +34,11 @@ class RhubarbDate extends RhubarbDateTime
     {
         return parent::setTime(0, 0, 0);
     }
+
+    public static function createFromFormat($format, $time, $timezone = null)
+    {
+        $date = parent::createFromFormat($format, $time, $timezone);
+        return new RhubarbDate($date);
+    }
+
 }
