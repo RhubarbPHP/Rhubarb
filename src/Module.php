@@ -34,6 +34,7 @@ use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * The base class of all modules.
@@ -424,5 +425,19 @@ abstract class Module
     protected function initialise()
     {
 
+    }
+
+    /**
+     * An opportunity for the module to return a list custard command line commands to register.
+     *
+     * Note that modules are asked for commands in the same order in which the modules themselves
+     * were registered. This allows extending modules or scaffolds to superseed a command with an
+     * improved version by simply reregistering a command with the same name.
+     *
+     * @return Command[]
+     */
+    public function getCustardCommands()
+    {
+        return [];
     }
 }
