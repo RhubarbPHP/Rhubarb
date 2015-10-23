@@ -28,6 +28,8 @@ error_reporting(E_ALL | E_STRICT);
 // As we preform our own exception handling we need to stop fatal errors from showing stack traces.
 ini_set("display_errors", "off");
 
+define( "VENDOR_DIR", realpath("vendor") );
+
 // Include the composer autoloader
 /** @noinspection PhpIncludeInspection */
 include("vendor/autoload.php");
