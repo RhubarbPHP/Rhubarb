@@ -103,7 +103,7 @@ window.rhubarb.validation.Validator = function (name) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.Validator.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.Validator.prototype.constructor = window.rhubarb.validation.Validator;
@@ -114,7 +114,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
     validator.name = json.name;
     validator.validateAll = json.settings.validateAll;
 
-    for (i in json.settings.validations) {
+    for (var i in json.settings.validations) {
         var validationJson = json.settings.validations[i];
         var type = validationJson.type;
         var name = validationJson.name;
@@ -126,8 +126,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
         if (type == "validator") {
             validationObject = window.rhubarb.validation.Validator.fromJson(settings);
             validationObject.name = name;
-        }
-        else {
+        } else {
             validationObject = new window.rhubarb.validation[type](name, settings);
         }
 
@@ -136,7 +135,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
     }
 
     return validator;
-}
+};
 
 window.rhubarb.validation.EqualTo = function (name, settings) {
     window.rhubarb.validation.BaseValidation.apply(this, arguments);
@@ -150,7 +149,7 @@ window.rhubarb.validation.EqualTo = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualTo.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualTo.prototype.constructor = window.rhubarb.validation.EqualTo;
@@ -167,7 +166,7 @@ window.rhubarb.validation.EqualToModelProperty = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualToModelProperty.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualToModelProperty.prototype.constructor = window.rhubarb.validation.EqualToModelProperty;
@@ -184,7 +183,7 @@ window.rhubarb.validation.ExactLength = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.ExactLength.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.ExactLength.prototype.constructor = window.rhubarb.validation.ExactLength;
@@ -199,7 +198,7 @@ window.rhubarb.validation.HasValue = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualTo.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualTo.prototype.constructor = window.rhubarb.validation.EqualTo;
