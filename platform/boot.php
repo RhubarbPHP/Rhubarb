@@ -48,7 +48,7 @@ if (!isset($unitTesting) || !$unitTesting) {
     ExceptionHandler::EnableExceptionTrapping();
 }
 
-$appName = false;
+$appName = (defined("APPLICATION_PATH")) ? APPLICATION_PATH : false;
 
 // Is there an app environment setting? This allows the same project to serve multiple solutions
 // with one code base (e.g. tenant and landlord together). This is very rare in production systems, however
