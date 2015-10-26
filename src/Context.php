@@ -30,11 +30,12 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
  * @property bool $UnitTesting
  * @property bool $IsAjaxRequest
  * @property bool $IsCliInvocation
- * @property bool $Live                        True to indicate this is a live production server
- * @property bool $DeveloperMode            True to enable developer only functionality
- * @property bool $SimulateNonCli            True to pretend that the request is not a CLI request (even if it is - used by unit testing)
- * @property mixed $SimulatedRequestBody    For unit testing - simulates the request body instead of using php://input
- * @property UrlHandler $UrlHandler            The URL handler currently generating the response
+ * @property string $ApplicationModuleFile      The path to the file containing the application module
+ * @property bool $Live                         True to indicate this is a live production server
+ * @property bool $DeveloperMode                True to enable developer only functionality
+ * @property bool $SimulateNonCli               True to pretend that the request is not a CLI request (even if it is - used by unit testing)
+ * @property mixed $SimulatedRequestBody        For unit testing - simulates the request body instead of using php://input
+ * @property UrlHandler $UrlHandler             The URL handler currently generating the response
  * @property Request\Request Request
  */
 class Context extends Settings
@@ -146,5 +147,19 @@ class Context extends Settings
         $requestBody = file_get_contents("php://input");
 
         return $requestBody;
+    }
+
+    /**
+     * The path to the app.config.php script that boots the real application.
+     *
+     * @return string
+     */
+    public function getApplicationModuleFile()
+    {
+        if (isset($this->modelData["ApplicationModuleFile"])){
+            return $this->modelData["ApplicationModuleFile"];
+        } else {
+            return __DIR__ . "/../../../../settings/app.config.php";
+        }
     }
 }

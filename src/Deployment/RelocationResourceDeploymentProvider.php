@@ -70,7 +70,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = getcwd();
+        $cwd = APPLICATION_ROOT_DIR;
 
         $urlPath = "deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gcd\Chariteer\Application\UnitTesting;
+namespace Rhubarb\Crown\Tests\Codeception;
 
 use Codeception\Lib\Framework;
 use Codeception\TestCase;

@@ -80,4 +80,45 @@ class ContextTest extends RhubarbTestCase
 
         $this->assertInstanceOf(CliRequest::class, Context::CurrentRequest());
     }
+
+    public function testApplicationModuleFile()
+    {
+        $context = new Context();
+        $default = $context->ApplicationModuleFile;
+
+        $this->assertEquals(
+            $this->resolveFilename(__DIR__."/../../../../settings/app.config.php"),
+            $this->resolveFilename($default ));
+
+        $context->ApplicationModuleFile = "a/b/c";
+
+        $default = $context->ApplicationModuleFile;
+
+        $this->assertEquals(
+            "a/b/c",
+            $default );
+    }
+
+    /**
+     * Helper because realpath returns false if the file doesn't exist.
+     *
+     * @param $filename
+     * @return string
+     */
+    private function resolveFilename($filename)
+    {
+        $filename = str_replace('\\', '/', $filename);
+        $filename = str_replace('//', '/', $filename);
+        $parts = explode('/', $filename);
+        $out = array();
+        foreach ($parts as $part){
+            if ($part == '.') continue;
+            if ($part == '..') {
+                array_pop($out);
+                continue;
+            }
+            $out[] = $part;
+        }
+        return implode('/', $out);
+    }
 }

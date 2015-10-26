@@ -27,9 +27,6 @@
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 
-// Change the working directory to the top level project folder.
-chdir(__DIR__ . "/../../../../");
-
 // Initiate our bootstrap script to boot all libraries required.
 require_once __DIR__ . "/boot.php";
 

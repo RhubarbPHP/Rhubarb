@@ -1,6 +1,6 @@
 <?php
 
-namespace Gcd\Chariteer\Application\UnitTesting;
+namespace Rhubarb\Crown\Tests\Codeception;
 
 use Codeception\Lib\Connector\Shared\PhpSuperGlobalsConverter;
 use Rhubarb\Crown\Context;
@@ -61,8 +61,6 @@ class RhubarbConnector extends Client
         $_SERVER['REQUEST_URI'] = $uri;
         $_SERVER['SCRIPT_URI'] = $uri;
         $_SERVER['SCRIPT_NAME'] = $uri;
-
-        include __DIR__."/../../vendor/rhubarbphp/rhubarb/platform/execute-test.php";
 
         $context = new Context();
         $context->SimulateNonCli = true;
