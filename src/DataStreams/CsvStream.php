@@ -159,7 +159,10 @@ class CsvStream extends DataStream
 
             $csvDataLength = strlen($csvData);
 
-            for ($i = 0; $i < $csvDataLength; $i++) {
+            // Check for and skip UTF8 BOM
+            $startByte = $csvDataLength > 2 && substr($csvData, 0, 3) === b"\xEF\xBB\xBF" ? 3 : 0;
+
+            for ($i = $startByte; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
 
                 if ($i < $csvDataLength - 1 && $inEnclosure) {
