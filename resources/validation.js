@@ -202,3 +202,20 @@ window.rhubarb.validation.HasValue = function (name, settings) {
 
 window.rhubarb.validation.EqualTo.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualTo.prototype.constructor = window.rhubarb.validation.EqualTo;
+
+window.rhubarb.validation.MatchesRegEx = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.regEx = new RegExp(settings.regEx);
+
+    this.validate = function (value) {
+        if (value.match(this.regEx)) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.MatchesRegEx.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.MatchesRegEx.prototype.constructor = window.rhubarb.validation.MatchesRegEx;
