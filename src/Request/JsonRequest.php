@@ -24,14 +24,26 @@ use Rhubarb\Crown\Context;
  * Represents a Json request
  *
  * Normally created when the Content-Type of the request is application/json
+ *
+ * @property boolean $ObjectsToAssocArrays If true, objects in the request will be converted to PHP associative arrays. Otherwise they will be stdClass objects.
  */
 class JsonRequest extends WebRequest
 {
+    /**
+     * Override this class to set default values for settings.
+     */
+    protected function initialiseDefaultValues()
+    {
+        parent::initialiseDefaultValues();
+
+        $this->ObjectsToAssocArrays = true;
+    }
+
     public function getPayload()
     {
         $context = new Context();
         $requestBody = trim($context->getRequestBody());
 
-        return json_decode($requestBody, true);
+        return json_decode($requestBody, $this->ObjectsToAssocArrays);
     }
 }
