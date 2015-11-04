@@ -26,6 +26,8 @@ class ResourceLoader
 {
     private static $resources = [];
 
+    public static $jqueryUiThemePath = "vendor/components/jqueryui/themes/base/";
+
     /**
      * Adds javascript script code to the collection
      *
@@ -218,7 +220,18 @@ HTML;
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
 
-        self::loadResource($deployer->deployResource(__DIR__."/../../../../components/jqueryui/themes/base/jquery-ui.css"));
+        self::loadResource($deployer->deployResource(self::$jqueryUiThemePath."jquery-ui.css"));
+
+        $imagePath = self::$jqueryUiThemePath . "images/";
+        $imageExtensions = ["png", "jpg", "jpeg", "gif"];
+
+        $dh = opendir($imagePath);
+        while ($file = readdir($dh)) {
+            if (!is_dir($imagePath.$file) && in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions)) {
+                $deployer->deployResource($imagePath.$file);
+            }
+        }
+
         self::loadResource(self::getJqueryUIUrl());
     }
 }
