@@ -26,7 +26,10 @@ class ResourceLoader
 {
     private static $resources = [];
 
-    public static $jqueryUiThemePath = "vendor/components/jqueryui/themes/base/";
+    /**
+     * @var string Allows a custom JQuery UI theme to be used
+     */
+    public static $jqueryUiThemePath;
 
     /**
      * Adds javascript script code to the collection
@@ -220,9 +223,11 @@ HTML;
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
 
-        self::loadResource($deployer->deployResource(self::$jqueryUiThemePath."jquery-ui.css"));
+        $themePath = self::getJQueryUIThemePath();
 
-        $imagePath = self::$jqueryUiThemePath . "images/";
+        self::loadResource($deployer->deployResource($themePath."/jquery-ui.css"));
+
+        $imagePath = $themePath . "/images/";
         $imageExtensions = ["png", "jpg", "jpeg", "gif"];
 
         $dh = opendir($imagePath);
@@ -234,4 +239,14 @@ HTML;
 
         self::loadResource(self::getJqueryUIUrl());
     }
+
+    private static function getJQueryUIThemePath()
+    {
+        if (isset(self::$jqueryUiThemePath)) {
+            return self::$jqueryUiThemePath;
+        } else {
+            return __DIR__ . '/../../../../components/jqueryui/themes/base';
+        }
+    }
+
 }
