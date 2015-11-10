@@ -219,3 +219,33 @@ window.rhubarb.validation.MatchesRegEx = function (name, settings) {
 
 window.rhubarb.validation.MatchesRegEx.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.MatchesRegEx.prototype.constructor = window.rhubarb.validation.MatchesRegEx;
+
+window.rhubarb.validation.GreaterThan = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.validate = function (value) {
+        if ((settings.equalTo && value >= settings.greaterThan) || value > settings.greaterThan) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.GreaterThan.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.GreaterThan.prototype.constructor = window.rhubarb.validation.GreaterThan;
+
+window.rhubarb.validation.LessThan = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.validate = function (value) {
+        if ((settings.equalTo && value <= settings.lessThan) || value < settings.lessThan) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.LessThan.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.LessThan.prototype.constructor = window.rhubarb.validation.LessThan;
