@@ -15,8 +15,21 @@
 	  "components/jqueryui": ">=1.10"
 	},
   	"require-dev": {
-	  "phpunit/phpunit": "4.*",
-	  "codeception/codeception": "*"
+	    "rhubarbphp/custard": ">=1.0.3",
+	    "rhubarbphp/rhubarb": "dev-develop as v1.0",
+		"rhubarbphp/module-build-status-updater": "dev-debug as 1.0.3",
+		"tan-tan-kanarek/github-php-client": "dev-master as 1.0",
+		"phpunit/phpunit": "4.*",
+		"codeception/codeception": "*",
+		"phploc/phploc": "*",
+		"theseer/phpdox": "*",
+		"phpmd/phpmd": "*",
+		"squizlabs/php_codesniffer": "*",
+		"sebastian/phpcpd": "*",
+		"pdepend/pdepend": "*"
+	},
+	"config": {
+		"bin-dir": "bin/"
 	},
     "scripts": {
       "post-create-project-cmd": [

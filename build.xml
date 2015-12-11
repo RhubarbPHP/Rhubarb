@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="rhubarb-project" default="check">
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+    <!-- Repository access for status updating -->
+
+    <property name="git.provider" value="github"/>
+    <property name="git.owner" value="rhubarbphp"/>
+    <property name="git.repos" value="rhubarb"/>
+
+    <!-- Locations of important commands -->
+
+    <condition property="batfile" value=".bat">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="batfile" value="">
+        <not><os family="windows"/></not>
+    </condition>
+
+    <condition property="phpcs-ruleset" value="phpcs-ruleset-win">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="phpcs-ruleset" value="phpcs-ruleset">
+        <not><os family="windows"/></not>
+    </condition>
+
+    <property name="pdepend" value="${basedir}/bin/pdepend${batfile}"/>
+    <property name="phpcpd"  value="${basedir}/bin/phpcpd${batfile}"/>
+    <property name="phpcs"   value="${basedir}/bin/phpcs${batfile}"/>
+    <property name="phpdox"  value="${basedir}/bin/phpdox${batfile}"/>
+    <property name="phploc"  value="${basedir}/bin/phploc${batfile}"/>
+    <property name="phpmd"   value="${basedir}/bin/phpmd${batfile}"/>
+    <property name="phpunit" value="${basedir}/bin/phpunit${batfile}"/>
+    <property name="codecept" value="${basedir}/bin/codecept${batfile}"/>
+    <property name="custard" value="${basedir}/bin/custard${batfile}"/>
+
+    <!-- Import environment variables -->
+
+    <property environment="env"/>
+
+    <!-- Top level targets for jenkins -->
+    <target name="build" depends="set-build-status-pending,build-quick,-check-tests,-check-quality,set-build-status-success,set-build-status-failure,-fail" />
+    <!-- Top level targets for developers to test their build against the build failure conditions -->
+    <target name="check" depends="static-analysis-cli,codecept,-check-tests,-check-quality,-fail" />
+    <target name="check-tests" depends="codecept,-check-tests,-fail" />
+
+    <!-- Chains of build commands used by top level targets -->
+    <target name="build-complete"
+            depends="prepare,static-analysis,codecept-covered,phpdox" />
+
+    <target name="build-quick"
+            depends="prepare,static-analysis,codecept"
+            description="Performs static analysis, runs the tests, and generates project documentation"/>
+
+    <target name="static-analysis"
+            depends="lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
+            description="Performs static analysis" />
+
+    <target name="static-analysis-cli"
+            depends="phpmd,phpcs,phpcpd"
+            description="Performs static analysis" />
+
+    <!-- Adjust the threadCount attribute's value to the number of CPUs -->
+    <target name="static-analysis-parallel"
+            description="Performs static analysis (executing the tools in parallel)">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend"/>
+                <antcall target="phpmd-ci"/>
+            </sequential>
+            <antcall target="lint"/>
+            <antcall target="phpcpd-ci"/>
+            <antcall target="phpcs-ci"/>
+            <antcall target="phploc-ci"/>
+        </parallel>
+    </target>
+
+    <target name="static-analysis-parallel-cli"
+            description="Performs static analysis (executing the tools in parallel) on the CLI">
+        <parallel threadCount="2">
+            <antcall target="phpmd"/>
+            <antcall target="phpcpd"/>
+            <antcall target="phpcs"/>
+        </parallel>
+    </target>
+
+    <!-- Targets for updating the git repos provider with build status details -->
+
+    <target name="set-build-status-pending">
+        <exec executable="${custard}">
+            <arg value="-c=\Rhubarb\BuildStatusUpdater\Custard\UpdateBuildStatusCommand" />
+            <arg value='build:update-status' />
+            <arg value="${git.provider}" />
+            <arg value="${git.owner}" />
+            <arg value="${git.repos}" />
+            <arg value="${env.GIT_COMMIT}" />
+            <arg value="jenkins-build-${env.BUILD_NUMBER}" />
+            <arg value="pending" />
+            <arg value="${env.BUILD_URL}" />
+            <arg value="The build is... building." />
+            <arg value="-u${env.GIT_USERNAME}" />
+            <arg value="-p${env.GIT_PASSWORD}" />
+        </exec>
+    </target>
+
+    <target name="set-build-status-success" unless="error">
+        <exec executable="${custard}">
+            <arg value="-c=\Rhubarb\BuildStatusUpdater\Custard\UpdateBuildStatusCommand" />
+            <arg value='build:update-status' />
+            <arg value="${git.provider}" />
+            <arg value="${git.owner}" />
+            <arg value="${git.repos}" />
+            <arg value="${env.GIT_COMMIT}" />
+            <arg value="jenkins-build-${env.BUILD_NUMBER}" />
+            <arg value="success" />
+            <arg value="${env.BUILD_URL}" />
+            <arg value="The build succeeded!" />
+            <arg value="-u${env.GIT_USERNAME}" />
+            <arg value="-p${env.GIT_PASSWORD}" />
+        </exec>
+    </target>
+
+    <target name="set-build-status-failure" if="error">
+        <exec executable="${custard}">
+            <arg value="-c=\Rhubarb\BuildStatusUpdater\Custard\UpdateBuildStatusCommand" />
+            <arg value='build:update-status' />
+            <arg value="${git.provider}" />
+            <arg value="${git.owner}" />
+            <arg value="${git.repos}" />
+            <arg value="${env.GIT_COMMIT}" />
+            <arg value="jenkins-build-${env.BUILD_NUMBER}" />
+            <arg value="failure" />
+            <arg value="${env.BUILD_URL}" />
+            <arg value="The build failed." />
+            <arg value="-u${env.GIT_USERNAME}" />
+            <arg value="-p${env.GIT_PASSWORD}" />
+        </exec>
+    </target>
+
+    <!--
+        Individual build tasks start here.
+    // -->
+
+    <target name="clean"
+            unless="clean.done"
+            description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/phpunit"/>
+        <delete dir="${basedir}/build/behat"/>
+        <delete dir="${basedir}/build/phploc"/>
+        <delete dir="${basedir}/build/pmd"/>
+        <delete dir="${basedir}/build/phpcs"/>
+        <delete dir="${basedir}/build/phpcpd"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/build/phpdox"/>
+        <delete>
+            <fileset dir="${basedir}/build" includes="*.zip"/>
+        </delete>
+        <property name="clean.done" value="true"/>
+    </target>
+
+    <target name="prepare"
+            unless="prepare.done"
+            depends="clean"
+            description="Prepare for build">
+
+        <mkdir dir="${basedir}/build/phpunit"/>
+        <mkdir dir="${basedir}/build/behat"/>
+        <mkdir dir="${basedir}/build/phploc"/>
+        <mkdir dir="${basedir}/build/phpcs"/>
+        <mkdir dir="${basedir}/build/phpcpd"/>
+        <mkdir dir="${basedir}/build/pmd"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+        <mkdir dir="${basedir}/build/phpdox"/>
+        <property name="prepare.done" value="true"/>
+    </target>
+
+    <target name="lint"
+            unless="lint.done"
+            description="Perform syntax check of sourcecode files">
+        <apply executable="php" taskname="lint">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+
+            <fileset dir="${basedir}/tests">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+        </apply>
+
+        <property name="lint.done" value="true"/>
+    </target>
+
+    <target name="phploc"
+            unless="phploc.done"
+            description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+        <exec executable="${phploc}" taskname="phploc">
+            <arg value="--count-tests" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phploc.done" value="true"/>
+    </target>
+
+    <target name="phploc-ci"
+            unless="phploc.done"
+            depends="prepare"
+            description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phploc}" taskname="phploc">
+            <arg value="--count-tests" />
+            <arg value="--log-csv" />
+            <arg path="${basedir}/build/phploc/phploc.csv" />
+            <arg value="--log-xml" />
+            <arg path="${basedir}/build/phploc/phploc.xml" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phploc.done" value="true"/>
+    </target>
+
+    <target name="pdepend"
+            unless="pdepend.done"
+            depends="prepare"
+            description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${pdepend}" taskname="pdepend">
+            <arg value="--jdepend-xml=${basedir}/build/pdepend/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="pdepend.done" value="true"/>
+    </target>
+
+    <target name="phpmd"
+            unless="phpmd.done"
+            description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpmd}" resultproperty="result.php-md" taskname="phpmd">
+            <arg path="${basedir}/src" />
+            <arg value="text" />
+            <arg path="${basedir}/build/phpmd.xml" />
+        </exec>
+
+        <property name="phpmd.done" value="true"/>
+    </target>
+
+    <target name="phpmd-ci"
+            unless="phpmd.done"
+            depends="prepare"
+            description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpmd}" resultproperty="result.php-md" taskname="phpmd">
+            <arg path="${basedir}/src" />
+            <arg value="xml" />
+            <arg path="${basedir}/build/phpmd.xml" />
+            <arg value="--reportfile" />
+            <arg path="${basedir}/build/pmd/pmd.xml" />
+        </exec>
+
+        <property name="phpmd.done" value="true"/>
+    </target>
+
+    <target name="phpcs"
+            unless="phpcs.done"
+            description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpcs}" resultproperty="result.php-cs" taskname="phpcs">
+            <arg value="--standard=build/${phpcs-ruleset}.xml" />
+            <arg value="--extensions=php" />
+            <arg value="--ignore=autoload.php" />
+            <arg value="--warning-severity=0"/>
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests/unit" />
+        </exec>
+
+        <property name="phpcs.done" value="true"/>
+    </target>
+
+    <target name="phpcs-ci"
+            unless="phpcs.done"
+            depends="prepare"
+            description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpcs}" resultproperty="result.php-cs" taskname="phpcs">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/build/phpcs/phpcs.xml" />
+            <arg value="--standard=build/${phpcs-ruleset}.xml" />
+            <arg value="--warning-severity=0"/>
+            <arg value="--extensions=php" />
+            <arg value="--ignore=autoload.php" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests/unit" />
+        </exec>
+
+        <property name="phpcs.done" value="true"/>
+    </target>
+
+    <target name="phpcpd"
+            unless="phpcpd.done"
+            description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+        <exec executable="${phpcpd}" resultproperty="result.php-cpd" taskname="phpcpd">
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="phpcpd.done" value="true"/>
+    </target>
+
+    <target name="phpcpd-ci"
+            unless="phpcpd.done"
+            depends="prepare"
+            description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <exec executable="${phpcpd}" resultproperty="result.php-cpd" taskname="phpcpd">
+            <arg value="--log-pmd" />
+            <arg path="${basedir}/build/phpcpd/pmd-cpd.xml" />
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="phpcpd.done" value="true"/>
+    </target>
+
+    <target name="codecept"
+            unless="codecept.done"
+            depends="prepare"
+            description="Run codeception tests">
+        <exec executable="${codecept}" resultproperty="result.codecept" taskname="codecept">
+            <arg value="run"/>
+            <arg value="unit,functional"/>
+            <arg value="--xml"/>
+        </exec>
+
+        <property name="codecept.done" value="true"/>
+    </target>
+
+    <target name="codecept-covered"
+            unless="codecept.done"
+            depends="prepare"
+            description="Run codeception tests">
+        <exec executable="${codecept}" resultproperty="result.codecept" taskname="codecept">
+            <arg value="run"/>
+            <arg value="unit,functional"/>
+            <arg value="--xml"/>
+            <arg value="--coverage"/>
+            <arg value="--coverage-xml"/>
+            <arg value="--coverage-html"/>
+        </exec>
+
+        <property name="codecept.done" value="true"/>
+    </target>
+
+    <target name="phpdox"
+            unless="phpdox.done"
+            depends="phploc-ci,phpcs-ci,phpmd-ci"
+            description="Generate project documentation using phpDox">
+        <exec executable="${phpdox}">
+            <arg value="--file" />
+            <arg value="${basedir}/build/phpdox.xml" />
+        </exec>
+
+        <property name="phpdox.done" value="true"/>
+    </target>
+
+    <target name="-check-tests">
+        <condition property="error" value="Behat did not finish successfully">
+            <and>
+                <not><equals arg1="${result.behat}" arg2="0" /></not>
+                <isset property="behat.enabled"/>
+            </and>
+        </condition>
+        <condition property="error" value="Codeception did not finish successfully">
+            <not><equals arg1="${result.codecept}" arg2="0" /></not>
+        </condition>
+    </target>
+
+    <target name="-check-quality">
+        <condition property="error" value="PHP Mess Detector detected violations!">
+            <not><equals arg1="${result.php-md}" arg2="0" /></not>
+        </condition>
+        <condition property="error" value="PHP Code Sniffer detected violations!">
+            <not><equals arg1="${result.php-cs}" arg2="0" /></not>
+        </condition>
+        <condition property="error" value="PHP Cut-and-Paste Detector detected violations!">
+            <not><equals arg1="${result.php-cpd}" arg2="0" /></not>
+        </condition>
+    </target>
+
+    <target name="-fail" if="error">
+        <fail message="${error}"/>
+    </target>
+
+</project>

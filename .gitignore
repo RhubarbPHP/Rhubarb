@@ -8,3 +8,4 @@ vendor/
 /deployed/
 /logs/
 /composer.lock
+/bin/
