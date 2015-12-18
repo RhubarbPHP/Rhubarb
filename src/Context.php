@@ -112,6 +112,13 @@ class Context extends Settings
                 $contentType = $parts[0];
 
                 switch ($contentType) {
+                    case "application/octet-stream":
+                    case "image/jpeg":
+                    case "image/jpg":
+                    case "image/gif":
+                    case "image/png":
+                        $request = new Request\BinaryRequest();
+                        break;
                     case "application/json":
                         $request = new Request\JsonRequest();
                         break;
