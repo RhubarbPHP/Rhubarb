@@ -191,7 +191,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * This protects the unwary developer from exposing internal secrets by using models that be serialised or
      * published. It is a chore to populate but it is better to be safe than sorry!
      *
-     * @return Array
+     * @return array
      */
     protected function getPublicPropertyList()
     {
@@ -202,7 +202,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Exports an array of model values that have been marked safe for public consumption.
      *
-     * @return Array
+     * @return array
      */
     public final function exportPublicData()
     {
@@ -249,7 +249,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Imports an array of model values that have been marked safe for public consumption.
      *
-     * @param Array $data
+     * @param array $data
      */
     public final function importData($data)
     {
@@ -404,7 +404,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * The data does not pass through any applicable Set methods or data transforms. If required to do so
      * call ImportData() instead, but understand the performance penalty of doing so.
      *
-     * @param Array $data
+     * @param array $data
      */
     public function importRawData($data)
     {
