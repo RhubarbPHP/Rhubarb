@@ -16,7 +16,8 @@
 	},
   	"require-dev": {
 	    "rhubarbphp/custard": ">=1.0.3",
-	    "rhubarbphp/rhubarb": "dev-develop as v1.0",
+	    "rhubarbphp/module-stem": "0.9",
+	    "rhubarbphp/rhubarb": "dev-feature/build as v1.0",
 		"rhubarbphp/module-build-status-updater": "dev-debug as 1.0.3",
 		"tan-tan-kanarek/github-php-client": "dev-master as 1.0",
 		"phpunit/phpunit": "4.*",

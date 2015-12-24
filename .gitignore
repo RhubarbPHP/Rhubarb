@@ -9,3 +9,7 @@ vendor/
 /logs/
 /composer.lock
 /bin/
+
+tests/_output/*
+/cache/
+/build/
