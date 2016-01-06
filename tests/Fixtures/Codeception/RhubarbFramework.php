@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Crown\Tests\Codeception;
+namespace Rhubarb\Crown\Tests\Fixtures\Codeception;
 
 use Codeception\Lib\Framework;
 use Codeception\TestCase;

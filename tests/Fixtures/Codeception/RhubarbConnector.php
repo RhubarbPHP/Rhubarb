@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Crown\Tests\Codeception;
+namespace Rhubarb\Crown\Tests\Fixtures\Codeception;
 
 use Codeception\Lib\Connector\Shared\PhpSuperGlobalsConverter;
 use Rhubarb\Crown\Context;
