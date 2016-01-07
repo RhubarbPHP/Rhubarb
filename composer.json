@@ -10,6 +10,7 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
+	"version": "1.0.x-dev",
 	"require": {
 	  "components/jquery": ">=1.9",
 	  "components/jqueryui": ">=1.10"
