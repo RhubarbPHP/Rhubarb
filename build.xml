@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="rhubarb-project" default="check">
+<project name="rhubarb-project" default="build">
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
@@ -42,9 +42,10 @@
     <property environment="env"/>
 
     <!-- Top level targets for jenkins -->
-    <target name="build" depends="set-build-status-pending,build-quick,-check-tests,-check-quality,set-build-status-success,set-build-status-failure,-fail" />
+    <target name="build" depends="set-build-status-pending,prepare,static-analysis-cli,codecept,-check-tests,set-build-status-success,set-build-status-failure,-fail" />
+
     <!-- Top level targets for developers to test their build against the build failure conditions -->
-    <target name="check" depends="static-analysis-cli,codecept,-check-tests,-check-quality,-fail" />
+    <target name="check" depends="static-analysis-cli,codecept,-check-tests,-fail" />
     <target name="check-tests" depends="codecept,-check-tests,-fail" />
 
     <!-- Chains of build commands used by top level targets -->
@@ -367,12 +368,6 @@
     </target>
 
     <target name="-check-tests">
-        <condition property="error" value="Behat did not finish successfully">
-            <and>
-                <not><equals arg1="${result.behat}" arg2="0" /></not>
-                <isset property="behat.enabled"/>
-            </and>
-        </condition>
         <condition property="error" value="Codeception did not finish successfully">
             <not><equals arg1="${result.codecept}" arg2="0" /></not>
         </condition>

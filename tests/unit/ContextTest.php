@@ -88,7 +88,7 @@ class ContextTest extends RhubarbTestCase
         $default = $context->ApplicationModuleFile;
 
         $this->assertEquals(
-            $this->resolveFilename(__DIR__."/../../../../settings/app.config.php"),
+            $this->resolveFilename(__DIR__."/../../../../../settings/app.config.php"),
             $this->resolveFilename($default ));
 
         $context->ApplicationModuleFile = "a/b/c";

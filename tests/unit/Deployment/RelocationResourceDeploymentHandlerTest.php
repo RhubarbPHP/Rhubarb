@@ -13,7 +13,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $url = $deploymentPackage->getDeployedResourceUrl(__FILE__);
 
-        $cwd = getcwd();
+        $cwd = APPLICATION_ROOT_DIR;
         $deployedUrl = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", __FILE__));
 
         $this->assertEquals($deployedUrl, $url);
@@ -21,7 +21,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 
     public function testDeploymentCopiesFiles()
     {
-        $cwd = getcwd();
+        $cwd = APPLICATION_ROOT_DIR;
 
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource(__FILE__);

@@ -26,7 +26,7 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function testStaticFileReturned()
     {
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/test.txt");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/test.txt");
         $handler->setUrl("/test.txt");
 
         $this->request->UrlPath = "/";
@@ -45,7 +45,7 @@ class StaticResourceTest extends RhubarbTestCase
     {
         LayoutModule::enableLayout();
 
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/test.txt");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/test.txt");
         $handler->setUrl("/test.txt");
         $this->request->UrlPath = "/test.txt";
 
@@ -56,7 +56,7 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function testStaticFolderFindsAndReturnsFiles()
     {
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
         $this->request->UrlPath = "/files/test2.txt";
 
@@ -72,14 +72,14 @@ class StaticResourceTest extends RhubarbTestCase
     {
         $this->setExpectedException(StaticResourceNotFoundException::class);
 
-        new StaticResourceUrlHandler(__DIR__ . "/Fixtures/non-extant-file.txt");
+        new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/non-extant-file.txt");
     }
 
     public function testExceptionThrownIfFileNotFoundInDirectory()
     {
         $this->setExpectedException(StaticResource404Exception::class);
 
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
 
         $this->request->UrlPath = "/files/non-extant.txt";
@@ -89,7 +89,7 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function testMimeTypeSetCorrectly()
     {
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/Fixtures/");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
 
         $this->request->UrlPath = "/files/test.txt";
@@ -106,7 +106,7 @@ class StaticResourceTest extends RhubarbTestCase
         $this->assertArrayHasKey("Content-Type", $headers);
         $this->assertEquals("text/css", $headers["Content-Type"]);
 
-        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../resources/resource-manager.js");
+        $handler = new StaticResourceUrlHandler(__DIR__ . "/../../../resources/resource-manager.js");
         $handler->setUrl("/js/resource-manager.js");
 
         $this->request->UrlPath = "/js/resource-manager.js";

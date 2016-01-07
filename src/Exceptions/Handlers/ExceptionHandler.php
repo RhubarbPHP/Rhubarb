@@ -146,7 +146,7 @@ abstract class ExceptionHandler
      * @param RhubarbException $er
      * @return bool
      */
-    protected static function shouldTrapException(RhubarbException $er)
+    protected function shouldTrapException(RhubarbException $er)
     {
         return self::$exceptionTrappingOn;
     }
@@ -160,8 +160,9 @@ abstract class ExceptionHandler
      */
     public final static function processException(RhubarbException $er)
     {
-        if (self::shouldTrapException($er)) {
-            $exceptionHandler = self::getExceptionHandler();
+        $exceptionHandler = self::getExceptionHandler();
+
+        if ($exceptionHandler->shouldTrapException($er)) {
             return $exceptionHandler->handleException($er);
         } else {
             // If exception trapping is disabled we should just rethrow the exception.

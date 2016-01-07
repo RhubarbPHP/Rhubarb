@@ -18,7 +18,10 @@ class JsonResponseTest extends RhubarbTestCase
         $response->send();
         $buffer = ob_get_clean();
 
-        $this->assertEquals('{"Forename":"' . $test->Forename . '","Surname":"123"}', $buffer);
+        $this->assertEquals('{
+    "Forename": "' . $test->Forename . '",
+    "Surname": "123"
+}', $buffer);
     }
 
     public function testResponseCanCodeNonModels()
@@ -31,7 +34,10 @@ class JsonResponseTest extends RhubarbTestCase
         $response->send();
         $buffer = ob_get_clean();
 
-        $this->assertEquals('["abc","123"]', $buffer);
+        $this->assertEquals('[
+    "abc",
+    "123"
+]', $buffer);
 
         $response = new JsonResponse();
         $test = new \stdClass();
@@ -43,6 +49,8 @@ class JsonResponseTest extends RhubarbTestCase
         $response->send();
         $buffer = ob_get_clean();
 
-        $this->assertEquals('{"abc":"123"}', $buffer);
+        $this->assertEquals('{
+    "abc": "123"
+}', $buffer);
     }
 }

@@ -116,7 +116,8 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have been notified.Tail", $response->getContent());
+        $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have
+been notified.Tail", $response->getContent());
 
         LayoutModule::disableLayout();
     }
@@ -218,7 +219,7 @@ class UnitTestSilentExceptionHandler extends DefaultExceptionHandler
 
 class UnitTestDisobedientExceptionHandler extends DefaultExceptionHandler
 {
-    protected static function shouldTrapException(RhubarbException $er)
+    protected function shouldTrapException(RhubarbException $er)
     {
         // Force handling of exceptions - even if disabled! Naughty!
         return true;

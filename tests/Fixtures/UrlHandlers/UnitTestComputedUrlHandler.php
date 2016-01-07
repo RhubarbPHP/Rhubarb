@@ -6,7 +6,7 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 class UnitTestComputedUrlHandler extends UrlHandler
 {
-    public function getUrl()
+    public function getDefaultUrl()
     {
         return "/computed-url/test/";
     }

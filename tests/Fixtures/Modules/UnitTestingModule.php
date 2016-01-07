@@ -64,7 +64,7 @@ class UnitTestingModule extends Module
             [
                 "/" => new ClassMappedUrlHandler(SimpleContent::class,
                     [
-                        "nmh/" => new NamespaceMappedUrlHandler(NamespaceMappedHandlerTest::class),
+                        "nmh/" => new NamespaceMappedUrlHandler('Rhubarb\Crown\Tests\Fixtures\UrlHandlers\NamespaceMappedHandlerTests'),
                         "simple/" => new ClassMappedUrlHandler(SimpleContent::class),
                         "files/" => new StaticResourceUrlHandler(__DIR__ . "/../UrlHandlers/")
                     ])

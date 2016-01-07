@@ -34,7 +34,7 @@ if (!defined("APPLICATION_ROOT_DIR")) {
 }
 
 if (!defined("VENDOR_DIR")) {
-    define("VENDOR_DIR", realpath(__DIR__."/../../../"));
+    define("VENDOR_DIR", APPLICATION_ROOT_DIR."/vendor/");
 }
 
 // Include the composer autoloader
@@ -66,10 +66,8 @@ if ($envAppSetting = getenv("rhubarb_app")) {
 
 $applicationModuleFile = $context->ApplicationModuleFile;
 
-// Move the working directory to the folder above the app config. Rhubarb itself doesn't require a
-// working directory however some applications may rely on this to find directories for storing
-// temporary files etc.
-chdir(dirname($applicationModuleFile)."/../");
+// Move the working directory to the application root.
+chdir(APPLICATION_ROOT_DIR);
 
 if (file_exists($applicationModuleFile)) {
     include($applicationModuleFile);

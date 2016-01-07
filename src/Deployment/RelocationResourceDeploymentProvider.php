@@ -36,7 +36,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = getcwd();
+        $cwd = APPLICATION_ROOT_DIR;
 
         $url = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath)));
 
@@ -72,23 +72,24 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         // Remove the current working directory from the resource path.
         $cwd = APPLICATION_ROOT_DIR;
 
-        $urlPath = "deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
+        $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
+        $localPath = $cwd.$urlPath;
 
-        if (!file_exists(dirname($urlPath))) {
-            if (!mkdir(dirname($urlPath), 0777, true)) {
-                throw new DeploymentException("The deployment folder could not be created. Check file permissions to the '" . dirname($urlPath) . "' folder.");
+        if (!file_exists(dirname($localPath))) {
+            if (!mkdir(dirname($localPath), 0777, true)) {
+                throw new DeploymentException("The deployment folder could not be created. Check file permissions to the '" . dirname($localPath) . "' folder.");
             }
         }
 
-        $result = @copy($resourceFilePath, $urlPath);
+        $result = @copy($resourceFilePath, $localPath);
 
         if (!$result) {
             throw new DeploymentException("The file $resourceFilePath could not be deployed. Please check file permissions.");
         }
 
-        $this->alreadyDeployed[$originalResourceFilePath] = "/" . $urlPath;
+        $this->alreadyDeployed[$originalResourceFilePath] = $urlPath;
 
-        return "/" . $urlPath;
+        return $urlPath;
     }
 
     public function deployResourceContent($resourceContent, $simulatedFilePath)

@@ -121,6 +121,8 @@ abstract class UrlHandler implements GeneratesResponse
         $this->creationOrder = self::$creationOrderCount;
 
         $this->addChildUrlHandlers($childUrlHandlers);
+
+        $this->url = $this->getDefaultUrl();
     }
 
     public static function setExecutingUrlHandler(UrlHandler $handler)
@@ -162,6 +164,17 @@ abstract class UrlHandler implements GeneratesResponse
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * Returns the default URL fragment for this handler.
+     *
+     * This is seldom overriden - in most cases it is better to simply call setUrl() when
+     * configuring the handler or use the key/value pair syntax when registering the handler.
+     */
+    protected function getDefaultUrl()
+    {
+        return "";
     }
 
     public function getUrl()

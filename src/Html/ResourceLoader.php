@@ -161,7 +161,7 @@ class ResourceLoader
         array_walk(
             $groupedItems,
             function ($item) use (&$tags, $preLoadedFiles) {
-                $source = $item[0];
+                $source = trim($item[0]);
                 $dependantResources = $item[1];
 
                 if (sizeof($dependantResources) > 0) {

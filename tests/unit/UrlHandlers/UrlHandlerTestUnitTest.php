@@ -2,12 +2,15 @@
 
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
+use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
+use Rhubarb\Crown\Tests\Fixtures\UrlHandlers\NamespaceMappedHandlerTests\ObjectA;
+use Rhubarb\Crown\Tests\Fixtures\UrlHandlers\NamespaceMappedHandlerTests\SubFolder\ObjectB;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
@@ -26,8 +29,8 @@ class UrlHandlerTest extends RhubarbTestCase
 
     public function testChildHandler()
     {
-        $child = new ClassMappedUrlHandler(Fixtures\NamespaceMappedHandlerTests\SubFolder\ObjectB::class);
-        $parent = new ClassMappedUrlHandler(Fixtures\NamespaceMappedHandlerTests\ObjectA::class,
+        $child = new ClassMappedUrlHandler(ObjectB::class);
+        $parent = new ClassMappedUrlHandler(ObjectA::class,
             ["child/" => $child]);
         $parent->setUrl("/parent/");
 
@@ -53,6 +56,8 @@ class UrlHandlerTest extends RhubarbTestCase
 
     public function testUrlExtractedFromHandler()
     {
+        LayoutModule::enableLayout();
+
         $request = new WebRequest();
         $request->UrlPath = "/computed-url/test/";
 

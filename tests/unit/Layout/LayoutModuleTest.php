@@ -100,7 +100,6 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
-        $request->IsWebRequest = true;
 
         $response = Module::generateResponseForRequest($request);
 
@@ -114,7 +113,6 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
-        $request->IsWebRequest = true;
 
         $this->setExpectedException(LayoutNotFoundException::class);
 
@@ -131,7 +129,6 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
-        $request->IsWebRequest = true;
 
         $response = Module::generateResponseForRequest($request);
 
