@@ -11,9 +11,9 @@ use Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient;
 
 class AppTestCase extends \Codeception\TestCase\Test
 {
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
         $context = new Context();
         $context->UnitTesting = true;

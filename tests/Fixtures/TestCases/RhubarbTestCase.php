@@ -17,7 +17,7 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
 
     protected static $rolesModule;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
         Module::RegisterModule(new UnitTestingModule());
         Module::InitialiseModules();
@@ -30,7 +30,7 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
         $request->Reset();
     }
 
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
         Module::clearModules();
 

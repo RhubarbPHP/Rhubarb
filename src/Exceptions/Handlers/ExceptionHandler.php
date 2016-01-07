@@ -95,10 +95,10 @@ abstract class ExceptionHandler
                     chdir(__DIR__.'/../../../../../../');
 
                     if (!file_exists("shutdown_logs")) {
-                        mkdir("shutdown_logs");
+                        @mkdir("shutdown_logs");
                     }
 
-                    file_put_contents(
+                    @file_put_contents(
                         'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
                         "Type: {$error["type"]}\n".
                         "Message: {$error["message"]}\n".

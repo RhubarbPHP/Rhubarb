@@ -14,6 +14,8 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->request = Context::CurrentRequest();
         $this->request->IsWebRequest = true;
 

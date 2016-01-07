@@ -25,6 +25,7 @@ use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
 use Rhubarb\Crown\Tests\unit\Logging\UnitTestLog;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
@@ -36,10 +37,12 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
      */
     private static $log;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
+        Module::clearModules();
+        Module::registerModule(new UnitTestingModule());
         Module::registerModule(new UnitTestExceptionModule());
         Module::initialiseModules();
 
@@ -47,11 +50,6 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         Log::attachLog(self::$log = new UnitTestLog(Log::ERROR_LEVEL));
 
         ExceptionHandler::enableExceptionTrapping();
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
 
         ExceptionHandler::setExceptionHandlerClassName(DefaultExceptionHandler::class);
     }
