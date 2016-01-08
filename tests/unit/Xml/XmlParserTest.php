@@ -27,9 +27,9 @@ use Rhubarb\Crown\Xml\XmlParser;
 
 class XmlParserTest extends RhubarbTestCase
 {
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
         // Create a text file to stream.
 
