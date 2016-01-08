@@ -65,4 +65,4 @@ class EmailAddress
     {
         return $this->getRfcFormat();
     }
-} 
+}

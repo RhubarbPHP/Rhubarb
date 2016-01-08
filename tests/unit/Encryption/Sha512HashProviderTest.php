@@ -12,8 +12,10 @@ class Sha512HashProviderTest extends RhubarbTestCase
         $hasher = new Sha512HashProvider();
         $result = $hasher->createHash("abc123", "saltyfish");
 
-        $this->assertEquals('$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0',
-            $result);
+        $this->assertEquals(
+            '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0',
+            $result
+        );
     }
 
     public function testHashesAreCompared()

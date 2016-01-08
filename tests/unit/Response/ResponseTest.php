@@ -36,19 +36,23 @@ class ResponseTest extends RhubarbTestCase
         $this->response->clearHeaders();
 
         $this->response->setHeader('Content-Type', 'application/json');
-        $this->assertEquals($this->response->getHeaders(),
+        $this->assertEquals(
+            $this->response->getHeaders(),
             [
                 'Content-Type' => 'application/json'
             ],
-            "Got headers did not equal set headers");
+            "Got headers did not equal set headers"
+        );
 
         $this->response->setHeader('Content-Encoding', 'gzip');
-        $this->assertEquals($this->response->getHeaders(),
+        $this->assertEquals(
+            $this->response->getHeaders(),
             [
                 'Content-Type' => 'application/json',
                 'Content-Encoding' => 'gzip'
             ],
-            "Got headers did not equal set headers");
+            "Got headers did not equal set headers"
+        );
     }
 
     public function testUnsetHeader()
@@ -62,8 +66,11 @@ class ResponseTest extends RhubarbTestCase
 
     public function testDefaultContentTypeHeader()
     {
-        $this->assertEquals($this->response->getHeaders()['Content-Type'], 'text/plain',
-            "Content-Type header is not set to text/plain");
+        $this->assertEquals(
+            $this->response->getHeaders()['Content-Type'],
+            'text/plain',
+            "Content-Type header is not set to text/plain"
+        );
     }
 
     public function testSetContent()
@@ -77,16 +84,25 @@ class ResponseTest extends RhubarbTestCase
         $this->assertNull($this->response->getContent(), "Content hasn't been set yet, should be NULL");
 
         $this->response->setContent($string_content);
-        $this->assertEquals($this->response->getContent(), $string_content,
-            "Got content did not equal set string content");
+        $this->assertEquals(
+            $this->response->getContent(),
+            $string_content,
+            "Got content did not equal set string content"
+        );
 
         $this->response->setContent($array_content);
-        $this->assertEquals($this->response->getContent(), $array_content,
-            "Got content did not equal set array content");
+        $this->assertEquals(
+            $this->response->getContent(),
+            $array_content,
+            "Got content did not equal set array content"
+        );
 
         $this->response->setContent($object_content);
-        $this->assertEquals($this->response->getContent(), $object_content,
-            "Got content did not equal set object content");
+        $this->assertEquals(
+            $this->response->getContent(),
+            $object_content,
+            "Got content did not equal set object content"
+        );
     }
 
     public function testSend()

@@ -33,7 +33,7 @@ class Layout
         print $content;
     }
 
-    public final function processResponse(Response $response)
+    final public function processResponse(Response $response)
     {
         ob_start();
 

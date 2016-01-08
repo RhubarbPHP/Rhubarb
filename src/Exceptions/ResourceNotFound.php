@@ -26,5 +26,4 @@ class ResourceNotFound extends \Exception
     {
         parent::__construct("The resource `$resourceUrl` does not exist.`");
     }
-
 }

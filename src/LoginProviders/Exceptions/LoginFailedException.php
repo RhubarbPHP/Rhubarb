@@ -29,5 +29,4 @@ class LoginFailedException extends RhubarbException
 
         $this->publicMessage = "Sorry, we failed to authenticate your credentials at this time.";
     }
-
 }

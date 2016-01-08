@@ -7,7 +7,6 @@ use Rhubarb\Crown\DateTime\RhubarbDateInterval;
 use Rhubarb\Crown\DateTime\RhubarbDateTime;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
-
 class RhubarbDateIntervalTest extends RhubarbTestCase
 {
     public function testTotals()

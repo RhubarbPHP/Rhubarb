@@ -47,5 +47,5 @@ abstract class EmailProvider
         return new $class();
     }
 
-    public abstract function sendEmail(Email $email);
+    abstract public function sendEmail(Email $email);
 }

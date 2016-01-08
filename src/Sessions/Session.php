@@ -49,7 +49,7 @@ class Session extends Settings
      *
      * @return SessionProviders\SessionProvider
      */
-    protected final function getSessionProvider()
+    final protected function getSessionProvider()
     {
         if ($this->sessionProvider == null) {
             $this->sessionProvider = $this->getNewSessionProvider();

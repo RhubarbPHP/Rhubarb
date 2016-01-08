@@ -20,5 +20,5 @@ namespace Rhubarb\Crown\Xml;
 
 abstract class NodeStrategy
 {
-    public abstract function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false);
+    abstract public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false);
 }

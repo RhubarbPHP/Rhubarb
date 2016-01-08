@@ -103,12 +103,12 @@ class Context extends Settings
                 // Special check for multipart, because the header could be multipart/form-data
                 // followed by boundary
                 $multipartType = "multipart/form-data";
-                if (strpos( $contentType, $multipartType ) === 0) {
+                if (strpos($contentType, $multipartType) === 0) {
                     $contentType = $multipartType;
                 }
 
                 // Firefox puts a charset on the end of the content type line
-                $parts = explode( ";", $contentType );
+                $parts = explode(";", $contentType);
                 $contentType = $parts[0];
 
                 switch ($contentType) {
@@ -156,7 +156,7 @@ class Context extends Settings
      */
     public function getApplicationModuleFile()
     {
-        if (isset($this->modelData["ApplicationModuleFile"])){
+        if (isset($this->modelData["ApplicationModuleFile"])) {
             return $this->modelData["ApplicationModuleFile"];
         } else {
             return __DIR__ . "/../../../../settings/app.config.php";

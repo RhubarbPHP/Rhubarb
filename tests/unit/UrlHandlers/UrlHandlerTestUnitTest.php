@@ -30,8 +30,10 @@ class UrlHandlerTest extends RhubarbTestCase
     public function testChildHandler()
     {
         $child = new ClassMappedUrlHandler(ObjectB::class);
-        $parent = new ClassMappedUrlHandler(ObjectA::class,
-            ["child/" => $child]);
+        $parent = new ClassMappedUrlHandler(
+            ObjectA::class,
+            ["child/" => $child]
+        );
         $parent->setUrl("/parent/");
 
         $request = new WebRequest();

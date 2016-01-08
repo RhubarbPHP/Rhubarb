@@ -63,8 +63,11 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`', $lastEntry[0],
-            "A RhubarbException should have been logged");
+        $this->assertContains(
+            'Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`',
+            $lastEntry[0],
+            "A RhubarbException should have been logged"
+        );
 
         ExceptionHandler::setExceptionHandlerClassName(UnitTestSilentExceptionHandler::class);
 
@@ -73,8 +76,11 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         Module::generateResponseForRequest($request);
 
-        $this->assertCount(0, self::$log->entries,
-            "The silent exception handler shouldn't log anything - exception handler injection is broken");
+        $this->assertCount(
+            0,
+            self::$log->entries,
+            "The silent exception handler shouldn't log anything - exception handler injection is broken"
+        );
     }
 
     public function testNonRhubarbExceptionCausesLogEntry()
@@ -86,9 +92,11 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`',
+        $this->assertContains(
+            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`',
             $lastEntry[0],
-            "A NonRhubarbException should have been logged");
+            "A NonRhubarbException should have been logged"
+        );
     }
 
     public function testPhpRuntimeErrorCausesLogEntry()
@@ -100,8 +108,11 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
 
         $lastEntry = array_pop(self::$log->entries);
 
-        $this->assertContains('Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`',
-            $lastEntry[0], "A NonRhubarbException should have been logged for php run time errors");
+        $this->assertContains(
+            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`',
+            $lastEntry[0],
+            "A NonRhubarbException should have been logged for php run time errors"
+        );
     }
 
     public function testUrlHandlerGeneratesResponse()

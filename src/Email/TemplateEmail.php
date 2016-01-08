@@ -60,11 +60,11 @@ abstract class TemplateEmail extends Email
         return "{Content}";
     }
 
-    protected abstract function getTextTemplateBody();
+    abstract protected function getTextTemplateBody();
 
-    protected abstract function getHtmlTemplateBody();
+    abstract protected function getHtmlTemplateBody();
 
-    protected abstract function getSubjectTemplate();
+    abstract protected function getSubjectTemplate();
 
     public function getSubject()
     {

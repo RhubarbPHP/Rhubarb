@@ -26,7 +26,7 @@ require_once __DIR__ . "/Log.php";
  */
 abstract class IndentedMessageLog extends Log
 {
-    protected final function writeEntry($message, $indent, $category = "", $additionalData = [])
+    final protected function writeEntry($message, $indent, $category = "", $additionalData = [])
     {
         if ($indent) {
             $message = str_repeat("    ", $indent) . $message;
@@ -44,5 +44,5 @@ abstract class IndentedMessageLog extends Log
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected abstract function writeFormattedEntry($message, $category = "", $additionalData);
+    abstract protected function writeFormattedEntry($message, $category = "", $additionalData);
 }

@@ -237,8 +237,8 @@ class StringTools
         $caseSensitive = true,
         $includeSearch = false,
         $returnIfNoMatch = false
-    )
-    {
+    ) {
+    
         $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
         $start = $posFunction($string, $search);
         if ($start === false) {

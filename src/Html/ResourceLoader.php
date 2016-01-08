@@ -248,5 +248,4 @@ HTML;
             return __DIR__ . '/../../../../components/jqueryui/themes/base';
         }
     }
-
 }

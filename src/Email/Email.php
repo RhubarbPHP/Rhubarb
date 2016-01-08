@@ -67,18 +67,18 @@ abstract class Email
     /**
      * @return string
      */
-    public abstract function getText();
+    abstract public function getText();
 
     /**
      * @return string
      */
-    public abstract function getSubject();
+    abstract public function getSubject();
 
 
     /**
      * @return string
      */
-    public abstract function getHtml();
+    abstract public function getHtml();
 
     /**
      * @return EmailAddress
@@ -251,9 +251,12 @@ abstract class Email
 
         Log::Debug("Sending email `" . $subject . "` to recipients: " . $this->getRecipientList(), "EMAIL");
 
-        Log::BulkData("Email content", "EMAIL",
+        Log::BulkData(
+            "Email content",
+            "EMAIL",
             $this->getMailHeadersAsString() . "\r\n\r\n" .
-            ($html != "") ? $html : $text);
+            ($html != "") ? $html : $text
+        );
 
         $emailProvider = EmailProvider::getDefaultEmailProvider();
         $emailProvider->sendEmail($this);

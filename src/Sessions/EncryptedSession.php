@@ -32,7 +32,7 @@ abstract class EncryptedSession extends Session
      *
      * @return mixed
      */
-    protected abstract function getEncryptionKeySalt();
+    abstract protected function getEncryptionKeySalt();
 
     public function __set($propertyName, $value)
     {

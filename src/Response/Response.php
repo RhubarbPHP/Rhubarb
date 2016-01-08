@@ -105,7 +105,7 @@ class Response
      */
     private function processHeaders()
     {
-        if ( $this->responseCode ){
+        if ($this->responseCode) {
             HttpHeaders::setHeader("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage(), false);
         }
 
@@ -121,7 +121,7 @@ class Response
      *
      * @param mixed $content
      */
-    public final function setContent($content)
+    final public function setContent($content)
     {
         $this->content = $content;
     }
@@ -133,7 +133,7 @@ class Response
      *
      * @return mixed
      */
-    public final function getContent()
+    final public function getContent()
     {
         return $this->content;
     }
@@ -141,7 +141,7 @@ class Response
     /**
      * send the response by printing to the output buffer.
      */
-    public final function send()
+    final public function send()
     {
         $this->processHeaders();
         $this->printContent();

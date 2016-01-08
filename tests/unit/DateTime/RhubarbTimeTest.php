@@ -6,7 +6,6 @@ use Rhubarb\Crown\DateTime\RhubarbDateTime;
 use Rhubarb\Crown\DateTime\RhubarbTime;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
-
 class RhubarbTimeTest extends RhubarbTestCase
 {
     public function testTimeAlwaysHasSameDay()

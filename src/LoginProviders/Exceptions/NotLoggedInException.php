@@ -29,5 +29,4 @@ class NotLoggedInException extends RhubarbException
 
         $this->publicMessage = "Sorry, you must be logged in to complete this action.";
     }
-
 }

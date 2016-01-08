@@ -74,7 +74,7 @@ abstract class HashProvider
      * @param string $salt
      * @return string
      */
-    public abstract function createHash($data, $salt = "");
+    abstract public function createHash($data, $salt = "");
 
     /**
      * Computes the hash of the supplied data using the salt contained within an existing hash.
@@ -85,5 +85,5 @@ abstract class HashProvider
      * @param $hash
      * @return bool
      */
-    public abstract function compareHash($data, $hash);
+    abstract public function compareHash($data, $hash);
 }

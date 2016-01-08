@@ -27,7 +27,7 @@ class CsvStreamTest extends RhubarbTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!file_exists("cache")){
+        if (!file_exists("cache")) {
             mkdir("cache", 0775);
         }
 

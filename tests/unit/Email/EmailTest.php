@@ -69,7 +69,9 @@ class EmailTest extends RhubarbTestCase
                 "Content-Type" => "text/plain; charset=utf-8",
                 "From" => "jsmith@gcdtech.com",
                 "Subject" => "Testing"
-            ], $email->GetMailHeaders());
+            ],
+            $email->GetMailHeaders()
+        );
 
         $this->assertEquals("This is test", $email->GetBodyRaw());
 
@@ -81,7 +83,9 @@ class EmailTest extends RhubarbTestCase
                 "Content-Type" => "multipart/alternative; boundary=\"972318020410491600659448730\"",
                 "From" => "jsmith@gcdtech.com",
                 "Subject" => "Testing"
-            ], $email->GetMailHeaders());
+            ],
+            $email->GetMailHeaders()
+        );
 
         $this->assertEquals("--972318020410491600659448730\r\n" .
             "Content-Type: text/plain\r\n" .

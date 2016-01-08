@@ -28,7 +28,7 @@ abstract class Aes256EncryptionProvider extends EncryptionProvider
      * @param string $keySalt An optional string used to derive the key. Not all use cases will supply this.
      * @return string
      */
-    protected abstract function getEncryptionKey($keySalt = "");
+    abstract protected function getEncryptionKey($keySalt = "");
 
     public function encrypt($data, $keySalt = "")
     {

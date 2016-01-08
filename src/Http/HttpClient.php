@@ -31,7 +31,7 @@ abstract class HttpClient
      * @param HttpRequest $request
      * @return HttpResponse
      */
-    public abstract function getResponse(HttpRequest $request);
+    abstract public function getResponse(HttpRequest $request);
 
     /**
      * Sets the name of the class to use for the default HttpClient

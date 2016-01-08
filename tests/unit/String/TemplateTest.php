@@ -15,7 +15,9 @@ class TemplateTest extends RhubarbTestCase
 
         $template = "Ah something to process! {Forename}";
 
-        $this->assertEquals("Ah something to process! Andrew",
-            Template::parseTemplate($template, ["Forename" => "Andrew"]));
+        $this->assertEquals(
+            "Ah something to process! Andrew",
+            Template::parseTemplate($template, ["Forename" => "Andrew"])
+        );
     }
 }

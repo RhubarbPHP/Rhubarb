@@ -38,7 +38,7 @@ abstract class DataStream
 
     }
 
-    public final function pushAllItems(DataStream $targetStream)
+    final public function pushAllItems(DataStream $targetStream)
     {
         while ($item = $this->readNextItem()) {
             $targetStream->appendItem($item);

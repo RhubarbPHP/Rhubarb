@@ -203,7 +203,7 @@ abstract class Log
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected abstract function writeEntry($message, $indent, $category = "", $additionalData = []);
+    abstract protected function writeEntry($message, $indent, $category = "", $additionalData = []);
 
     public static function createEntry($level, $message, $category = "", $additionalData = [])
     {

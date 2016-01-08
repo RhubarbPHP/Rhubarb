@@ -73,7 +73,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
     }
 
-    public final function addPropertyChangedNotificationHandler($propertyNames, $callback)
+    final public function addPropertyChangedNotificationHandler($propertyNames, $callback)
     {
         if (!is_array($propertyNames)) {
             $propertyNames = [$propertyNames];
@@ -112,7 +112,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * @param $propertyName
      * @param $value
      */
-    protected final function setModelValue($propertyName, $value)
+    final protected function setModelValue($propertyName, $value)
     {
         try {
             $oldValue = isset($this->modelData[$propertyName]) ? $this->modelData[$propertyName] : null;
@@ -204,7 +204,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      *
      * @return Array
      */
-    public final function exportPublicData()
+    final public function exportPublicData()
     {
         $publicProperties = $this->getPublicPropertyList();
 
@@ -251,7 +251,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      *
      * @param Array $data
      */
-    public final function importData($data)
+    final public function importData($data)
     {
         foreach ($data as $property => $value) {
             $this[$property] = $value;
@@ -275,8 +275,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
         $manuallyUnsetProperties = array_diff_key($this->changeSnapshotData, $this->modelData);
         foreach ($manuallyUnsetProperties as $property => $value) {
             // If it wasn't null before, that's a change
-            if( $value !== null )
-            {
+            if ($value !== null) {
                 return true;
             }
         }
@@ -316,16 +315,14 @@ class ModelState implements \ArrayAccess, JsonSerializable
          * so we're not using that any more.
          * */
         foreach ($this->modelData as $property => $value) {
-            if($this->hasPropertyChanged( $property ))
-            {
+            if ($this->hasPropertyChanged($property)) {
                 $differences[ $property ] = $value;
             }
         }
 
         // Because people might manually call unset on $this->modelData[ 'field' ]
-        $manuallyUnsetProperties = array_diff_key( $this->changeSnapshotData, $this->modelData );
-        foreach($manuallyUnsetProperties as $property => $value )
-        {
+        $manuallyUnsetProperties = array_diff_key($this->changeSnapshotData, $this->modelData);
+        foreach ($manuallyUnsetProperties as $property => $value) {
             $differences[ $property ] = null;
         }
 
@@ -340,8 +337,8 @@ class ModelState implements \ArrayAccess, JsonSerializable
     public function hasPropertyChanged($propertyName)
     {
         $propertyValue = null;
-        $inSnapshot = isset( $this->changeSnapshotData[ $propertyName ] );
-        $inModelData = isset( $this->modelData[ $propertyName ] );
+        $inSnapshot = isset($this->changeSnapshotData[ $propertyName ]);
+        $inModelData = isset($this->modelData[ $propertyName ]);
         if (!$inModelData && $inSnapshot) {
             // Key removed.
             return true;

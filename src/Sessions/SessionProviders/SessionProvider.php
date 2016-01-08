@@ -25,7 +25,7 @@ use Rhubarb\Crown\Sessions\Session;
  */
 abstract class SessionProvider
 {
-    public abstract function restoreSession(Session $session);
+    abstract public function restoreSession(Session $session);
 
-    public abstract function storeSession(Session $session);
+    abstract public function storeSession(Session $session);
 }

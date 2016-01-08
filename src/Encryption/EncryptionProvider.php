@@ -71,7 +71,7 @@ abstract class EncryptionProvider
      * @param string $keySalt An optional piece of data possibly used by the encryption algorithm to derive the key
      * @return string
      */
-    public abstract function encrypt($data, $keySalt = "");
+    abstract public function encrypt($data, $keySalt = "");
 
     /**
      * Returns the decrypted data
@@ -80,5 +80,5 @@ abstract class EncryptionProvider
      * @param string $keySalt An optional piece of data possibly used by the encryption algorithm to derive the key
      * @return mixed
      */
-    public abstract function decrypt($data, $keySalt = "");
+    abstract public function decrypt($data, $keySalt = "");
 }

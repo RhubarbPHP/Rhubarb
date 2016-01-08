@@ -58,7 +58,7 @@ class MimePart
     /**
      * Transforms the part as per the transform encoding header and returns the transformed result.
      */
-    public final function getTransformedBody()
+    final public function getTransformedBody()
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -81,7 +81,7 @@ class MimePart
      *
      * @param $transformedBody
      */
-    public final function setTransformedBody($transformedBody)
+    final public function setTransformedBody($transformedBody)
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -170,4 +170,4 @@ class MimePart
 
         return $string;
     }
-} 
+}

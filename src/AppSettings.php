@@ -35,4 +35,4 @@ class AppSettings extends Settings
 
         $this->AppBaseUrl = $scheme . "://" . $request->Server("SERVER_NAME");
     }
-} 
+}

@@ -16,5 +16,4 @@ class PlainTextHashProviderTest extends RhubarbTestCase
 
         $this->assertTrue($plainTextProvider->compareHash("abc123", "abc123"));
     }
-
 }

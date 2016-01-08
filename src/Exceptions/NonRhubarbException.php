@@ -32,4 +32,4 @@ class NonRhubarbException extends RhubarbException
         $this->line = $nonRhubarbException->getLine();
         $this->file = $nonRhubarbException->getFile();
     }
-} 
+}

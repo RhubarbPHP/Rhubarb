@@ -36,7 +36,7 @@ abstract class ExceptionHandler
      * @param RhubarbException $er
      * @return Response
      */
-    protected abstract function handleException(RhubarbException $er);
+    abstract protected function handleException(RhubarbException $er);
 
     /**
      * @var string
@@ -109,8 +109,13 @@ abstract class ExceptionHandler
                 }
 
                 if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
-                    $exceptionHandler(new ErrorException($error["message"], 0, $error["type"], $error["file"],
-                        $error["line"]));
+                    $exceptionHandler(new ErrorException(
+                        $error["message"],
+                        0,
+                        $error["type"],
+                        $error["file"],
+                        $error["line"]
+                    ));
                 }
             }
         });
@@ -158,7 +163,7 @@ abstract class ExceptionHandler
      * @return Response
      * @throws RhubarbException
      */
-    public final static function processException(RhubarbException $er)
+    final public static function processException(RhubarbException $er)
     {
         $exceptionHandler = self::getExceptionHandler();
 

@@ -33,8 +33,13 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
         $this->assertEquals(
             [
                 "/deployed" . str_replace("\\", "/", str_replace($cwd, "", __FILE__)),
-                "/deployed" . str_replace("\\", "/",
-                    str_replace($cwd, "", realpath(__DIR__ . "/../../../src/Deployment/Deployable.php")))
-            ], $urls);
+                "/deployed" . str_replace(
+                    "\\",
+                    "/",
+                    str_replace($cwd, "", realpath(__DIR__ . "/../../../src/Deployment/Deployable.php"))
+                )
+            ],
+            $urls
+        );
     }
 }

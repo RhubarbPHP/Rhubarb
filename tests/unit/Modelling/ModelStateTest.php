@@ -66,7 +66,7 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->takeChangeSnapshot();
         // un-setting some other value is a change
-        unset( $model->NewProperty );
+        unset($model->NewProperty);
 
         $this->assertTrue($model->hasChanged());
     }
@@ -138,7 +138,7 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->takeChangeSnapshot();
 
-        unset( $model->NewProperty );
+        unset($model->NewProperty);
 
         $this->assertTrue($model->hasPropertyChanged("NewProperty"));
 
@@ -189,7 +189,7 @@ class ModelStateTest extends RhubarbTestCase
         $model->takeChangeSnapshot();
 
         // Remove C via unset
-        unset( $model->C );
+        unset($model->C);
 
         $this->assertEquals(['C' => null], $model->getModelChanges());
     }
@@ -310,12 +310,14 @@ class ModelStateTest extends RhubarbTestCase
         $example = new ModelState();
         $example->Forename = "Ryan";
 
-        $example->addPropertyChangedNotificationHandler("Forename",
+        $example->addPropertyChangedNotificationHandler(
+            "Forename",
             function ($newValue, $propertyName, $oldValue) use (&$property, &$oldForename1, &$newForename1) {
                 $property = $propertyName;
                 $oldForename1 = $oldValue;
                 $newForename1 = $newValue;
-            });
+            }
+        );
 
         $example->Forename = "Bert";
 
@@ -329,11 +331,13 @@ class ModelStateTest extends RhubarbTestCase
         $oldForename2 = "";
         $newForename2 = "";
 
-        $example->addPropertyChangedNotificationHandler("Forename",
+        $example->addPropertyChangedNotificationHandler(
+            "Forename",
             function ($new, $propertyName, $old) use (&$oldForename2, &$newForename2) {
                 $oldForename2 = $old;
                 $newForename2 = $new;
-            });
+            }
+        );
 
         $example->Forename = "Alan";
 
@@ -342,7 +346,8 @@ class ModelStateTest extends RhubarbTestCase
 
         $oldSurname = "";
         $newSurname = "";
-        $example->addPropertyChangedNotificationHandler("Surname",
+        $example->addPropertyChangedNotificationHandler(
+            "Surname",
             function ($new, $propertyName, $old) use (&$oldSurname, &$newSurname) {
                 $oldSurname = $old;
                 $newSurname = $new;
@@ -353,7 +358,8 @@ class ModelStateTest extends RhubarbTestCase
         $this->assertEquals("Kilfedder", $oldSurname);
         $this->assertEquals("Smythe", $newSurname);
 
-        $example->addPropertyChangedNotificationHandler("Surname",
+        $example->addPropertyChangedNotificationHandler(
+            "Surname",
             function ($new, $propertyName, $old) use (&$oldSurname, &$newSurname) {
                 $this->fail("This shouldn't have run because old is the same as new");
 

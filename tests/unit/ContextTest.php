@@ -89,7 +89,8 @@ class ContextTest extends RhubarbTestCase
 
         $this->assertEquals(
             $this->resolveFilename(__DIR__."/../../../../../settings/app.config.php"),
-            $this->resolveFilename($default ));
+            $this->resolveFilename($default)
+        );
 
         $context->ApplicationModuleFile = "a/b/c";
 
@@ -97,7 +98,8 @@ class ContextTest extends RhubarbTestCase
 
         $this->assertEquals(
             "a/b/c",
-            $default );
+            $default
+        );
     }
 
     /**
@@ -112,8 +114,10 @@ class ContextTest extends RhubarbTestCase
         $filename = str_replace('//', '/', $filename);
         $parts = explode('/', $filename);
         $out = array();
-        foreach ($parts as $part){
-            if ($part == '.') continue;
+        foreach ($parts as $part) {
+            if ($part == '.') {
+                continue;
+            }
             if ($part == '..') {
                 array_pop($out);
                 continue;

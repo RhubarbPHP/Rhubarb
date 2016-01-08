@@ -28,7 +28,8 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $this->assertEquals(
             TestLayout2::class,
-            LayoutModule::getLayoutClassName());
+            LayoutModule::getLayoutClassName()
+        );
     }
 
     public function testAjaxRequestDisablesLayout()
@@ -103,8 +104,10 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertEquals("TopDon't change this content - it should match the unit test.Tail",
-            $response->getContent());
+        $this->assertEquals(
+            "TopDon't change this content - it should match the unit test.Tail",
+            $response->getContent()
+        );
     }
 
     public function testLayoutFilterThrowsException()
@@ -132,8 +135,10 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $response = Module::generateResponseForRequest($request);
 
-        $this->assertEquals("TopDon't change this content - it should match the unit test.Tail",
-            $response->GetContent());
+        $this->assertEquals(
+            "TopDon't change this content - it should match the unit test.Tail",
+            $response->GetContent()
+        );
     }
 
     public function testHeadItems()

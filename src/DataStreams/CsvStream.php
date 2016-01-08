@@ -336,11 +336,16 @@ class CsvStream extends DataStream
             $enclosedData = [];
 
             foreach ($dataToWrite as $value) {
-                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos($value,
-                            $this->delimiter) !== false)
+                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos(
+                    $value,
+                    $this->delimiter
+                ) !== false)
                 ) {
-                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure,
-                            $escapeCharacter . $this->enclosure, $value) . $this->enclosure;
+                    $enclosedData[] = $this->enclosure . str_replace(
+                        $this->enclosure,
+                        $escapeCharacter . $this->enclosure,
+                        $value
+                    ) . $this->enclosure;
                 } else {
                     $enclosedData[] = $value;
                 }

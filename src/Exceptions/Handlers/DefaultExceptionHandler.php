@@ -33,8 +33,11 @@ class DefaultExceptionHandler extends ExceptionHandler
 {
     protected function logException(RhubarbException $er)
     {
-        Log::error("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
-            "ERROR", ["Exception: ".$er]);
+        Log::error(
+            "Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
+            "ERROR",
+            ["Exception: ".$er]
+        );
     }
 
     protected function generateResponseForException(RhubarbException $er)

@@ -143,7 +143,7 @@ abstract class Module
     private function addUrlHandler($url, UrlHandler $handler, $children = [])
     {
         // If $url is numeric then most likely the $handler can report it's own URL
-        if ( !is_numeric( $url ) ){
+        if (!is_numeric($url)) {
             $handler->setUrl($url);
         }
 

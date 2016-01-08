@@ -21,7 +21,10 @@ class HtmlResponseTest extends RhubarbTestCase
 
     public function testDefaultContentTypeHeader()
     {
-        $this->assertEquals($this->response->getHeaders()['Content-Type'], 'text/html',
-            "Content-Type header is not set to text/html");
+        $this->assertEquals(
+            $this->response->getHeaders()['Content-Type'],
+            'text/html',
+            "Content-Type header is not set to text/html"
+        );
     }
 }
