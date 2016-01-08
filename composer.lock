@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3b1bd07f94d7558107e9bfea5821dae8",
-    "content-hash": "d52228de579685ed0a10ee260f6afd38",
+    "hash": "3550618e671c4e862b927182e1d93bb0",
+    "content-hash": "944cb3a647aa0bc523b79568f82e82e0",
     "packages": [
         {
             "name": "components/jquery",
@@ -1376,7 +1376,7 @@
         },
         {
             "name": "rhubarbphp/custard",
-            "version": "v1.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RhubarbPHP/Custard.git",
