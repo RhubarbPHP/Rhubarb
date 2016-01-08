@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="rhubarb-project" default="build">
+<project name="rhubarb-project" default="check">
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
@@ -42,7 +42,7 @@
     <property environment="env"/>
 
     <!-- Top level targets for jenkins -->
-    <target name="build" depends="set-build-status-pending,prepare,static-analysis-cli,codecept,-check-tests,set-build-status-success,set-build-status-failure,-fail" />
+    <target name="build" depends="set-build-status-pending,prepare,static-analysis-cli,codecept-covered,phpdox,-check-tests,set-build-status-success,set-build-status-failure,-fail" />
 
     <!-- Top level targets for developers to test their build against the build failure conditions -->
     <target name="check" depends="static-analysis-cli,codecept,-check-tests,-fail" />
