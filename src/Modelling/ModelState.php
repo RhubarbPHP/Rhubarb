@@ -67,13 +67,20 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
     /**
      * Override this to attach internal property change notification handlers.
+     *
+     * Use addPropertyChangedNotificationHandler within this method to add handlers.
      */
     protected function attachPropertyChangedNotificationHandlers()
     {
-
     }
 
-    public final function addPropertyChangedNotificationHandler($propertyNames, $callback)
+    /**
+     * When the named properties are changed, the callable method provided will be called and passed details of the change.
+     *
+     * @param string|string[] $propertyNames The name of a property, or an array of property names
+     * @param callable $callback A callable which will receive 3 parameters: $newValue, $propertyName, $oldValue
+     */
+    final public function addPropertyChangedNotificationHandler($propertyNames, $callback)
     {
         if (!is_array($propertyNames)) {
             $propertyNames = [$propertyNames];
