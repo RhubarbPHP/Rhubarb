@@ -67,12 +67,19 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
     /**
      * Override this to attach internal property change notification handlers.
+     *
+     * Use addPropertyChangedNotificationHandler within this method to add handlers.
      */
     protected function attachPropertyChangedNotificationHandlers()
     {
-
     }
 
+    /**
+     * When the named properties are changed, the callable method provided will be called and passed details of the change.
+     *
+     * @param string|string[] $propertyNames The name of a property, or an array of property names
+     * @param callable $callback A callable which will receive 3 parameters: $newValue, $propertyName, $oldValue
+     */
     final public function addPropertyChangedNotificationHandler($propertyNames, $callback)
     {
         if (!is_array($propertyNames)) {
@@ -130,7 +137,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
         if ($oldValue != $value) {
             if (!$this->propertyChangeEventsDisabled) {
-               // Don't fire changes if they are disabled.
+                // Don't fire changes if they are disabled.
                 $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
                 $this->traitRaiseEvent("AfterChange", $this);
             }
@@ -191,7 +198,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * This protects the unwary developer from exposing internal secrets by using models that be serialised or
      * published. It is a chore to populate but it is better to be safe than sorry!
      *
-     * @return Array
+     * @return array
      */
     protected function getPublicPropertyList()
     {
@@ -202,7 +209,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Exports an array of model values that have been marked safe for public consumption.
      *
-     * @return Array
+     * @return array
      */
     final public function exportPublicData()
     {
@@ -249,7 +256,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Imports an array of model values that have been marked safe for public consumption.
      *
-     * @param Array $data
+     * @param array $data
      */
     final public function importData($data)
     {
@@ -316,14 +323,14 @@ class ModelState implements \ArrayAccess, JsonSerializable
          * */
         foreach ($this->modelData as $property => $value) {
             if ($this->hasPropertyChanged($property)) {
-                $differences[ $property ] = $value;
+                $differences[$property] = $value;
             }
         }
 
         // Because people might manually call unset on $this->modelData[ 'field' ]
         $manuallyUnsetProperties = array_diff_key($this->changeSnapshotData, $this->modelData);
         foreach ($manuallyUnsetProperties as $property => $value) {
-            $differences[ $property ] = null;
+            $differences[$property] = null;
         }
 
         return $differences;
@@ -337,14 +344,14 @@ class ModelState implements \ArrayAccess, JsonSerializable
     public function hasPropertyChanged($propertyName)
     {
         $propertyValue = null;
-        $inSnapshot = isset($this->changeSnapshotData[ $propertyName ]);
-        $inModelData = isset($this->modelData[ $propertyName ]);
+        $inSnapshot = isset($this->changeSnapshotData[$propertyName]);
+        $inModelData = isset($this->modelData[$propertyName]);
         if (!$inModelData && $inSnapshot) {
             // Key removed.
             return true;
         } elseif ($inModelData) {
             // Determine the current value (if it's safe to do so)
-            $propertyValue = $this->modelData[ $propertyName ];
+            $propertyValue = $this->modelData[$propertyName];
         }
 
         if (!$inSnapshot) {
@@ -356,7 +363,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
             // Key added
             return true;
         }
-        if ($this->changeSnapshotData[ $propertyName ] != $propertyValue) {
+        if ($this->changeSnapshotData[$propertyName] != $propertyValue) {
             // Key changed
             return true;
         }
@@ -401,7 +408,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * The data does not pass through any applicable Set methods or data transforms. If required to do so
      * call ImportData() instead, but understand the performance penalty of doing so.
      *
-     * @param Array $data
+     * @param array $data
      */
     public function importRawData($data)
     {

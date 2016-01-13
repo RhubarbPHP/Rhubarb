@@ -91,4 +91,19 @@ class WebRequest extends Request
     {
         return !(empty($this->ServerData['HTTPS']) || $this->ServerData['HTTPS'] === 'off');
     }
+
+    /**
+     * @return string
+     */
+    public function getAcceptsRequestMimeType()
+    {
+        $typeString = strtolower($this->Header("Accept"));
+
+        if (preg_match("/\*\/\*/", $typeString) || $typeString == "") {
+            $typeString = "text/html";
+            return $typeString;
+        }
+
+        return $typeString;
+    }
 }

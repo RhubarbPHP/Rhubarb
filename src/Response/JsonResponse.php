@@ -18,8 +18,6 @@
 
 namespace Rhubarb\Crown\Response;
 
-use Rhubarb\Crown\Modelling\ModelState;
-
 require_once __DIR__ . "/Response.php";
 
 /**
@@ -39,14 +37,6 @@ class JsonResponse extends Response
 
     public function formatContent()
     {
-        $object = $this->getContent();
-
-        if (is_array($object) || $object instanceof ModelState || $object instanceof \stdClass) {
-            $jsonString = json_encode($object, JSON_PRETTY_PRINT);
-
-            return $jsonString;
-        }
-
-        return false;
+        return json_encode($this->getContent());
     }
 }
