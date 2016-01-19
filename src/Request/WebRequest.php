@@ -40,6 +40,7 @@ use Rhubarb\Crown;
  * @property string $URI
  * @property string $Host
  * @property string $UrlPath
+ * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  */
 class WebRequest extends Request
 {
@@ -63,28 +64,47 @@ class WebRequest extends Request
         } else {
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, "http_") === 0) {
-                    $this->Header(
-                        str_replace(
-                            ' ',
-                            '-',
-                            ucwords(strtolower(str_replace(
-                                '_',
-                                ' ',
-                                substr(
-                                    $key,
-                                    5
-                                )
-                            )))
-                        ),
-                        $value
-                    );
+                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
+                    $this->Header($key, $value);
                 }
             }
         }
 
-        $this->Host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        $this->Host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
         $this->URI = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '';
         $this->UrlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+    }
+
+    /**
+     * Gets the Base url for the current request (e.g. http://localhost/), with optional appended path.
+     *
+     * The Base Url will not normally have a trailing URL, but if a path to append is included, one will be added.
+     *
+     * @param string $append Optional path to append to the URL
+     * @return string
+     */
+    public function getUrlBase($append = '')
+    {
+        if (!isset($this->modelData['UrlBase'])) {
+            $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+            $protocol = strtolower($_SERVER['SERVER_PROTOCOL']);
+            $protocol = substr($protocol, 0, strpos($protocol, '/')) . (($ssl) ? 's' : '');
+
+            $host = $this->Host;
+            if (strpos($host, ':') === false) {
+                $port = $_SERVER['SERVER_PORT'];
+                $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
+                $host = $this->Host . $port;
+            }
+
+            $this->modelData['UrlBase'] = $protocol . '://' . $host;
+        }
+
+        if ($append !== '' && strpos($append, '/') === false) {
+            $append = '/' . $append;
+        }
+
+        return $this->modelData['UrlBase'].$append;
     }
 
     public function getIsSSL()
@@ -99,9 +119,8 @@ class WebRequest extends Request
     {
         $typeString = strtolower($this->Header("Accept"));
 
-        if (preg_match("/\*\/\*/", $typeString) || $typeString == "") {
-            $typeString = "text/html";
-            return $typeString;
+        if (strpos($typeString, '*/*') !== false || $typeString == "") {
+            return "text/html";
         }
 
         return $typeString;
