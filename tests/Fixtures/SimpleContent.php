@@ -6,8 +6,10 @@ use Rhubarb\Crown\Response\GeneratesResponse;
 
 class SimpleContent implements GeneratesResponse
 {
+    const CONTENT = "Don't change this content - it should match the unit test.";
+
     public function generateResponse($request = null)
     {
-        return "Don't change this content - it should match the unit test.";
+        return self::CONTENT;
     }
 }

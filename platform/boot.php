@@ -49,29 +49,8 @@ include_once(__DIR__ . "/../src/Module.php");
 include_once(__DIR__ . "/../src/Exceptions/ImplementationException.php");
 include_once(__DIR__ . "/../src/Exceptions/Handlers/ExceptionHandler.php");
 
-// Register to handle exceptions and PHP errors. However we don't do this if we are unit testing. It's
-// best to let the exceptions report unhindered to phpunit.
-if (!isset($unitTesting) || !$unitTesting) {
-    ExceptionHandler::EnableExceptionTrapping();
-}
-
-$context = new Context();
-
-// Is there an app environment setting? This allows the same project to serve multiple solutions
-// with one code base (e.g. tenant and landlord together). This is very rare in production systems, however
-// for the initial project phase this can be very useful.
-if ($envAppSetting = getenv("rhubarb_app")) {
-    $context->ApplicationModuleFile = APPLICATION_ROOT_DIR."/".$envAppSetting."/settings/app.config.php";
-}
-
-$applicationModuleFile = $context->ApplicationModuleFile;
-
-// Move the working directory to the application root.
+// Move the working directory to the application root. This is primarily a security feature
+// to ensure any files pushed onto the filesystem through a vulnerability can't be as easily
+// referenced in a follow up attack. You should not rely on the current working director when
+// performing file IO, instead use file paths relative to the current code file using __DIR__
 chdir(APPLICATION_ROOT_DIR);
-
-if (file_exists($applicationModuleFile)) {
-    include($applicationModuleFile);
-}
-
-// Now auto loaders are in place we can initialise the modules properly.
-Module::InitialiseModules();

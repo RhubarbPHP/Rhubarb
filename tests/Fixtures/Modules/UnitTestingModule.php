@@ -20,11 +20,9 @@ use Rhubarb\Stem\Repositories\Repository;
 
 class UnitTestingModule extends Module
 {
-    protected function registerDependantModules()
+    public function getModules()
     {
-        parent::registerDependantModules();
-
-        Module::registerModule(new LayoutModule(TestLayout::class));
+        return [ new LayoutModule(TestLayout::class) ];
     }
 
     protected function Initialise()
