@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Layout;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Layout\Exceptions\LayoutNotFoundException;
 use Rhubarb\Crown\Layout\LayoutModule;
@@ -50,7 +51,8 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
 
-        new LayoutModule(TestLayout2::class);
+        $module = new LayoutModule(TestLayout2::class);
+        $module->initialiseModule();
 
         // Ajax request
         $this->assertTrue(LayoutModule::isDisabled());
@@ -102,7 +104,7 @@ class LayoutModuleTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
 
-        $response = Module::generateResponseForRequest($request);
+        $response = Application::runningApplication()->generateResponseForRequest($request);
 
         $this->assertEquals(
             "TopDon't change this content - it should match the unit test.Tail",
@@ -121,7 +123,7 @@ class LayoutModuleTest extends RhubarbTestCase
 
         ExceptionHandler::disableExceptionTrapping();
 
-        Module::generateResponseForRequest($request);
+        Application::runningApplication()->generateResponseForRequest($request);
     }
 
     public function testLayoutCanBeAnonymousFunction()
@@ -133,7 +135,7 @@ class LayoutModuleTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->UrlPath = "/simple/";
 
-        $response = Module::generateResponseForRequest($request);
+        $response = Application::runningApplication()->generateResponseForRequest($request);
 
         $this->assertEquals(
             "TopDon't change this content - it should match the unit test.Tail",

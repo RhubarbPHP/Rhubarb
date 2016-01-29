@@ -7,6 +7,9 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RequestTestCase;
 
 class WebRequestSSLOffWindowsTest extends RequestTestCase
 {
+    /**
+     * @var WebRequest
+     */
     protected $request = null;
 
     protected function setUp()
@@ -39,6 +42,6 @@ class WebRequestSSLOffWindowsTest extends RequestTestCase
 
     public function testNoSSL()
     {
-        $this->assertFalse($this->request->IsSSL);
+        $this->assertFalse($this->request->isSSL());
     }
 }

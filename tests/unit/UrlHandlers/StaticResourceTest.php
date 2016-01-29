@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\StaticResource404Exception;
 use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
 use Rhubarb\Crown\Layout\LayoutModule;
@@ -15,7 +15,7 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function setUp()
     {
-        $this->request = Context::currentRequest();
+        $this->request = PhpContext::currentRequest();
         $this->request->IsWebRequest = true;
     }
 

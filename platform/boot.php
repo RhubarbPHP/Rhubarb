@@ -20,37 +20,23 @@
  * Sets up the working environment to provide a consistant and predictable ecosystem for user code
  */
 
-use Rhubarb\Crown\Context;
-use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
-use Rhubarb\Crown\Module;
-
 error_reporting(E_ALL | E_STRICT);
 
 // As we preform our own exception handling we need to stop fatal errors from showing stack traces.
 ini_set("display_errors", "off");
 
-if (!defined("APPLICATION_ROOT_DIR")) {
-    define("APPLICATION_ROOT_DIR", realpath(__DIR__."/../../../../"));
-}
-
-if (!defined("VENDOR_DIR")) {
-    define("VENDOR_DIR", APPLICATION_ROOT_DIR."/vendor/");
+if(file_exists(__DIR__."/../vendor/autoload.php")){
+    define("VENDOR_DIR", realpath(__DIR__."/../vendor"));
+} else {
+    define("VENDOR_DIR", realpath(__DIR__."/../../"));
 }
 
 // Include the composer autoloader
 /** @noinspection PhpIncludeInspection */
 include_once(VENDOR_DIR."/autoload.php");
 
-// Initially we don't have an auto loader as this is handled by the modules. We need to load this first
-// module 'core' so that we have an auto loader for subsequent modules. There are also some other classes
-// that might be needed by this booting script so we load them aswell.
-
-include_once(__DIR__ . "/../src/Module.php");
-include_once(__DIR__ . "/../src/Exceptions/ImplementationException.php");
-include_once(__DIR__ . "/../src/Exceptions/Handlers/ExceptionHandler.php");
-
-// Move the working directory to the application root. This is primarily a security feature
+// Move the working directory up one from the application root. This is primarily a security feature
 // to ensure any files pushed onto the filesystem through a vulnerability can't be as easily
 // referenced in a follow up attack. You should not rely on the current working director when
 // performing file IO, instead use file paths relative to the current code file using __DIR__
-chdir(APPLICATION_ROOT_DIR);
+chdir(VENDOR_DIR."/../");

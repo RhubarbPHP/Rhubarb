@@ -3,7 +3,7 @@
 namespace Rhubarb\Crown\Tests\Fixtures\Codeception;
 
 use Codeception\Lib\Connector\Shared\PhpSuperGlobalsConverter;
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Symfony\Component\BrowserKit\Client;
@@ -62,11 +62,11 @@ class RhubarbConnector extends Client
         $_SERVER['SCRIPT_URI'] = $uri;
         $_SERVER['SCRIPT_NAME'] = $uri;
 
-        $context = new Context();
+        $context = new PhpContext();
         $context->SimulateNonCli = true;
         unset($context->Request);
 
-        $request = \Rhubarb\Crown\Context::currentRequest();
+        $request = \Rhubarb\Crown\PhpContext::currentRequest();
         $response = Module::generateResponseForRequest($request);
 
         $headers = $response->getHeaders();

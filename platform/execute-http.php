@@ -36,7 +36,7 @@ require_once __DIR__ . "/../src/Context.php";
 
 Log::performance( "Rhubarb booted", "ROUTER" );
 
-$request = \Rhubarb\Crown\Context::currentRequest();
+$request = \Rhubarb\Crown\PhpContext::currentRequest();
 
 try {
     // Pass control to the Module class and ask it to generate a response for the
@@ -46,7 +46,7 @@ try {
     $response->send();
     Log::performance( "Response sent", "ROUTER" );
 } catch (\Exception $er) {
-    $context = new \Rhubarb\Crown\Context();
+    $context = new \Rhubarb\Crown\PhpContext();
 
     if ($context->DeveloperMode) {
         Log::error($er->getMessage(), "ERROR");

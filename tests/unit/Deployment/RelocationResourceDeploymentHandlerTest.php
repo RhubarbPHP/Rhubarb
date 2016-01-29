@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Deployment;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider;
 use Rhubarb\Crown\Exceptions\DeploymentException;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
@@ -13,7 +14,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $url = $deploymentPackage->getDeployedResourceUrl(__FILE__);
 
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::runningApplication()->applicationRootPath;
         $deployedUrl = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", __FILE__));
 
         $this->assertEquals($deployedUrl, $url);
@@ -21,7 +22,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
 
     public function testDeploymentCopiesFiles()
     {
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::runningApplication()->applicationRootPath;
 
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource(__FILE__);

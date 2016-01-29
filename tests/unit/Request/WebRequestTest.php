@@ -20,7 +20,7 @@ class WebRequestTest extends RequestTestCase
         $_SERVER['REQUEST_URI'] = '/foo';
         $_SERVER['SCRIPT_NAME'] = '/foo';
 
-        $_GET = [];
+        $_GET = ["test" => "value"];
         $_POST = [];
         $_FILES = [];
         $_COOKIE = [];
@@ -37,28 +37,23 @@ class WebRequestTest extends RequestTestCase
         parent::tearDown();
     }
 
-    public function testIsWebRequest()
-    {
-        $this->assertTrue($this->request->IsWebRequest);
-    }
-
     public function testHostValue()
     {
-        $this->assertEquals('gcdtech.com', $this->request->Host);
+        $this->assertEquals('gcdtech.com', $this->request->host);
     }
 
     public function testURIValue()
     {
-        $this->assertEquals('http://gcdtech.com/foo', $this->request->URI);
+        $this->assertEquals('http://gcdtech.com/foo', $this->request->uri);
     }
 
     public function testPathValue()
     {
-        $this->assertEquals('/foo', $this->request->UrlPath);
+        $this->assertEquals('/foo', $this->request->urlPath);
     }
 
     public function testNoSSL()
     {
-        $this->assertFalse($this->request->IsSSL);
+        $this->assertFalse($this->request->isSSL());
     }
 }

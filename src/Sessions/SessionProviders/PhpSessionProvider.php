@@ -20,7 +20,8 @@ namespace Rhubarb\Crown\Sessions\SessionProviders;
 
 require_once __DIR__ . "/SessionProvider.php";
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Sessions\Session;
 
 /**
@@ -30,9 +31,9 @@ class PhpSessionProvider extends SessionProvider
 {
     public function restoreSession(Session $session)
     {
-        $context = new Context();
+        $context = Application::runningApplication()->getPhpContext();
 
-        if (!$context->IsCliInvocation) {
+        if (!$context->isCliInvocation()) {
             session_start();
         }
 
@@ -44,16 +45,16 @@ class PhpSessionProvider extends SessionProvider
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
         // simultaneous AJAX requests.
-        if (!$context->IsCliInvocation) {
+        if (!$context->isCliInvocation()) {
             session_write_close();
         }
     }
 
     public function storeSession(Session $session)
     {
-        $context = new Context();
+        $context = Application::runningApplication()->getPhpContext();
 
-        if (!$context->IsCliInvocation) {
+        if (!$context->isCliInvocation()) {
             session_start();
         }
 
@@ -63,7 +64,7 @@ class PhpSessionProvider extends SessionProvider
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
         // simultaneous AJAX requests.
-        if (!$context->IsCliInvocation) {
+        if (!$context->isCliInvocation()) {
             session_write_close();
         }
     }

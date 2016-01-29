@@ -20,7 +20,8 @@ namespace Rhubarb\Crown\Email;
 
 require_once __DIR__ . '/../Settings.php';
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Settings;
 
 /**
@@ -35,8 +36,8 @@ class EmailSettings extends Settings
     {
         parent::initialiseDefaultValues();
 
-        $request = Context::currentRequest();
-        $host = $request->Server("SERVER_NAME");
+        $request = Application::runningApplication()->currentRequest();
+        $host = $request->server("SERVER_NAME");
 
         $this->DefaultSender = new EmailAddress("donotreply@" . $host . ".com");
         $this->OnlyRecipient = false;

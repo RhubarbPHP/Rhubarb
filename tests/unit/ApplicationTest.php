@@ -2,15 +2,15 @@
 
 namespace Rhubarb\Crown\Tests;
 
+use Codeception\TestCase\Test;
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Layout\LayoutModule;
-use Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModuleB;
 use Rhubarb\Crown\Tests\Fixtures\SimpleContent;
 
-class ApplicationTest extends \Codeception\TestCase\Test
+class ApplicationTest extends Test
 {
     public function testApplicationCanHaveModules()
     {
@@ -48,5 +48,31 @@ class ApplicationTest extends \Codeception\TestCase\Test
         $response = $application->generateResponseForRequest($request);
 
         $this->assertContains(SimpleContent::CONTENT, $response->getContent());
+    }
+
+    public function testRunningApplication()
+    {
+        $application = new Application();
+        $application->run();
+
+        $this->assertEquals($application, Application::runningApplication());
+
+        $application2 = new Application();
+        $application2->run();
+
+        $this->assertEquals($application2, Application::runningApplication());
+
+        $request = new WebRequest();
+        $request->UrlPath = "/";
+
+        $application->generateResponseForRequest($request);
+
+        $this->assertEquals($application, Application::runningApplication());
+    }
+
+    public function testApplicationPath()
+    {
+        $application = new Application();
+        $this->assertEquals(realpath(VENDOR_DIR."/../"), $application->applicationRootPath);
     }
 }

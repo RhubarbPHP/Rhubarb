@@ -18,6 +18,20 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
 final class Application
 {
     /**
+     * True to enable developer only functionality
+     *
+     * @var bool
+     */
+    public $developerMode = false;
+
+    /**
+     * True to indicate this application is running on a live production server
+     *
+     * @var bool
+     */
+    public $live = false;
+
+    /**
      * The currently processing request
      *
      * @var Request
@@ -34,6 +48,71 @@ final class Application
      */
     private $rootHandlers = [];
 
+    /**
+     * The active PHP context for the application
+     *
+     * @var PhpContext
+     */
+    private $phpContext = null;
+
+    /**
+     * The request currently being processed
+     *
+     * @var Request
+     */
+    private $request = null;
+
+    public $applicationRootPath = "";
+
+    /**
+     * The running application
+     *
+     * @see runningApplication()
+     * @var Application
+     */
+    private static $runningApplication = null;
+
+    public final function __construct()
+    {
+        global $unitTesting;
+
+        $this->phpContext = new PhpContext();
+
+        // $unitTesting is set in execute-test.php
+        $this->unitTesting = (isset($unitTesting) && $unitTesting) ? true : false;
+        $this->developerMode = false;
+        $this->live = false;
+        $this->applicationRootPath = realpath(VENDOR_DIR."/../");
+
+        $this->setAsRunningApplication();
+    }
+
+    /**
+     * True if the application is being ran in a unit test harness.
+     * @return bool
+     */
+    public function isUnitTesting()
+    {
+        return $this->unitTesting;
+    }
+
+    /**
+     * Get's the PHP Context
+     *
+     * @return PhpContext
+     */
+    public function getPhpContext()
+    {
+        return $this->phpContext;
+    }
+
+    /**
+     * Register a module with the application.
+     *
+     * Registers the child modules returned by the
+     *
+     * @param Module $module
+     */
     public function registerModule(Module $module)
     {
         $dependencies = $module->getModules();
@@ -124,6 +203,9 @@ final class Application
      */
     public function generateResponseForRequest(Request $request)
     {
+        $this->setAsRunningApplication();
+        $this->request = $request;
+
         $this->initialiseModules();
 
         $this->activeRequest = $request;
@@ -209,5 +291,32 @@ final class Application
         Log::outdent();
 
         return $response;
+    }
+
+    /**
+     * Gets the current request derived from the PHP context.
+     */
+    public function currentRequest()
+    {
+        if ($this->request == null){
+            $this->request = $this->phpContext->currentRequest();
+        }
+
+        return $this->request;
+    }
+
+    public function run()
+    {
+        $this->setAsRunningApplication();
+    }
+
+    public static function runningApplication()
+    {
+        return self::$runningApplication;
+    }
+
+    protected function setAsRunningApplication()
+    {
+        Application::$runningApplication = $this;
     }
 }

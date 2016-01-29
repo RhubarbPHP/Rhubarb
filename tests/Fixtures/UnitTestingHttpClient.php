@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Http\HttpClient;
 use Rhubarb\Crown\Http\HttpRequest;
 use Rhubarb\Crown\Http\HttpResponse;
@@ -36,7 +36,7 @@ class UnitTestingHttpClient extends HttpClient
      */
     public function getResponse(HttpRequest $request)
     {
-        $context = new Context();
+        $context = new PhpContext();
         $context->SimulatedRequestBody = "";
 
         $headers = $request->getHeaders();

@@ -2,13 +2,13 @@
 
 namespace Rhubarb\Crown\Tests\unit\unit\Request;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class JsonRequestTest extends RhubarbTestCase
 {
     /**
-     * @var Context
+     * @var PhpContext
      */
     private $context;
 
@@ -16,9 +16,8 @@ class JsonRequestTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->context = new Context();
-        $this->context->Request = null;
-        $this->context->SimulateNonCli = true;
+        $this->context = $this->application->getPhpContext();
+        $this->context->simulateNonCli = true;
 
         $_SERVER["CONTENT_TYPE"] = "application/json";
     }
@@ -30,9 +29,9 @@ class JsonRequestTest extends RhubarbTestCase
               "b" => 2
             ];
 
-        $this->context->SimulatedRequestBody = json_encode($testPayload);
+        $this->context->simulatedRequestBody = json_encode($testPayload);
 
-        $request = Context::currentRequest();
+        $request = $this->application->currentRequest();
 
         $this->assertEquals($testPayload, $request->getPayload());
     }

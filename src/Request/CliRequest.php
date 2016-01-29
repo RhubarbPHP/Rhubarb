@@ -30,10 +30,15 @@ use Rhubarb\Crown\Settings;
  */
 class CliRequest extends Request
 {
+    /**
+     * Subclasses must implement the Initialise() method.
+     *
+     * That implementation is the entry point for initial
+     * customisation, rather than the constructor.
+     *
+     * @return mixed
+     */
     public function initialise()
     {
-        $this->modelData['IsCliInvocation'] = true;
-        $this->modelData['PostData'] = [];
-        $this->modelData['FilesData'] = [];
     }
 }

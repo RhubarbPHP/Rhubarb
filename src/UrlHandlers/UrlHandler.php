@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
@@ -252,7 +252,7 @@ abstract class UrlHandler implements GeneratesResponse
 
     protected function getAbsoluteHandledUrl()
     {
-        $request = Context::currentRequest();
+        $request = PhpContext::currentRequest();
 
         return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
     }
@@ -269,7 +269,7 @@ abstract class UrlHandler implements GeneratesResponse
     public function generateResponse($request = null, $currentUrlFragment = false)
     {
         if ($currentUrlFragment === false) {
-            $currentUrlFragment = $request->UrlPath;
+            $currentUrlFragment = $request->urlPath;
         }
 
         if (!$this->matchesRequest($request, $currentUrlFragment)) {
@@ -284,7 +284,7 @@ abstract class UrlHandler implements GeneratesResponse
 
         Log::indent();
 
-        $context = new Context();
+        $context = new PhpContext();
         $context->UrlHandler = $this;
 
         $this->matchingUrl = $this->getMatchingUrlFragment($request, $currentUrlFragment);

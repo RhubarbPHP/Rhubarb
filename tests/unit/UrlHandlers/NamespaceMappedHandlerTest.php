@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
@@ -16,7 +16,7 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->request = Context::CurrentRequest();
+        $this->request = PhpContext::CurrentRequest();
         $this->request->IsWebRequest = true;
 
         LayoutModule::disableLayout();

@@ -18,7 +18,8 @@
 
 namespace Rhubarb\Crown\Html;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
 use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
 
@@ -106,12 +107,12 @@ class ResourceLoader
 
         $html = "<script src=\"" . $urls[0] . "\" type=\"text/javascript\"></script>";
 
-        $context = new Context();
+        $context = Application::runningApplication()->getPhpContext();
 
         $preLoadedFiles = [];
 
         // CSS files are safe to load immediately and might avoid 'flicker' by so doing.
-        if (!$context->IsAjaxRequest) {
+        if (!$context->isXhrRequest()) {
             foreach (self::$resources as $item) {
                 $dependantResources = $item[1];
 

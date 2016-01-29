@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Deployment;
 
 require_once __DIR__ . "/ResourceDeploymentProvider.php";
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\DeploymentException;
 
 /**
@@ -36,7 +37,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::runningApplication()->applicationRootPath;
 
         $url = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath)));
 
@@ -70,7 +71,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::runningApplication()->applicationRootPath;
 
         $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
         $localPath = $cwd.$urlPath;

@@ -1,9 +1,11 @@
 <?php
 
 namespace Rhubarb\Crown\Tests\Fixtures\TestCases;
-use Rhubarb\Crown\Context;
-use Rhubarb\Crown\Module;
+
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
+
 
 /**
  * This base class adds basic setup and teardown for unit testing within Rhubarb's core
@@ -17,23 +19,22 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
 
     protected static $rolesModule;
 
+    /**
+     * @var Application
+     */
+    protected $application;
+
     protected function setUp()
     {
-        Module::RegisterModule(new UnitTestingModule());
-        Module::InitialiseModules();
+        $this->application = new Application();
+        $this->application->unitTesting = true;
+        $this->application->getPhpContext()->simulateNonCli = false;
+        $this->application->registerModule(new UnitTestingModule());
 
-        $context = new Context();
-        $context->UnitTesting = true;
-        $context->SimulateNonCli = false;
-
-        $request = Context::CurrentRequest();
-        $request->Reset();
+        ExceptionHandler::disableExceptionTrapping();
     }
 
     protected function tearDown()
     {
-        Module::clearModules();
-
-        parent::tearDownAfterClass();
     }
 }
