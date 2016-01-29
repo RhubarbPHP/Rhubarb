@@ -62,6 +62,13 @@ final class Application
      */
     private $request = null;
 
+    /**
+     * The dependency injection container for this instance
+     *
+     * @var Container
+     */
+    private $container = null;
+
     public $applicationRootPath = "";
 
     /**
@@ -85,6 +92,20 @@ final class Application
         $this->applicationRootPath = realpath(VENDOR_DIR."/../");
 
         $this->setAsRunningApplication();
+    }
+
+    /**
+     * Gets the dependency injection container
+     * 
+     * @return Container
+     */
+    public final function container()
+    {
+        if (!$this->container){
+            $this->container = new Container();
+        }
+
+        return $this->container;
     }
 
     /**
