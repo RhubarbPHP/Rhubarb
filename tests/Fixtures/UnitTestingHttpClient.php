@@ -74,7 +74,7 @@ class UnitTestingHttpClient extends HttpClient
         }
 
         $simulatedRequest->URI = $request->getUrl();
-        $simulatedRequest->UrlPath = $request->getUrl();
+        $simulatedRequest->urlPath = $request->getUrl();
 
         $context->Request = $simulatedRequest;
 

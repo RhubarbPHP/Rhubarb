@@ -36,7 +36,7 @@ require_once __DIR__ . "/../src/Context.php";
 
 Log::performance( "Rhubarb booted", "ROUTER" );
 
-$request = \Rhubarb\Crown\PhpContext::currentRequest();
+$request = \Rhubarb\Crown\PhpContext::createRequest();
 
 try {
     // Pass control to the Module class and ask it to generate a response for the

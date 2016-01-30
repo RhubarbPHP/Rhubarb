@@ -252,7 +252,7 @@ abstract class UrlHandler implements GeneratesResponse
 
     protected function getAbsoluteHandledUrl()
     {
-        $request = PhpContext::currentRequest();
+        $request = PhpContext::createRequest();
 
         return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
     }

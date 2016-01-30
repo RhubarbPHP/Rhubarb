@@ -175,7 +175,6 @@ class LayoutModule extends Module
      */
     public static function getBodyItemsAsHtml()
     {
-        return implode("
-", self::$bodyItems);
+        return implode("\n", self::$bodyItems);
     }
 }

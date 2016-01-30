@@ -62,7 +62,7 @@ class HttpResponse
     public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
     {
         setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
-        $request = PhpContext::currentRequest();
+        $request = PhpContext::createRequest();
         $request->cookie($name, $value);
     }
 

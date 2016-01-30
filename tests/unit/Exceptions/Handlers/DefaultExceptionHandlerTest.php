@@ -64,7 +64,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`',
+            'Unhandled RhubarbException `Things went wrong`',
             $lastEntry[0],
             "A RhubarbException should have been logged"
         );
@@ -93,7 +93,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`',
+            'Unhandled NonRhubarbException `OutOfBoundsException - Out of bounds`',
             $lastEntry[0],
             "A NonRhubarbException should have been logged"
         );
@@ -109,7 +109,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`',
+            'Unhandled NonRhubarbException `ErrorException - Division by zero`',
             $lastEntry[0],
             "A NonRhubarbException should have been logged for php run time errors"
         );

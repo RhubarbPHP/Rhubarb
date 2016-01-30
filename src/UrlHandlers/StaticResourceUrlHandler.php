@@ -103,7 +103,7 @@ class StaticResourceUrlHandler extends UrlHandler
      */
     protected function getMatchingUrlFragment(Request $request, $currentUrlFragment = '')
     {
-        $url = $request->UrlPath;
+        $url = $request->urlPath;
 
         if ($this->isFolder) {
             $urlDirectory = dirname($url);

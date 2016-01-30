@@ -102,7 +102,7 @@ class LayoutModuleTest extends RhubarbTestCase
         LayoutModule::setLayoutClassName(TestLayout::class);
 
         $request = new WebRequest();
-        $request->UrlPath = "/simple/";
+        $request->urlPath = "/simple/";
 
         $response = Application::runningApplication()->generateResponseForRequest($request);
 
@@ -117,7 +117,7 @@ class LayoutModuleTest extends RhubarbTestCase
         LayoutModule::setLayoutClassName('\Rhubarb\Crown\Tests\unit\Layout\NonExistant');
 
         $request = new WebRequest();
-        $request->UrlPath = "/simple/";
+        $request->urlPath = "/simple/";
 
         $this->setExpectedException(LayoutNotFoundException::class);
 
@@ -133,7 +133,7 @@ class LayoutModuleTest extends RhubarbTestCase
         });
 
         $request = new WebRequest();
-        $request->UrlPath = "/simple/";
+        $request->urlPath = "/simple/";
 
         $response = Application::runningApplication()->generateResponseForRequest($request);
 
@@ -153,8 +153,7 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $head = LayoutModule::getHeadItemsAsHtml();
 
-        $this->assertEquals("this is some html
-this is more html", $head);
+        $this->assertEquals("this is some html\nthis is more html", $head);
 
     }
 
@@ -165,8 +164,7 @@ this is more html", $head);
 
         $head = LayoutModule::getBodyItemsAsHtml();
 
-        $this->assertEquals("this is some html
-this is more html", $head);
+        $this->assertEquals("this is some html\nthis is more html", $head);
     }
 
     public static function tearDownAfterClass()

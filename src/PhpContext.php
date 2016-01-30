@@ -49,7 +49,7 @@ class PhpContext
     /**
      * A cached instance of the request derived from this context.
      *
-     * @see currentRequest()
+     * @see createRequest()
      * @var Request
      */
     private $request = null;
@@ -80,7 +80,7 @@ class PhpContext
     /**
      * Gets the current request derived from the PHP context.
      */
-    public function currentRequest()
+    public function createRequest()
     {
         if ($this->request == null){
             $this->request = Request::fromPhpContext($this);

@@ -43,7 +43,7 @@ class ApplicationTest extends Test
         $application->registerModule(new UnitTestingModule());
 
         $request = new WebRequest();
-        $request->UrlPath = "/";
+        $request->urlPath = "/";
 
         $response = $application->generateResponseForRequest($request);
 
@@ -63,7 +63,7 @@ class ApplicationTest extends Test
         $this->assertEquals($application2, Application::runningApplication());
 
         $request = new WebRequest();
-        $request->UrlPath = "/";
+        $request->urlPath = "/";
 
         $application->generateResponseForRequest($request);
 

@@ -66,7 +66,7 @@ class RhubarbConnector extends Client
         $context->SimulateNonCli = true;
         unset($context->Request);
 
-        $request = \Rhubarb\Crown\PhpContext::currentRequest();
+        $request = \Rhubarb\Crown\PhpContext::createRequest();
         $response = Module::generateResponseForRequest($request);
 
         $headers = $response->getHeaders();

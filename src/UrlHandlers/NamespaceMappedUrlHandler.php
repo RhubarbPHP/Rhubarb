@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
+use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\GeneratesResponse;
 
 require_once __DIR__ . "/UrlHandler.php";
@@ -65,7 +66,7 @@ class NamespaceMappedUrlHandler extends UrlHandler
 
     protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
-        if ($request !== null && $request->IsWebRequest) {
+        if ($request !== null && $request instanceof WebRequest) {
             $url = $currentUrlFragment;
         } else {
             $url = null;

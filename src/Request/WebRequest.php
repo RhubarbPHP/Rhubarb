@@ -36,7 +36,7 @@ use Rhubarb\Crown;
  *
  * @property string $URI
  * @property string $Host
- * @property string $UrlPath
+ * @property string $urlPath
  * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  *
  * @method mixed get(string $property, string $defaultValue=null) Return a value from the query string optionally using a default value.

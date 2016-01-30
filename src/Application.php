@@ -96,7 +96,7 @@ final class Application
 
     /**
      * Gets the dependency injection container
-     * 
+     *
      * @return Container
      */
     public final function container()
@@ -240,7 +240,7 @@ final class Application
 
         Log::createEntry(Log::PERFORMANCE_LEVEL | Log::DEBUG_LEVEL, function () use ($request) {
             if ($request instanceof WebRequest) {
-                return "Generating response for url " . $request->UrlPath;
+                return "Generating response for url " . $request->urlPath;
             }
 
             if ($request instanceof CliRequest) {
@@ -320,7 +320,7 @@ final class Application
     public function currentRequest()
     {
         if ($this->request == null){
-            $this->request = $this->phpContext->currentRequest();
+            $this->request = $this->phpContext->createRequest();
         }
 
         return $this->request;

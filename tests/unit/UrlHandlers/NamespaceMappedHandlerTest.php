@@ -16,7 +16,8 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->request = PhpContext::CurrentRequest();
+        $this->application->getPhpContext()->simulateNonCli = true;
+        $this->request = $this->application->currentRequest();
         $this->request->IsWebRequest = true;
 
         LayoutModule::disableLayout();
@@ -24,22 +25,22 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
 
     public function testHandlerFindsTestObject()
     {
-        $this->request->UrlPath = "/nmh/ObjectA/";
+        $this->request->urlPath = "/nmh/ObjectA/";
 
-        $response = Module::generateResponseForRequest($this->request);
+        $response = $this->application->generateResponseForRequest($this->request);
         $this->assertEquals("ObjectA Response", $response->getContent());
 
-        $this->request->UrlPath = "/nmh/SubFolder/ObjectB/";
+        $this->request->urlPath = "/nmh/SubFolder/ObjectB/";
 
-        $response = Module::generateResponseForRequest($this->request);
+        $response = $this->application->generateResponseForRequest($this->request);
         $this->assertEquals("ObjectB Response", $response->getContent());
     }
 
     public function testHandlerRedirectsWhenTrailingSlashMissing()
     {
-        $this->request->UrlPath = "/nmh/ObjectA";
+        $this->request->urlPath = "/nmh/ObjectA";
 
-        $response = Module::generateResponseForRequest($this->request);
+        $response = $this->application->generateResponseForRequest($this->request);
 
         $headers = $response->getHeaders();
 
@@ -51,9 +52,9 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
         HttpHeaders::clearHeaders();
 
         // This folder does contain an index so it should redirect.
-        $this->request->UrlPath = "/nmh/SubFolder/";
+        $this->request->urlPath = "/nmh/SubFolder/";
 
-        $response = Module::generateResponseForRequest($this->request);
+        $response = $this->application->generateResponseForRequest($this->request);
 
         $headers = $response->getHeaders();
 
