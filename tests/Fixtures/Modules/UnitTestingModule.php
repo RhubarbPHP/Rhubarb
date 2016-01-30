@@ -25,11 +25,11 @@ class UnitTestingModule extends Module
         return [ new LayoutModule(TestLayout::class) ];
     }
 
-    protected function Initialise()
+    protected function initialise()
     {
         require_once __DIR__ . '/../../unit/UrlHandlers/UrlHandlerTestUnitTest.php';
 
-        parent::Initialise();
+        parent::initialise();
 
         Repository::setDefaultRepositoryClassName(Offline::class);
 

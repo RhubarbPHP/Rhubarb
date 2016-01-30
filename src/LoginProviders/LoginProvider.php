@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\LoginProviders;
 
 require_once __DIR__ . "/../Sessions/Session.php";
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Sessions\Session;
 
@@ -30,13 +31,6 @@ use Rhubarb\Crown\Sessions\Session;
  */
 abstract class LoginProvider extends Session
 {
-    /**
-     * Stores the name of the default login provider class
-     *
-     * @var string
-     */
-    private static $defaultLoginProviderClassName = "";
-
     /**
      * Returns True if the user is logged in.
      */
@@ -93,29 +87,23 @@ abstract class LoginProvider extends Session
     /**
      * Returns the default login provider, if one is configured
      *
-     * @throws \Rhubarb\Crown\Exceptions\ImplementationException Thrown if no default is configured
-     * @see setDefaultLoginProviderClassName()
+     * @deprecated Use the dependency injection container instead.
      * @return LoginProvider
      */
     public static function getDefaultLoginProvider()
     {
-        if (self::$defaultLoginProviderClassName == "") {
-            throw new ImplementationException("There is no default login provider class name");
-        }
-
-        $providerClass = self::$defaultLoginProviderClassName;
-        $provider = new $providerClass();
-
-        return $provider;
+        Application::runningApplication()->container()->instance(LoginProvider::class);
     }
 
-    public static function getDefaultLoginProviderClassName()
-    {
-        return self::$defaultLoginProviderClassName;
-    }
-
+    /**
+     * @deprecated Use the dependency injection container instead
+     * @param $className
+     */
     public static function setDefaultLoginProviderClassName($className)
     {
-        self::$defaultLoginProviderClassName = $className;
+        Application::runningApplication()->container()->registerClass(
+            LoginProvider::class,
+            $className
+        );
     }
 }

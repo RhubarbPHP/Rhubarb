@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Email;
 
+use Rhubarb\Crown\Application;
+
 /**
  * Performs transmission of emails to recipients.
  *
@@ -29,22 +31,26 @@ namespace Rhubarb\Crown\Email;
  */
 abstract class EmailProvider
 {
-    private static $defaultEmailProviderClassName = '\Rhubarb\Crown\Email\PhpMailEmailProvider';
-
+    /**
+     * @deprecated Use the dependency injection container instead
+     * @param $emailProviderClassName
+     */
     public static function setDefaultEmailProviderClassName($emailProviderClassName)
     {
-        self::$defaultEmailProviderClassName = $emailProviderClassName;
+        $application = Application::runningApplication();
+        $application->container()->registerClass(EmailProvider::class, $emailProviderClassName );
     }
 
     /**
      * Returns an instance of the default email provider
      *
+     * @deprecated Use the dependency injection container instead
      * @return EmailProvider
      */
     public static function getDefaultEmailProvider()
     {
-        $class = self::$defaultEmailProviderClassName;
-        return new $class();
+        $application = Application::runningApplication();
+        return $application->container()->instance(EmailProvider::class);
     }
 
     abstract public function sendEmail(Email $email);

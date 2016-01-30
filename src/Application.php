@@ -179,9 +179,11 @@ final class Application
     }
 
     /**
-     * Asks all modules to initialise themselves.
+     * Asks all modules to initialise.
+     *
+     * Called automatically when processing requests.
      */
-    private final function initialiseModules()
+    public final function initialiseModules()
     {
         foreach ($this->modules as $module) {
             $module->initialiseModule();

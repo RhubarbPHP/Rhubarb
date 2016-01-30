@@ -30,7 +30,7 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
         $this->application->unitTesting = true;
         $this->application->getPhpContext()->simulateNonCli = false;
         $this->application->registerModule(new UnitTestingModule());
-
+        $this->application->initialiseModules();
         ExceptionHandler::disableExceptionTrapping();
     }
 

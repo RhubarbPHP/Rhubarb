@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\Encryption;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
@@ -25,43 +26,31 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
  */
 abstract class EncryptionProvider
 {
-    private static $defaultEncryptionProviderClassName = null;
-
     /**
      * Sets the class to be used for the default hash provider.
      *
+     * @deprecated Use the dependency injection container
      * @param $providerClassName
      * @return string Returns the class name of the previous default provider.
      */
     public static function setEncryptionProviderClassName($providerClassName)
     {
-        $oldEncryptionProviderClassName = self::$defaultEncryptionProviderClassName;
-
-        self::$defaultEncryptionProviderClassName = $providerClassName;
-
-        return $oldEncryptionProviderClassName;
+        Application::runningApplication()
+            ->container()
+            ->registerClass(
+                EncryptionProvider::class,
+                $providerClassName);
     }
 
     /**
      * Get's an instance of the default hash provider.
      *
+     * @deprecated Use the dependency injection container instead.
      * @return EncryptionProvider
-     * @throws ImplementationException
      */
     public static function getEncryptionProvider()
     {
-        if (self::$defaultEncryptionProviderClassName == null) {
-            throw new ImplementationException("No default encryption provider class name has been set.");
-        }
-
-        $providerClassName = self::$defaultEncryptionProviderClassName;
-        $provider = new $providerClassName();
-
-        if (!is_a($provider, "Rhubarb\Crown\Encryption\EncryptionProvider")) {
-            throw new ImplementationException("The default encryption provider must extend Rhubarb\Crown\Encryption\EncryptionProvider");
-        }
-
-        return $provider;
+        return Application::runningApplication()->container()->instance(EncryptionProvider::class);
     }
 
     /**

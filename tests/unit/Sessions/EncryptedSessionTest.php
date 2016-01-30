@@ -9,20 +9,11 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class EncryptedSessionTest extends RhubarbTestCase
 {
-    private static $oldEncryptionProvider = "";
-
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        self::$oldEncryptionProvider = EncryptionProvider::setEncryptionProviderClassName(Aes256ComputedKeyEncryptionProvider::class);
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        EncryptionProvider::setEncryptionProviderClassName(self::$oldEncryptionProvider);
+        EncryptionProvider::setEncryptionProviderClassName(Aes256ComputedKeyEncryptionProvider::class);
     }
 
     public function testSessionEncrypts()

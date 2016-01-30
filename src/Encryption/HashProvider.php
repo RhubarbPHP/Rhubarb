@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\Encryption;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
@@ -29,38 +30,26 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
  */
 abstract class HashProvider
 {
-    private static $defaultHashProviderClassName = null;
-
     /**
      * Sets the class to be used for the default hash provider.
      *
+     * @deprecated Use the dependency injection container instead
      * @param $providerClassName
      */
     public static function setHashProviderClassName($providerClassName)
     {
-        self::$defaultHashProviderClassName = $providerClassName;
+        Application::runningApplication()->container()->registerClass(HashProvider::class, $providerClassName);
     }
 
     /**
      * Get's an instance of the default hash provider.
      *
+     * @deprecated Use the dependency injection container instead.
      * @return HashProvider
-     * @throws ImplementationException
      */
     public static function getHashProvider()
     {
-        if (self::$defaultHashProviderClassName == null) {
-            throw new ImplementationException("No default hash provider class name has been set.");
-        }
-
-        $providerClassName = self::$defaultHashProviderClassName;
-        $provider = new $providerClassName();
-
-        if (!is_a($provider, "Rhubarb\Crown\Encryption\HashProvider")) {
-            throw new ImplementationException("The default hash provider must extend Rhubarb\Crown\Encryption\HashProvider");
-        }
-
-        return $provider;
+        return Application::runningApplication()->container()->instance(HashProvider::class);
     }
 
     /**
