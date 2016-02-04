@@ -16,9 +16,9 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
 
-require_once __DIR__ . '/../Settings.php';
+require_once __DIR__ . '/../../Settings.php';
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Settings;

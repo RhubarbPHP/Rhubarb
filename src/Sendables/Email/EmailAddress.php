@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
 
 use Rhubarb\Crown\Exceptions\EmailException;
 

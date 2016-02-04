@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Email;
 
-use Rhubarb\Crown\Email\SimpleEmail;
+use Rhubarb\Crown\Sendables\Email\SimpleEmail;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
@@ -112,5 +112,17 @@ class EmailTest extends RhubarbTestCase
         $lastEmail = UnitTestingEmailProvider::GetLastEmail();
 
         $this->assertEquals($email, $lastEmail);
+    }
+
+    public function testSimpleEmailExpressAsDictionary()
+    {
+        $email = new SimpleEmail();
+        $email->setSubject( "Hello Richard" );
+
+        $data = $email->toDictionary();
+
+        $this->assertArrayHasKey( "Subject", $data );
+        $this->assertEquals($email->getSubject(), $data["Subject"]);
+
     }
 }

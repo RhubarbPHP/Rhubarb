@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures\Modules;
 
-use Rhubarb\Crown\Email\EmailProvider;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;

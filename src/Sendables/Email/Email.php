@@ -16,12 +16,13 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
 
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Mime\MimeDocument;
 use Rhubarb\Crown\Mime\MimePartBinaryFile;
 use Rhubarb\Crown\Mime\MimePartText;
+use Rhubarb\Crown\Sendables\Sendable;
 
 /**
  * Represents and channels delivery of an email.
@@ -29,7 +30,7 @@ use Rhubarb\Crown\Mime\MimePartText;
  * This class is abstract as the getText(), getSubject() and getHtml() methods must be implemented to satisfy
  * the implementation.
  */
-abstract class Email
+abstract class Email extends Sendable
 {
     private $recipients = [];
 
@@ -243,7 +244,12 @@ abstract class Email
         return $headers;
     }
 
-    public function send()
+    protected function getProviderClassName()
+    {
+        return EmailProvider::class;
+    }
+
+    protected function logSending()
     {
         $subject = $this->getSubject();
         $html = $this->getHtml();
@@ -257,8 +263,5 @@ abstract class Email
             $this->getMailHeadersAsString() . "\r\n\r\n" .
             ($html != "") ? $html : $text
         );
-
-        $emailProvider = EmailProvider::getDefaultEmailProvider();
-        $emailProvider->sendEmail($this);
     }
 }

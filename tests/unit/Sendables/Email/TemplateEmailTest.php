@@ -1,8 +1,8 @@
 <?php
 
-namespace Rhubarb\Crown\Tests\unit\Email;
+namespace Rhubarb\Crown\Tests\unit\Sendables\Email;
 
-use Rhubarb\Crown\Email\TemplateEmail;
+use Rhubarb\Crown\Sendables\Email\TemplateEmail;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class TemplateEmailTest extends RhubarbTestCase

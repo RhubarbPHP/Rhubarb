@@ -2,8 +2,9 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures;
 
-use Rhubarb\Crown\Email\Email;
-use Rhubarb\Crown\Email\EmailProvider;
+use Rhubarb\Crown\Sendables\Email\Email;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
+use Rhubarb\Crown\Sendables\Sendable;
 
 class UnitTestingEmailProvider extends EmailProvider
 {
@@ -12,7 +13,7 @@ class UnitTestingEmailProvider extends EmailProvider
      */
     private static $_lastEmail;
 
-    public function SendEmail(Email $email)
+    public function send(Sendable $email)
     {
         self::$_lastEmail = $email;
     }

@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
 
 require_once __DIR__ . '/Email.php';
 
@@ -78,5 +78,14 @@ class SimpleEmail extends Email
         $this->subject = $subject;
 
         return $this;
+    }
+
+    public function toDictionary()
+    {
+        $dataArray = [
+            "Subject" => $this->getSubject()
+        ];
+
+        return $dataArray;
     }
 }

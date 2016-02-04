@@ -16,7 +16,8 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
+use Rhubarb\Crown\Sendables\SendableProvider;
 
 /**
  * Performs transmission of emails to recipients.
@@ -27,9 +28,9 @@ namespace Rhubarb\Crown\Email;
  *
  * @see Email
  */
-abstract class EmailProvider
+abstract class EmailProvider extends SendableProvider
 {
-    private static $defaultEmailProviderClassName = '\Rhubarb\Crown\Email\PhpMailEmailProvider';
+    private static $defaultEmailProviderClassName = '\Rhubarb\Crown\Sendables\Email\PhpMailEmailProvider';
 
     public static function setDefaultEmailProviderClassName($emailProviderClassName)
     {
@@ -41,11 +42,9 @@ abstract class EmailProvider
      *
      * @return EmailProvider
      */
-    public static function getDefaultEmailProvider()
+    public static function getDefaultProvider()
     {
         $class = self::$defaultEmailProviderClassName;
         return new $class();
     }
-
-    abstract public function sendEmail(Email $email);
 }

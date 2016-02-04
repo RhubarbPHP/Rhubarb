@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Email;
 
-use Rhubarb\Crown\Email\EmailAddress;
+use Rhubarb\Crown\Sendables\Email\EmailAddress;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class EmailAddressTest extends RhubarbTestCase

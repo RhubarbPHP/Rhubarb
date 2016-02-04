@@ -16,13 +16,15 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Email;
+namespace Rhubarb\Crown\Sendables\Email;
+
+use Rhubarb\Crown\Sendables\Sendable;
 
 require_once __DIR__ . '/EmailProvider.php';
 
 class PhpMailEmailProvider extends EmailProvider
 {
-    public function sendEmail(Email $email)
+    public function send(Sendable $email)
     {
         mail(
             $email->getRecipientList(),
