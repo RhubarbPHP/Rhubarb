@@ -21,6 +21,7 @@ namespace Rhubarb\Crown\LoginProviders;
 require_once __DIR__ . "/../Sessions/Session.php";
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Sessions\Session;
 
@@ -92,7 +93,7 @@ abstract class LoginProvider extends Session
      */
     public static function getDefaultLoginProvider()
     {
-        Application::runningApplication()->container()->instance(LoginProvider::class);
+        Container::instance(LoginProvider::class);
     }
 
     /**
@@ -101,7 +102,7 @@ abstract class LoginProvider extends Session
      */
     public static function setDefaultLoginProviderClassName($className)
     {
-        Application::runningApplication()->container()->registerClass(
+        Application::current()->container()->registerClass(
             LoginProvider::class,
             $className
         );

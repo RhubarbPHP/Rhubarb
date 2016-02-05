@@ -38,7 +38,7 @@ class SessionTest extends RhubarbTestCase
     {
         Session::setDefaultSessionProviderClassName(UnitTestingSessionProvider::class);
 
-        $session = new UnitTestingSession();
+        $session = UnitTestingSession::instance();
 
         $this->assertInstanceOf(UnitTestingSessionProvider::class, $session->testGetSessionProvider());
 

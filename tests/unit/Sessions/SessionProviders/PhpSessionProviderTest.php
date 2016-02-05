@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions\SessionProviders;
 
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Settings;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\Tests\unit\Sessions\UnitTestingSession;
@@ -10,24 +11,22 @@ class PhpSessionProviderTest extends RhubarbTestCase
 {
     public function testSessionStorage()
     {
-        $session = new UnitTestingSession();
+        $session = UnitTestingSession::instance();
         $session->TestValue = "abc123";
         $session->storeSession();
 
-        $this->assertEquals("abc123", $_SESSION["UnitTestingSession"]["TestValue"]);
+        $this->assertEquals("abc123", $_SESSION['Rhubarb\Crown\Tests\unit\Sessions\UnitTestingSession']["TestValue"]);
     }
 
     public function testSessionRestore()
     {
-        $session = new UnitTestingSession();
+        $session = UnitTestingSession::instance();
         $session->TestValue = "abc123";
         $session->storeSession();
 
-        // We can't test PHP sessions properly within the same script. However we can verify
-        // that it at least restores the data from the $_SESSION array
-        Settings::deleteSettingNamespace("UnitTestingSession");
+        Container::current()->clearSingleton(UnitTestingSession::class);
 
-        $session = new UnitTestingSession();
+        $session = UnitTestingSession::instance();
 
         $this->assertEquals("abc123", $session->TestValue);
     }

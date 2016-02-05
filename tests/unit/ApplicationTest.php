@@ -4,6 +4,9 @@ namespace Rhubarb\Crown\Tests;
 
 use Codeception\TestCase\Test;
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionSettings;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
@@ -53,26 +56,46 @@ class ApplicationTest extends Test
     public function testRunningApplication()
     {
         $application = new Application();
-        $application->run();
 
-        $this->assertEquals($application, Application::runningApplication());
+        $this->assertEquals($application, Application::current());
 
         $application2 = new Application();
-        $application2->run();
 
-        $this->assertEquals($application2, Application::runningApplication());
+        $this->assertEquals($application2, Application::current());
 
         $request = new WebRequest();
         $request->urlPath = "/";
 
         $application->generateResponseForRequest($request);
 
-        $this->assertEquals($application, Application::runningApplication());
+        $this->assertEquals($application, Application::current());
     }
 
     public function testApplicationPath()
     {
         $application = new Application();
         $this->assertEquals(realpath(VENDOR_DIR."/../"), $application->applicationRootPath);
+    }
+
+    public function testDefaultExceptionHandlerEnabled()
+    {
+        $application = new Application();
+        $instance = $application->container()->getInstance(ExceptionHandler::class);
+
+        $this->assertInstanceOf(DefaultExceptionHandler::class, $instance);
+
+        $instance->prop1 = true;
+
+        $instance = $application->container()->getInstance(ExceptionHandler::class);
+
+        $this->assertTrue($instance->prop1, "Should have been a singleton...");
+
+
+        $instance = $application->container()->getInstance(ExceptionSettings::class);
+        $instance->prop1 = true;
+
+        $instance = $application->container()->getInstance(ExceptionSettings::class);
+
+        $this->assertTrue($instance->prop1, "Should have been a singleton...");
     }
 }

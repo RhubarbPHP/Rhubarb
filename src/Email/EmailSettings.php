@@ -32,14 +32,17 @@ use Rhubarb\Crown\Settings;
  */
 class EmailSettings extends Settings
 {
+    public $onlyRecipient = false;
+
+    public $defaultSender;
+
     protected function initialiseDefaultValues()
     {
         parent::initialiseDefaultValues();
 
-        $request = Application::runningApplication()->currentRequest();
+        $request = Application::current()->currentRequest();
         $host = $request->server("SERVER_NAME");
 
-        $this->DefaultSender = new EmailAddress("donotreply@" . $host . ".com");
-        $this->OnlyRecipient = false;
+        $this->defaultSender = new EmailAddress("donotreply@" . $host . ".com");
     }
 }

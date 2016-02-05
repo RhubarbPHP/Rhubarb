@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Tests\unit\Exceptions\Handlers;
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Exceptions\RhubarbException;
@@ -45,13 +46,11 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         $this->application = new Application();
         $this->application->registerModule(new UnitTestingModule());
         $this->application->registerModule(new UnitTestExceptionModule());
-
+        $this->application->initialiseModules();
         Log::clearLogs();
         Log::attachLog(self::$log = new UnitTestLog(Log::ERROR_LEVEL));
 
         ExceptionHandler::enableExceptionTrapping();
-
-        ExceptionHandler::setExceptionHandlerClassName(DefaultExceptionHandler::class);
     }
 
     public function testExceptionCausesLogEntry()
@@ -69,7 +68,7 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
             "A RhubarbException should have been logged"
         );
 
-        ExceptionHandler::setExceptionHandlerClassName(UnitTestSilentExceptionHandler::class);
+        $this->application->container()->registerClass(ExceptionHandler::class, UnitTestSilentExceptionHandler::class);
 
         // Clear the log entries.
         self::$log->entries = [];
@@ -147,7 +146,7 @@ been notified.Tail", $response->getContent());
         } catch (RhubarbException $er) {
         }
 
-        ExceptionHandler::setExceptionHandlerClassName(UnitTestDisobedientExceptionHandler::class);
+        $this->application->container()->registerClass(ExceptionHandler::class, UnitTestDisobedientExceptionHandler::class);
 
         try {
             // Enable layouts for this test as proof the URL handler has intercepted the response.

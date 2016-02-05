@@ -31,16 +31,18 @@ class PhpSessionProvider extends SessionProvider
 {
     public function restoreSession(Session $session)
     {
-        $context = Application::runningApplication()->getPhpContext();
+        $context = Application::current()->getPhpContext();
 
         if (!$context->isCliInvocation()) {
             session_start();
         }
 
-        $namespace = $session->getNamespace();
+        $namespace = get_class($session);
 
         if (isset($_SESSION[$namespace])) {
-            $session->importRawData($_SESSION[$namespace]);
+            foreach($_SESSION[$namespace] as $key => $value ){
+                $session->$key = $value;
+            }
         }
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
@@ -52,15 +54,15 @@ class PhpSessionProvider extends SessionProvider
 
     public function storeSession(Session $session)
     {
-        $context = Application::runningApplication()->getPhpContext();
+        $context = Application::current()->getPhpContext();
 
         if (!$context->isCliInvocation()) {
             session_start();
         }
 
-        $namespace = $session->getNamespace();
+        $namespace = get_class($session);
 
-        $_SESSION[$namespace] = $session->exportRawData();
+        $_SESSION[$namespace] = get_object_vars($session);
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
         // simultaneous AJAX requests.

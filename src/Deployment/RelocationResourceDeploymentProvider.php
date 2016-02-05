@@ -37,7 +37,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = Application::runningApplication()->applicationRootPath;
+        $cwd = Application::current()->applicationRootPath;
 
         $url = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath)));
 
@@ -71,7 +71,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         }
 
         // Remove the current working directory from the resource path.
-        $cwd = Application::runningApplication()->applicationRootPath;
+        $cwd = Application::current()->applicationRootPath;
 
         $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
         $localPath = $cwd.$urlPath;

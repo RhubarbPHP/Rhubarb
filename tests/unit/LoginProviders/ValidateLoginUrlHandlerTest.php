@@ -15,7 +15,7 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 {
     public function testInvalidLoginRedirects()
     {
-        $login = new UnitTestingLoginProvider();
+        $login = UnitTestingLoginProvider::instance();
         $login->logOut();
 
         $_SERVER["SCRIPT_NAME"] = "/cant/be/here";
@@ -23,7 +23,7 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->initialise();
 
-        $response = Application::runningApplication()->generateResponseForRequest($request);
+        $response = Application::current()->generateResponseForRequest($request);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
     }
@@ -38,7 +38,7 @@ class ValidateLoginUrlHandlerTest extends RhubarbTestCase
 
         $request->initialise();
 
-        $response = Application::runningApplication()->generateResponseForRequest($request);
+        $response = Application::current()->generateResponseForRequest($request);
 
         $this->assertInstanceOf(HtmlResponse::class, $response);
     }

@@ -19,6 +19,8 @@
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use ErrorException;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Response\Response;
@@ -28,8 +30,6 @@ use Rhubarb\Crown\Response\Response;
  */
 abstract class ExceptionHandler
 {
-    private static $exceptionTrappingOn = false;
-
     /**
      * Should be overriden by extends of this base class to do the actual processing with the exception
      *
@@ -45,7 +45,11 @@ abstract class ExceptionHandler
 
     public static function disableExceptionTrapping()
     {
-        self::$exceptionTrappingOn = false;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        $exceptionSettings->exceptionTrappingOn = false;
 
         ini_set("display_errors", true);
 
@@ -55,7 +59,11 @@ abstract class ExceptionHandler
 
     public static function enableExceptionTrapping()
     {
-        self::$exceptionTrappingOn = true;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        $exceptionSettings->exceptionTrappingOn = true;
 
         ini_set("display_errors", false);
 
@@ -68,7 +76,11 @@ abstract class ExceptionHandler
             }
 
             // Dispatch the exception to the handler.
-            $response = self::ProcessException($er);
+            /**
+             * @var ExceptionHandler $handler
+             */
+            $handler = Container::instance(ExceptionHandler::class);
+            $response = $handler->processException($er);
             $response->send();
         });
 
@@ -86,7 +98,11 @@ abstract class ExceptionHandler
 
         // Make sure we handle fatal errors too.
         register_shutdown_function(function () use ($exceptionHandler) {
-            if (self::$exceptionTrappingOn) {
+            /**
+             * @var ExceptionSettings $exceptionSettings
+             */
+            $exceptionSettings = Container::instance(ExceptionSettings::class);
+            if ($exceptionSettings->exceptionTrappingOn) {
                 $error = error_get_last();
 
                 if ($error != null) {
@@ -122,27 +138,6 @@ abstract class ExceptionHandler
     }
 
     /**
-     * Sets the name of the exception handler class to use when exceptions are raised.
-     *
-     * @param $exceptionHandlerClassName
-     */
-    public static function setExceptionHandlerClassName($exceptionHandlerClassName)
-    {
-        self::$exceptionHandlerClassName = $exceptionHandlerClassName;
-    }
-
-    /**
-     * @return ExceptionHandler
-     */
-    protected static function getExceptionHandler()
-    {
-        $class = self::$exceptionHandlerClassName;
-        $handler = new $class();
-
-        return $handler;
-    }
-
-    /**
      * Returns true if the handler should handle the exception.
      *
      * Normally this is controlled by enableExceptionTrapping() and disableExceptionTrapping() but this
@@ -153,7 +148,11 @@ abstract class ExceptionHandler
      */
     protected function shouldTrapException(RhubarbException $er)
     {
-        return self::$exceptionTrappingOn;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        return $exceptionSettings->exceptionTrappingOn;
     }
 
     /**
@@ -163,12 +162,10 @@ abstract class ExceptionHandler
      * @return Response
      * @throws RhubarbException
      */
-    final public static function processException(RhubarbException $er)
+    final public function processException(RhubarbException $er)
     {
-        $exceptionHandler = self::getExceptionHandler();
-
-        if ($exceptionHandler->shouldTrapException($er)) {
-            return $exceptionHandler->handleException($er);
+        if ($this->shouldTrapException($er)) {
+            return $this->handleException($er);
         } else {
             // If exception trapping is disabled we should just rethrow the exception.
             throw $er;

@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Encryption;
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
@@ -38,7 +39,7 @@ abstract class HashProvider
      */
     public static function setHashProviderClassName($providerClassName)
     {
-        Application::runningApplication()->container()->registerClass(HashProvider::class, $providerClassName);
+        Application::current()->container()->registerClass(HashProvider::class, $providerClassName);
     }
 
     /**
@@ -49,7 +50,7 @@ abstract class HashProvider
      */
     public static function getHashProvider()
     {
-        return Application::runningApplication()->container()->instance(HashProvider::class);
+        return Container::instance(HashProvider::class);
     }
 
     /**

@@ -13,13 +13,37 @@ final class Container
 
     private $singletons = [];
 
+    /**
+     * Returns the current container for the running application
+     */
+    public final static function current()
+    {
+        return Application::current()->container();
+    }
+
     public final function registerClass($classRequested, $classToInstantiate, $singleton = false)
     {
         $this->concreteClassMappings[($singleton ? "_" : "").$classRequested] = $classToInstantiate;
+
+        if (!$singleton){
+            unset($this->concreteClassMappings["_".$classRequested]);
+            unset($this->singletons[$classRequested]);
+        }
     }
 
-    public final function instance($requestedClass, ...$arguments)
+    /**
+     * Creates an object instance of the requested class, optionally passing additional constructor arguments
+     *
+     * @param $requestedClass
+     * @param ...$arguments
+     * @return mixed|object
+     */
+    public final function getInstance($requestedClass, ...$arguments)
     {
+        if (isset($this->singletons[$requestedClass])){
+            return $this->singletons[$requestedClass];
+        }
+
         $useSingleton = false;
 
         // Check for singletons first as they should trump previous registrations of non
@@ -31,10 +55,6 @@ final class Container
             $class = $this->concreteClassMappings[$requestedClass];
         } else {
             $class = $requestedClass;
-        }
-
-        if ($useSingleton && isset($this->singletons[$requestedClass])){
-            return $this->singletons[$requestedClass];
         }
 
         $reflection = new \ReflectionClass($class);
@@ -55,6 +75,50 @@ final class Container
     }
 
     /**
+     * Creates an object instance of the requested class from the current DI container
+     *
+     * @see getInstance()
+     * @param $requestedClass
+     * @param ...$arguments
+     * @return mixed
+     */
+    public static function instance($requestedClass, ...$arguments)
+    {
+        $instance = Application::current()->container();
+        return call_user_func_array([$instance, "getInstance"], func_get_args());
+    }
+
+    /**
+     * Creates a singleton object instance of the requested class from the current DI container
+     *
+     * @see getInstance()
+     * @param $requestedClass
+     * @param ...$arguments
+     * @return mixed
+     */
+    public function registerSingleton($requestedClass, callable $singletonCreationCallback)
+    {
+        if (!isset($this->singletons[$requestedClass])){
+            $singleton = $singletonCreationCallback();
+            $this->singletons[$requestedClass] = $singleton;
+            $this->concreteClassMappings["_".$requestedClass] = $requestedClass;
+        }
+
+        return $this->singletons[$requestedClass];
+    }
+
+    /**
+     * Deregisters a stored singleton.
+     *
+     * @param $requestedClass
+     */
+    public function clearSingleton($requestedClass)
+    {
+        unset($this->singletons[$requestedClass]);
+    }
+
+
+    /**
      * @param ReflectionMethod $constructor
      * @return mixed
      */
@@ -70,7 +134,7 @@ final class Container
                 break;
             }
 
-            $dependency = $this->instance($dependencyClass->getName());
+            $dependency = $this->getInstance($dependencyClass->getName());
             $paramArgs[] = $dependency;
         }
 

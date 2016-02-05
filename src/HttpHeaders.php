@@ -108,7 +108,7 @@ class HttpHeaders
     {
         foreach (self::$headers as $name => $content) {
             // We can't set headers when unit testing.
-            if (!Application::runningApplication()->isUnitTesting()) {
+            if (!Application::current()->isUnitTesting()) {
                 if ($content === false) {
                     header($name);
                 } else {

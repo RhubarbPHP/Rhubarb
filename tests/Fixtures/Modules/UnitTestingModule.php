@@ -33,14 +33,14 @@ class UnitTestingModule extends Module
 
         Repository::setDefaultRepositoryClassName(Offline::class);
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::instance(), "/login/index");
         $login->SetPriority(20);
 
         $this->AddUrlHandlers(
             ["/cant/be/here" => $login]
         );
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/defo/not/here/login/index/",
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::instance(), "/defo/not/here/login/index/",
             [
                 "login/index/" => new ClassMappedUrlHandler(SimpleContent::class)
                 // We have to give it something to render!
@@ -70,7 +70,7 @@ class UnitTestingModule extends Module
         );
 
         $this->AddUrlHandlers("/priority-test/",
-            new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
+            new ValidateLoginUrlHandler(UnitTestingLoginProvider::instance(), "/login/index"));
 
         $test = new NamespaceMappedUrlHandler('Rhubarb\Leaf\Presenters');
         $test->SetPriority(100);

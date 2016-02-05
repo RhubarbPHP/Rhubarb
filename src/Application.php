@@ -3,7 +3,9 @@
 namespace Rhubarb\Crown;
 
 use Rhubarb\Crown\Exceptions\ForceResponseException;
+use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
+use Rhubarb\Crown\Exceptions\Handlers\ExceptionSettings;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
@@ -77,7 +79,7 @@ final class Application
      * @see runningApplication()
      * @var Application
      */
-    private static $runningApplication = null;
+    private static $currentApplication = null;
 
     public final function __construct()
     {
@@ -90,6 +92,9 @@ final class Application
         $this->developerMode = false;
         $this->live = false;
         $this->applicationRootPath = realpath(VENDOR_DIR."/../");
+
+        $this->container()->registerClass(ExceptionHandler::class, DefaultExceptionHandler::class, true);
+        $this->container()->registerClass(ExceptionSettings::class, ExceptionSettings::class, true);
 
         $this->setAsRunningApplication();
     }
@@ -291,9 +296,11 @@ final class Application
         } catch (StopGeneratingResponseException $er) {
             $filterResponse = false;
         } catch (RhubarbException $er) {
-            $response = ExceptionHandler::processException($er);
+            $handler = $this->container()->getInstance(ExceptionHandler::class);
+            $response = $handler->processException($er);
         } catch (\Exception $er) {
-            $response = ExceptionHandler::processException(new NonRhubarbException($er));
+            $handler = $this->container()->getInstance(ExceptionHandler::class);
+            $response = $handler->processException(new NonRhubarbException($er));
         }
 
         if ($filterResponse) {
@@ -328,18 +335,13 @@ final class Application
         return $this->request;
     }
 
-    public function run()
+    public static function current()
     {
-        $this->setAsRunningApplication();
-    }
-
-    public static function runningApplication()
-    {
-        return self::$runningApplication;
+        return self::$currentApplication;
     }
 
     protected function setAsRunningApplication()
     {
-        Application::$runningApplication = $this;
+        Application::$currentApplication = $this;
     }
 }

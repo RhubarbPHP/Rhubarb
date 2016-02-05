@@ -41,13 +41,13 @@ class ContainerTest extends RhubarbTestCase
 
     public function testSimpleClassCreationNoTypeSpecified()
     {
-        $object = $this->container->instance(SimpleClass::class);
+        $object = $this->container->getInstance(SimpleClass::class);
         $this->assertInstanceOf(SimpleClass::class, $object);
     }
 
     public function testSimpleClassWithDependency()
     {
-        $object = $this->container->instance(OneDependency::class);
+        $object = $this->container->getInstance(OneDependency::class);
         $this->assertInstanceOf(OneDependency::class, $object);
     }
 
@@ -55,10 +55,10 @@ class ContainerTest extends RhubarbTestCase
     {
         $this->container->registerClass(SimpleClass::class, ExtendedSimpleClass::class);
 
-        $object = $this->container->instance(SimpleClass::class);
+        $object = $this->container->getInstance(SimpleClass::class);
         $this->assertInstanceOf(ExtendedSimpleClass::class, $object);
 
-        $object = $this->container->instance(OneDependency::class);
+        $object = $this->container->getInstance(OneDependency::class);
         $this->assertInstanceOf(ExtendedSimpleClass::class, $object->injected);
     }
 
@@ -66,10 +66,25 @@ class ContainerTest extends RhubarbTestCase
     {
         $this->container->registerClass(SimpleClass::class, ExtendedSimpleClass::class, true);
 
-        $object = $this->container->instance(SimpleClass::class);
+        $object = $this->container->getInstance(SimpleClass::class);
         $object->foo = "bar";
 
-        $object = $this->container->instance(SimpleClass::class);
+        $object = $this->container->getInstance(SimpleClass::class);
+        $this->assertEquals("bar", $object->foo);
+
+        $this->container->registerClass(SimpleClass::class, SimpleClass::class, false);
+
+        $object = $this->container->getInstance(SimpleClass::class);
+
+        $this->assertNotInstanceOf(ExtendedSimpleClass::class, $object, "A subsequent registration for a non singleton should superseed the singleton registration.");
+    }
+
+    public function testSingletonRequest()
+    {
+        $object = $this->container->registerSingleton(SimpleClass::class, function(){ return new SimpleClass(); });
+        $object->foo = "bar";
+
+        $object = $this->container->getInstance(SimpleClass::class);
         $this->assertEquals("bar", $object->foo);
     }
 
@@ -77,7 +92,7 @@ class ContainerTest extends RhubarbTestCase
     {
         $this->container->registerClass(OneDependency::class, DependencyWithArguments::class);
 
-        $object = $this->container->instance(OneDependency::class, "foo", "bar");
+        $object = $this->container->getInstance(OneDependency::class, "foo", "bar");
 
         $this->assertEquals("foo", $object->argument1);
         $this->assertEquals("bar", $object->argument2);

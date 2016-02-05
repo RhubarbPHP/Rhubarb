@@ -104,7 +104,7 @@ class LayoutModuleTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->urlPath = "/simple/";
 
-        $response = Application::runningApplication()->generateResponseForRequest($request);
+        $response = Application::current()->generateResponseForRequest($request);
 
         $this->assertEquals(
             "TopDon't change this content - it should match the unit test.Tail",
@@ -123,7 +123,7 @@ class LayoutModuleTest extends RhubarbTestCase
 
         ExceptionHandler::disableExceptionTrapping();
 
-        Application::runningApplication()->generateResponseForRequest($request);
+        Application::current()->generateResponseForRequest($request);
     }
 
     public function testLayoutCanBeAnonymousFunction()
@@ -135,7 +135,7 @@ class LayoutModuleTest extends RhubarbTestCase
         $request = new WebRequest();
         $request->urlPath = "/simple/";
 
-        $response = Application::runningApplication()->generateResponseForRequest($request);
+        $response = Application::current()->generateResponseForRequest($request);
 
         $this->assertEquals(
             "TopDon't change this content - it should match the unit test.Tail",

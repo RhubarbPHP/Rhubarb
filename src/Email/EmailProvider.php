@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Email;
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 
 /**
  * Performs transmission of emails to recipients.
@@ -37,8 +38,8 @@ abstract class EmailProvider
      */
     public static function setDefaultEmailProviderClassName($emailProviderClassName)
     {
-        $application = Application::runningApplication();
-        $application->container()->registerClass(EmailProvider::class, $emailProviderClassName );
+        $container = Container::current();
+        $container->registerClass(EmailProvider::class, $emailProviderClassName );
     }
 
     /**
@@ -49,8 +50,7 @@ abstract class EmailProvider
      */
     public static function getDefaultEmailProvider()
     {
-        $application = Application::runningApplication();
-        return $application->container()->instance(EmailProvider::class);
+        return Container::instance(EmailProvider::class);
     }
 
     abstract public function sendEmail(Email $email);

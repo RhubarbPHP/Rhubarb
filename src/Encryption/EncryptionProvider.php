@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Encryption;
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Container;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
@@ -35,7 +36,7 @@ abstract class EncryptionProvider
      */
     public static function setEncryptionProviderClassName($providerClassName)
     {
-        Application::runningApplication()
+        Application::current()
             ->container()
             ->registerClass(
                 EncryptionProvider::class,
@@ -50,7 +51,7 @@ abstract class EncryptionProvider
      */
     public static function getEncryptionProvider()
     {
-        return Application::runningApplication()->container()->instance(EncryptionProvider::class);
+        return Container::instance(EncryptionProvider::class);
     }
 
     /**
