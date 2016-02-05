@@ -15,6 +15,8 @@ use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\Response;
+use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
+use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 final class Application
@@ -95,6 +97,7 @@ final class Application
 
         $this->container()->registerClass(ExceptionHandler::class, DefaultExceptionHandler::class, true);
         $this->container()->registerClass(ExceptionSettings::class, ExceptionSettings::class, true);
+        $this->container()->registerClass(SessionProvider::class, PhpSessionProvider::class, true);
 
         $this->setAsRunningApplication();
     }
