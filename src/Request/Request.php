@@ -47,11 +47,6 @@ abstract class Request
     protected $envData;
 
     /**
-     * @var array
-     */
-    static protected $originalRequestData = null;
-
-    /**
      * @var bool Have we copied the superglobals yet?
      */
     protected $hasInitialised = false;
@@ -186,18 +181,6 @@ abstract class Request
     public function reset()
     {
         $this->hasInitialised = false;
-        self::$originalRequestData = null;
-
-        $this->modelData = [];
-    }
-
-    /**
-     * Static method to return the request to its uninitialised state.
-     */
-    public static function resetRequest()
-    {
-        $instance = new static();
-        $instance->reset();
     }
 
     /**

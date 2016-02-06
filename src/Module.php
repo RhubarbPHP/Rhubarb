@@ -42,16 +42,6 @@ use Symfony\Component\Console\Command\Command;
 abstract class Module
 {
     /**
-     * The collection of registered modules.
-     *
-     * Register a module through RegisterModule
-     *
-     * @see RegisterModule()
-     * @var Module[]
-     */
-    private static $modules = [];
-
-    /**
      * An array of UrlHandlers
      *
      * @var \Rhubarb\Crown\UrlHandlers\UrlHandler[]

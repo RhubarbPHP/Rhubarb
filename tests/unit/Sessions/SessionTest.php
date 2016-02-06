@@ -3,8 +3,6 @@
 namespace Rhubarb\Crown\Tests\unit\Sessions;
 
 use Rhubarb\Crown\Container;
-use Rhubarb\Crown\Sessions\Exceptions\SessionProviderNotFoundException;
-use Rhubarb\Crown\Sessions\Session;
 use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
 use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;

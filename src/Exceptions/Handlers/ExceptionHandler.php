@@ -38,11 +38,6 @@ abstract class ExceptionHandler
      */
     abstract protected function handleException(RhubarbException $er);
 
-    /**
-     * @var string
-     */
-    private static $exceptionHandlerClassName = '\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler';
-
     public static function disableExceptionTrapping()
     {
         /**
