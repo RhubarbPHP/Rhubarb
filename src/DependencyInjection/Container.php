@@ -1,8 +1,9 @@
 <?php
 
-namespace Rhubarb\Crown;
+namespace Rhubarb\Crown\DependencyInjection;
 
 use ReflectionMethod;
+use Rhubarb\Crown\Application;
 
 /**
  * Rhubarb's dependency container
@@ -84,8 +85,7 @@ final class Container
      */
     public static function instance($requestedClass, ...$arguments)
     {
-        $instance = Application::current()->container();
-        return call_user_func_array([$instance, "getInstance"], func_get_args());
+        return self::current()->getInstance($requestedClass, ...$arguments);
     }
 
     /**

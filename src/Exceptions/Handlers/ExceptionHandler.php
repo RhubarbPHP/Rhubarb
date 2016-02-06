@@ -19,8 +19,9 @@
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use ErrorException;
-use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\SingletonProviderTrait;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Response\Response;
@@ -28,8 +29,10 @@ use Rhubarb\Crown\Response\Response;
 /**
  * The base ExceptionHandler class
  */
-abstract class ExceptionHandler
+abstract class ExceptionHandler implements ProviderInterface
 {
+    use SingletonProviderTrait;
+
     /**
      * Should be overriden by extends of this base class to do the actual processing with the exception
      *
@@ -43,7 +46,7 @@ abstract class ExceptionHandler
         /**
          * @var ExceptionSettings $exceptionSettings
          */
-        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        $exceptionSettings = ExceptionSettings::singleton();
         $exceptionSettings->exceptionTrappingOn = false;
 
         ini_set("display_errors", true);
@@ -57,7 +60,7 @@ abstract class ExceptionHandler
         /**
          * @var ExceptionSettings $exceptionSettings
          */
-        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        $exceptionSettings = ExceptionSettings::singleton();
         $exceptionSettings->exceptionTrappingOn = true;
 
         ini_set("display_errors", false);
@@ -96,7 +99,7 @@ abstract class ExceptionHandler
             /**
              * @var ExceptionSettings $exceptionSettings
              */
-            $exceptionSettings = Container::instance(ExceptionSettings::class);
+            $exceptionSettings = ExceptionSettings::singleton();
             if ($exceptionSettings->exceptionTrappingOn) {
                 $error = error_get_last();
 

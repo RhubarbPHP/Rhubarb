@@ -19,7 +19,7 @@
 namespace Rhubarb\Crown\Tests\unit\Exceptions\Handlers;
 
 use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Exceptions\RhubarbException;

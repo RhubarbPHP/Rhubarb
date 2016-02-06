@@ -86,7 +86,7 @@ abstract class Email
     public function getSender()
     {
         if ($this->sender == null) {
-            $emailSettings = EmailSettings::instance();
+            $emailSettings = EmailSettings::singleton();
 
             return $emailSettings->defaultSender;
         }
@@ -124,7 +124,7 @@ abstract class Email
 
     public function getRecipients()
     {
-        $emailSettings = EmailSettings::instance();
+        $emailSettings = EmailSettings::singleton();
 
         if ($emailSettings->onlyRecipient) {
             // Only send emails to a test recipient, to prevent emailing real customers from a development environment
@@ -258,7 +258,7 @@ abstract class Email
             ($html != "") ? $html : $text
         );
 
-        $emailProvider = EmailProvider::getDefaultEmailProvider();
+        $emailProvider = EmailProvider::getProvider();
         $emailProvider->sendEmail($this);
     }
 }

@@ -39,7 +39,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         // Remove the current working directory from the resource path.
         $cwd = Application::current()->applicationRootPath;
 
-        $url = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath)));
+        $url = "/deployed/" . ltrim(str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath))),'/');
 
         $this->alreadyDeployed[$resourceFilePath] = $url;
 

@@ -18,8 +18,8 @@
 
 namespace Rhubarb\Crown\Email;
 
-use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 
 /**
  * Performs transmission of emails to recipients.
@@ -30,28 +30,9 @@ use Rhubarb\Crown\Container;
  *
  * @see Email
  */
-abstract class EmailProvider
+abstract class EmailProvider implements ProviderInterface
 {
-    /**
-     * @deprecated Use the dependency injection container instead
-     * @param $emailProviderClassName
-     */
-    public static function setDefaultEmailProviderClassName($emailProviderClassName)
-    {
-        $container = Container::current();
-        $container->registerClass(EmailProvider::class, $emailProviderClassName );
-    }
-
-    /**
-     * Returns an instance of the default email provider
-     *
-     * @deprecated Use the dependency injection container instead
-     * @return EmailProvider
-     */
-    public static function getDefaultEmailProvider()
-    {
-        return Container::instance(EmailProvider::class);
-    }
+    use ProviderTrait;
 
     abstract public function sendEmail(Email $email);
 }

@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Sessions;
 
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 
 /**

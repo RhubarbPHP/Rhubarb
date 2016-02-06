@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions\SessionProviders;
 
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Settings;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\Tests\unit\Sessions\UnitTestingSession;
@@ -11,7 +11,7 @@ class PhpSessionProviderTest extends RhubarbTestCase
 {
     public function testSessionStorage()
     {
-        $session = UnitTestingSession::instance();
+        $session = UnitTestingSession::singleton();
         $session->TestValue = "abc123";
         $session->storeSession();
 
@@ -20,13 +20,13 @@ class PhpSessionProviderTest extends RhubarbTestCase
 
     public function testSessionRestore()
     {
-        $session = UnitTestingSession::instance();
+        $session = UnitTestingSession::singleton();
         $session->TestValue = "abc123";
         $session->storeSession();
 
         Container::current()->clearSingleton(UnitTestingSession::class);
 
-        $session = UnitTestingSession::instance();
+        $session = UnitTestingSession::singleton();
 
         $this->assertEquals("abc123", $session->TestValue);
     }

@@ -16,13 +16,13 @@ class SettingsTest extends RhubarbTestCase
 {
     public function testDefaultsAreSet()
     {
-        $settings = UnitTestingSettings::instance();
+        $settings = UnitTestingSettings::singleton();
 
         $this->assertEquals("default", $settings->SettingWithDefault);
 
         $settings->SettingWithDefault = "abc";
 
-        $settings = UnitTestingSettings::instance();
+        $settings = UnitTestingSettings::singleton();
 
         $this->assertEquals("abc", $settings->SettingWithDefault);
     }

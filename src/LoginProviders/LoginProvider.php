@@ -21,7 +21,7 @@ namespace Rhubarb\Crown\LoginProviders;
 require_once __DIR__ . "/../Sessions/Session.php";
 
 use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Sessions\Session;
 

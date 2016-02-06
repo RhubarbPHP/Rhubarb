@@ -2,6 +2,9 @@
 
 namespace Rhubarb\Crown;
 
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider;
+use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
@@ -95,11 +98,11 @@ final class Application
         $this->live = false;
         $this->applicationRootPath = realpath(VENDOR_DIR."/../");
 
-        $this->container()->registerClass(ExceptionHandler::class, DefaultExceptionHandler::class, true);
-        $this->container()->registerClass(ExceptionSettings::class, ExceptionSettings::class, true);
-        $this->container()->registerClass(SessionProvider::class, PhpSessionProvider::class, true);
-
         $this->setAsRunningApplication();
+
+        ExceptionHandler::setProviderClassName(DefaultExceptionHandler::class);
+        SessionProvider::setProviderClassName(PhpSessionProvider::class);
+        ResourceDeploymentProvider::setProviderClassName(RelocationResourceDeploymentProvider::class);
     }
 
     /**

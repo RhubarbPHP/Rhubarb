@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Tests;
 
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\DependencyWithArguments;
 use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\ExtendedSimpleClass;
 use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\OneDependency;

@@ -15,7 +15,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
         $url = $deploymentPackage->getDeployedResourceUrl(__FILE__);
 
         $cwd = Application::current()->applicationRootPath;
-        $deployedUrl = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", __FILE__));
+        $deployedUrl = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", __FILE__));
 
         $this->assertEquals($deployedUrl, $url);
     }
@@ -27,7 +27,7 @@ class RelocationResourceDeploymentHandlerTest extends RhubarbTestCase
         $deploymentPackage = new RelocationResourceDeploymentProvider();
         $deploymentPackage->deployResource(__FILE__);
 
-        $deployedFile = "deployed/" . str_replace($cwd, "", __FILE__);
+        $deployedFile = "deployed" . str_replace($cwd, "", __FILE__);
 
         $this->assertFileExists($deployedFile);
 

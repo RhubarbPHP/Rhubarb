@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions;
 
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Encryption\Aes256ComputedKeyEncryptionProvider;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 use Rhubarb\Crown\Sessions\EncryptedSession;
@@ -19,7 +19,7 @@ class EncryptedSessionTest extends RhubarbTestCase
 
     public function testSessionEncrypts()
     {
-        $session = UnitTestEncryptedSession::instance();
+        $session = UnitTestEncryptedSession::singleton();
         $session->TestValue = "123456";
         $raw = get_object_vars($session);
 

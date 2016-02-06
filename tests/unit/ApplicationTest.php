@@ -91,10 +91,10 @@ class ApplicationTest extends Test
         $this->assertTrue($instance->prop1, "Should have been a singleton...");
 
 
-        $instance = $application->container()->getInstance(ExceptionSettings::class);
+        $instance = ExceptionSettings::singleton();
         $instance->prop1 = true;
 
-        $instance = $application->container()->getInstance(ExceptionSettings::class);
+        $instance = ExceptionSettings::singleton();
 
         $this->assertTrue($instance->prop1, "Should have been a singleton...");
     }

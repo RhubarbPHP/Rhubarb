@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions;
 
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
 use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
@@ -18,7 +18,7 @@ class SessionTest extends RhubarbTestCase
     {
         Container::current()->registerClass(SessionProvider::class, UnitTestingSessionProvider::class);
 
-        $session = UnitTestingSession::instance();
+        $session = UnitTestingSession::singleton();
 
         $this->assertInstanceOf(UnitTestingSessionProvider::class, $session->testGetSessionProvider());
 

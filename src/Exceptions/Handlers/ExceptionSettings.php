@@ -2,7 +2,9 @@
 
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
-class ExceptionSettings
+use Rhubarb\Crown\Settings;
+
+class ExceptionSettings extends Settings
 {
     /**
      * True if exception trapping should be enabled

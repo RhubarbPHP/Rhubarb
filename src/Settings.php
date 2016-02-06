@@ -20,14 +20,19 @@ namespace Rhubarb\Crown;
 
 require_once __DIR__ . "/Modelling/ModelState.php";
 
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\SingletonInterface;
+use Rhubarb\Crown\DependencyInjection\SingletonTrait;
 use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Modelling\ModelState;
 
 /**
  * A base class for creating settings classes.
  */
-abstract class Settings
+abstract class Settings implements SingletonInterface
 {
+    use SingletonTrait;
+
     private $needsInitialised = true;
 
     protected function __construct()
@@ -36,16 +41,6 @@ abstract class Settings
             $this->needsInitialised = false;
             $this->initialiseDefaultValues();
         }
-    }
-
-    /**
-     * @return static
-     */
-    final public static function instance()
-    {
-        return Container::current()->registerSingleton(static::class, function() {
-            return new static();
-        });
     }
 
     /**

@@ -19,7 +19,7 @@
 namespace Rhubarb\Crown\Encryption;
 
 use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Container;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
