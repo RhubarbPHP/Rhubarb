@@ -28,7 +28,7 @@ ini_set("display_errors", "off");
 if(file_exists(__DIR__."/../vendor/autoload.php")){
     define("VENDOR_DIR", realpath(__DIR__."/../vendor"));
 } else {
-    define("VENDOR_DIR", realpath(__DIR__."/../../"));
+    define("VENDOR_DIR", realpath(__DIR__."/../../../"));
 }
 
 // Include the composer autoloader

@@ -97,4 +97,15 @@ class ContainerTest extends RhubarbTestCase
         $this->assertEquals("foo", $object->argument1);
         $this->assertEquals("bar", $object->argument2);
     }
+
+    public function testPassingConcreteDependency()
+    {
+        $simpleClass = new SimpleClass();
+        $simpleClass->foo = "bar";
+
+        $object = $this->container->instance(OneDependency::class, $simpleClass);
+
+        $this->assertEquals("bar", $object->injected->foo);
+
+    }
 }

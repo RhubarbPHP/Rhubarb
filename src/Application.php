@@ -86,6 +86,13 @@ final class Application
      */
     private static $currentApplication = null;
 
+    /**
+     * A collection of arrays provided by getSharedArray()
+     *
+     * @var array
+     */
+    private $sharedData = [];
+
     public final function __construct()
     {
         global $unitTesting;
@@ -349,5 +356,21 @@ final class Application
     protected function setAsRunningApplication()
     {
         Application::$currentApplication = $this;
+    }
+
+    /**
+     * Returns a reference to an array stored using $key.
+     *
+     * Used to share data in this application instead of using statics.
+     * @param $key
+     * @return array
+     */
+    public function &getSharedArray($key)
+    {
+        if (!isset($this->sharedData[$key])){
+            $this->sharedData[$key] = [];
+        }
+
+        return $this->sharedData[$key];
     }
 }

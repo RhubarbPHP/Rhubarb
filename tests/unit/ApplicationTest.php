@@ -77,25 +77,18 @@ class ApplicationTest extends Test
         $this->assertEquals(realpath(VENDOR_DIR."/../"), $application->applicationRootPath);
     }
 
-    public function testDefaultExceptionHandlerEnabled()
+    public function testApplicationData()
     {
         $application = new Application();
-        $instance = $application->container()->getInstance(ExceptionHandler::class);
+        $array = &$application->getSharedArray("test-key");
+        $array["key1"] = "value1";
 
-        $this->assertInstanceOf(DefaultExceptionHandler::class, $instance);
+        $array2 = &$application->getSharedArray("test-key");
 
-        $instance->prop1 = true;
+        $this->assertEquals("value1", $array2["key1"]);
 
-        $instance = $application->container()->getInstance(ExceptionHandler::class);
+        $array2["that"] = "this";
 
-        $this->assertTrue($instance->prop1, "Should have been a singleton...");
-
-
-        $instance = ExceptionSettings::singleton();
-        $instance->prop1 = true;
-
-        $instance = ExceptionSettings::singleton();
-
-        $this->assertTrue($instance->prop1, "Should have been a singleton...");
+        $this->assertEquals("this", $array["that"]);
     }
 }
