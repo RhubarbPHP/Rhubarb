@@ -27,5 +27,14 @@ class UnitTestingHttpClient extends HttpClient
     public function getResponse(HttpRequest $request)
     {
         self::$request = $request;
+        return $this->getFakeResponse($request);
+    }
+
+    protected function getFakeResponse(HttpRequest $request)
+    {
+        $httpResponse = new HttpResponse();
+        $httpResponse->setResponseBody(json_encode([]));
+
+        return $httpResponse;
     }
 }
