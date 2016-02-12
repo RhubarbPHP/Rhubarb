@@ -9,6 +9,17 @@ use Rhubarb\Crown\Http\HttpResponse;
 class UnitTestingHttpClient extends HttpClient
 {
     private static $request;
+    private static $requestHistory = [];
+
+    public static function getRequestHistory()
+    {
+        return self::$requestHistory;
+    }
+
+    public static function clearRequestHistory()
+    {
+        self::$requestHistory = [];
+    }
 
     /**
      * @return HttpRequest
@@ -27,6 +38,7 @@ class UnitTestingHttpClient extends HttpClient
     public function getResponse(HttpRequest $request)
     {
         self::$request = $request;
+        self::$requestHistory[] = $request;
         return $this->getFakeResponse($request);
     }
 
