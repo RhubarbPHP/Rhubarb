@@ -86,37 +86,35 @@ abstract class ExceptionHandler
 
         // Make sure we handle fatal errors too.
         register_shutdown_function(function () use ($exceptionHandler) {
-            if (self::$exceptionTrappingOn) {
-                $error = error_get_last();
+            $error = error_get_last();
 
-                if ($error != null) {
-                    // Ensure we're in the project root directory, as some webservers (e.g. apache) can change
-                    // the working directory during shutdown.
-                    chdir(__DIR__.'/../../../../../../');
+            if ($error != null) {
+                // Ensure we're in the project root directory, as some webservers (e.g. apache) can change
+                // the working directory during shutdown.
+                chdir(__DIR__.'/../../../../../../');
 
-                    if (!file_exists("shutdown_logs")) {
-                        @mkdir("shutdown_logs");
-                    }
-
-                    @file_put_contents(
-                        'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
-                        "Type: {$error["type"]}\n".
-                        "Message: {$error["message"]}\n".
-                        "File: {$error["file"]}\n".
-                        "Line: {$error["line"]}\n\n",
-                        FILE_APPEND
-                    );
+                if (!file_exists("shutdown_logs")) {
+                    @mkdir("shutdown_logs");
                 }
 
-                if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
-                    $exceptionHandler(new ErrorException(
-                        $error["message"],
-                        0,
-                        $error["type"],
-                        $error["file"],
-                        $error["line"]
-                    ));
-                }
+                @file_put_contents(
+                    'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
+                    "Type: {$error["type"]}\n".
+                    "Message: {$error["message"]}\n".
+                    "File: {$error["file"]}\n".
+                    "Line: {$error["line"]}\n\n",
+                    FILE_APPEND
+                );
+            }
+
+            if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
+                $exceptionHandler(new ErrorException(
+                    $error["message"],
+                    0,
+                    $error["type"],
+                    $error["file"],
+                    $error["line"]
+                ));
             }
         });
     }
