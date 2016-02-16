@@ -13,5 +13,4 @@ class HttpResponseException extends RhubarbException
         parent::__construct($privateMessage, $previous);
         $this->response = $response;
     }
-
 }
