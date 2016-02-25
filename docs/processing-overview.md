@@ -1,20 +1,20 @@
 The Rhubarb Processing Pipeline
 ===============================
 
-Rhubarb answers requests from a client (presented by a web server) with a response. Determining which response
-and how that response is formatted is the job of the Rhubarb processing pipeline. Understanding the
-pipeline is an important step to understanding how many key Rhubarb classes work.
+Rhubarb answers requests from a client with a response. Determining which response and how that response is
+formatted is the job of the Rhubarb processing pipeline. Understanding the pipeline is an important step to
+understanding how Rhubarb's behaviour can be modified for your needs.
 
-## Stage 1: Application is booted
+## Step 1: Application is booted
 
 In the `vendor/rhubarbphp/rhubarb/platform` folder there are a number of PHP scripts starting with the word
-"execute". These files are the entry point of all requests to the Rhubarb engine. Sometimes these are called
-['Front Controllers'](http://en.wikipedia.org/wiki/Front_Controller_pattern). Which script depends upon
+"execute". These files are the entry point of all requests to the Rhubarb engine. Sometimes called
+['Front Controllers'](http://en.wikipedia.org/wiki/Front_Controller_pattern) the script called depends upon
 the context of the request:
 
 execute-http.php
 :   Called by a webserver serving an HttpRequest to Rhubarb. The webserver must be instructed to route all
-    (with some exceptions) requests to this PHP script.
+    requests to this PHP script with the exception of static files that can be served directlys.
 
 execute-cli.php
 :   Called from a machine terminal serving a CliRequest to Rhubarb. This is used for running scheduled tasks

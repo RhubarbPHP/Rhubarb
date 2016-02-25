@@ -3,23 +3,22 @@ Rhubarb Basics
 
 ## Table of Contents
 
-### 1. Rhubarb's Processing Pipeline
+### 1. Essential Concepts
 
-The purpose of Rhubarb is to generate a "Response" to a "Request". Starting with an overview of Rhubarb
-files and folders we learn about how to generate responses by matching requests to url handlers and then
-surrounding those responses with a layout.
+The purpose of any web framework like Rhubarb is to generate a "Response" to answer a "Request". Find out how
+Rhubarb selects and generates responses.
 
 * [Essential Files and Directories](files-and-directories)
-* [Processing Pipeline](processing-pipeline)
+* [Processing Overview](processing-overview)
 * [Response Generators](response-generating)
 * [UrlHandler](url-handlers)
 * [Request](request)
 * [Response](response)
 * [Filters and Layout](filters-and-layout)
 
-### 3. Providers
+### 2. Providers
 
-Rhubarb delegates much of its responsibilities to "providers". A provider supplies specific functionality by
+Many real world integrations are delegated in Rhubarb to "providers". A provider gives you functionality by
 following the pattern of a base abstract "Provider" class or interface. Your application can choose which
 of the actual providers you want to use and providers can be changed without rebuilding any of your application.
 For example you might switch your EmailProvider from the Send Grid provider to the PostmarkApp provider with one
@@ -31,11 +30,11 @@ line of code.
 * [Encryption and Hash Providers](encryption)
 * [Deployment Providers](deployment)
 
-### 4. Logging
+### 3. Logging
 
 Find out how Rhubarb handles logging, how to control what is logged and where it is logged to.
 
-### 5. Useful Classes
+### 4. Useful Classes
 
 The base Rhubarb package includes a range of useful classes used within Rhubarb that you can use in your
 applications.
@@ -46,3 +45,7 @@ applications.
 * [Mime](mime)
 * [Xml](xml)
 * [DataStreams](data-streams)
+
+### 5. Dependency Injection
+
+Rhubarb implements a dependency injection container. Find out what it is and how to use it.

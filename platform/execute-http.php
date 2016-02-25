@@ -32,11 +32,9 @@ require_once __DIR__ . "/boot.php";
 
 require_once __DIR__ . "/../src/Logging/Log.php";
 require_once __DIR__ . "/../src/Module.php";
-require_once __DIR__ . "/../src/Context.php";
+require_once __DIR__ . "/../src/PhpContext.php";
 
 Log::performance( "Rhubarb booted", "ROUTER" );
-
-$request = \Rhubarb\Crown\PhpContext::createRequest();
 
 try {
     // Pass control to the Module class and ask it to generate a response for the
@@ -45,10 +43,11 @@ try {
     Log::performance( "Response generated", "ROUTER" );
     $response->send();
     Log::performance( "Response sent", "ROUTER" );
-} catch (\Exception $er) {
-    $context = new \Rhubarb\Crown\PhpContext();
 
-    if ($context->DeveloperMode) {
+} catch (\Exception $er) {
+    $app = \Rhubarb\Crown\Application::current();
+
+    if ($app->developerMode) {
         Log::error($er->getMessage(), "ERROR");
 
         print "<pre>Exception: " . get_class($er) . "
