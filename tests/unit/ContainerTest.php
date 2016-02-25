@@ -106,6 +106,5 @@ class ContainerTest extends RhubarbTestCase
         $object = $this->container->instance(OneDependency::class, $simpleClass);
 
         $this->assertEquals("bar", $object->injected->foo);
-
     }
 }

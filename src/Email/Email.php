@@ -38,6 +38,16 @@ abstract class Email
     private $attachments = [];
 
     /**
+     * @var EmailProvider
+     */
+    private $emailProvider;
+
+    public function __construct(EmailProvider $emailProvider)
+    {
+        $this->emailProvider = $emailProvider;
+    }
+
+    /**
      * Adds an attachment
      *
      * @param string $path The path to the local file
@@ -258,7 +268,6 @@ abstract class Email
             ($html != "") ? $html : $text
         );
 
-        $emailProvider = EmailProvider::getProvider();
-        $emailProvider->sendEmail($this);
+        $this->emailProvider->sendEmail($this);
     }
 }

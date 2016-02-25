@@ -65,7 +65,7 @@ final class Container
             // No defined constructor so exit simply with a new instance.
             $instance = $reflection->newInstanceArgs($arguments);
         } else {
-            $instance = $this->generateInstanceFromConstructor($constructor, $arguments);
+            $instance = $this->generateInstanceFromConstructor($reflection, $constructor, $arguments);
         }
 
         if ($useSingleton) {
@@ -122,7 +122,7 @@ final class Container
      * @param ReflectionMethod $constructor
      * @return mixed
      */
-    private function generateInstanceFromConstructor($constructor, $arguments)
+    private function generateInstanceFromConstructor($requestedClass, $constructor, $arguments)
     {
         $params = $constructor->getParameters();
         $paramArgs = [];
@@ -134,13 +134,21 @@ final class Container
                 break;
             }
 
-            $dependency = $this->getInstance($dependencyClass->getName());
+            $dependencyClassName = $dependencyClass->getName();
+
+            if (count($arguments) > 0 && is_object($arguments[0]) && $arguments[0] instanceof $dependencyClassName) {
+                $dependency = $arguments[0];
+                array_splice($arguments, 0, 1);
+            } else {
+                $dependency = $this->getInstance($dependencyClass->getName());
+            }
+
             $paramArgs[] = $dependency;
         }
 
         $paramArgs = array_merge($paramArgs,$arguments);
 
-        $instance = $constructor->getDeclaringClass()->newInstanceArgs($paramArgs);
+        $instance = $requestedClass->newInstanceArgs($paramArgs);
 
         return $instance;
     }

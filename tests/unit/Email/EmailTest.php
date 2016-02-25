@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Email;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Email\SimpleEmail;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
@@ -10,7 +11,7 @@ class EmailTest extends RhubarbTestCase
 {
     public function testEmailRecipients()
     {
-        $email = new SimpleEmail();
+        $email = Container::instance(SimpleEmail::class);
         $email->AddRecipients(
             [
                 "acuthbert@gcdtech.com"
@@ -19,7 +20,7 @@ class EmailTest extends RhubarbTestCase
 
         $this->assertEquals("acuthbert@gcdtech.com", current($email->GetRecipients())->email);
 
-        $email = new SimpleEmail();
+        $email = Container::instance(SimpleEmail::class);
         $email->AddRecipients(
             [
                 "acuthbert@gcdtech.com",
@@ -44,7 +45,7 @@ class EmailTest extends RhubarbTestCase
 
     public function testFileAttaches()
     {
-        $email = new SimpleEmail();
+        $email = Container::instance(SimpleEmail::class);
         $email->AddAttachment("/path/to/file");
 
         $this->assertEquals("/path/to/file", $email->GetAttachments()[0]->path);
@@ -58,7 +59,7 @@ class EmailTest extends RhubarbTestCase
 
     public function testMimeDocument()
     {
-        $email = new SimpleEmail();
+        $email = Container::instance(SimpleEmail::class);
         $email->AddRecipient("acuthbert@gcdtech.com")
             ->SetSubject("Testing")
             ->SetSender("jsmith@gcdtech.com")
@@ -104,7 +105,7 @@ class EmailTest extends RhubarbTestCase
     public function testEmailSends()
     {
         // Note this test only confirms the email has made it to the provider.
-        $email = new SimpleEmail();
+        $email = Container::instance(SimpleEmail::class);
         $email->AddRecipient("acuthbert@gcdtech.com")
             ->SetText("This is a test email")
             ->Send();
