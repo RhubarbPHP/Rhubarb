@@ -33,7 +33,7 @@ class Response
     /**
      * Records a reference to the object that generated this response.
      *
-     * This is often used by unit tests to determine that url routing was successfull, however it can also be useful
+     * This is often used by unit tests to determine that url routing was successful, however it can also be useful
      * in complex rendering stacks where a response filter needs to know who generated the output to make an
      * appropriate response.
      *
