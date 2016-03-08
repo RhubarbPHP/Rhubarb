@@ -10,7 +10,7 @@ Rhubarb selects and generates responses.
 
 * [Essential Files and Directories](files-and-directories)
 * [Processing Overview](processing-overview)
-* [Response Generators](response-generating)
+* [Generating Responses](response-generating)
 * [UrlHandler](url-handlers)
 * [Request](request)
 * [Response](response)

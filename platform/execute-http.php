@@ -24,6 +24,7 @@
  * and CSS files.
  */
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 
@@ -36,10 +37,21 @@ require_once __DIR__ . "/../src/PhpContext.php";
 
 Log::performance( "Rhubarb booted", "ROUTER" );
 
+/**
+ * @var Application $application
+ */
+
+if ($_ENV["rhubarb_app"]){
+    $appClass = $_ENV["rhubarb_app"];
+    $application = new $appClass();
+} elseif (file_exists("settings/app.config.php")){
+    include_once "settings/app.config.php";
+}
+
 try {
     // Pass control to the Module class and ask it to generate a response for the
     // incoming request.
-    $response = Module::generateResponseForRequest($request);
+    $response = $application->generateResponseForRequest($application->currentRequest());
     Log::performance( "Response generated", "ROUTER" );
     $response->send();
     Log::performance( "Response sent", "ROUTER" );

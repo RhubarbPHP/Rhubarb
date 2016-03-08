@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures;
 
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 
-class SimpleContent implements GeneratesResponse
+class SimpleContent implements GeneratesResponseInterface
 {
     const CONTENT = "Don't change this content - it should match the unit test.";
 

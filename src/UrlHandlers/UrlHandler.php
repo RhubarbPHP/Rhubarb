@@ -23,12 +23,12 @@ use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\Request;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Response\Response;
 
-require_once __DIR__ . "/../Response/GeneratesResponse.php";
+require_once __DIR__ . "/../Response/GeneratesResponseInterface.php";
 
 /**
  * The base class for URL Handlers.
@@ -40,7 +40,7 @@ require_once __DIR__ . "/../Response/GeneratesResponse.php";
  * We return false rather than an exception for performance reasons.
  *
  */
-abstract class UrlHandler implements GeneratesResponse
+abstract class UrlHandler implements GeneratesResponseInterface
 {
     /**
      * The URL stub which will allow this handler to consider a response
