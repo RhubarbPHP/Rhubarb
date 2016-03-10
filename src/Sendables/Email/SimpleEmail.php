@@ -88,4 +88,61 @@ class SimpleEmail extends Email
 
         return $dataArray;
     }
+
+    public function toArray()
+    {
+        $recipientList = [];
+
+        foreach($this->getRecipients() as $recipient){
+            $recipientList[] = [ "name" => $recipient->name, "email" => $recipient->email ];
+        }
+
+        $attachmentList = [];
+
+        foreach($this->getAttachments() as $attachment){
+            $attachmentList[] = [ "path" => $attachment->path, "name" => $attachment->name ];
+        }
+
+        $data =
+            [
+                "subject" => $this->getSubject(),
+                "recipients" => $recipientList,
+                "text" => $this->getText(),
+                "html" => $this->getHtml(),
+                "sender" => [
+                    "email" => $this->getSender()->email,
+                    "name" => $this->getSender()->name
+                ],
+                "attachments" => $attachmentList
+
+            ];
+
+        return $data;
+    }
+
+    /**
+     * Create's an email from an array of data previously returned via toArray()
+     *
+     * @param $data
+     * @return SimpleEmail
+     */
+    public static function fromArray($data)
+    {
+        $email = new SimpleEmail();
+        $email->setSubject($data["subject"]);
+
+        foreach($data["recipients"] as $recipient){
+            $email->addRecipient($recipient["email"], $recipient["name"]);
+        }
+
+        foreach($data["attachments"] as $attachment){
+            $email->addAttachment($attachment["path"], $attachment["name"]);
+        }
+
+        $email->setText($data["text"]);
+        $email->setHtml($data["html"]);
+        $email->setSender($data["sender"]["email"], $data["sender"]["name"]);
+
+        return $email;
+    }
 }

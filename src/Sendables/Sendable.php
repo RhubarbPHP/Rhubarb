@@ -51,6 +51,13 @@ abstract class Sendable
      */
     public abstract function getText();
 
+    /**
+     * Expresses the sendable as an array allowing it to be serialised, stored and recovered later.
+     *
+     * @return array
+     */
+    public abstract function toArray();
+
     public final function send()
     {
         $this->logSending();
