@@ -47,7 +47,7 @@ abstract class Request
     protected $envData;
 
     /**
-     * @var bool Have we copied the superglobals yet?
+     * @var bool Have we initialised yet?
      */
     protected $hasInitialised = false;
 

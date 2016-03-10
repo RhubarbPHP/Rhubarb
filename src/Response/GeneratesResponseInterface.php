@@ -21,7 +21,7 @@ namespace Rhubarb\Crown\Response;
 /**
  * All classes eligible for generating a response to a request must implement this interface.
  */
-interface GeneratesResponse
+interface GeneratesResponseInterface
 {
     public function generateResponse($request = null);
 }

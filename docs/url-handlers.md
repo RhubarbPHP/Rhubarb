@@ -1,164 +1,138 @@
 URL Handlers
 ===
 
-URL Handlers perform the role of handling incoming requests to generate a response with the collection of
-URL Handlers essentially becoming a *router* for incoming URLs.
+URL Handlers perform the role of matching incoming requests based on their URL and generating a response. The
+collection of URL Handlers essentially becomes a *router* for incoming URLs.
 
-URL Handlers extend the `\Gcd\Core\UrlHandlers\UrlHandler` class and must be created and registered
-within a Module.
+URL Handlers extend the `UrlHandler` class and must be created and registered within the 'registerUrlHandlers()'
+method of a Module.
 
-Some modules may create one or more UrlHandlers to implement behaviour essential to the module.
-Others will simple make the new handlers available as part of it's class library.
+URL Handlers are registered to handle a particular URL 'stub'. Rhubarb iterates over all the registered handlers
+in turn and if the stub is found withing the current URL then the URL is asked to generate the response. A URL
+handler may refuse to generate the response in which case Rhubarb will continue to the next matching handler.
 
-URL Handlers are registered to handle a particular stub of the URL 'tree'. However even if the
-handler matches it's registered URL 'stub' the handler may decided not to handle the request due to
-other factors (e.g. a REST handler might refuse to handle the URL because the client will not accept
-XML)
+For example a URL handler with a stub of '/app/contacts/' would be given the opportunity to handle the following
+requests:
 
-## Using a URL Handler
+```
+/app/contacts/
+/app/contacts/dashboard/
+/app/contacts/1/
+/app/contacts/1/history/
+```
 
-Consider the following configuration file `settings/app.config.php`:
+A handler can have child handlers in which case the child handlers will normally be asked if they would be able
+to generate a response instead. Child handlers also are registered with a stub however this stub should be set
+to match against the remaining portion of the URL.
 
-~~~ php
+For example if our handler in the above example had a child handler with a stub of "dashboard/" it would accept
+the responsibility of generating the response for the second example in the list.
+
+URL handlers can also extract information from the URL. For example if our handler registered for "/app/contacts/"
+was a 'CrudUrlHandler' it would understand that the following digit '1' in "/app/contacts/1/" is really a
+record ID. The '1' is removed from the remainder of the URL so any child handlers are matched without it.
+
+## Registering a URL Handler
+
+Consider the following module:
+
+``` php
 <?php
-
-namespace Site;
-
-use Gcd\Core\Module;
-use Gcd\Core\StaticResource\StaticResourceModule;
-use Gcd\Core\StaticResource\UrlHandlers\StaticResource;
-
-include( "libraries/core/modules/StaticResource/StaticResourceModule.class.php" );
-
 class SiteModule extends Module
 {
-	public function __construct()
+	public function registerUrlHandlers()
 	{
-		$this->namespace = __NAMESPACE__;
-		$this->AddClassPath( "classes" );
-
-		parent::__construct();
-	}
-
-	public function Initialise()
-	{
-		$this->AddUrlHandlers(
+		$this->addUrlHandlers(
 		[
-			"/images/" => new StaticResource( "public/images" ),
-			"/css/" => new StaticResource( "public/css" ),
-			"/js/" => new StaticResource( "public/js" )
+			"/images/" => new StaticResourceUrlHandler( "public/images" ),
+			"/css/" => new StaticResourceUrlHandler( "public/css" ),
+			"/js/" => new StaticResourceUrlHandler( "public/js" )
 		] );
 	}
 }
+```
 
-Module::RegisterModule( new StaticResourceModule() );
-Module::RegisterModule( new SiteModule() );
-~~~
+Here we create three StaticResource url handlers to process resources under /images, /css and /js by
+instantiating them and passing them to the `addUrlHandlers()` method on the `Module` object.
 
-Here we create three StaticResource handlers to process resources under /images, /css and /js by
-instantiating them and passing them to the `AddUrlHandlers()` method on the `Module` object.
-
-This method can take a range of parameter formats:
-
-### Parameter Format 1: Pass the URL stub and the handler as two parameters.
-
-~~~ php
-$this->AddUrlHandlers( "/login/", new ClassMappedUrlHandler( "\MySite\Presenters\LoginPresenter" )
+Either pass a stub and a handler:
+``` php
+$this->addUrlHandlers( "/login/", new ClassMappedUrlHandler(LoginPresenter::class)
 );
-~~~
+```
 
-### Parameter Format 2: Pass an array structure:
+or an array to register a sequence of handlers:
 
-~~~ php
-$this->AddUrlHandlers(
+``` php
+$this->addUrlHandlers(
 [
-	"/login/" => new ClassMappedUrlHandler( "\MySite\Presenters\LoginPresenter" )
+	"/login/" => new ClassMappedUrlHandler(LoginPresenter::class),
+	"/login/forgot-password/" => new ClassMappedUrlHandler(ForgotPassword::class)
 ] );
-~~~
+```
 
-This allows for the registration of multiple handlers in one go.
+Constructors for handlers have a final argument that accepts an array of child handlers in
+a similar array structure. The following registration has exactly the same effect as the one above:
+
+``` php
+$this->addUrlHandlers(
+[
+	"/login/" => new ClassMappedUrlHandler(LoginPresenter::class,
+	[
+		"forgot-password/" => new ClassMappedUrlHandler(ForgotPassword::class)
+	])
+]);
+```
+
+While both forms have the same overall effect registering children usually results in greater performance as
+the child URL will not be instantiated or even considered for URLs that don't start with, in this case, "/login/".
+There might be times when you want to 'flatten' the handlers into top level registrations if analytics reveals the
+child URL is actually requested as commonly or even more so than the parent or other top level handlers.
+
+Performance can also be improved generally by ensuring more commonly accessed URLs are registered first, and higher
+up the array if registered with other handlers. The less handlers that need consulted to match a URL the faster the
+response will be generated.
 
 ## Common Url Handlers
 
-Core comes with a number of commonly used URL handlers:
+Rhubarb comes with a number of commonly used URL handlers:
 
 ClassMappedUrlHandler
 :	This maps a single URL to a single class to generate the response
+
 NamespaceMappedUrlHandler
-:	This maps a stub URL to a stub class namespace, with any 'folders' appear aftering the stub URL being treated as
+:	This maps a stub URL to a stub class namespace, with any 'folders' appearing after the stub URL being treated as
 	additional parts to the class name.
+
 MvpUrlHandler
-:	A variant of NamespaceMappedUrlHandler that expects class names to end in the word 'Presenter'
+:	A variant of NamespaceMappedUrlHandler that expects class names to end in the word 'Presenter' without requiring
+	the URL to do so.
+
 ValidateLoginUrlHandler
-:	Checks the status of a login provider and redirects to a login page if not logged in. Used to protected branches
+:	Checks the status of a login provider and redirects to a login page if not logged in. Used to protect branches
 	of the URL tree from unauthorised access
+
 UrlCapturedDataUrlHandler
-:	Allows a single piece of data to be captured inside the URL as a 'folder' after the handler's registered URL.
+:	Allows a single piece of data to be captured inside the URL as a 'folder' after the handler's registered stub.
+
 CrudUrlHandler
-:	Uses two different generating mvp presenters, one for collections, and one for items if a numeric ID has been
-	added to the URL.
-
-## Sub Handlers
-
-While in most applications all handlers can be registered in this way it can be neater, and
-sometimes required, to consider a handler as being a sub handler of a parent. In nearly all cases
-this is when the URL of the child is 'beneath' that of the parent.
-
-In some cases this is the only way to ensure the child handler gets considered as the URL the parent
-is handling could contain variable data that the child would not be able to predicate. For example
-consider these two UrlHandlers and the URLS they need to handle:
-
-~~~ php
-$this->AddUrlHandlers(
-[
-	"/tickets/" => new CrudUrlHandler( "Ticket", "\MySite\Presenters\Tickets" ),
-	"/tickets/{x}/files/" => new CrudUrlHandler( "Attachment",
-"\MySite\Presenters\Tickets\Attachments" )
-] );
-~~~
-
-The CrudUrlHandler for tickets will process a URL such as:
-
-`/tickets/3/`
-
-However there is no way the UrlHandler for ticket attachments can register itself as the full URL
-can't be predicated.
-
-Instead we make the attachment handler a child of the ticket handler:
-
-~~~ php
-$this->AddUrlHandlers(
-[
-	"/tickets/" => new CrudUrlHandler( "Ticket", "\MySite\Presenters\Tickets", "", [],
-	[
-		"files/" => new CrudUrlHandler( "Attachment",
-"\MySite\Presenters\Tickets\Attachments" )
-	] )
-] );
-~~~
-
-Notice that the URL has changed to simply `files/`. This is because it will be given the URL that
-the parent decided to handle during execution. Notice also that the children are passed in array
-with an identical structure. All UrlHandlers can accept an array of children - this should be the
-last parameter in the constructor.
-
-In general using sub handlers is strongly recommended as it greatly clarifies your application
-config.
+:	Can extract an ID from the URL and will select one of two different generating mvp presenters, one for collections,
+	and one for items depending on whether an ID is found or not.
 
 ## Creating a URL Handler
 
-~~~ php
+``` php
 class MyHandler extends UrlHandler
 {
-	public function GenerateResponseForRequest( Request $request, $currentUrlFragment
+	public function generateResponseForRequest( Request $request, $currentUrlFragment
 = "" )
 	{
 		if ( $someConditionThatChecksTheUrlOrOtherContextualConditions )
 		{
 			$response = new Response();
 
-			// Do the content generation here and return a Reponse object:
-			$response->SetContent( "Sample Response Output" );
+			// Do the content generation here and return a Response object:
+			$response->setContent( "Sample Response Output" );
 
 			return $response;
 		}
@@ -166,39 +140,38 @@ class MyHandler extends UrlHandler
 		return false;
 	}
 }
-~~~
+```
 
 This is the most basic type of URL Handler you can implement. We extend
-`UrlHandler` and only override the `GenerateResponseForRequest()` method.
+`UrlHandler` and only override the `generateResponseForRequest()` method.
 
-`GenerateResponseForRequest()` should return either a `Response` object encapsulating the generated
+`generateResponseForRequest()` should return either a `Response` object encapsulating the generated
 response *or* `false` if it was unsuitable for handling the given request.
 
 ## Prioritisation of UrlHandlers
 
-With a module url handlers are considered in turn in the order in which they are added to the
-`$urlHandlers` array. Sometimes however you have to ensure that your url handler is considered
-before the url handlers of another module. The order of module registration may be outside of your
-control. In these cases you need to increase the priority of the url handler by calling
-`SetPriority()`:
+Generally URL handlers are considered in turn in the order in which they are registered. Sometimes however you
+have to ensure that your url handler is considered before the url handlers of another module. The order of module
+registration may be outside of your control. In these cases you need to increase the priority of the url handler
+by calling `setPriority()`:
 
-~~~ php
-$this->urlHandlers[ "login" ] = $loginValidator = new ValidateLoginUrlHandler( new SiteLogin(),
-array( "/restricted-area/" ), "/login/" );
-$loginValidator->SetPriority( 100 );
-~~~
+``` php
+$loginValidator = new ValidateLoginUrlHandler( new SiteLogin(), [ "/restricted-area/" ], "/login/" );
+$loginValidator->setPriority( 100 );
+
+$this->addUrlHandlers(
+[
+	"/" => $loginValidator
+]
+```
 
 The higher the number, the more precedence the url handler is given.
 
-Note that this only works if the URL Handler is registered as a top most parent handler (i.e.
-registered directly with `Module::AddChildUrlHandlers()`
+Note that this only works if the URL Handler is registered as a top level handler (i.e.
+registered directly with `addUrlHandlers()` and not as a child handler.
 
 ## Named UrlHandlers
 
-UrlHandlers can be named by calling `SetName()`. Only one top most handler with a given name can
-exist in the
-handlers collection at any one time. This allows modules to setup handling of known subject areas
-but provide for future modules, or indeed the application, to replace the handler with a different
-one.
-
-[Request and Response](request-and-response)
+UrlHandlers can be named by calling `setName()`. Only one top most handler with a given name can
+exist in the handlers collection at any one time. This allows modules to setup handlers
+but allow subsequently registered modules to replace the handler with a different one.

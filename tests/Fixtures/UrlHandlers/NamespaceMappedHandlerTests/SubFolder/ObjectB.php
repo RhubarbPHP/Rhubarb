@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures\UrlHandlers\NamespaceMappedHandlerTests\SubFolder;
 
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 
-class ObjectB implements GeneratesResponse
+class ObjectB implements GeneratesResponseInterface
 {
     public function generateResponse($request = null)
     {

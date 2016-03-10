@@ -19,7 +19,7 @@
 namespace Rhubarb\Crown\UrlHandlers;
 
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 
 require_once __DIR__ . "/UrlHandler.php";
 
@@ -108,7 +108,7 @@ class NamespaceMappedUrlHandler extends UrlHandler
 
                 $object = new $objectClass();
 
-                if (is_a($object, "\Rhubarb\Crown\Response\GeneratesResponse")) {
+                if (is_a($object, "\Rhubarb\Crown\Response\GeneratesResponseInterface")) {
                     return $this->onTargetFound($object, $request);
                 }
             }
@@ -124,11 +124,11 @@ class NamespaceMappedUrlHandler extends UrlHandler
      *
      * Normally this just asks the $object to generate a response for the request
      *
-     * @param GeneratesResponse $object
+     * @param GeneratesResponseInterface $object
      * @param $request
      * @return mixed
      */
-    protected function onTargetFound(GeneratesResponse $object, $request)
+    protected function onTargetFound(GeneratesResponseInterface $object, $request)
     {
         return $object->generateResponse($request);
     }

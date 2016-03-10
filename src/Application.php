@@ -111,7 +111,7 @@ class Application
         SessionProvider::setProviderClassName(PhpSessionProvider::class);
         ResourceDeploymentProvider::setProviderClassName(RelocationResourceDeploymentProvider::class);
 
-        $modules = $this->getRegisteredModules();
+        $modules = $this->getModules();
 
         foreach($modules as $module){
             $this->registerModule($module);

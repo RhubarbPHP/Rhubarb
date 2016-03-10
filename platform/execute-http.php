@@ -34,28 +34,36 @@ require_once __DIR__ . "/../src/Logging/Log.php";
 require_once __DIR__ . "/../src/Module.php";
 require_once __DIR__ . "/../src/PhpContext.php";
 
-Log::performance( "Rhubarb booted", "ROUTER" );
+Log::performance("Rhubarb booted", "ROUTER");
+
+/**
+ * @var Application $application
+ */
 
 if (isset($_ENV["rhubarb_app"])) {
     $appClass = $_ENV["rhubarb_app"];
-    /**
-     * @var Application $app
-     */
-    $app = new $appClass();
+    $application = new $appClass();
+} elseif (file_exists("settings/app.config.php")) {
+    include_once "settings/app.config.php";
+}
 
+if (!isset($application)) {
+    Log::warning("HTTP request made with no application loaded.", "ROUTER");
+} else {
+    // Pass control to the Module class and ask it to generate a response for the
+    // incoming request.
     try {
         // Pass control to the application and ask it to generate a response for the
         // incoming request.
-        $response = $app->generateResponseForRequest($app->currentRequest());
+        $response = $application->generateResponseForRequest($application->currentRequest());
 
         Log::performance("Response generated", "ROUTER");
         $response->send();
         Log::performance("Response sent", "ROUTER");
 
     } catch (\Exception $er) {
-        $app = \Rhubarb\Crown\Application::current();
 
-        if ($app->developerMode) {
+        if ($application->developerMode) {
             Log::error($er->getMessage(), "ERROR");
 
             print "<pre>Exception: " . get_class($er) . "
@@ -65,8 +73,7 @@ Stack Trace:
 
         }
     }
-} else {
-    Log::warning("HTTP request made with no application loaded.", "ROUTER");
 }
+
 
 Log::debug("Request Complete", "ROUTER");

@@ -3,7 +3,7 @@
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
@@ -31,7 +31,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
     }
 }
 
-class TestTarget implements GeneratesResponse
+class TestTarget implements GeneratesResponseInterface
 {
     public function generateResponse($request = null)
     {

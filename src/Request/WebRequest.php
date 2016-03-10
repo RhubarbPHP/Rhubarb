@@ -95,19 +95,17 @@ class WebRequest extends Request
         }
 
         $this->host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
-        $this->uri = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '';
+        $this->uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
         $this->urlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
     }
 
     /**
-     * Gets the Base url for the current request (e.g. http://localhost/), with optional appended path.
+     * Creates a URL for a URI using the existing http scheme, host and port of this request (e.g. http://localhost/)
      *
-     * The Base Url will not normally have a trailing URL, but if a path to append is included, one will be added.
-     *
-     * @param string $append Optional path to append to the URL
+     * @param string $uri The URI to compose a URL for.
      * @return string
      */
-    public function getUrlBase($append = '')
+    public function createUrl($uri = '/')
     {
         if (!isset($this->urlBase)) {
             $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
@@ -124,11 +122,11 @@ class WebRequest extends Request
             $this->urlBase = $protocol . '://' . $host;
         }
 
-        if ($append !== '' && strpos($append, '/') === false) {
-            $append = '/' . $append;
+        if ($uri !== '' && strpos($uri, '/') === false) {
+            $uri = '/' . $uri;
         }
 
-        return $this->urlBase.$append;
+        return $this->urlBase.$uri;
     }
 
     public function isSSL()
