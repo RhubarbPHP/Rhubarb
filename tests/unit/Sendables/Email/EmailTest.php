@@ -123,6 +123,14 @@ class EmailTest extends RhubarbTestCase
 
         $this->assertArrayHasKey( "Subject", $data );
         $this->assertEquals($email->getSubject(), $data["Subject"]);
-
     }
+
+    public function testEmailSendableType()
+    {
+        $email = new SimpleEmail();
+        $type = $email->getSendableType();
+
+        $this->assertEquals("Email", $type);
+    }
+
 }

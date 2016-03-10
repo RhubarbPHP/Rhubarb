@@ -68,11 +68,6 @@ abstract class Email extends Sendable
     /**
      * @return string
      */
-    abstract public function getText();
-
-    /**
-     * @return string
-     */
     abstract public function getSubject();
 
 
@@ -133,6 +128,11 @@ abstract class Email extends Sendable
         }
 
         return $this->recipients;
+    }
+
+    public function getSendableType()
+    {
+        return "Email";
     }
 
     public function getMimeDocument()
