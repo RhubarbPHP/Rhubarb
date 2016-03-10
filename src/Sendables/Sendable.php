@@ -21,7 +21,7 @@ abstract class Sendable
     protected abstract function getProviderClassName();
 
     /**
-     * Returns the list of recipients for this sendable.@deprecated
+     * Returns the list of recipients for this sendable.
      *
      * Sendable types must be able to return a list of recipients. This should return either an array
      * of values keyed by a string (e.g. email address) or a numerically indexed array containing
