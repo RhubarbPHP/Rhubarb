@@ -22,7 +22,7 @@ use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
 use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
-final class Application
+class Application
 {
     /**
      * True to enable developer only functionality
@@ -110,6 +110,17 @@ final class Application
         ExceptionHandler::setProviderClassName(DefaultExceptionHandler::class);
         SessionProvider::setProviderClassName(PhpSessionProvider::class);
         ResourceDeploymentProvider::setProviderClassName(RelocationResourceDeploymentProvider::class);
+
+        $modules = $this->getRegisteredModules();
+
+        foreach($modules as $module){
+            $this->registerModule($module);
+        }
+    }
+
+    protected function getModules()
+    {
+        return [];
     }
 
     /**
@@ -130,7 +141,7 @@ final class Application
      * True if the application is being ran in a unit test harness.
      * @return bool
      */
-    public function isUnitTesting()
+    public final function isUnitTesting()
     {
         return $this->unitTesting;
     }
@@ -140,7 +151,7 @@ final class Application
      *
      * @return PhpContext
      */
-    public function getPhpContext()
+    public final function getPhpContext()
     {
         return $this->phpContext;
     }
@@ -148,11 +159,11 @@ final class Application
     /**
      * Register a module with the application.
      *
-     * Registers the child modules returned by the
+     * Also registers the dependencies of the application also
      *
      * @param Module $module
      */
-    public function registerModule(Module $module)
+    public final function registerModule(Module $module)
     {
         $dependencies = $module->getModules();
 
@@ -163,7 +174,7 @@ final class Application
         $this->modules[$module->getModuleName()] = $module;
     }
 
-    public function getModules()
+    public final function getRegisteredModules()
     {
         return array_values($this->modules);
     }
@@ -242,7 +253,7 @@ final class Application
      * @param Request $request
      * @return string|Response
      */
-    public function generateResponseForRequest(Request $request)
+    public final function generateResponseForRequest(Request $request)
     {
         $this->setAsRunningApplication();
         $this->request = $request;
@@ -339,7 +350,7 @@ final class Application
     /**
      * Gets the current request derived from the PHP context.
      */
-    public function currentRequest()
+    public final function currentRequest()
     {
         if ($this->request == null){
             $this->request = $this->phpContext->createRequest();
@@ -348,7 +359,7 @@ final class Application
         return $this->request;
     }
 
-    public static function current()
+    public static final function current()
     {
         return self::$currentApplication;
     }
@@ -365,7 +376,7 @@ final class Application
      * @param $key
      * @return array
      */
-    public function &getSharedArray($key)
+    public final function &getSharedArray($key)
     {
         if (!isset($this->sharedData[$key])){
             $this->sharedData[$key] = [];

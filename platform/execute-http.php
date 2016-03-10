@@ -24,8 +24,8 @@
  * and CSS files.
  */
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Crown\Module;
 
 // Initiate our bootstrap script to boot all libraries required.
 require_once __DIR__ . "/boot.php";
@@ -36,26 +36,37 @@ require_once __DIR__ . "/../src/PhpContext.php";
 
 Log::performance( "Rhubarb booted", "ROUTER" );
 
-try {
-    // Pass control to the Module class and ask it to generate a response for the
-    // incoming request.
-    $response = Module::generateResponseForRequest($request);
-    Log::performance( "Response generated", "ROUTER" );
-    $response->send();
-    Log::performance( "Response sent", "ROUTER" );
+if (isset($_ENV["rhubarb_app"])) {
+    $appClass = $_ENV["rhubarb_app"];
+    /**
+     * @var Application $app
+     */
+    $app = new $appClass();
 
-} catch (\Exception $er) {
-    $app = \Rhubarb\Crown\Application::current();
+    try {
+        // Pass control to the application and ask it to generate a response for the
+        // incoming request.
+        $response = $app->generateResponseForRequest($app->currentRequest());
 
-    if ($app->developerMode) {
-        Log::error($er->getMessage(), "ERROR");
+        Log::performance("Response generated", "ROUTER");
+        $response->send();
+        Log::performance("Response sent", "ROUTER");
 
-        print "<pre>Exception: " . get_class($er) . "
+    } catch (\Exception $er) {
+        $app = \Rhubarb\Crown\Application::current();
+
+        if ($app->developerMode) {
+            Log::error($er->getMessage(), "ERROR");
+
+            print "<pre>Exception: " . get_class($er) . "
 Message: " . $er->getMessage() . "
 Stack Trace:
 " . $er->getTraceAsString();
 
+        }
     }
+} else {
+    Log::warning("HTTP request made with no application loaded.", "ROUTER");
 }
 
 Log::debug("Request Complete", "ROUTER");
