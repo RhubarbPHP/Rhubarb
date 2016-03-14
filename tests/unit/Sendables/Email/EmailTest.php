@@ -2,6 +2,8 @@
 
 namespace Rhubarb\Crown\Tests\unit\Email;
 
+use Rhubarb\Crown\Sendables\Email\Email;
+use Rhubarb\Crown\Sendables\Email\EmailSettings;
 use Rhubarb\Crown\Sendables\Email\SimpleEmail;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
@@ -123,6 +125,44 @@ class EmailTest extends RhubarbTestCase
 
         $this->assertArrayHasKey( "Subject", $data );
         $this->assertEquals($email->getSubject(), $data["Subject"]);
+    }
 
+    public function testEmailSendableType()
+    {
+        $email = new SimpleEmail();
+        $type = $email->getSendableType();
+
+        $this->assertEquals("Email", $type);
+    }
+
+    public function testToArray()
+    {
+        $email = new SimpleEmail();
+        $email->setSubject("This is a test");
+        $email->setSender("alice@bob.com");
+        $this->assertReflectionMatches($email);
+        $email->addRecipient("joe@bob.com");
+        $this->assertReflectionMatches($email);
+        $email->addRecipient("jane@bob.com", "Jane Bob");
+        $this->assertReflectionMatches($email);
+        $email->setText("War and peace");
+        $this->assertReflectionMatches($email);
+        $email->setHtml("<p>War and peace</p>");
+        $this->assertReflectionMatches($email);
+
+        file_put_contents("test.txt", "abc123");
+
+        $email->addAttachment("test.txt", "Test File.txt");
+
+        unlink("test.txt");
+
+        $this->assertReflectionMatches($email);
+    }
+
+    private function assertReflectionMatches(Email $email)
+    {
+        $reflection = SimpleEmail::fromArray($email->toArray());
+
+        $this->assertEquals($reflection, $email);
     }
 }
