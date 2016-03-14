@@ -50,8 +50,6 @@ if (isset($_ENV["rhubarb_app"])) {
 if (!isset($application)) {
     Log::warning("HTTP request made with no application loaded.", "ROUTER");
 } else {
-    // Pass control to the Module class and ask it to generate a response for the
-    // incoming request.
     try {
         // Pass control to the application and ask it to generate a response for the
         // incoming request.
