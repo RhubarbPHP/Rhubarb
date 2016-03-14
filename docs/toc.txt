@@ -1,23 +1,23 @@
 Rhubarb Basics:
     Essential Files and Directories:files-and-directories
     Processing Overview:processing-overview
-    Generating Responses:generating-responses
+    Generating Responses:response-generating
     Handling URLs:url-handlers
     Requests:request
     Responses:response
     Filters and Layout:filters-and-layout
     Application:application
     Dependency Injection:dependency-injection
-Settings
-Sessions
-Handling Login Status
-Sendables
-Encryption
-Deploying Resource Files
-Logging
-Dates and Times
-DataStreams
-Other Useful Classes
-    StringTools
-    Mime
-    Xml
+Settings:settings
+Sessions:sessions
+Handling Login Status:login
+Sendables:sendables
+Encryption:encryption
+Deploying Resource Files:deployment
+Logging:logging
+Dates and Times:date-and-time
+DataStreams:datastreams
+Other Useful Classes:other-classes
+    StringTools:other-classes/string-tools
+    Mime:other-classes/mime
+    Xml:other-classes/xml
