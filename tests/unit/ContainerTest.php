@@ -81,7 +81,7 @@ class ContainerTest extends RhubarbTestCase
 
     public function testSingletonRequest()
     {
-        $object = $this->container->registerSingleton(SimpleClass::class, function(){ return new SimpleClass(); });
+        $object = $this->container->singleton(SimpleClass::class, function(){ return new SimpleClass(); });
         $object->foo = "bar";
 
         $object = $this->container->getInstance(SimpleClass::class);

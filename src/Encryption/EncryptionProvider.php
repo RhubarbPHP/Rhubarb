@@ -20,39 +20,16 @@ namespace Rhubarb\Crown\Encryption;
 
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
  * Provides a framework for providing encryption services.
  */
-abstract class EncryptionProvider
+abstract class EncryptionProvider implements ProviderInterface
 {
-    /**
-     * Sets the class to be used for the default hash provider.
-     *
-     * @deprecated Use the dependency injection container
-     * @param $providerClassName
-     * @return string Returns the class name of the previous default provider.
-     */
-    public static function setEncryptionProviderClassName($providerClassName)
-    {
-        Application::current()
-            ->container()
-            ->registerClass(
-                EncryptionProvider::class,
-                $providerClassName);
-    }
-
-    /**
-     * Get's an instance of the default hash provider.
-     *
-     * @deprecated Use the dependency injection container instead.
-     * @return EncryptionProvider
-     */
-    public static function getEncryptionProvider()
-    {
-        return Container::instance(EncryptionProvider::class);
-    }
+    use ProviderTrait;
 
     /**
      * Returns the encrypted data.

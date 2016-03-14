@@ -1,11 +1,16 @@
 Encryption
-===
+==========
 
-The Core provides a framework for implementing two types of encryption: normal two way encryption and one way
-or 'hashing'. As reviewing and updating encryption techniques is so critical we've implemented a dependency injection
-approach to selecting the particular type of encryption or hashing required by a project.
+Rhubarb provides a framework for implementing two types of encryption: two way encryption and one way
+or 'hashing'.
 
-The core module includes the following encryption methods as standard:
+Both types of encryption follow the provider pattern: you can set a default hash provider and a default encryption
+provider for your application. Systems that require encryption and decryption will use these default providers.
+
+Because making choices about encryption are so critical there are provider engaged by default. You must configure
+the provider you want for your encryption before encryption can be used.
+
+Rhubarb includes the following encryption methods as standard:
 
 ### Encryption
 
@@ -19,76 +24,103 @@ The core module includes the following encryption methods as standard:
 
 ### Setting the default hash provider
 
-The default hash provider should be set by your application's modules.php file and simply involves calling the static
-function `HashProvider::SetHashProviderClassName()`:
+The default hash provider should be set in your application's main module and simply involves calling the static
+function `HashProvider::setProviderClassName()`:
 
 ~~~ php
-\Gcd\Core\Encryption\HashProvider::SetHashProviderClassName( "Gcd\Core\Encryption\Sha512HashProvider" );
+HashProvider::setProviderClassName(Sha512HashProvider::class);
 ~~~
 
 ### Creating a hash
 
-While you can instantiate HashProvider classes and use them directly we *strongly recommend* using the dependency injection pattern and getting the hash provider by using:
+While you can instantiate HashProvider classes and use them directly we *strongly recommend* using the default
+provider by using:
 
 ~~~ php
-$hashProvider = \Gcd\Core\Encryption\HashProvider::GetHashProvider();
+$hashProvider = HashProvider::getProvider();
 ~~~
 
-This approach ensures that if the provider for a project is replaced, all coding using it is changed at a stroke.
+This way if the provider for a project is changed all code using the hash provider starts using the new one
+immediately.
 
-To create a hash simply call the `CreateHash` function:
+To create a hash simply call the `createHash` function:
 
 ~~~ php
-$hashProvider = \Gcd\Core\Encryption\HashProvider::GetHashProvider();
-$hash = $hashProvider->CreateHash( "stringtobehashed", $salt );
+$hashProvider = HashProvider::getProvider();
+$hash = $hashProvider->createHash("stringtobehashed", $salt);
 ~~~
 
-The second parameter is optional and supplies a salt to the hashing algorithm (if required). If omitted a random salt will be used.
+The second parameter is optional and supplies a salt to the hashing algorithm (if required). If omitted a
+random salt will be generated for you.
 
-### Comparing hashes
+### Checking hash values
 
-Simply call the `CompareHash` function:
+To check if a value matches that of the hash simply call the `compareHash` function:
 
 ~~~ php
-$hashProvider = \Gcd\Core\Encryption\HashProvider::GetHashProvider();
-$matched = $hashProvider->CompareHash( $valueToTest, $storedHash );
+$hashProvider = HashProvider::getProvider();
+$matched = $hashProvider->compareHash($valueToTest, $storedHash);
 ~~~
 
-A function is required to do the comparison (rather than a simple `==` ) because we must rehash the `$valueToTest` with the same salt as the original. Therefore we must first extract the salt from the stored hash which is a problem for the HashProvider to solve.
+This extracts the salt from the stored hash and hashes the comparison value ($valueToTest) and then compares
+the two hashes.
 
-`CompareHash` returns a simple boolean.
+`compareHash()` returns true if the hash matches the tested value and false if it does not.
 
 ## Encryption
 
 ### Setting the default encryption provider
 
-In addition the default encryption provider should also be set by your application's modules.php file and likewise
-simply involves calling the static function `EncryptionProvider::SetEncryptionProviderClassName()`:
+The default encryption provider should also be set by your application's main module and likewise
+simply involves calling a static function `EncryptionProvider::setProviderClassName()`:
 
 ~~~ php
-\Gcd\Core\Encryption\EncryptionProvider::SetEncryptionProviderClassName( "Gcd\Core\Encryption\MyAes256EncryptionProvider" );
+EncryptionProvider::setProviderClassName("MyAes256EncryptionProvider");
 ~~~
 
 ### Encrypting a value.
 
-In a similar way to the hash providers we recommend using dependency injection patterns to get the encryption provider.
+In a similar way to hash providers we recommend using the provider pattern to get the encryption provider.
 
-Encrypting is then simply a case of calling the `Encrypt` method with the data to be encrypted:
+Encrypting is then simply a case of calling the `encrypt` method with the data to be encrypted:
 
 ~~~ php
-$cipher = \Gcd\Core\Encryption\EncryptionProvider::GetEncryptionProvider();
-$crypt = $cipher->Encrypt( "stringtobeencrypted" );
+$cipher = EncryptionProvider::getProvider();
+$crypt = $cipher->encrypt( "stringtobeencrypted" );
 ~~~
 
-The `Encrypt` method can take a second parameter which will supply additional information used by the encryption provider to generate a suitable key.
+The `Encrypt` method can take a second parameter which will might be used by the encryption provider to
+generate a unique key for the encryption process. This allows you to have a unique key per record rather than
+one key for the whole application.
 
 ### Decrypting a value.
 
-Really simple:
+Decryption is straightforward - simply call `decrypt`
 
 ~~~ php
-$cipher = \Gcd\Core\Encryption\EncryptionProvider::GetEncryptionProvider();
-$plainText = $cipher->Decrypt( "verysecretencryptedstring" );
+$cipher = EncryptionProvider::getProvider();
+$plainText = $cipher->decrypt( "verysecretencryptedstring" );
 ~~~
 
-Of course if you supplied the second parameter to the `Encrypt` method you need to pass the same value here too.
+If you supplied an additional argument to the `encrypt` method you will need to pass the same arguments here too.
+
+### Creating an encryption provider
+
+Most encryption providers are abstract as two way encryption requires a key. Storage and supply of the key
+is a potential weak point that must be carefully thought about in your application. Usually you must extend an
+encryption provider and override the `getEncryptionKey()` method:
+
+``` php
+class MyAes256EncryptionProvider extends Aes256EncryptionProvider
+{
+    protected function getEncryptionKey($keySalt = "")
+    {
+        if (!$keySalt){
+            $keySalt = uniqid();
+        }
+
+        return sha1($keySalt.microtime());
+    }
+}
+```
+

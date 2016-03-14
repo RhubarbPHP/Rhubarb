@@ -31,11 +31,11 @@ else
 }
 ~~~
 
-## Validating Login Status
+### Validating Login Status
 
 Call `isLoggedIn()` to determine if the current user is logged in or not.
 
-## Attempting a Login
+### Attempting a Login
 
 Most login providers have a `login()` method which you normally pass the username and password.
 The method will return true if the login succeeds or false if it does not. In addition your login
@@ -43,11 +43,11 @@ provider will usually update the session to record the logged in status.
 
 Note that most login providers require your application to have selected a hash provider.
 
-## Logging Out
+### Logging Out
 
 To logout simply call the `logout` function in your user interface.
 
-## Redirecting users when not logged in
+### Redirecting users when not logged in
 
 The most common purpose of a login is to restrict portions of your application from view until the user
 authenticates. The login framework provides a simple way to redirect users to your login page if
@@ -72,9 +72,9 @@ $loginUrl
 The URL registered with the handler (/restricted-area/) is the area that will be kept secure behind
 the login.
 
-## Common Login Providers
+### Common Login Providers
 
-### ModelLoginProvider
+#### ModelLoginProvider
 
 This provider binds a model object as it's authentication source. It provides support for
 logging in using a username and password and optionally tracking an activation status using a boolean column.
@@ -95,12 +95,12 @@ Once logged in you can call the `getModel()` method to return the Model represen
 user. Note that `getModel()` throws a `NotLoggedInException` if the user isn't logged in at the
 time.
 
-#### Password Hashing
+###### Password Hashing
 
 ModelLoginProvider will expect the passwords to be hashed and will use the standard HashProvider
 configured for your application to attempt to rehash the user supplied password.
 
-#### Attempting a Login
+###### Attempting a Login
 
 Call the Login function and pass the user supplied username and password as arguments:
 
@@ -118,7 +118,7 @@ LoginFailedException
 LoginDisabledException
 :    Thrown if the login was correct but the login is inactive
 
-## Forcing a Login
+### Forcing a Login
 
 On occasion you may need to log a user in, without a username and a password. An example of such
 an occasion is to automatically log someone in when you have just registered on a site. Another

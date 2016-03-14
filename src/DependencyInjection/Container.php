@@ -96,7 +96,7 @@ final class Container
      * @param ...$arguments
      * @return mixed
      */
-    public function registerSingleton($requestedClass, callable $singletonCreationCallback)
+    public function singleton($requestedClass, callable $singletonCreationCallback)
     {
         if (!isset($this->singletons[$requestedClass])){
             $singleton = $singletonCreationCallback();

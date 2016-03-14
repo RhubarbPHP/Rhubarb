@@ -10,7 +10,7 @@ trait SingletonTrait
      */
     final public static function singleton(...$arguments)
     {
-        return Container::current()->registerSingleton(static::class, function() use ($arguments) {
+        return Container::current()->singleton(static::class, function() use ($arguments) {
             return new static(...$arguments);
         });
     }

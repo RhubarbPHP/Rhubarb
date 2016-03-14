@@ -103,4 +103,37 @@ $rocket = $container->instance(Rocket::class, $control, $name);
 // $rocket is now an instance of NasaShuttle with StarCity as its ground controller...
 ```
 
+This works for any number of arguments and will descend through every constructor. The dependencies must be
+instantiable without any arguments and once the container meets an argument that is not an object or not supplied
+in the call to `instance()` it will stop trying to complete any more arguments.
+
 ## Singletons
+
+The [singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern) is a way of ensuring that when an instance
+of a class is needed only one is created and the same instance is shared with all who need it. The Rhubarb
+container allows classes to be marked as singletons when you configure the mapping by passing true as the third
+argument:
+
+``` php
+$container->registerClass(Rocket::class, NasaShuttle::class, true);
+\\\ Now we'll only ever have one rocket...
+
+$a = $container->instance(Rocket::class);
+$b = $container->instance(Rocket::class);
+
+\\ $a is the same instance as $b
+```
+
+Alternatively the caller can request that any object be returned as a singleton simply by calling `singleton()`
+instead of `instance()`. This will work whether or not the class has a singleton mapping, although without the
+mapping it can't be guaranteed that there won't be other instances in use elsewhere.
+
+``` php
+$container->registerClass(Rocket::class, NasaShuttle::class);
+
+$a = $container->singleton(Rocket::class);
+$b = $container->singleton(Rocket::class);
+
+\\ $a is the same instance as $b
+```
+

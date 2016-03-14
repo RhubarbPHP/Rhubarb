@@ -20,6 +20,8 @@ namespace Rhubarb\Crown\Encryption;
 
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
@@ -29,29 +31,9 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
  * practice is to call the static HashProvider::GetHashProvider() method so that the hashing
  * provider can be set with a dependency injection.
  */
-abstract class HashProvider
+abstract class HashProvider implements ProviderInterface
 {
-    /**
-     * Sets the class to be used for the default hash provider.
-     *
-     * @deprecated Use the dependency injection container instead
-     * @param $providerClassName
-     */
-    public static function setHashProviderClassName($providerClassName)
-    {
-        Application::current()->container()->registerClass(HashProvider::class, $providerClassName);
-    }
-
-    /**
-     * Get's an instance of the default hash provider.
-     *
-     * @deprecated Use the dependency injection container instead.
-     * @return HashProvider
-     */
-    public static function getHashProvider()
-    {
-        return Container::instance(HashProvider::class);
-    }
+    use ProviderTrait;
 
     /**
      * Create's a new hash of the supplied data using the optionally supplied salt.
