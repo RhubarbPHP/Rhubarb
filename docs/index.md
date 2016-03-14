@@ -46,7 +46,7 @@ The base Rhubarb package includes a range of useful classes used within Rhubarb 
 applications.
 
 * [Settings](settings)
-* [RhubarbDateTime](date-time)
+* [Date and Time Processing](date-time)
 * [StringTools](string-tools)
 * [Mime](mime)
 * [Xml](xml)
