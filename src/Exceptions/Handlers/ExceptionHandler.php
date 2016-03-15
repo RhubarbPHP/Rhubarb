@@ -41,6 +41,11 @@ abstract class ExceptionHandler implements ProviderInterface
      */
     abstract protected function handleException(RhubarbException $er);
 
+    /**
+     * @var string
+     */
+    private static $exceptionHandlerClassName = '\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler';
+
     public static function disableExceptionTrapping()
     {
         /**
@@ -133,6 +138,27 @@ abstract class ExceptionHandler implements ProviderInterface
                 }
             }
         });
+    }
+
+    /**
+     * Sets the name of the exception handler class to use when exceptions are raised.
+     *
+     * @param $exceptionHandlerClassName
+     */
+    public static function setExceptionHandlerClassName($exceptionHandlerClassName)
+    {
+        self::$exceptionHandlerClassName = $exceptionHandlerClassName;
+    }
+
+    /**
+     * @return ExceptionHandler
+     */
+    protected static function getExceptionHandler()
+    {
+        $class = self::$exceptionHandlerClassName;
+        $handler = new $class();
+
+        return $handler;
     }
 
     /**

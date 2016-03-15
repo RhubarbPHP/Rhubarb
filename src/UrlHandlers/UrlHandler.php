@@ -228,6 +228,14 @@ abstract class UrlHandler implements GeneratesResponseInterface
     }
 
     /**
+     * @return string
+     */
+    public function getHandledUrl()
+    {
+        return $this->handledUrl;
+    }
+
+    /**
      * Return the response if appropriate or false if no response could be generated.
      *
      * @param mixed $request
