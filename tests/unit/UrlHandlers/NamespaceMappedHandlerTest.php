@@ -16,8 +16,8 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->application->getPhpContext()->simulateNonCli = true;
-        $this->request = $this->application->currentRequest();
+        $this->application->context()->simulateNonCli = true;
+        $this->request = $this->application->request();
         $this->request->IsWebRequest = true;
 
         LayoutModule::disableLayout();

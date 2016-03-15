@@ -71,7 +71,7 @@ class LayoutModule extends Module
      */
     private function checkForAjaxRequest()
     {
-        if (Application::current()->getPhpContext()->isXhrRequest()) {
+        if (Application::current()->context()->isXhrRequest()) {
             self::disableLayout();
         }
     }

@@ -1,4 +1,4 @@
-Rhubarb Basics:
+Essential Concepts:
     Essential Files and Directories:files-and-directories
     Processing Overview:processing-overview
     Generating Responses:response-generating
@@ -8,16 +8,17 @@ Rhubarb Basics:
     Filters and Layout:filters-and-layout
     Application:application
     Dependency Injection:dependency-injection
-Settings:settings
-Sessions:sessions
-Handling Login Status:login
-Sendables:sendables
-Encryption:encryption
-Deploying Resource Files:deployment
-Logging:logging
-Dates and Times:date-and-time
-DataStreams:datastreams
-Other Useful Classes:other-classes
+Common Tasks:
+    Settings:settings
+    Sessions:sessions
+    Handling Login Status:login
+    Sendables:sendables
+    Encryption:encryption
+    Deploying Resource Files:deployment
+    Logging:logging
+    Dates and Times:date-and-time
+    DataStreams:datastreams
+Toolkit Classes:
     StringTools:other-classes/string-tools
     Mime:other-classes/mime
     Xml:other-classes/xml

@@ -53,7 +53,7 @@ if (!isset($application)) {
     try {
         // Pass control to the application and ask it to generate a response for the
         // incoming request.
-        $response = $application->generateResponseForRequest($application->currentRequest());
+        $response = $application->generateResponseForRequest($application->request());
 
         Log::performance("Response generated", "ROUTER");
         $response->send();

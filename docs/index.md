@@ -16,13 +16,21 @@ Rhubarb selects and generates responses.
 * [Response](response)
 * [Filters and Layout](filters-and-layout)
 
-### 2. Sendables
+### 2. Settings
 
 ### 3. Sessions
 
-### 4. Handling Logins
+### 4. Handling Login Status
 
-### 5. Handling Logins
+### 5. Sendables
+
+### 6. Encryption
+
+### 7. Deploying Resource Files
+
+### 8. Logging
+
+####
 
 Many real world integrations are delegated in Rhubarb to "providers". A provider gives you functionality by
 following the pattern of a base abstract "Provider" class or interface. Your application can choose which

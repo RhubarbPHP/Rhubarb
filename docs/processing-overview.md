@@ -25,9 +25,9 @@ execute-test.php
 All three will boot the application by setting up the environment and then loading your main application
 configuration.
 
-## Stage 2: Module registration
+## Stage 2: Application and Module registration
 
-execute-http.php and execute-cli.php will try and load a Rhubarb `Application` object. The most common way
+execute-http.php and execute-cli.php will try and load a Rhubarb [Application](application#content) object. The most common way
 to support this is by creating an `app.config.php` file in the settings folder which will define a Module for
 the application and **register it** in a new Application instance. A module can return a list of dependant modules
 which will also be registered.

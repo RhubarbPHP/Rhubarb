@@ -10,7 +10,7 @@ The request object is passed to `UrlHandler` objects and `GenerateResponseInterf
 `generateResponse` methods however at any point you can fetch the request object:
 
 ```php
-$request = Application::current()->currentRequest();
+$request = Application::current()->request();
 ```
 
 To get the payload of a request call the `getPayload()` function:

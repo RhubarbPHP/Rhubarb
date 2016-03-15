@@ -17,7 +17,7 @@ class StaticResourceTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->request = $this->application->currentRequest();
+        $this->request = $this->application->request();
         $this->request->IsWebRequest = true;
     }
 

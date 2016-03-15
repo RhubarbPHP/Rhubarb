@@ -187,3 +187,4 @@ isn't created unless the singleton is requested.
 To clarify passing a callback to `singleton()` and `registerSingleton()` has mostly the same effect with the
 main difference being that `singleton()` will call the callback immediately if the singleton doesn't already
 exist. `singleton()` also returns a singleton instance whereas `registerSingleton()` returns void.
+

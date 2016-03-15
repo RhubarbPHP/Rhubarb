@@ -95,7 +95,7 @@ class MyModule extends Module
     {
         return [
             new LayoutModule(function(){
-                $request = Application::current()->currentRequest();
+                $request = Application::current()->request();
 
                 if (stripos("/login", $request->uri) === 0){
                     return LoginLayout::class;

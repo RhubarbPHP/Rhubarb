@@ -31,7 +31,7 @@ class PhpSessionProvider extends SessionProvider
 {
     public function restoreSession(Session $session)
     {
-        $context = Application::current()->getPhpContext();
+        $context = Application::current()->context();
 
         if (!$context->isCliInvocation()) {
             session_start();
@@ -54,7 +54,7 @@ class PhpSessionProvider extends SessionProvider
 
     public function storeSession(Session $session)
     {
-        $context = Application::current()->getPhpContext();
+        $context = Application::current()->context();
 
         if (!$context->isCliInvocation()) {
             session_start();

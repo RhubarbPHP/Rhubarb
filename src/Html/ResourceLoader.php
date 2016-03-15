@@ -107,7 +107,7 @@ class ResourceLoader
 
         $html = "<script src=\"" . $urls[0] . "\" type=\"text/javascript\"></script>";
 
-        $context = Application::current()->getPhpContext();
+        $context = Application::current()->context();
 
         $preLoadedFiles = [];
 

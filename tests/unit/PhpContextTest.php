@@ -27,11 +27,11 @@ class PhpContextTest extends RhubarbTestCase
 {
     public function testAjaxDetection()
     {
-        $this->assertFalse($this->application->getPhpContext()->isXhrRequest());
+        $this->assertFalse($this->application->context()->isXhrRequest());
 
         $_SERVER["HTTP_X_REQUESTED_WITH"] = "xmlhttprequest";
 
-        $this->assertTrue($this->application->getPhpContext()->isXhrRequest());
+        $this->assertTrue($this->application->context()->isXhrRequest());
     }
 
     public function testCliDetection()
@@ -40,22 +40,22 @@ class PhpContextTest extends RhubarbTestCase
         // are run from the CLI and PHP's SAPI checking isn't something
         // we can hook in and modify
 
-        $this->assertTrue($this->application->getPhpContext()->isCliInvocation());
+        $this->assertTrue($this->application->context()->isCliInvocation());
     }
 
     public function testJsonContentTypeDetection()
     {
-        $this->application->getPhpContext()->simulateNonCli = true;
+        $this->application->context()->simulateNonCli = true;
 
         $_SERVER["CONTENT_TYPE"] = "application/json";
 
-        $request = $this->application->currentRequest();
+        $request = $this->application->request();
 
         $this->assertInstanceOf(JsonRequest::class, $request);
     }
 
     public function testRequestAccess()
     {
-        $this->assertInstanceOf(CliRequest::class, $this->application->currentRequest());
+        $this->assertInstanceOf(CliRequest::class, $this->application->request());
     }
 }

@@ -16,7 +16,7 @@ class JsonRequestTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->context = $this->application->getPhpContext();
+        $this->context = $this->application->context();
         $this->context->simulateNonCli = true;
 
         $_SERVER["CONTENT_TYPE"] = "application/json";
@@ -31,7 +31,7 @@ class JsonRequestTest extends RhubarbTestCase
 
         $this->context->simulatedRequestBody = json_encode($testPayload);
 
-        $request = $this->application->currentRequest();
+        $request = $this->application->request();
 
         $this->assertEquals($testPayload, $request->getPayload());
     }

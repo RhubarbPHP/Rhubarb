@@ -76,6 +76,14 @@ class Application
      */
     private $container = null;
 
+    /**
+     * True if the application is being unit tested.
+     *
+     * @see isUnitTesting()
+     * @var bool
+     */
+    private $unitTesting = false;
+
     public $applicationRootPath = "";
 
     /**
@@ -151,7 +159,7 @@ class Application
      *
      * @return PhpContext
      */
-    public final function getPhpContext()
+    public final function context()
     {
         return $this->phpContext;
     }
@@ -350,7 +358,7 @@ class Application
     /**
      * Gets the current request derived from the PHP context.
      */
-    public final function currentRequest()
+    public final function request()
     {
         if ($this->request == null){
             $this->request = $this->phpContext->createRequest();

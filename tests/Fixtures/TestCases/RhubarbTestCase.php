@@ -28,7 +28,7 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
     {
         $this->application = new Application();
         $this->application->unitTesting = true;
-        $this->application->getPhpContext()->simulateNonCli = false;
+        $this->application->context()->simulateNonCli = false;
         $this->application->registerModule(new UnitTestingModule());
         $this->application->initialiseModules();
 
