@@ -188,3 +188,123 @@ To clarify passing a callback to `singleton()` and `registerSingleton()` has mos
 main difference being that `singleton()` will call the callback immediately if the singleton doesn't already
 exist. `singleton()` also returns a singleton instance whereas `registerSingleton()` returns void.
 
+### The SingletonInterface and SingletonTrait
+
+Instead of having to instantiate singletons by calling the `singleton` method on the container and passing a
+class name, it's possible to give any class a static function called `singleton` of its own. This makes using
+the singleton pattern more straight forward.
+
+To apply this behaviour you should implement the `SingletonInterface` and then use the `SingletonTrait`:
+
+``` php
+class Rocket implements SingletonInterface
+{
+    use SingletonTrait;
+}
+
+$rocket = Rocket::singleton();
+```
+
+This is the preferred pattern for getting singleton instances. To register specific singleton instances you still
+need to call the container methods directly.
+
+## The Provider Pattern
+
+Many services in Rhubarb are handled by providers. A provider is essentially an abstract class that sets a pattern
+for providing some essential service. The actual concrete implementation of the provider is registered at the
+application level. A good example of a provider is the [HashProvider](encryption#content):
+
+``` php
+// Set the registered hash provider for the application.
+HashProvider::setProviderClassName(Sha512HashProvider::class);
+```
+
+Internally providers use the dependency injection container to implement the mapping. Therefore when getting an
+instance of the provider it should be done using the dependency injection pattern where possible:
+
+``` php
+class MyClassThatNeedsToHashSomething
+{
+    private $hashProvider;
+
+    public function __construct(HashProvider $hashProvider)
+    {
+        $this->hashProvider = $hashProvider;
+    }
+
+    public function hashIt()
+    {
+        $this->hashProvider->createHash(...);
+        // ....
+    }
+}
+
+$hasher = Container::current()->instance(MyClassThatNeedsToHashSomething::class);
+```
+
+Alternatively a provider can be given to you directly within your code:
+
+``` php
+class MyClassThatNeedsToHashSomething
+{
+    public function hashIt()
+    {
+        $hashProvider = HashProvider::getProvider();
+        $hashProvider->createHash(...);
+        // ....
+    }
+}
+
+$hasher = new MyClassThatNeedsToHashSomething();
+```
+
+The dependency injection approach is preferred because it makes unit testing easier and makes it more apparent
+what the dependencies for this class really are.
+
+However if a provider is particularly slow or expensive to create and the likelyhood of it being used within
+a class is small the direct approach could improve performance. Consider:
+
+``` php
+class MyHeavyWeightClass
+{
+    private $mysteryProvider;
+
+    public function __construct(ReallySlowToCreateProvider $mysteryProvider)
+    {
+        $this->mysteryProvider = $mysteryProvider;
+    }
+
+    public function mysteryFunction()
+    {
+        if ($this->somethingReallyUnlikely()){
+            $this->mysteryProvider->doSomethingMysterious();
+        }
+        // ....
+    }
+}
+
+$mystery = Container::current()->instance(MyHeavyWeightClass::class);
+```
+
+As soon as the `MyHeavyWeightClass` is created a `ReallySlowToCreateProvider` is created regardless of the fact
+that it will very rarely be needed.
+
+### Creating a provider
+
+Providers should be abstract and should implement the ProviderInterface and use the ProviderTrait:
+
+``` php
+abstract class MyProvider implements ProviderInterface
+{
+    use ProviderTrait;
+}
+```
+
+The interface and trait give the class two static methods, `setProviderClassName($className)` and `getProvider()`.
+
+### Singleton Providers
+
+Normally providers are inexpensive to create and share no state between instances. As such they are created new
+each time they're requested. Sometimes your provider needs to be a singleton to remain efficient. In this case
+simply switch from using `ProviderTrait` to `SingletonProviderTrait`. Thereafter calls to `getProvider` will
+return a singleton.

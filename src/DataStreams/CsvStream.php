@@ -33,7 +33,7 @@ use Rhubarb\Crown\Exceptions\EndOfStreamException;
  * enclosure character if it appears in the cell contents, then you should set the $escapeCharacter
  * property before starting to read your stream.
  */
-class CsvStream extends DataStream
+class CsvStream extends RecordStream
 {
     private $filePath;
 
@@ -85,7 +85,7 @@ class CsvStream extends DataStream
         parent::__construct();
     }
 
-    public function GetFilePath()
+    public function getFilePath()
     {
         return $this->filePath;
     }

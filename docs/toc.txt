@@ -1,13 +1,14 @@
 Essential Concepts:
-    Essential Files and Directories:files-and-directories
+    Files and Directory Layout:files-and-directories
     Processing Overview:processing-overview
+    Application:application
     Generating Responses:response-generating
     Handling URLs:url-handlers
     Requests:request
     Responses:response
     Filters and Layout:filters-and-layout
-    Application:application
     Dependency Injection:dependency-injection
+    Static Resources:static-resources
 Common Tasks:
     Settings:settings
     Sessions:sessions
@@ -17,7 +18,7 @@ Common Tasks:
     Deploying Resource Files:deployment
     Logging:logging
     Dates and Times:date-time
-    Data Streams:datastreams
+    Record Streams:recordstreams
 Toolkit Classes:
     StringTools:string-tools
     Mime:mime

@@ -22,9 +22,9 @@ use Rhubarb\Crown\DataStreams\CsvStream;
 use Rhubarb\Crown\DataStreams\XmlStream;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
-class DataStreamTest extends RhubarbTestCase
+class RecordStreamTest extends RhubarbTestCase
 {
-    public function testPush()
+    public function testAppendStream()
     {
         file_put_contents("cache/unit-test-xml-stream.xml", '<?xml version="1.0" encoding="ISO-8859-1"?>
 <meals>
@@ -48,7 +48,7 @@ class DataStreamTest extends RhubarbTestCase
         $stream = new XmlStream("meal", "cache/unit-test-xml-stream.xml");
         $csvStream = new CsvStream("cache/unit-test-csv-output-from-xml.csv");
 
-        $stream->pushAllItems($csvStream);
+        $csvStream->appendStream($stream);
 
         $this->assertFileExists("cache/unit-test-csv-output-from-xml.csv");
 

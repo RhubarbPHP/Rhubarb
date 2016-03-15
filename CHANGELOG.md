@@ -12,3 +12,4 @@
 * Changed providers to use the dependency injection container by way of a Provider trait
 * Renamed WebRequest::getUrlBase to WebRequest::createUrl
 * Revised a lot of documentation
+* Renamed DataStream to RecordStream

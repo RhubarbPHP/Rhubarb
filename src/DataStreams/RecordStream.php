@@ -22,26 +22,20 @@ namespace Rhubarb\Crown\DataStreams;
 /**
  * An abstract base class to model data streams.
  */
-abstract class DataStream
+abstract class RecordStream
 {
     public function __construct()
     {
     }
 
-    public function readNextItem()
-    {
-        return false;
-    }
+    public abstract function readNextItem();
 
-    public function appendItem($item)
-    {
+    public abstract function appendItem($item);
 
-    }
-
-    final public function pushAllItems(DataStream $targetStream)
+    final public function appendStream(RecordStream $sourceStream)
     {
-        while ($item = $this->readNextItem()) {
-            $targetStream->appendItem($item);
+        while ($item = $sourceStream->readNextItem()) {
+            $this->appendItem($item);
         }
     }
 }
