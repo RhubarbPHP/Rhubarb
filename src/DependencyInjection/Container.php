@@ -96,15 +96,36 @@ final class Container
      * @param ...$arguments
      * @return mixed
      */
-    public function singleton($requestedClass, callable $singletonCreationCallback)
+    public function singleton($requestedClass, callable $singletonCreationCallback = null)
     {
         if (!isset($this->singletons[$requestedClass])){
-            $singleton = $singletonCreationCallback();
+            if ($singletonCreationCallback){
+                $singleton = $singletonCreationCallback;
+            } else {
+                $singleton = $this->instance($requestedClass);
+            }
+
             $this->singletons[$requestedClass] = $singleton;
             $this->concreteClassMappings["_".$requestedClass] = $requestedClass;
         }
 
+        if (is_callable($this->singletons[$requestedClass])){
+            $callback = $this->singletons[$requestedClass];
+            $this->singletons[$requestedClass] = $callback();
+        }
+
         return $this->singletons[$requestedClass];
+    }
+
+    /**
+     * Registers an instance, or a callback to create an instance, for a singleton.
+     *
+     * @param string $requestedClass The class of the singleton
+     * @param mixed $instanceOrCallback An object instance or a callable
+     */
+    public function registerSingleton($requestedClass, $instanceOrCallback)
+    {
+        $this->singletons[$requestedClass] = $instanceOrCallback;
     }
 
     /**

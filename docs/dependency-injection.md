@@ -132,8 +132,58 @@ mapping it can't be guaranteed that there won't be other instances in use elsewh
 $container->registerClass(Rocket::class, NasaShuttle::class);
 
 $a = $container->singleton(Rocket::class);
+$a->foo = "bar";
+
 $b = $container->singleton(Rocket::class);
 
 \\ $a is the same instance as $b
+\\ and $b->foo == "bar";
 ```
 
+If you need to control the creation of the singleton more precisely you can supply a callback function as a second
+argument to `singleton`. Only in the event that the singleton doesn't already exist will the call back be called.
+The call back should return the instance that will now serve as the singleton instance.
+
+``` php
+$container->registerClass(Rocket::class, NasaShuttle::class);
+
+$shuttle = $container->singleton(Rocket::class, function(){
+    $shuttle = new NasaShuttle();
+    $shuttle->upgradeEngines();
+
+    return $shuttle;
+});
+
+// IF there wasn't already a singleton in use for Rocket THEN $a will be a NasaShuttle with upgraded engines
+```
+
+If you want to initialise the container with a particular singleton instance so that future requests to singleton
+return that instance you can call `registerSingleton`. This example achieves the same result as the code above
+with the advantage it can be ran first (in your application configuration for example) to guarantee no other
+singleton instance could have been created first.
+
+``` php
+$shuttle = new NasaShuttle();
+$shuttle->upgradeEngines();
+$container->registerSingleton(Rocket::class, $shuttle);
+```
+
+Creating classes in your configuration is something you should avoid however as there is no guarantee the current
+request is going to need your singleton. It's much better to register a callback function with `registerSingleton`
+instead:
+
+``` php
+$container->registerSingleton(Rocket::class, function(){
+    $shuttle = new NasaShuttle();
+    $shuttle->upgradeEngines();
+
+    return $shuttle;
+});
+```
+
+This code has the same affect as the previous example with the additional advantage that the shuttle class
+isn't created unless the singleton is requested.
+
+To clarify passing a callback to `singleton()` and `registerSingleton()` has mostly the same effect with the
+main difference being that `singleton()` will call the callback immediately if the singleton doesn't already
+exist. `singleton()` also returns a singleton instance whereas `registerSingleton()` returns void.

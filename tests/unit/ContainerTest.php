@@ -24,6 +24,7 @@ use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\ExtendedSimpleClass;
 use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\OneDependency;
 use Rhubarb\Crown\Tests\Fixtures\DependencyInjection\SimpleClass;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
+use Rhubarb\Leaf\Tests\Fixtures\Presenters\Simple;
 
 class ContainerTest extends RhubarbTestCase
 {
@@ -81,11 +82,50 @@ class ContainerTest extends RhubarbTestCase
 
     public function testSingletonRequest()
     {
-        $object = $this->container->singleton(SimpleClass::class, function(){ return new SimpleClass(); });
-        $object->foo = "bar";
+        $objectA = $this->container->singleton(SimpleClass::class);
+        $objectA->foo = "bar";
+        $objectB = $this->container->singleton(SimpleClass::class);
+
+        $this->assertEquals("bar", $objectB->foo);
+
+        $this->container->clearSingleton(SimpleClass::class);
+
+        $objectC = $this->container->singleton(SimpleClass::class, function(){
+            $c = new SimpleClass();
+            $c->foo = "bang";
+
+            return $c;
+        });
+
+        $this->assertEquals("bang", $objectC->foo);
 
         $object = $this->container->getInstance(SimpleClass::class);
-        $this->assertEquals("bar", $object->foo);
+        $this->assertEquals("bang", $object->foo);
+    }
+
+    public function testSingletonRegistration()
+    {
+        $simpleClass = new SimpleClass();
+        $simpleClass->foo = "bar";
+
+        $this->container->registerSingleton(SimpleClass::class, $simpleClass);
+
+        $objectA = $this->container->singleton(SimpleClass::class);
+
+        $this->assertEquals("bar", $objectA->foo);
+
+        $this->container->clearSingleton(SimpleClass::class);
+
+        $this->container->registerSingleton(SimpleClass::class, function(){
+            $simpleClass = new SimpleClass();
+            $simpleClass->foo = "bang";
+
+            return $simpleClass;
+        });
+
+        $objectA = $this->container->singleton(SimpleClass::class);
+
+        $this->assertEquals("bang", $objectA->foo);
     }
 
     public function testAdditionalArgumentsCanPassToConstructor()
