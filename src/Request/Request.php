@@ -21,6 +21,7 @@ namespace Rhubarb\Crown\Request;
 require_once __DIR__ . "/../Settings.php";
 
 use Rhubarb\Crown;
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
 
@@ -67,6 +68,16 @@ abstract class Request
 
             $this->hasInitialised = true;
         }
+    }
+
+    /**
+     * Returns the active request from the currently running application.
+     *
+     * @return Request
+     */
+    public final static function current()
+    {
+        return Application::current()->request();
     }
 
     /**

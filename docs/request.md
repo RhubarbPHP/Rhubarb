@@ -11,6 +11,8 @@ The request object is passed to `UrlHandler` objects and `GenerateResponseInterf
 
 ```php
 $request = Application::current()->request();
+// Or slightly shorter...
+$request = Request::current();
 ```
 
 To get the payload of a request call the `getPayload()` function:
