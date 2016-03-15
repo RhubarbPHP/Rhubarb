@@ -297,30 +297,6 @@ class StringTools
     }
 
     /**
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralise($string, $number)
-    {
-        return $number != 1 ? $string . "s" : $string;
-    }
-
-    /**
-     * Alias of Pluralise.
-     *
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralize($string, $number)
-    {
-        return self::pluralise($string, $number);
-    }
-
-    /**
      * Returns a sentence with each word in $wordList concatenated with commas between each,
      * and "and" between the last 2 words. Skips any empty values in the list.
      *

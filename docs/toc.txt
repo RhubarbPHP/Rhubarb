@@ -16,9 +16,9 @@ Common Tasks:
     Encryption:encryption
     Deploying Resource Files:deployment
     Logging:logging
-    Dates and Times:date-and-time
-    DataStreams:datastreams
+    Dates and Times:date-time
+    Data Streams:datastreams
 Toolkit Classes:
-    StringTools:other-classes/string-tools
-    Mime:other-classes/mime
-    Xml:other-classes/xml
+    StringTools:string-tools
+    Mime:mime
+    Xml:xml
