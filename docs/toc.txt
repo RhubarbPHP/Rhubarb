@@ -9,7 +9,7 @@ Essential Concepts:
     Filters and Layout:filters-and-layout
     Dependency Injection:dependency-injection
     Static Resources:static-resources
-Common Tasks:
+Common Patterns:
     Settings:settings
     Sessions:sessions
     Handling Login Status:login
@@ -18,7 +18,9 @@ Common Tasks:
     Deploying Resource Files:deployment
     Logging:logging
     Dates and Times:date-time
+    Events:events
     Record Streams:recordstreams
+    Modules and Scaffolds:modules-and-scaffolds
 Toolkit Classes:
     StringTools:string-tools
     Mime:mime
