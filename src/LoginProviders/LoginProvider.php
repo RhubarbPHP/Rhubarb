@@ -32,12 +32,14 @@ use Rhubarb\Crown\Sessions\Session;
  */
 abstract class LoginProvider extends Session
 {
+    protected $loggedIn = false;
+
     /**
      * Returns True if the user is logged in.
      */
     public function isLoggedIn()
     {
-        return (isset($this->LoggedIn) && ($this->LoggedIn));
+        return (isset($this->loggedIn) && ($this->loggedIn));
     }
 
     /**
@@ -45,7 +47,7 @@ abstract class LoginProvider extends Session
      */
     public function logOut()
     {
-        $this->LoggedIn = false;
+        $this->loggedIn = false;
 
         $this->onLogOut();
 
@@ -60,7 +62,7 @@ abstract class LoginProvider extends Session
      */
     public function forceLogin()
     {
-        $this->LoggedIn = true;
+        $this->loggedIn = true;
         $this->storeSession();
     }
 
