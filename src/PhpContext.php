@@ -99,7 +99,7 @@ class PhpContext
      */
     public function getRequestBody()
     {
-        if (Application::current()->isUnitTesting()){
+        if (Application::current()->unitTesting){
             return $this->simulatedRequestBody;
         }
 

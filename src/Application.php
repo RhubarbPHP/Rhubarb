@@ -82,7 +82,7 @@ class Application
      * @see isUnitTesting()
      * @var bool
      */
-    private $unitTesting = false;
+    public $unitTesting = false;
 
     public $applicationRootPath = "";
 
