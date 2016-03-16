@@ -74,7 +74,7 @@ During unit testing some behaviours that require a real browser to be making the
 
 ``` php
 // True if the application is currently being unit tested.
-$unitTesting = $app->isUnitTesting();
+$unitTesting = $app->unitTesting;
 ```
 
 ## Creating and registering an Application object
