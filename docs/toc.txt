@@ -17,10 +17,12 @@ Common Patterns:
     Encryption:encryption
     Deploying Resource Files:deployment
     Logging:logging
+    Handling Exceptions:exceptions
     Dates and Times:date-time
     Events:events
     Record Streams:recordstreams
     Modules and Scaffolds:modules-and-scaffolds
+    Http:http
 Toolkit Classes:
     StringTools:string-tools
     Mime:mime
