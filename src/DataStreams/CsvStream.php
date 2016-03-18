@@ -19,7 +19,7 @@
 
 namespace Rhubarb\Crown\DataStreams;
 
-require_once __DIR__ . '/DataStream.php';
+require_once __DIR__ . '/RecordStream.php';
 
 use Rhubarb\Crown\Exceptions\EndOfStreamException;
 

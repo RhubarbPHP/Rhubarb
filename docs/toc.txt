@@ -22,7 +22,7 @@ Common Patterns:
     Events:events
     Record Streams:recordstreams
     Modules and Scaffolds:modules-and-scaffolds
-    Http:http
+    Http Clients:http-clients
 Toolkit Classes:
     StringTools:string-tools
     Mime:mime

@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\DataStreams;
 
 require_once __DIR__ . '/../Xml/XmlParser.php';
 require_once __DIR__ . '/../Xml/NodeStrategyCollationDictionary.php';
-require_once __DIR__ . '/DataStream.php';
+require_once __DIR__ . '/RecordStream.php';
 
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Xml\NodeStrategyCollationDictionary;

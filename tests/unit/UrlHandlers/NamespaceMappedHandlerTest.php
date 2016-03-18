@@ -49,8 +49,6 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
 
     public function testHandlerRedirectsToIndexPage()
     {
-        HttpHeaders::clearHeaders();
-
         // This folder does contain an index so it should redirect.
         $this->request->urlPath = "/nmh/SubFolder/";
 

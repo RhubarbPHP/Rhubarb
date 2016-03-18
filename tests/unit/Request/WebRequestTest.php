@@ -44,7 +44,7 @@ class WebRequestTest extends RequestTestCase
 
     public function testURIValue()
     {
-        $this->assertEquals('http://gcdtech.com/foo', $this->request->uri);
+        $this->assertEquals('/foo', $this->request->uri);
     }
 
     public function testPathValue()
