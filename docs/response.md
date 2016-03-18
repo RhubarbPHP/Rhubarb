@@ -43,7 +43,28 @@ NotAuthorisedResponse
 RedirectResponse
 :   Issues a Location header to a new URL
 
-### Forcing a response
+## Setting the response code
+
+A response should carry an appropriate HTTP response code. The default will be a 200 response for a normal
+HtmlResponse. To change the response code call `setResponseCode()` amd `setResponseMessage()` with the appropriate
+code and message.
+
+The Response object defines a range of constants mapped to common response codes for your convenience.
+
+## Setting HTTP headers
+
+To set a header call the `setHeader` function on the response object:
+
+``` php
+$response = new HtmlResponse();
+$response->setHeader('Cache-Control', 'no-cache');
+```
+
+Headers are not set until the response is transmitted to the browser. Thus if you set a header on the response
+but a later exception causes a different response to be transmitted your headers will not (correctly) end up
+with the client.
+
+## Forcing a response
 
 Sometimes in the middle of generating a standard response your application need to abort the generation of the
 standard response and issue another type of response instead. If using a pattern like MVP the code that

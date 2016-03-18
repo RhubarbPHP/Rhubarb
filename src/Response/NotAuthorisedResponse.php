@@ -18,15 +18,13 @@
 
 namespace Rhubarb\Crown\Response;
 
-use Rhubarb\Crown\HttpHeaders;
-
 class NotAuthorisedResponse extends Response
 {
     public function __construct($generator = null)
     {
         parent::__construct($generator);
 
-        $this->setResponseCode(HttpHeaders::HTTP_STATUS_CLIENT_ERROR_UNAUTHORIZED);
+        $this->setResponseCode(Response::HTTP_STATUS_CLIENT_ERROR_UNAUTHORIZED);
         $this->setResponseMessage("401 Unauthorized");
 
         $this->setContent("Sorry, you are not authorised to access this resource.");

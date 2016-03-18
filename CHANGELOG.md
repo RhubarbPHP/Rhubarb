@@ -13,3 +13,4 @@
 * Renamed WebRequest::getUrlBase to WebRequest::createUrl
 * Revised a lot of documentation
 * Renamed DataStream to RecordStream
+* Removed HttpHeaders class and move functionality to the Response object
