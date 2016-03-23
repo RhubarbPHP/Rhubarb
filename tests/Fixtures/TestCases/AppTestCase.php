@@ -5,9 +5,9 @@ namespace Rhubarb\Crown\Tests\Fixtures\TestCases;
 /**
  * This test case class should be used for unit testing site specific code.
  */
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Http\HttpClient;
-use Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient;
+use Rhubarb\Crown\Tests\Fixtures\UnitTestingRhubarbRequestHttpClient;
 
 class AppTestCase extends \Codeception\TestCase\Test
 {
@@ -15,9 +15,9 @@ class AppTestCase extends \Codeception\TestCase\Test
     {
         parent::setUp();
 
-        $context = new Context();
+        $context = new PhpContext();
         $context->UnitTesting = true;
 
-        HttpClient::setDefaultHttpClientClassName(UnitTestingHttpClient::class);
+        HttpClient::setDefaultHttpClientClassName(UnitTestingRhubarbRequestHttpClient::class);
     }
 }

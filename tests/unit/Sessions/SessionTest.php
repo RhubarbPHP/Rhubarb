@@ -2,9 +2,9 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions;
 
-use Rhubarb\Crown\Sessions\Exceptions\SessionProviderNotFoundException;
-use Rhubarb\Crown\Sessions\Session;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
+use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 /**
@@ -14,35 +14,15 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
  */
 class SessionTest extends RhubarbTestCase
 {
-    public function setUp()
-    {
-        Session::setDefaultSessionProviderClassName(PhpSessionProvider::class);
-
-        parent::setUp();
-    }
-
-    public function testDefaultSessionProvider()
-    {
-        $this->assertEquals(PhpSessionProvider::class, Session::GetDefaultSessionProviderClassName());
-
-        Session::setDefaultSessionProviderClassName(UnitTestingSessionProvider::class);
-
-        $this->assertEquals(UnitTestingSessionProvider::class, Session::GetDefaultSessionProviderClassName());
-
-        $this->setExpectedException(SessionProviderNotFoundException::class);
-
-        Session::setDefaultSessionProviderClassName('\Rhubarb\Crown\Sessions\SessionProviders\UnknownProvider');
-    }
-
     public function testSessionGetsProvider()
     {
-        Session::setDefaultSessionProviderClassName(UnitTestingSessionProvider::class);
+        Container::current()->registerClass(SessionProvider::class, UnitTestingSessionProvider::class);
 
-        $session = new UnitTestingSession();
+        $session = UnitTestingSession::singleton();
 
         $this->assertInstanceOf(UnitTestingSessionProvider::class, $session->testGetSessionProvider());
 
-        Session::setDefaultSessionProviderClassName(PhpSessionProvider::class);
+        Container::current()->registerClass(SessionProvider::class, PhpSessionProvider::class);
 
         // Although we have changed the default provider, we already instantiated the session so the provider will not
         // have changed

@@ -2,13 +2,13 @@
 
 namespace Rhubarb\Crown\Request;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 
 class BinaryRequest extends WebRequest
 {
     public function getPayload()
     {
-        $context = new Context();
+        $context = new PhpContext();
         $requestBody = $context->getRequestBody();
 
         return $requestBody;

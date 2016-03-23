@@ -16,32 +16,12 @@
  *  limitations under the License.
  */
 
-
-namespace Rhubarb\Crown\DataStreams;
+namespace Rhubarb\Crown\Response;
 
 /**
- * An abstract base class to model data streams.
+ * All classes eligible for generating a response to a request must implement this interface.
  */
-abstract class DataStream
+interface GeneratesResponseInterface
 {
-    public function __construct()
-    {
-    }
-
-    public function readNextItem()
-    {
-        return false;
-    }
-
-    public function appendItem($item)
-    {
-
-    }
-
-    final public function pushAllItems(DataStream $targetStream)
-    {
-        while ($item = $this->readNextItem()) {
-            $targetStream->appendItem($item);
-        }
-    }
+    public function generateResponse($request = null);
 }

@@ -125,15 +125,15 @@ trait EventEmitter
         foreach ($this->eventHandlers[$event] as $delegate) {
             $answer = call_user_func_array($delegate, $args);
 
+            if ($callBack !== false && $answer !== null) {
+                call_user_func($callBack, $answer);
+            }
+
             // If we don't have a result yet - make this the result. This way the first event handler to
             // return a non null result will be the overall result of the event.
             if ($result === null) {
                 $result = $answer;
             }
-        }
-
-        if ($callBack !== false) {
-            call_user_func($callBack, $result);
         }
 
         return $result;

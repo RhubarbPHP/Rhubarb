@@ -20,6 +20,15 @@ namespace Rhubarb\Crown\Mime;
 
 class MimePart
 {
+    const MIME_TYPE_APPLICATION_JSON = 'application/json';
+    const MIME_TYPE_IMAGE_GIF = 'image/gif';
+    const MIME_TYPE_IMAGE_JPEG = 'image/jpeg';
+    const MIME_TYPE_IMAGE_PNG = 'image/png';
+    const MIME_TYPE_TEXT_PLAIN = 'text/plain';
+    const MIME_TYPE_TEXT_HTML = 'text/html';
+    const MIME_TYPE_TEXT_CSS = 'text/css';
+
+
     /**
      * @var string[]
      */

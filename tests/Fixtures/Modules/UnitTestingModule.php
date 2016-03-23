@@ -20,29 +20,27 @@ use Rhubarb\Stem\Repositories\Repository;
 
 class UnitTestingModule extends Module
 {
-    protected function registerDependantModules()
+    public function getModules()
     {
-        parent::registerDependantModules();
-
-        Module::registerModule(new LayoutModule(TestLayout::class));
+        return [ new LayoutModule(TestLayout::class) ];
     }
 
-    protected function Initialise()
+    protected function initialise()
     {
         require_once __DIR__ . '/../../unit/UrlHandlers/UrlHandlerTestUnitTest.php';
 
-        parent::Initialise();
+        parent::initialise();
 
         Repository::setDefaultRepositoryClassName(Offline::class);
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/login/index");
         $login->SetPriority(20);
 
         $this->AddUrlHandlers(
             ["/cant/be/here" => $login]
         );
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/defo/not/here/login/index/",
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/defo/not/here/login/index/",
             [
                 "login/index/" => new ClassMappedUrlHandler(SimpleContent::class)
                 // We have to give it something to render!
@@ -72,13 +70,13 @@ class UnitTestingModule extends Module
         );
 
         $this->AddUrlHandlers("/priority-test/",
-            new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
+            new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/login/index"));
 
         $test = new NamespaceMappedUrlHandler('Rhubarb\Leaf\Presenters');
         $test->SetPriority(100);
 
         $this->AddUrlHandlers("/priority-test/", $test);
 
-        EmailProvider::setDefaultEmailProviderClassName(UnitTestingEmailProvider::class);
+        EmailProvider::setProviderClassName(UnitTestingEmailProvider::class);
     }
 }

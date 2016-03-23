@@ -3,7 +3,7 @@
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
@@ -13,7 +13,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
     public function testUrlHandled()
     {
         $request = new WebRequest();
-        $request->UrlPath = "/wrong/path/";
+        $request->urlPath = "/wrong/path/";
 
         $handler = new ClassMappedUrlHandler(TestTarget::class);
         $handler->setUrl("/right/path/");
@@ -23,7 +23,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
         $this->assertFalse($response);
 
         $request = new WebRequest();
-        $request->UrlPath = "/right/path/";
+        $request->urlPath = "/right/path/";
 
         $response = $handler->generateResponse($request);
 
@@ -31,7 +31,7 @@ class ClassMappedHandlerTest extends RhubarbTestCase
     }
 }
 
-class TestTarget implements GeneratesResponse
+class TestTarget implements GeneratesResponseInterface
 {
     public function generateResponse($request = null)
     {

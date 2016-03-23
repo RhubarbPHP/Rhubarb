@@ -32,7 +32,7 @@ class ResourceDeploymentPackage extends DeploymentPackage
      */
     public function getDeployedUrls()
     {
-        $deploymentHandler = ResourceDeploymentProvider::getResourceDeploymentProvider();
+        $deploymentHandler = ResourceDeploymentProvider::getProvider();
 
         $urls = [];
 
@@ -45,7 +45,7 @@ class ResourceDeploymentPackage extends DeploymentPackage
 
     protected function onDeploy()
     {
-        $deploymentHandler = ResourceDeploymentProvider::getResourceDeploymentProvider();
+        $deploymentHandler = ResourceDeploymentProvider::getProvider();
 
         $urls = [];
 

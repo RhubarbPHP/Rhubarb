@@ -18,10 +18,9 @@
 
 namespace Rhubarb\Crown\Response;
 
-require_once __DIR__ . "/../Response/GeneratesResponse.php";
-require_once __DIR__ . "/../HttpHeaders.php";
+require_once __DIR__ . "/../Response/GeneratesResponseInterface.php";
 
-use Rhubarb\Crown\HttpHeaders;
+use Rhubarb\Crown\Application;
 
 class Response
 {
@@ -30,14 +29,25 @@ class Response
     protected $responseCode;
     protected $responseMessage;
 
+    const HTTP_STATUS_SUCCESS_OK = 200;
+    const HTTP_STATUS_REDIRECTION_PERMANENT = 301;
+    const HTTP_STATUS_REDIRECTION_TEMPORARY = 302;
+    const HTTP_STATUS_CLIENT_ERROR_BAD_REQUEST = 400;
+    const HTTP_STATUS_CLIENT_ERROR_UNAUTHORIZED = 401;
+    const HTTP_STATUS_CLIENT_ERROR_FORBIDDEN = 403;
+    const HTTP_STATUS_CLIENT_ERROR_NOT_FOUND = 404;
+    const HTTP_STATUS_CLIENT_ERROR_METHOD_NOT_ALLOWED = 405;
+    const HTTP_STATUS_CLIENT_ERROR_CONFLICT = 409;
+    const HTTP_STATUS_SERVER_ERROR_GENERIC = 500;
+
     /**
      * Records a reference to the object that generated this response.
      *
-     * This is often used by unit tests to determine that url routing was successfull, however it can also be useful
+     * This is often used by unit tests to determine that url routing was successful, however it can also be useful
      * in complex rendering stacks where a response filter needs to know who generated the output to make an
      * appropriate response.
      *
-     * @var GeneratesResponse
+     * @var GeneratesResponseInterface
      */
     protected $generator;
 
@@ -46,13 +56,13 @@ class Response
         $this->headers = ['Content-Type' => 'text/plain'];
         $this->content = null;
         $this->generator = $generator;
-        $this->responseCode = HttpHeaders::HTTP_STATUS_SUCCESS_OK;
+        $this->responseCode = self::HTTP_STATUS_SUCCESS_OK;
     }
 
     /**
      * Get's a reference to the object that generated this response.
      *
-     * @return \Rhubarb\Crown\Response\GeneratesResponse
+     * @return \Rhubarb\Crown\Response\GeneratesResponseInterface
      */
     public function getGenerator()
     {
@@ -100,20 +110,25 @@ class Response
         $this->headers = [];
     }
 
+    private function setHeaderInPhp($header)
+    {
+        if (!Application::current()->unitTesting){
+            header($header);
+        }
+    }
+
     /*
      * Does the actual setting of headers for the response.
      */
     private function processHeaders()
     {
         if ($this->responseCode) {
-            HttpHeaders::setHeader("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage(), false);
+            $this->setHeaderInPhp("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage());
         }
 
-        foreach ($this->headers as $name => $value) {
-            HttpHeaders::setHeader($name, $value);
+        foreach($this->headers as $type => $value){
+            $this->setHeaderInPhp($type.": ".$value);
         }
-
-        HttpHeaders::flushHeaders();
     }
 
     /**

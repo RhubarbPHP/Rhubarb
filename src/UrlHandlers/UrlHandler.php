@@ -18,17 +18,17 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\Request;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Response\Response;
 
-require_once __DIR__ . "/../Response/GeneratesResponse.php";
+require_once __DIR__ . "/../Response/GeneratesResponseInterface.php";
 
 /**
  * The base class for URL Handlers.
@@ -40,7 +40,7 @@ require_once __DIR__ . "/../Response/GeneratesResponse.php";
  * We return false rather than an exception for performance reasons.
  *
  */
-abstract class UrlHandler implements GeneratesResponse
+abstract class UrlHandler implements GeneratesResponseInterface
 {
     /**
      * The URL stub which will allow this handler to consider a response
@@ -228,6 +228,14 @@ abstract class UrlHandler implements GeneratesResponse
     }
 
     /**
+     * @return string
+     */
+    public function getHandledUrl()
+    {
+        return $this->handledUrl;
+    }
+
+    /**
      * Return the response if appropriate or false if no response could be generated.
      *
      * @param mixed $request
@@ -252,7 +260,7 @@ abstract class UrlHandler implements GeneratesResponse
 
     protected function getAbsoluteHandledUrl()
     {
-        $request = Context::currentRequest();
+        $request = PhpContext::createRequest();
 
         return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
     }
@@ -269,7 +277,7 @@ abstract class UrlHandler implements GeneratesResponse
     public function generateResponse($request = null, $currentUrlFragment = false)
     {
         if ($currentUrlFragment === false) {
-            $currentUrlFragment = $request->UrlPath;
+            $currentUrlFragment = $request->urlPath;
         }
 
         if (!$this->matchesRequest($request, $currentUrlFragment)) {
@@ -284,7 +292,7 @@ abstract class UrlHandler implements GeneratesResponse
 
         Log::indent();
 
-        $context = new Context();
+        $context = new PhpContext();
         $context->UrlHandler = $this;
 
         $this->matchingUrl = $this->getMatchingUrlFragment($request, $currentUrlFragment);

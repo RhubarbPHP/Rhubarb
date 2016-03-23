@@ -37,6 +37,16 @@ abstract class Email extends Sendable
     private $attachments = [];
 
     /**
+     * @var EmailProvider
+     */
+    private $emailProvider;
+
+    public function __construct(EmailProvider $emailProvider)
+    {
+        $this->emailProvider = $emailProvider;
+    }
+
+    /**
      * Adds an attachment
      *
      * @param string $path The path to the local file
@@ -80,9 +90,9 @@ abstract class Email extends Sendable
     public function getSender()
     {
         if ($this->sender == null) {
-            $emailSettings = new EmailSettings();
+            $emailSettings = EmailSettings::singleton();
 
-            return $emailSettings->DefaultSender;
+            return $emailSettings->defaultSender;
         }
 
         return $this->sender;
@@ -118,11 +128,11 @@ abstract class Email extends Sendable
 
     public function getRecipients()
     {
-        $emailSettings = new EmailSettings();
+        $emailSettings = EmailSettings::singleton();
 
-        if ($emailSettings->OnlyRecipient) {
+        if ($emailSettings->onlyRecipient) {
             // Only send emails to a test recipient, to prevent emailing real customers from a development environment
-            return [$emailSettings->OnlyRecipient];
+            return [$emailSettings->onlyRecipient];
         }
 
         return parent::getRecipients();

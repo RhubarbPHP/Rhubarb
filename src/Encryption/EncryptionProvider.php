@@ -18,51 +18,18 @@
 
 namespace Rhubarb\Crown\Encryption;
 
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 
 /**
  * Provides a framework for providing encryption services.
  */
-abstract class EncryptionProvider
+abstract class EncryptionProvider implements ProviderInterface
 {
-    private static $defaultEncryptionProviderClassName = null;
-
-    /**
-     * Sets the class to be used for the default hash provider.
-     *
-     * @param $providerClassName
-     * @return string Returns the class name of the previous default provider.
-     */
-    public static function setEncryptionProviderClassName($providerClassName)
-    {
-        $oldEncryptionProviderClassName = self::$defaultEncryptionProviderClassName;
-
-        self::$defaultEncryptionProviderClassName = $providerClassName;
-
-        return $oldEncryptionProviderClassName;
-    }
-
-    /**
-     * Get's an instance of the default hash provider.
-     *
-     * @return EncryptionProvider
-     * @throws ImplementationException
-     */
-    public static function getEncryptionProvider()
-    {
-        if (self::$defaultEncryptionProviderClassName == null) {
-            throw new ImplementationException("No default encryption provider class name has been set.");
-        }
-
-        $providerClassName = self::$defaultEncryptionProviderClassName;
-        $provider = new $providerClassName();
-
-        if (!is_a($provider, "Rhubarb\Crown\Encryption\EncryptionProvider")) {
-            throw new ImplementationException("The default encryption provider must extend Rhubarb\Crown\Encryption\EncryptionProvider");
-        }
-
-        return $provider;
-    }
+    use ProviderTrait;
 
     /**
      * Returns the encrypted data.
