@@ -26,8 +26,8 @@ use Rhubarb\Crown\Settings;
 /**
  * Container for some default properties for sending emails.
  *
- * @property EmailAddress $DefaultSender The default sender to use for all emails (unless set explicitly in the email classes)
- * @property EmailAddress|bool $OnlyRecipient If you wish to prevent a development setup from emailing real customer addresses, set this to a test recipient address
+ * @property EmailRecipient $DefaultSender The default sender to use for all emails (unless set explicitly in the email classes)
+ * @property EmailRecipient|bool $OnlyRecipient If you wish to prevent a development setup from emailing real customer addresses, set this to a test recipient address
  */
 class EmailSettings extends Settings
 {
@@ -38,7 +38,7 @@ class EmailSettings extends Settings
         $request = Context::currentRequest();
         $host = $request->Server("SERVER_NAME");
 
-        $this->DefaultSender = new EmailAddress("donotreply@" . $host . ".com");
+        $this->DefaultSender = new EmailRecipient("donotreply@" . $host . ".com");
         $this->OnlyRecipient = false;
     }
 }

@@ -132,7 +132,7 @@ class SimpleEmail extends Email
         $email->setSubject($data["subject"]);
 
         foreach($data["recipients"] as $recipient){
-            $email->addRecipient($recipient["email"], $recipient["name"]);
+            $email->addRecipientByEmail($recipient["email"], $recipient["name"]);
         }
 
         foreach($data["attachments"] as $attachment){

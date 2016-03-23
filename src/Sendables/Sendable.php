@@ -8,6 +8,12 @@ namespace Rhubarb\Crown\Sendables;
 abstract class Sendable
 {
     /**
+     * The list of recipients
+     * @var SendableRecipient[]
+     */
+    protected $recipients = [];
+
+    /**
      * Called when sending occurs providing an opportunity to log the event.
      * @return mixed
      */
@@ -21,17 +27,22 @@ abstract class Sendable
     protected abstract function getProviderClassName();
 
     /**
-     * Returns the list of recipients for this sendable.
+     * Returns the list of recipients objects for this sendable.
      *
-     * Sendable types must be able to return a list of recipients. This should return either an array
-     * of values keyed by a string (e.g. email address) or a numerically indexed array containing
-     * strings values (e.g. mobile phone numbers).
-     *
-     * If returning string keys the values can be of any type.
-     *
-     * @return array
+     * @return SendableRecipient[]
      */
-    public abstract function getRecipients();
+    public function getRecipients()
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * Clears the list of recipients
+     */
+    public function clearRecipients()
+    {
+        $this->recipients = [];
+    }
 
     /**
      * Returns a common type for the sendable
@@ -72,5 +83,16 @@ abstract class Sendable
         $provider = $providerClass::getDefaultProvider();
 
         return $provider;
+    }
+
+    public function addRecipient(SendableRecipient $recipient)
+    {
+        foreach($this->recipients as $existingRecipient){
+            if ((string)$existingRecipient == (string)$recipient){
+                return;
+            }
+        }
+
+        $this->recipients[] = $recipient;
     }
 }

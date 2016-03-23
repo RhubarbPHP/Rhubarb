@@ -1,8 +1,10 @@
 <?php
 
-namespace Rhubarb\Crown\Tests\unit\Sendables\Email;
+namespace Rhubarb\Crown\Tests\Sendables\Email;
 
 use Rhubarb\Crown\Sendables\Email\TemplateEmail;
+use Rhubarb\Crown\Tests\Fixtures\Emails\FancyUnitTestingTemplateEmail;
+use Rhubarb\Crown\Tests\Fixtures\Emails\UnitTestingTemplateEmail;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class TemplateEmailTest extends RhubarbTestCase
@@ -22,33 +24,3 @@ class TemplateEmailTest extends RhubarbTestCase
     }
 }
 
-class UnitTestingTemplateEmail extends TemplateEmail
-{
-    protected function GetTextTemplateBody()
-    {
-        return "Your name is {Name}";
-    }
-
-    protected function GetHtmlTemplateBody()
-    {
-        return "Your age is {Age}";
-    }
-
-    protected function GetSubjectTemplate()
-    {
-        return "Your hair is {HairColour}";
-    }
-}
-
-class FancyUnitTestingTemplateEmail extends UnitTestingTemplateEmail
-{
-    protected function GetHtmlLayout()
-    {
-        return "<div>{Content}</div>";
-    }
-
-    protected function GetTextLayout()
-    {
-        return "abc{Content}def";
-    }
-}

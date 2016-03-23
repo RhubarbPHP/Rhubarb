@@ -32,8 +32,6 @@ use Rhubarb\Crown\Sendables\Sendable;
  */
 abstract class Email extends Sendable
 {
-    private $recipients = [];
-
     private $sender;
 
     private $attachments = [];
@@ -77,7 +75,7 @@ abstract class Email extends Sendable
     abstract public function getHtml();
 
     /**
-     * @return EmailAddress
+     * @return EmailRecipient
      */
     public function getSender()
     {
@@ -92,22 +90,22 @@ abstract class Email extends Sendable
 
     public function setSender($senderEmail, $name = "")
     {
-        $this->sender = new EmailAddress($senderEmail, $name);
+        $this->sender = new EmailRecipient($senderEmail, $name);
 
         return $this;
     }
 
-    public function addRecipient($recipientEmail, $recipientName = "")
+    public function addRecipientByEmail($recipientEmail, $recipientName = "")
     {
-        $this->recipients[$recipientEmail] = new EmailAddress($recipientEmail, $recipientName);
+        $this->addRecipient(new EmailRecipient($recipientEmail, $recipientName));
 
         return $this;
     }
 
-    public function addRecipients($recipients)
+    public function addRecipientsByEmail($recipients)
     {
         foreach ($recipients as $recipient) {
-            $this->addRecipient($recipient);
+            $this->addRecipientByEmail($recipient);
         }
 
         return $this;
@@ -127,7 +125,7 @@ abstract class Email extends Sendable
             return [$emailSettings->OnlyRecipient];
         }
 
-        return $this->recipients;
+        return parent::getRecipients();
     }
 
     public function getSendableType()

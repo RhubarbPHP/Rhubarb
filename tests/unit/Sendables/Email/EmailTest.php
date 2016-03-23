@@ -13,7 +13,7 @@ class EmailTest extends RhubarbTestCase
     public function testEmailRecipients()
     {
         $email = new SimpleEmail();
-        $email->AddRecipients(
+        $email->addRecipientsByEmail(
             [
                 "acuthbert@gcdtech.com"
             ]
@@ -22,7 +22,7 @@ class EmailTest extends RhubarbTestCase
         $this->assertEquals("acuthbert@gcdtech.com", current($email->GetRecipients())->email);
 
         $email = new SimpleEmail();
-        $email->AddRecipients(
+        $email->addRecipientsByEmail(
             [
                 "acuthbert@gcdtech.com",
                 "msmith@gcdtech.com"
@@ -34,14 +34,14 @@ class EmailTest extends RhubarbTestCase
 
         $this->assertEquals("acuthbert@gcdtech.com", current($email->GetRecipients())->email);
 
-        $email->AddRecipients(
+        $email->addRecipientsByEmail(
             [
                 "acuthbert@gcdtech.com",
                 "msmith@gcdtech.com"
             ]
         );
 
-        $this->assertCount(2, $email->GetRecipients(), "Dupes shouldn't get added to recipients twice.");
+        $this->assertCount(2, $email->getRecipients(), "Dupes shouldn't get added to recipients twice.");
     }
 
     public function testFileAttaches()
@@ -61,7 +61,7 @@ class EmailTest extends RhubarbTestCase
     public function testMimeDocument()
     {
         $email = new SimpleEmail();
-        $email->AddRecipient("acuthbert@gcdtech.com")
+        $email->addRecipientByEmail("acuthbert@gcdtech.com")
             ->SetSubject("Testing")
             ->SetSender("jsmith@gcdtech.com")
             ->SetText("This is test");
@@ -107,7 +107,7 @@ class EmailTest extends RhubarbTestCase
     {
         // Note this test only confirms the email has made it to the provider.
         $email = new SimpleEmail();
-        $email->AddRecipient("acuthbert@gcdtech.com")
+        $email->addRecipientByEmail("acuthbert@gcdtech.com")
             ->SetText("This is a test email")
             ->Send();
 
@@ -141,9 +141,9 @@ class EmailTest extends RhubarbTestCase
         $email->setSubject("This is a test");
         $email->setSender("alice@bob.com");
         $this->assertReflectionMatches($email);
-        $email->addRecipient("joe@bob.com");
+        $email->addRecipientByEmail("joe@bob.com");
         $this->assertReflectionMatches($email);
-        $email->addRecipient("jane@bob.com", "Jane Bob");
+        $email->addRecipientByEmail("jane@bob.com", "Jane Bob");
         $this->assertReflectionMatches($email);
         $email->setText("War and peace");
         $this->assertReflectionMatches($email);
