@@ -25,15 +25,6 @@ use Rhubarb\Crown;
 /**
  * Encapsulates the current web request.
  *
- * @property-read array $serverData
- * @property-read array $getData
- * @property-read array $postData
- * @property-read array $filesData
- * @property-read array $cookieData
- * @property-read array $sessionData
- * @property-read array $requestData
- * @property-read array $headerData
- *
  * @property string $URI
  * @property string $Host
  * @property string $urlPath
@@ -48,13 +39,13 @@ use Rhubarb\Crown;
  */
 class WebRequest extends Request
 {
-    private $serverData;
-    private $getData;
-    private $postData;
-    private $filesData;
-    private $cookieData;
-    private $sessionData;
-    private $headerData;
+    public $serverData;
+    public $getData;
+    public $postData;
+    public $filesData;
+    public $cookieData;
+    public $sessionData;
+    public $headerData;
 
     public $host;
     public $uri;
