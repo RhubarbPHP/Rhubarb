@@ -14,3 +14,4 @@
 * Revised a lot of documentation
 * Renamed DataStream to RecordStream
 * Removed HttpHeaders class and move functionality to the Response object
+* Removed send() method on Email and Sendable classes. Call SendableProvider::selectProviderAndSend() instead.

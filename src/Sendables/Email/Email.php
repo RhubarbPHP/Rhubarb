@@ -37,16 +37,6 @@ abstract class Email extends Sendable
     private $attachments = [];
 
     /**
-     * @var EmailProvider
-     */
-    private $emailProvider;
-
-    public function __construct(EmailProvider $emailProvider)
-    {
-        $this->emailProvider = $emailProvider;
-    }
-
-    /**
      * Adds an attachment
      *
      * @param string $path The path to the local file
@@ -252,7 +242,7 @@ abstract class Email extends Sendable
         return $headers;
     }
 
-    protected function getProviderClassName()
+    public function getProviderClassName()
     {
         return EmailProvider::class;
     }

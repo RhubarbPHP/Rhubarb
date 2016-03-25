@@ -14,17 +14,11 @@ abstract class Sendable
     protected $recipients = [];
 
     /**
-     * Called when sending occurs providing an opportunity to log the event.
-     * @return mixed
-     */
-    protected abstract function logSending();
-
-    /**
      * Returns the name of the base provider class used to send this sendable
      *
      * @return string
      */
-    protected abstract function getProviderClassName();
+    public abstract function getProviderClassName();
 
     /**
      * Returns the list of recipients objects for this sendable.
@@ -68,22 +62,6 @@ abstract class Sendable
      * @return array
      */
     public abstract function toArray();
-
-    public final function send()
-    {
-        $this->logSending();
-
-        $provider = $this->createProvider();
-        $provider->send($this);
-    }
-
-    private function createProvider()
-    {
-        $providerClass = $this->getProviderClassName();
-        $provider = $providerClass::getDefaultProvider();
-
-        return $provider;
-    }
 
     public function addRecipient(SendableRecipient $recipient)
     {
