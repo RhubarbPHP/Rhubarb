@@ -55,7 +55,7 @@ class WebRequest extends Request
 
     public function initialise()
     {
-        $this->superglobalMethodNames = [
+        $this->superGlobalMethodNames = [
             'env',
             'server',
             'get',
