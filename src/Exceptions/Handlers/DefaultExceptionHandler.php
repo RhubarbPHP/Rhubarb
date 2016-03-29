@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use Rhubarb\Crown\Exceptions\RhubarbException;
+use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
@@ -48,7 +49,8 @@ class DefaultExceptionHandler extends ExceptionHandler
         }
 
         $response = new Response();
-        $response->SetContent("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
+        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);
+        $response->setContent("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
         return $response;
     }
 

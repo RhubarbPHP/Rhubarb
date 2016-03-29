@@ -21,6 +21,7 @@ namespace Rhubarb\Crown\UrlHandlers;
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
+use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Response\GeneratesResponse;
@@ -331,6 +332,7 @@ abstract class UrlHandler implements GeneratesResponse
     public function generateResponseForException(RhubarbException $er)
     {
         $response = new HtmlResponse();
+        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);
         $response->setContent($er->getPublicMessage());
 
         return $response;
