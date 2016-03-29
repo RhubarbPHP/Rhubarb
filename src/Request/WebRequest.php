@@ -100,7 +100,7 @@ class WebRequest extends Request
             $this->modelData['UrlBase'] = $protocol . '://' . $host;
         }
 
-        if ($append !== '' && strpos($append, '/') === false) {
+        if ($append !== '' && strpos($append, '/') !== 0) {
             $append = '/' . $append;
         }
 
