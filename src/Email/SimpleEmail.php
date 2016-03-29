@@ -63,6 +63,10 @@ class SimpleEmail extends Email
     {
         $this->html = $html;
 
+        if (!$this->text) {
+            $this->text = strip_tags($html);
+        }
+
         return $this;
     }
 
