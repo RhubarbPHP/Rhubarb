@@ -92,7 +92,7 @@ class XmlParserTest extends RhubarbTestCase
             }
         ));
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertTrue($hit);
 
@@ -103,7 +103,7 @@ class XmlParserTest extends RhubarbTestCase
             }
         ));
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertEquals("breakfast", $hit->name);
         $this->assertEmpty($hit->attributes);
@@ -119,7 +119,7 @@ class XmlParserTest extends RhubarbTestCase
             }
         ));
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertEquals("cold", $hit->children[0]->attributes["warmth"]);
         $this->assertEquals("decaff", $hit->children[1]->children[1]->attributes["type"]);
@@ -134,7 +134,7 @@ class XmlParserTest extends RhubarbTestCase
         $parser = new XmlParser("cache/unit-test-xml-stream.xml");
         $parser->addNodeHandler("dinner", $dinnerSniffer);
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertEquals("Apple <b>Pie</b>s", $hit->text);
 
@@ -143,7 +143,7 @@ class XmlParserTest extends RhubarbTestCase
             $hit = $node;
         }));
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertEquals("dark", $hit->attributes["colour"], "Self closed tags don't work no more");
     }
@@ -178,7 +178,7 @@ class XmlParserTest extends RhubarbTestCase
             $hit = $node;
         }));
 
-        $parser->Parse();
+        $parser->parse();
 
         $this->assertEquals("George", $hit["name"]);
         $this->assertEquals("tall", $hit["height"]);

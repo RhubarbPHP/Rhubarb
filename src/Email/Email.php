@@ -249,9 +249,9 @@ abstract class Email
         $html = $this->getHtml();
         $text = $this->getText();
 
-        Log::Debug("Sending email `" . $subject . "` to recipients: " . $this->getRecipientList(), "EMAIL");
+        Log::debug("Sending email `" . $subject . "` to recipients: " . $this->getRecipientList(), "EMAIL");
 
-        Log::BulkData(
+        Log::bulkData(
             "Email content",
             "EMAIL",
             $this->getMailHeadersAsString() . "\r\n\r\n" .

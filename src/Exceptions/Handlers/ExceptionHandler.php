@@ -68,7 +68,7 @@ abstract class ExceptionHandler
             }
 
             // Dispatch the exception to the handler.
-            $response = self::ProcessException($er);
+            $response = self::processException($er);
             $response->send();
         });
 
@@ -91,7 +91,7 @@ abstract class ExceptionHandler
             if ($error != null) {
                 // Ensure we're in the project root directory, as some webservers (e.g. apache) can change
                 // the working directory during shutdown.
-                chdir(__DIR__.'/../../../../../../');
+                chdir(__DIR__ . '/../../../../../../');
 
                 if (!file_exists("shutdown_logs")) {
                     @mkdir("shutdown_logs");
@@ -99,9 +99,9 @@ abstract class ExceptionHandler
 
                 @file_put_contents(
                     'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
-                    "Type: {$error["type"]}\n".
-                    "Message: {$error["message"]}\n".
-                    "File: {$error["file"]}\n".
+                    "Type: {$error["type"]}\n" .
+                    "Message: {$error["message"]}\n" .
+                    "File: {$error["file"]}\n" .
                     "Line: {$error["line"]}\n\n",
                     FILE_APPEND
                 );

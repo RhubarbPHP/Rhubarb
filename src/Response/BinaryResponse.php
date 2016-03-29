@@ -6,7 +6,7 @@ class BinaryResponse extends Response
 {
     private $binaryData;
 
-    public function __construct($generator, $binaryData, $contentType, $fileName = "" )
+    public function __construct($generator, $binaryData, $contentType, $fileName = "")
     {
         parent::__construct($generator);
 
@@ -24,7 +24,7 @@ class BinaryResponse extends Response
         $this->setHeader('Content-Length', strlen($binaryData));
     }
 
-    protected function PrintContent()
+    protected function printContent()
     {
         ob_clean();
 

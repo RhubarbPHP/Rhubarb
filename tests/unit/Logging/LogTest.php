@@ -40,7 +40,7 @@ class LogTest extends RhubarbTestCase
     {
         $this->log->setLevelMask(Log::DEBUG_LEVEL);
 
-        Log::Debug("This is a test", "test", ["a" => "b"]);
+        Log::debug("This is a test", "test", ["a" => "b"]);
 
         $this->assertEquals(["This is a test", "test", 0, ["a" => "b"]], $this->log->entries[0]);
     }

@@ -13,7 +13,7 @@ class EmailAddressTest extends RhubarbTestCase
 
         $this->assertEquals("acuthbert@gcdtech.com", $emailAddress->email);
 
-        $internetFormat = $emailAddress->GetRfcFormat();
+        $internetFormat = $emailAddress->getRfcFormat();
 
         $this->assertEquals("acuthbert@gcdtech.com", $internetFormat);
 
@@ -21,7 +21,7 @@ class EmailAddressTest extends RhubarbTestCase
 
         $this->assertEquals("Andrew Cuthbert", $emailAddress->name);
 
-        $internetFormat = $emailAddress->GetRfcFormat();
+        $internetFormat = $emailAddress->getRfcFormat();
 
         $this->assertEquals("\"Andrew Cuthbert\" <acuthbert@gcdtech.com>", $internetFormat);
 

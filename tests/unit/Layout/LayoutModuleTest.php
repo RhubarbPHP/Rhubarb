@@ -137,7 +137,7 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $this->assertEquals(
             "TopDon't change this content - it should match the unit test.Tail",
-            $response->GetContent()
+            $response->getContent()
         );
     }
 

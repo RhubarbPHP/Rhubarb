@@ -85,7 +85,7 @@ class CsvStream extends DataStream
         parent::__construct();
     }
 
-    public function GetFilePath()
+    public function getFilePath()
     {
         return $this->filePath;
     }
@@ -337,15 +337,15 @@ class CsvStream extends DataStream
 
             foreach ($dataToWrite as $value) {
                 if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos(
-                    $value,
-                    $this->delimiter
-                ) !== false)
+                            $value,
+                            $this->delimiter
+                        ) !== false)
                 ) {
                     $enclosedData[] = $this->enclosure . str_replace(
-                        $this->enclosure,
-                        $escapeCharacter . $this->enclosure,
-                        $value
-                    ) . $this->enclosure;
+                            $this->enclosure,
+                            $escapeCharacter . $this->enclosure,
+                            $value
+                        ) . $this->enclosure;
                 } else {
                     $enclosedData[] = $value;
                 }

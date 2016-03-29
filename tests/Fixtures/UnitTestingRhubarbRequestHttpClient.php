@@ -78,7 +78,7 @@ class UnitTestingRhubarbRequestHttpClient extends HttpClient
 
         $context->Request = $simulatedRequest;
 
-        $rawResponse = Module::GenerateResponseForRequest($simulatedRequest);
+        $rawResponse = Module::generateResponseForRequest($simulatedRequest);
 
         $response = new HttpResponse();
         $response->setResponseBody($rawResponse->formatContent());

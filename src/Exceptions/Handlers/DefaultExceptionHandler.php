@@ -37,7 +37,7 @@ class DefaultExceptionHandler extends ExceptionHandler
         Log::error(
             "Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
             "ERROR",
-            ["Exception: ".$er]
+            ["Exception: " . $er]
         );
     }
 

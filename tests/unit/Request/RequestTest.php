@@ -58,7 +58,7 @@ class RequestTest extends RequestTestCase
         // check test ENV - currently == 42 from setUp()
         $this->assertEquals($this->testEnvValue, $this->request->EnvData[$this->testEnvKey]);
         $this->assertEquals($this->testEnvValue, $this->request->OriginalEnvData[$this->testEnvKey]);
-        $this->assertEquals($this->testEnvValue, $this->request->Env($this->testEnvKey));
+        $this->assertEquals($this->testEnvValue, $this->request->env($this->testEnvKey));
 
         /*
          * Static data does now reparse the global arrays each time a request is created.
@@ -70,7 +70,7 @@ class RequestTest extends RequestTestCase
         $differentRequest = new TestRequest();
         $this->assertEquals( $this->testEnvValue, $differentRequest->EnvData[ $this->testEnvKey ] );
         $this->assertEquals( $this->testEnvValue, $differentRequest->OriginalEnvData[ $this->testEnvKey] );
-        $this->assertEquals( $this->testEnvValue, $differentRequest->Env( $this->testEnvKey ) );
+        $this->assertEquals( $this->testEnvValue, $differentRequest->env( $this->testEnvKey ) );
         */
     }
 }

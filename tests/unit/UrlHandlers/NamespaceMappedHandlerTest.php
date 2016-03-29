@@ -16,7 +16,7 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        $this->request = Context::CurrentRequest();
+        $this->request = Context::currentRequest();
         $this->request->IsWebRequest = true;
 
         LayoutModule::disableLayout();

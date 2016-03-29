@@ -26,8 +26,8 @@ use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
-use Rhubarb\Crown\Tests\unit\Logging\UnitTestLog;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
+use Rhubarb\Crown\Tests\unit\Logging\UnitTestLog;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 class DefaultExceptionHandlerTest extends RhubarbTestCase
@@ -177,7 +177,7 @@ class UnitTestExceptionModule extends Module
         $this->namespace = __NAMESPACE__;
     }
 
-    protected function RegisterUrlHandlers()
+    protected function registerUrlHandlers()
     {
         $this->addUrlHandlers(
             [

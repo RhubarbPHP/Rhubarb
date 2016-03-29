@@ -53,7 +53,7 @@ class XmlStream extends DataStream
         $this->xmlFilePath = $xmlFilePath;
     }
 
-    private function Open()
+    private function open()
     {
         if ($this->xmlParser == null) {
             $this->xmlParser = new XmlParser($this->xmlFilePath);
@@ -65,7 +65,7 @@ class XmlStream extends DataStream
 
     public function readNextItem()
     {
-        $this->Open();
+        $this->open();
 
         $available = $this->xmlParser->parseOne();
 

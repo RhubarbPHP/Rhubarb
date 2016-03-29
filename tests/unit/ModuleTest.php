@@ -75,9 +75,9 @@ class TestModule extends Module
 
 class TestModule2 extends Module
 {
-    protected function Initialise()
+    protected function initialise()
     {
-        parent::Initialise();
+        parent::initialise();
 
         $this->responseFilters[] = new LayoutFilter();
     }
@@ -85,9 +85,9 @@ class TestModule2 extends Module
 
 class TestModule3 extends Module
 {
-    protected function Initialise()
+    protected function initialise()
     {
-        parent::Initialise();
+        parent::initialise();
 
         $this->responseFilters[] = new LayoutFilter();
     }
@@ -95,9 +95,9 @@ class TestModule3 extends Module
 
 class TestModule4 extends Module
 {
-    protected function RegisterDependantModules()
+    protected function registerDependantModules()
     {
-        Module::RegisterModule(new TestModule5());
+        Module::registerModule(new TestModule5());
     }
 }
 

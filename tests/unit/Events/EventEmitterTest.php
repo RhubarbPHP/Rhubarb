@@ -49,7 +49,7 @@ class EventEmitterTest extends RhubarbTestCase
 
     private $eventWasRaised = false;
 
-    public function OnSomeEvent($a, $b, $c)
+    public function onSomeEvent($a, $b, $c)
     {
         $this->eventWasRaised = true;
 

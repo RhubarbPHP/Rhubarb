@@ -54,7 +54,7 @@ class XmlParser
         $this->reader->close();
     }
 
-    public function Parse()
+    public function parse()
     {
         $this->open();
 

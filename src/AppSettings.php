@@ -31,8 +31,8 @@ class AppSettings extends Settings
 
         $request = Context::currentRequest();
 
-        $scheme = ($request->Server("HTTPS")) ? "https" : "http";
+        $scheme = ($request->server("HTTPS")) ? "https" : "http";
 
-        $this->AppBaseUrl = $scheme . "://" . $request->Server("SERVER_NAME");
+        $this->AppBaseUrl = $scheme . "://" . $request->server("SERVER_NAME");
     }
 }

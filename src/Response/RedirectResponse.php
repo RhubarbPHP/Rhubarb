@@ -35,9 +35,9 @@ class RedirectResponse extends Response
 
     /**
      * RedirectResponse constructor.
-     * @param string $url  The new URI to redirect the client to
-     * @param null|object $generator  A reference to the object that generated this response for traceability.
-     * @param bool $permanent  If true, the response will use a 302 HTTP code, otherwise it will use 301.
+     * @param string $url The new URI to redirect the client to
+     * @param null|object $generator A reference to the object that generated this response for traceability.
+     * @param bool $permanent If true, the response will use a 302 HTTP code, otherwise it will use 301.
      *     Note that permanent redirects are aggressively cached by browsers and will result in them not even
      *     requesting the current URI in future until the browser's cache of this response expires.
      */

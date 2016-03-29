@@ -80,7 +80,7 @@ abstract class Module
     /**
      * True if the module has been initialised
      *
-     * Note that this is not set as you might expect in Initialise() but rather Module::InitialiseModules()
+     * Note that this is not set as you might expect in Initialise() but rather Module::initialiseModules()
      * This is because as Initialise is designed to be overridden the developer might forget to
      * call the parent and the veracity of this boolean is important.
      *
@@ -356,7 +356,7 @@ abstract class Module
 
         // an empty-string Response to fall back on if nothing else is generated
         $response = new HtmlResponse();
-        $response->SetContent('');
+        $response->setContent('');
 
         $filterResponse = true;
 
@@ -369,7 +369,7 @@ abstract class Module
                 $generatedResponse = $handler->generateResponse($request);
 
                 if ($generatedResponse !== false) {
-                    Log::Debug(function () use ($handler) {
+                    Log::debug(function () use ($handler) {
                         return ["Handler `" . get_class($handler) . "` generated response.", []];
                     }, "ROUTER");
 

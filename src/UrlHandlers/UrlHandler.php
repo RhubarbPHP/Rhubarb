@@ -180,9 +180,9 @@ abstract class UrlHandler implements GeneratesResponse
 
     public function getUrl()
     {
-        $parentUrl = ( $this->parentHandler ) ? $this->parentHandler->matchingUrl : "";
+        $parentUrl = ($this->parentHandler) ? $this->parentHandler->matchingUrl : "";
 
-        return $parentUrl.$this->url;
+        return $parentUrl . $this->url;
     }
 
     public function getParentHandler()
@@ -263,7 +263,7 @@ abstract class UrlHandler implements GeneratesResponse
     {
         $request = Context::currentRequest();
 
-        return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
+        return $request->server("REQUEST_SCHEME") . "://" . $request->server("SERVER_NAME") . $this->handledUrl;
     }
 
     /**

@@ -36,7 +36,7 @@ class EmailSettings extends Settings
         parent::initialiseDefaultValues();
 
         $request = Context::currentRequest();
-        $host = $request->Server("SERVER_NAME");
+        $host = $request->server("SERVER_NAME");
 
         $this->DefaultSender = new EmailAddress("donotreply@" . $host . ".com");
         $this->OnlyRecipient = false;

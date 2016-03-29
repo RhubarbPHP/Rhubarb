@@ -1,6 +1,7 @@
 <?php
 
 namespace Rhubarb\Crown\Tests\Fixtures\TestCases;
+
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
@@ -19,15 +20,15 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
 
     protected function setUp()
     {
-        Module::RegisterModule(new UnitTestingModule());
-        Module::InitialiseModules();
+        Module::registerModule(new UnitTestingModule());
+        Module::initialiseModules();
 
         $context = new Context();
         $context->UnitTesting = true;
         $context->SimulateNonCli = false;
 
-        $request = Context::CurrentRequest();
-        $request->Reset();
+        $request = Context::currentRequest();
+        $request->reset();
     }
 
     protected function tearDown()

@@ -377,7 +377,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * This should not be used unless you fully understand the difference between this method
      * and ExportData()
      *
-     * @see Rhubarb\Crown\Data\Repositories\Repository::StoreObjectData()
+     * @see Rhubarb\Crown\Data\Repositories\Repository::storeObjectData()
      */
     public function exportRawData()
     {

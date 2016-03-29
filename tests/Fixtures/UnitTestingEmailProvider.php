@@ -12,7 +12,7 @@ class UnitTestingEmailProvider extends EmailProvider
      */
     private static $_lastEmail;
 
-    public function SendEmail(Email $email)
+    public function sendEmail(Email $email)
     {
         self::$_lastEmail = $email;
     }
@@ -20,7 +20,7 @@ class UnitTestingEmailProvider extends EmailProvider
     /**
      * @return Email
      */
-    public static function GetLastEmail()
+    public static function getLastEmail()
     {
         return self::$_lastEmail;
     }

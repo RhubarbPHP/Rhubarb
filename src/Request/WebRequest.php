@@ -65,7 +65,7 @@ class WebRequest extends Request
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, "http_") === 0) {
                     $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
-                    $this->Header($key, $value);
+                    $this->header($key, $value);
                 }
             }
         }
@@ -104,7 +104,7 @@ class WebRequest extends Request
             $append = '/' . $append;
         }
 
-        return $this->modelData['UrlBase'].$append;
+        return $this->modelData['UrlBase'] . $append;
     }
 
     public function getIsSSL()
@@ -117,7 +117,7 @@ class WebRequest extends Request
      */
     public function getAcceptsRequestMimeType()
     {
-        $typeString = strtolower($this->Header("Accept"));
+        $typeString = strtolower($this->header("Accept"));
 
         if (strpos($typeString, '*/*') !== false || $typeString == "") {
             return "text/html";

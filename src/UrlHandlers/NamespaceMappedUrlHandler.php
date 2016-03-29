@@ -102,7 +102,7 @@ class NamespaceMappedUrlHandler extends UrlHandler
 
             if (class_exists($objectClass)) {
                 if ($redirectTo !== false) {
-                    UrlHandler::redirectToUrl($this->BuildCompleteChildUrl($redirectTo));
+                    UrlHandler::redirectToUrl($this->buildCompleteChildUrl($redirectTo));
                 }
 
                 $object = new $objectClass();

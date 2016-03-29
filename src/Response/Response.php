@@ -106,7 +106,7 @@ class Response
     private function processHeaders()
     {
         if ($this->responseCode) {
-            HttpHeaders::setHeader("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage(), false);
+            HttpHeaders::setHeader("HTTP/1.1 " . $this->getResponseCode() . " " . $this->getResponseMessage(), false);
         }
 
         foreach ($this->headers as $name => $value) {

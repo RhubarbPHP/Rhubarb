@@ -11,7 +11,6 @@ use Rhubarb\Crown\Tests\Fixtures\LoginProviders\UnitTestingLoginProvider;
 use Rhubarb\Crown\Tests\Fixtures\SimpleContent;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Crown\Tests\Fixtures\UrlHandlers\UnitTestComputedUrlHandler;
-use Rhubarb\Crown\Tests\unit\UrlHandlers\NamespaceMappedHandlerTest;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\NamespaceMappedUrlHandler;
 use Rhubarb\Crown\UrlHandlers\StaticResourceUrlHandler;
@@ -27,18 +26,18 @@ class UnitTestingModule extends Module
         Module::registerModule(new LayoutModule(TestLayout::class));
     }
 
-    protected function Initialise()
+    protected function initialise()
     {
         require_once __DIR__ . '/../../unit/UrlHandlers/UrlHandlerTestUnitTest.php';
 
-        parent::Initialise();
+        parent::initialise();
 
         Repository::setDefaultRepositoryClassName(Offline::class);
 
         $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
-        $login->SetPriority(20);
+        $login->setPriority(20);
 
-        $this->AddUrlHandlers(
+        $this->addUrlHandlers(
             ["/cant/be/here" => $login]
         );
 
@@ -48,9 +47,9 @@ class UnitTestingModule extends Module
                 // We have to give it something to render!
             ]);
 
-        $login->SetPriority(20);
+        $login->setPriority(20);
 
-        $this->AddUrlHandlers(
+        $this->addUrlHandlers(
             ["/defo/not/here/" => $login]
         );
 
@@ -60,7 +59,7 @@ class UnitTestingModule extends Module
             ]
         );
 
-        $this->AddUrlHandlers(
+        $this->addUrlHandlers(
             [
                 "/" => new ClassMappedUrlHandler(SimpleContent::class,
                     [
@@ -71,13 +70,13 @@ class UnitTestingModule extends Module
             ]
         );
 
-        $this->AddUrlHandlers("/priority-test/",
+        $this->addUrlHandlers("/priority-test/",
             new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
 
         $test = new NamespaceMappedUrlHandler('Rhubarb\Leaf\Presenters');
-        $test->SetPriority(100);
+        $test->setPriority(100);
 
-        $this->AddUrlHandlers("/priority-test/", $test);
+        $this->addUrlHandlers("/priority-test/", $test);
 
         EmailProvider::setDefaultEmailProviderClassName(UnitTestingEmailProvider::class);
     }

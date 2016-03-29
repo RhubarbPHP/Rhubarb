@@ -23,11 +23,11 @@ class SessionTest extends RhubarbTestCase
 
     public function testDefaultSessionProvider()
     {
-        $this->assertEquals(PhpSessionProvider::class, Session::GetDefaultSessionProviderClassName());
+        $this->assertEquals(PhpSessionProvider::class, Session::getDefaultSessionProviderClassName());
 
         Session::setDefaultSessionProviderClassName(UnitTestingSessionProvider::class);
 
-        $this->assertEquals(UnitTestingSessionProvider::class, Session::GetDefaultSessionProviderClassName());
+        $this->assertEquals(UnitTestingSessionProvider::class, Session::getDefaultSessionProviderClassName());
 
         $this->setExpectedException(SessionProviderNotFoundException::class);
 

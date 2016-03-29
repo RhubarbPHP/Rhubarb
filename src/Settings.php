@@ -43,7 +43,7 @@ use Rhubarb\Crown\Modelling\ModelState;
  *
  * For quick access you can get settings by simply doing:
  *
- * \Rhubarb\Crown\Settings::GetSetting( "Data", "Host", "127.0.0.1" )
+ * \Rhubarb\Crown\Settings::getSetting( "Data", "Host", "127.0.0.1" )
  *
  * Note that this means you cannot have two settings classes with the same name - even if they have
  * different PHP namespaces.

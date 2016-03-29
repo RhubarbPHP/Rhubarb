@@ -24,7 +24,7 @@ use Rhubarb\Crown\Exceptions\ImplementationException;
  * Provides a framework for providing hash services to your application.
  *
  * While you can instantiate an instance of an individual hash provider, the best
- * practice is to call the static HashProvider::GetHashProvider() method so that the hashing
+ * practice is to call the static HashProvider::getHashProvider() method so that the hashing
  * provider can be set with a dependency injection.
  */
 abstract class HashProvider

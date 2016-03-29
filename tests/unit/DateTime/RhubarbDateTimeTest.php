@@ -36,23 +36,23 @@ class RhubarbDateTimeTest extends RhubarbTestCase
     {
         $date = new RhubarbDateTime();
 
-        $this->assertFalse($date->IsValidDateTime());
+        $this->assertFalse($date->isValidDateTime());
 
         $date = new RhubarbDateTime("now");
 
-        $this->assertTrue($date->IsValidDateTime());
+        $this->assertTrue($date->isValidDateTime());
 
         $date = new RhubarbDateTime("czcvz-23-122");
 
-        $this->assertFalse($date->IsValidDateTime());
+        $this->assertFalse($date->isValidDateTime());
 
         $date = new RhubarbDateTime("0000-00-00");
 
-        $this->assertFalse($date->IsValidDateTime());
+        $this->assertFalse($date->isValidDateTime());
 
         $date = new RhubarbDateTime("0000-00-00 00:00:00");
 
-        $this->assertFalse($date->IsValidDateTime());
+        $this->assertFalse($date->isValidDateTime());
 
         ob_start();
 
@@ -104,19 +104,19 @@ class RhubarbDateTimeTest extends RhubarbTestCase
     {
         $refDate = new RhubarbDate("2014-03-31");
 
-        $newDate = RhubarbDateTime::PreviousMonday($refDate);
+        $newDate = RhubarbDateTime::previousMonday($refDate);
 
         $this->assertEquals($refDate->format("Ymd"), $newDate->format("Ymd"));
 
         $refDate = new RhubarbDate("2014-04-02");
 
-        $newDate = RhubarbDateTime::PreviousMonday($refDate);
+        $newDate = RhubarbDateTime::previousMonday($refDate);
 
         $this->assertEquals("20140331", $newDate->format("Ymd"));
 
         $refDate = new RhubarbDate("2014-03-30");
 
-        $newDate = RhubarbDateTime::PreviousMonday($refDate);
+        $newDate = RhubarbDateTime::previousMonday($refDate);
 
         $this->assertEquals("20140324", $newDate->format("Ymd"));
     }

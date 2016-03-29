@@ -26,7 +26,7 @@ require_once __DIR__ . "/boot.php";
 // Disable exception trapping as there will be no valid URL handler able to return a sensible
 // interpretation of the exception details. CLI scripts are never seen publicly so it is more
 // useful to have the real exception text and isn't a security risk.
-\Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler::DisableExceptionTrapping();
+\Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler::disableExceptionTrapping();
 
 if (isset($argv[1])) {
     $script = $argv[1];

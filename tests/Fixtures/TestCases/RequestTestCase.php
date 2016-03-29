@@ -3,7 +3,6 @@
 namespace Rhubarb\Crown\Tests\Fixtures\TestCases;
 
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class RequestTestCase extends RhubarbTestCase
 {
@@ -35,6 +34,6 @@ class RequestTestCase extends RhubarbTestCase
         $this->stashSuperglobals = [];
 
         // WebRequest as Request is an abstract class
-        WebRequest::ResetRequest();
+        WebRequest::resetRequest();
     }
 }

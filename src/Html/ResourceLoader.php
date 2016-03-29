@@ -48,10 +48,10 @@ class ResourceLoader
     {
         // Deploy the composer jquery libraries.
         $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jquery/jquery.min.js";
-        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/jquery-ui.min.js";
-        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
-        $package->resourcesToDeploy[] = __DIR__."/../../../../components/jqueryui/themes/ui-lightness/theme.css";
+        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jquery/jquery.min.js";
+        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/jquery-ui.min.js";
+        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
+        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/themes/ui-lightness/theme.css";
         $jQueryUrls = $package->deploy();
 
         array_splice(
@@ -95,7 +95,7 @@ class ResourceLoader
      * with finding some libraries like Google maps not working if added to the page via AJAX. Any client
      * side issues with the script loader will now become a major concern and should get addressed quickly.
      *
-     * @see ResourceLoader::AddResource()
+     * @see ResourceLoader::addResource()
      * @return string
      */
     public static function getResourceInjectionHtml()
@@ -205,7 +205,7 @@ HTML;
     public static function getJqueryUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource(__DIR__."/../../../../components/jquery/jquery.min.js");
+        return $deployer->deployResource(__DIR__ . "/../../../../components/jquery/jquery.min.js");
     }
 
     public static function loadJquery()
@@ -216,7 +216,7 @@ HTML;
     public static function getJqueryUIUrl()
     {
         $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource(__DIR__."/../../../../components/jqueryui/jquery-ui.min.js");
+        return $deployer->deployResource(__DIR__ . "/../../../../components/jqueryui/jquery-ui.min.js");
     }
 
     public static function loadJqueryUI()
@@ -225,15 +225,15 @@ HTML;
 
         $themePath = self::getJQueryUIThemePath();
 
-        self::loadResource($deployer->deployResource($themePath."/jquery-ui.css"));
+        self::loadResource($deployer->deployResource($themePath . "/jquery-ui.css"));
 
         $imagePath = $themePath . "/images/";
         $imageExtensions = ["png", "jpg", "jpeg", "gif"];
 
         $dh = opendir($imagePath);
         while ($file = readdir($dh)) {
-            if (!is_dir($imagePath.$file) && in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions)) {
-                $deployer->deployResource($imagePath.$file);
+            if (!is_dir($imagePath . $file) && in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions)) {
+                $deployer->deployResource($imagePath . $file);
             }
         }
 

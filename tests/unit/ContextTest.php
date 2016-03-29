@@ -63,7 +63,7 @@ class ContextTest extends RhubarbTestCase
 
         $_SERVER["CONTENT_TYPE"] = "application/json";
 
-        $request = Context::CurrentRequest();
+        $request = Context::currentRequest();
 
         $this->assertInstanceOf(JsonRequest::class, $request);
     }
@@ -75,11 +75,11 @@ class ContextTest extends RhubarbTestCase
 
         unset($this->context->Request);
 
-        $this->assertNotNull(Context::CurrentRequest(), "Static Request accessor returned NULL");
+        $this->assertNotNull(Context::currentRequest(), "Static Request accessor returned NULL");
         $this->assertNotNull($this->context->Request, "Request accessor returned NULL");
 
 
-        $this->assertInstanceOf(CliRequest::class, Context::CurrentRequest());
+        $this->assertInstanceOf(CliRequest::class, Context::currentRequest());
     }
 
     public function testApplicationModuleFile()
@@ -88,7 +88,7 @@ class ContextTest extends RhubarbTestCase
         $default = $context->ApplicationModuleFile;
 
         $this->assertEquals(
-            $this->resolveFilename(__DIR__."/../../../../../settings/app.config.php"),
+            $this->resolveFilename(__DIR__ . "/../../../../../settings/app.config.php"),
             $this->resolveFilename($default)
         );
 
@@ -113,7 +113,7 @@ class ContextTest extends RhubarbTestCase
         $filename = str_replace('\\', '/', $filename);
         $filename = str_replace('//', '/', $filename);
         $parts = explode('/', $filename);
-        $out = array();
+        $out = [];
         foreach ($parts as $part) {
             if ($part == '.') {
                 continue;

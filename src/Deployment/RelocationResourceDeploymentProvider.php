@@ -73,7 +73,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         $cwd = APPLICATION_ROOT_DIR;
 
         $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
-        $localPath = $cwd.$urlPath;
+        $localPath = $cwd . $urlPath;
 
         if (!file_exists(dirname($localPath))) {
             if (!mkdir(dirname($localPath), 0777, true)) {

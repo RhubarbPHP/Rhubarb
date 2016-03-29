@@ -69,34 +69,34 @@ class MimeDocumentTest extends RhubarbTestCase
 
     public function testMimeParses()
     {
-        $document = MimeDocument::FromString($this->message1);
+        $document = MimeDocument::fromString($this->message1);
 
-        $this->assertCount(2, $document->GetParts());
+        $this->assertCount(2, $document->getParts());
 
-        $document = MimeDocument::FromString($this->message2);
+        $document = MimeDocument::fromString($this->message2);
 
-        $this->assertCount(3, $document->GetParts());
+        $this->assertCount(3, $document->getParts());
 
-        $this->assertEquals("Body of second message", $document->GetParts()[1]->GetRawBody());
+        $this->assertEquals("Body of second message", $document->getParts()[1]->getRawBody());
 
-        $this->assertEquals("header3", $document->GetParts()[2]->GetHeaders()["Test-Header"]);
+        $this->assertEquals("header3", $document->getParts()[2]->getHeaders()["Test-Header"]);
 
-        $this->assertEquals($this->message2, $document->ToString());
+        $this->assertEquals($this->message2, $document->toString());
     }
 
     public function testMimeParsesToConcretePartTypes()
     {
-        $document = MimeDocument::FromString($this->message2);
+        $document = MimeDocument::fromString($this->message2);
 
-        $this->assertInstanceOf(MimePartText::class, $document->GetParts()[0]);
-        $this->assertInstanceOf(MimePartImage::class, $document->GetParts()[2]);
+        $this->assertInstanceOf(MimePartText::class, $document->getParts()[0]);
+        $this->assertInstanceOf(MimePartImage::class, $document->getParts()[2]);
     }
 
     public function testBase64TransferEncoding()
     {
-        $document = MimeDocument::FromString($this->message2);
-        $part = $document->GetParts()[2];
-        $text = $part->GetTransformedBody();
+        $document = MimeDocument::fromString($this->message2);
+        $part = $document->getParts()[2];
+        $text = $part->getTransformedBody();
 
         $this->assertEquals("Test!\r\n" .
             "\r\n" .
@@ -108,20 +108,21 @@ class MimeDocumentTest extends RhubarbTestCase
 
         $newText = "gibberish is soothing";
 
-        $part->SetTransformedBody($newText);
+        $part->setTransformedBody($newText);
 
-        $this->assertEquals(base64_encode($newText) . "\r\n", $part->GetRawBody());
+        $this->assertEquals(base64_encode($newText) . "\r\n", $part->getRawBody());
     }
 
     public function testQuotedPrintable()
     {
-        $document = MimeDocument::FromString($this->message2);
-        $part = $document->GetParts()[0];
-        $text = $part->GetTransformedBody();
+        $document = MimeDocument::fromString($this->message2);
+        $part = $document->getParts()[0];
+        $text = $part->getTransformedBody();
 
-        $this->assertEquals('<b:Sources SelectedStyle="\APASixthEditionOfficeOnline.xsl" StyleName="APA" Version="6" xmlns:b="http://schemas.openxmlformats.org/officeDocument/2006/bibliography" xmlns="http://schemas.openxmlformats.org/officeDocument/2006/bibliography"></b:Sources>', $text);
+        $this->assertEquals('<b:Sources SelectedStyle="\APASixthEditionOfficeOnline.xsl" StyleName="APA" Version="6" xmlns:b="http://schemas.openxmlformats.org/officeDocument/2006/bibliography" xmlns="http://schemas.openxmlformats.org/officeDocument/2006/bibliography"></b:Sources>',
+            $text);
 
-        $part->SetTransformedBody("aSDF====rasdfasdfxcv asdf asdf werqwerqsedfasdfasd fasdfasdf asdf asdfasdfas dfasdf asdf a\r\n" .
+        $part->setTransformedBody("aSDF====rasdfasdfxcv asdf asdf werqwerqsedfasdfasd fasdfasdf asdf asdfasdfas dfasdf asdf a\r\n" .
             "zxcvasedrf\r\n" .
             "2q34r2\r\n" .
             "423423");
@@ -130,6 +131,6 @@ class MimeDocumentTest extends RhubarbTestCase
             "sdfasdfas dfasdf asdf a\r\n" .
             "zxcvasedrf\r\n" .
             "2q34r2\r\n" .
-            "423423", $part->GetRawBody());
+            "423423", $part->getRawBody());
     }
 }

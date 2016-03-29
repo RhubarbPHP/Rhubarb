@@ -26,8 +26,9 @@ class JsonRequestTest extends RhubarbTestCase
     public function testPayload()
     {
         $testPayload =
-            [ "a" => 1,
-              "b" => 2
+            [
+                "a" => 1,
+                "b" => 2
             ];
 
         $this->context->SimulatedRequestBody = json_encode($testPayload);

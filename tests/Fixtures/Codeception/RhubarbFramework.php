@@ -13,13 +13,13 @@ class RhubarbFramework extends Framework
         $this->client = new RhubarbConnector();
     }
 
-    public function seeHeader($header, $headerValue=null)
+    public function seeHeader($header, $headerValue = null)
     {
         $response = $this->client->getInternalResponse();
-        PHPUnit_Framework_Assert::assertContains($header,$response->getHeaders());
+        PHPUnit_Framework_Assert::assertContains($header, $response->getHeaders());
 
-        if ( $headerValue!=null){
-            PHPUnit_Framework_Assert::assertEquals($headerValue,$response->getHeader($header));
+        if ($headerValue != null) {
+            PHPUnit_Framework_Assert::assertEquals($headerValue, $response->getHeader($header));
         }
     }
 }

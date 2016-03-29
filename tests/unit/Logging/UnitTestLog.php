@@ -18,12 +18,12 @@ class UnitTestLog extends Log
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected function WriteEntry($message, $indent, $category = "", $additionalData = [])
+    protected function writeEntry($message, $indent, $category = "", $additionalData = [])
     {
         $this->entries[] = [$message, $category, $indent, $additionalData];
     }
 
-    protected function ShouldLog($category)
+    protected function shouldLog($category)
     {
         global $logFilter;  // Yes, it's a global - it's a unit test. Get over it.
 
@@ -35,6 +35,6 @@ class UnitTestLog extends Log
             return false;
         }
 
-        return parent::ShouldLog($category);
+        return parent::shouldLog($category);
     }
 }

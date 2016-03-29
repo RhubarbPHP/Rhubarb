@@ -70,7 +70,6 @@ class UrlHandlerTest extends RhubarbTestCase
 }
 
 
-
 class TestChildHandler extends UrlHandler
 {
     public $stub = "/";

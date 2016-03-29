@@ -100,7 +100,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      * @param RhubarbDateTime $referenceDate The date to find the previous Monday of. Today if null.
      * @return RhubarbDate
      */
-    public static function PreviousMonday($referenceDate = null)
+    public static function previousMonday($referenceDate = null)
     {
         if ($referenceDate == null) {
             $referenceDate = new RhubarbDateTime("today");

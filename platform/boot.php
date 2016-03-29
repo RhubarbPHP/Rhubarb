@@ -30,16 +30,16 @@ error_reporting(E_ALL | E_STRICT);
 ini_set("display_errors", "off");
 
 if (!defined("APPLICATION_ROOT_DIR")) {
-    define("APPLICATION_ROOT_DIR", realpath(__DIR__."/../../../../"));
+    define("APPLICATION_ROOT_DIR", realpath(__DIR__ . "/../../../../"));
 }
 
 if (!defined("VENDOR_DIR")) {
-    define("VENDOR_DIR", APPLICATION_ROOT_DIR."/vendor/");
+    define("VENDOR_DIR", APPLICATION_ROOT_DIR . "/vendor/");
 }
 
 // Include the composer autoloader
 /** @noinspection PhpIncludeInspection */
-include_once(VENDOR_DIR."/autoload.php");
+include_once(VENDOR_DIR . "/autoload.php");
 
 // Initially we don't have an auto loader as this is handled by the modules. We need to load this first
 // module 'core' so that we have an auto loader for subsequent modules. There are also some other classes
@@ -52,7 +52,7 @@ include_once(__DIR__ . "/../src/Exceptions/Handlers/ExceptionHandler.php");
 // Register to handle exceptions and PHP errors. However we don't do this if we are unit testing. It's
 // best to let the exceptions report unhindered to phpunit.
 if (!isset($unitTesting) || !$unitTesting) {
-    ExceptionHandler::EnableExceptionTrapping();
+    ExceptionHandler::enableExceptionTrapping();
 }
 
 $context = new Context();
@@ -61,7 +61,7 @@ $context = new Context();
 // with one code base (e.g. tenant and landlord together). This is very rare in production systems, however
 // for the initial project phase this can be very useful.
 if ($envAppSetting = getenv("rhubarb_app")) {
-    $context->ApplicationModuleFile = APPLICATION_ROOT_DIR."/".$envAppSetting."/settings/app.config.php";
+    $context->ApplicationModuleFile = APPLICATION_ROOT_DIR . "/" . $envAppSetting . "/settings/app.config.php";
 }
 
 $applicationModuleFile = $context->ApplicationModuleFile;
@@ -74,4 +74,4 @@ if (file_exists($applicationModuleFile)) {
 }
 
 // Now auto loaders are in place we can initialise the modules properly.
-Module::InitialiseModules();
+Module::initialiseModules();
