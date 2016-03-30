@@ -1,4 +1,4 @@
-Deployment Packages
+Deploying Resources
 ===
 
 Rapid enterprise development depends upon being able to reuse packages of code to speed development and to

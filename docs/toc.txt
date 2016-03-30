@@ -1,9 +1,9 @@
 Basic Concepts:
     . Files and Directory Layout:files-and-directories
-    . Processing Overview:processing-overview
-    . Application:application
-    . Generating Responses:response-generating
-    . Handling URLs:url-handlers
+    . Request Processing Overview:processing-overview
+    . The Application Object:application
+    . Generating a Response:response-generating
+    . URL Handlers:url-handlers
     . Requests:request
     . Responses:response
     . Filters and Layout:filters-and-layout
@@ -12,10 +12,10 @@ Basic Concepts:
 Common Patterns:
     . Settings:settings
     . Sessions:sessions
-    . Handling Login Status:login
+    . Handling Logins:login
     . Sendables:sendables
     . Encryption:encryption
-    . Deploying Resource Files:deployment
+    . Deploying Resources:deployment
     . Logging:logging
     . Handling Exceptions:exceptions
     . Dates and Times:date-time

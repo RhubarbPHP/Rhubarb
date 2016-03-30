@@ -1,4 +1,4 @@
-The Rhubarb Processing Pipeline
+Request Processing Overview
 ===============================
 
 Rhubarb answers requests from a client with a response. Determining which response and how that response is

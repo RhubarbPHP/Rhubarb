@@ -1,4 +1,4 @@
-Date and Time Processing
+Dates and Times
 ====================
 
 Rhubarb provides three classes to make date and time processing easier:

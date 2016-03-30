@@ -1,4 +1,4 @@
-Response objects
+Responses
 ================
 
 The purpose of Rhubarb is to generate responses. Responses are encapsulated in `Response` objects and just like
