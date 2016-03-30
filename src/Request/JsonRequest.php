@@ -18,32 +18,25 @@
 
 namespace Rhubarb\Crown\Request;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 
 /**
  * Represents a Json request
  *
  * Normally created when the Content-Type of the request is application/json
- *
- * @property boolean $ObjectsToAssocArrays If true, objects in the request will be converted to PHP associative arrays. Otherwise they will be stdClass objects.
  */
 class JsonRequest extends WebRequest
 {
     /**
-     * Override this class to set default values for settings.
+     * @var bool If true, objects in the request will be converted to PHP associative arrays. Otherwise they will be stdClass objects.
      */
-    protected function initialiseDefaultValues()
-    {
-        parent::initialiseDefaultValues();
-
-        $this->ObjectsToAssocArrays = true;
-    }
+    public $objectsToAssocArrays = true;
 
     public function getPayload()
     {
-        $context = new Context();
+        $context = $this->getOriginatingPhpContext();
         $requestBody = trim($context->getRequestBody());
 
-        return json_decode($requestBody, $this->ObjectsToAssocArrays);
+        return json_decode($requestBody, $this->objectsToAssocArrays);
     }
 }

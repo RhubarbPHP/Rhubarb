@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Deployment;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
@@ -13,7 +14,7 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
         $package->resourcesToDeploy = [__FILE__, __DIR__ . "/../../../src/Deployment/Deployable.php"];
         $package->deploy();
 
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::current()->applicationRootPath;
 
         $this->assertFileExists("deployed/" . str_replace($cwd, "", __FILE__));
         $this->assertFileExists("deployed/" . str_replace($cwd, "", __DIR__ . "/../../../src/Deployment/Deployable.php"));
@@ -28,7 +29,7 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
         $package->resourcesToDeploy = [__FILE__, __DIR__ . "/../../../src/Deployment/Deployable.php"];
         $urls = $package->getDeployedUrls();
 
-        $cwd = APPLICATION_ROOT_DIR;
+        $cwd = Application::current()->applicationRootPath;
 
         $this->assertEquals(
             [

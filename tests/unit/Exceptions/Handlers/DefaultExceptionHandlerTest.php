@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Tests\unit\Exceptions\Handlers;
 
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Exceptions\RhubarbException;
@@ -41,40 +43,37 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
     {
         parent::setUp();
 
-        Module::clearModules();
-        Module::registerModule(new UnitTestingModule());
-        Module::registerModule(new UnitTestExceptionModule());
-        Module::initialiseModules();
-
+        $this->application = new Application();
+        $this->application->registerModule(new UnitTestingModule());
+        $this->application->registerModule(new UnitTestExceptionModule());
+        $this->application->initialiseModules();
         Log::clearLogs();
         Log::attachLog(self::$log = new UnitTestLog(Log::ERROR_LEVEL));
 
         ExceptionHandler::enableExceptionTrapping();
-
-        ExceptionHandler::setExceptionHandlerClassName(DefaultExceptionHandler::class);
     }
 
     public function testExceptionCausesLogEntry()
     {
         $request = new WebRequest();
-        $request->UrlPath = "/test-exception/";
+        $request->urlPath = "/test-exception/";
 
-        Module::generateResponseForRequest($request);
+        $this->application->generateResponseForRequest($request);
 
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\RhubarbException `Things went wrong`',
+            'Unhandled RhubarbException `Things went wrong`',
             $lastEntry[0],
             "A RhubarbException should have been logged"
         );
 
-        ExceptionHandler::setExceptionHandlerClassName(UnitTestSilentExceptionHandler::class);
+        $this->application->container()->registerClass(ExceptionHandler::class, UnitTestSilentExceptionHandler::class);
 
         // Clear the log entries.
         self::$log->entries = [];
 
-        Module::generateResponseForRequest($request);
+        $this->application->generateResponseForRequest($request);
 
         $this->assertCount(
             0,
@@ -86,14 +85,14 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
     public function testNonRhubarbExceptionCausesLogEntry()
     {
         $request = new WebRequest();
-        $request->UrlPath = "/test-exception-non-core/";
+        $request->urlPath = "/test-exception-non-core/";
 
-        Module::generateResponseForRequest($request);
+        $this->application->generateResponseForRequest($request);
 
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `OutOfBoundsException - Out of bounds`',
+            'Unhandled NonRhubarbException `OutOfBoundsException - Out of bounds`',
             $lastEntry[0],
             "A NonRhubarbException should have been logged"
         );
@@ -102,14 +101,14 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
     public function testPhpRuntimeErrorCausesLogEntry()
     {
         $request = new WebRequest();
-        $request->UrlPath = "/test-php-error/";
+        $request->urlPath = "/test-php-error/";
 
-        Module::generateResponseForRequest($request);
+        $this->application->generateResponseForRequest($request);
 
         $lastEntry = array_pop(self::$log->entries);
 
         $this->assertContains(
-            'Unhandled Rhubarb\Crown\Exceptions\NonRhubarbException `ErrorException - Division by zero`',
+            'Unhandled NonRhubarbException `ErrorException - Division by zero`',
             $lastEntry[0],
             "A NonRhubarbException should have been logged for php run time errors"
         );
@@ -121,9 +120,9 @@ class DefaultExceptionHandlerTest extends RhubarbTestCase
         LayoutModule::enableLayout();
 
         $request = new WebRequest();
-        $request->UrlPath = "/test-exception/";
+        $request->urlPath = "/test-exception/";
 
-        $response = Module::generateResponseForRequest($request);
+        $response = $this->application->generateResponseForRequest($request);
 
         $this->assertEquals("TopSorry, something went wrong and we couldn't complete your request. The developers have
 been notified.Tail", $response->getContent());
@@ -140,23 +139,23 @@ been notified.Tail", $response->getContent());
             LayoutModule::enableLayout();
 
             $request = new WebRequest();
-            $request->UrlPath = "/test-exception/";
+            $request->urlPath = "/test-exception/";
 
-            $response = Module::generateResponseForRequest($request);
+            $response = $this->application->generateResponseForRequest($request);
             $this->fail("Without exception trapping this line should not be reached.");
         } catch (RhubarbException $er) {
         }
 
-        ExceptionHandler::setExceptionHandlerClassName(UnitTestDisobedientExceptionHandler::class);
+        $this->application->container()->registerClass(ExceptionHandler::class, UnitTestDisobedientExceptionHandler::class);
 
         try {
             // Enable layouts for this test as proof the URL handler has intercepted the response.
             LayoutModule::enableLayout();
 
             $request = new WebRequest();
-            $request->UrlPath = "/test-exception/";
+            $request->urlPath = "/test-exception/";
 
-            $response = Module::generateResponseForRequest($request);
+            $response = $this->application->generateResponseForRequest($request);
 
         } catch (RhubarbException $er) {
             $this->fail("The extended exception handler should force handling of exceptions even if trapping is disabled.");
@@ -170,13 +169,6 @@ been notified.Tail", $response->getContent());
 
 class UnitTestExceptionModule extends Module
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->namespace = __NAMESPACE__;
-    }
-
     protected function RegisterUrlHandlers()
     {
         $this->addUrlHandlers(

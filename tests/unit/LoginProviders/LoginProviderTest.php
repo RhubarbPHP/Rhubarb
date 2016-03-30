@@ -9,7 +9,7 @@ class LoginProviderTest extends RhubarbTestCase
 {
     public function testForceLogin()
     {
-        $loginProvider = new UnitTestingLoginProvider();
+        $loginProvider = UnitTestingLoginProvider::singleton();
         $loginProvider->forceLogin();
 
         $this->assertTrue($loginProvider->isLoggedIn());

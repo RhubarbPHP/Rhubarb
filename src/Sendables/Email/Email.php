@@ -32,8 +32,6 @@ use Rhubarb\Crown\Sendables\Sendable;
  */
 abstract class Email extends Sendable
 {
-    private $recipients = [];
-
     private $sender;
 
     private $attachments = [];
@@ -77,14 +75,14 @@ abstract class Email extends Sendable
     abstract public function getHtml();
 
     /**
-     * @return EmailAddress
+     * @return EmailRecipient
      */
     public function getSender()
     {
         if ($this->sender == null) {
-            $emailSettings = new EmailSettings();
+            $emailSettings = EmailSettings::singleton();
 
-            return $emailSettings->DefaultSender;
+            return $emailSettings->defaultSender;
         }
 
         return $this->sender;
@@ -92,22 +90,22 @@ abstract class Email extends Sendable
 
     public function setSender($senderEmail, $name = "")
     {
-        $this->sender = new EmailAddress($senderEmail, $name);
+        $this->sender = new EmailRecipient($senderEmail, $name);
 
         return $this;
     }
 
-    public function addRecipient($recipientEmail, $recipientName = "")
+    public function addRecipientByEmail($recipientEmail, $recipientName = "")
     {
-        $this->recipients[$recipientEmail] = new EmailAddress($recipientEmail, $recipientName);
+        $this->addRecipient(new EmailRecipient($recipientEmail, $recipientName));
 
         return $this;
     }
 
-    public function addRecipients($recipients)
+    public function addRecipientsByEmail($recipients)
     {
         foreach ($recipients as $recipient) {
-            $this->addRecipient($recipient);
+            $this->addRecipientByEmail($recipient);
         }
 
         return $this;
@@ -120,14 +118,14 @@ abstract class Email extends Sendable
 
     public function getRecipients()
     {
-        $emailSettings = new EmailSettings();
+        $emailSettings = EmailSettings::singleton();
 
-        if ($emailSettings->OnlyRecipient) {
+        if ($emailSettings->onlyRecipient) {
             // Only send emails to a test recipient, to prevent emailing real customers from a development environment
-            return [$emailSettings->OnlyRecipient];
+            return [$emailSettings->onlyRecipient];
         }
 
-        return $this->recipients;
+        return parent::getRecipients();
     }
 
     public function getSendableType()
@@ -244,7 +242,7 @@ abstract class Email extends Sendable
         return $headers;
     }
 
-    protected function getProviderClassName()
+    public function getProviderClassName()
     {
         return EmailProvider::class;
     }

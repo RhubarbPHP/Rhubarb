@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\StaticResource404Exception;
 use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
 use Rhubarb\Crown\Layout\LayoutModule;
@@ -15,12 +15,16 @@ class StaticResourceTest extends RhubarbTestCase
 
     public function setUp()
     {
-        $this->request = Context::currentRequest();
+        parent::setUp();
+
+        $this->request = $this->application->request();
         $this->request->IsWebRequest = true;
     }
 
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->request = null;
     }
 
@@ -29,13 +33,13 @@ class StaticResourceTest extends RhubarbTestCase
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/test.txt");
         $handler->setUrl("/test.txt");
 
-        $this->request->UrlPath = "/";
+        $this->request->urlPath = "/";
 
         $response = $handler->generateResponse($this->request);
 
         $this->assertFalse($response);
 
-        $this->request->UrlPath = "/test.txt";
+        $this->request->urlPath = "/test.txt";
         $response = $handler->generateResponse($this->request);
 
         $this->assertEquals("This is a static resource", $response->getContent());
@@ -47,7 +51,7 @@ class StaticResourceTest extends RhubarbTestCase
 
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/test.txt");
         $handler->setUrl("/test.txt");
-        $this->request->UrlPath = "/test.txt";
+        $this->request->urlPath = "/test.txt";
 
         $handler->generateResponse($this->request);
 
@@ -58,12 +62,12 @@ class StaticResourceTest extends RhubarbTestCase
     {
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
-        $this->request->UrlPath = "/files/test2.txt";
+        $this->request->urlPath = "/files/test2.txt";
 
         $response = $handler->generateResponse($this->request);
         $this->assertEquals("This is another static resource", $response->getContent());
 
-        $this->request->UrlPath = "/files/subfolder/test3.txt";
+        $this->request->urlPath = "/files/subfolder/test3.txt";
         $response = $handler->generateResponse($this->request);
         $this->assertEquals("test3", $response->getContent());
     }
@@ -82,7 +86,7 @@ class StaticResourceTest extends RhubarbTestCase
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
 
-        $this->request->UrlPath = "/files/non-extant.txt";
+        $this->request->urlPath = "/files/non-extant.txt";
 
         $handler->generateResponse($this->request);
     }
@@ -92,14 +96,14 @@ class StaticResourceTest extends RhubarbTestCase
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../Fixtures/UrlHandlers/");
         $handler->setUrl("/files/");
 
-        $this->request->UrlPath = "/files/test.txt";
+        $this->request->urlPath = "/files/test.txt";
         $response = $handler->generateResponse($this->request);
         $headers = $response->getHeaders();
 
         $this->assertArrayHasKey("Content-Type", $headers);
         $this->assertEquals("text/plain; charset=us-ascii", $headers["Content-Type"]);
 
-        $this->request->UrlPath = "/files/base.css";
+        $this->request->urlPath = "/files/base.css";
         $response = $handler->generateResponse($this->request);
         $headers = $response->getHeaders();
 
@@ -109,7 +113,7 @@ class StaticResourceTest extends RhubarbTestCase
         $handler = new StaticResourceUrlHandler(__DIR__ . "/../../../resources/resource-manager.js");
         $handler->setUrl("/js/resource-manager.js");
 
-        $this->request->UrlPath = "/js/resource-manager.js";
+        $this->request->urlPath = "/js/resource-manager.js";
 
         $response = $handler->generateResponse($this->request);
         $headers = $response->getHeaders();

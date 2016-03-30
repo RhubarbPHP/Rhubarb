@@ -40,6 +40,16 @@ abstract class TemplateEmail extends Email
         $this->recipientData = $recipientData;
     }
 
+    public function toArray()
+    {
+        return [ "recipientData" => $this->recipientData ];
+    }
+
+    public static function fromArray($sendableData = [])
+    {
+        return new static($sendableData);
+    }
+
     /**
      * Optionally returns a text string to surround the HTML content with.
      *

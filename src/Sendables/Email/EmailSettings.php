@@ -20,25 +20,29 @@ namespace Rhubarb\Crown\Sendables\Email;
 
 require_once __DIR__ . '/../../Settings.php';
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Settings;
 
 /**
  * Container for some default properties for sending emails.
  *
- * @property EmailAddress $DefaultSender The default sender to use for all emails (unless set explicitly in the email classes)
- * @property EmailAddress|bool $OnlyRecipient If you wish to prevent a development setup from emailing real customer addresses, set this to a test recipient address
+ * @property EmailRecipient $DefaultSender The default sender to use for all emails (unless set explicitly in the email classes)
+ * @property EmailRecipient|bool $OnlyRecipient If you wish to prevent a development setup from emailing real customer addresses, set this to a test recipient address
  */
 class EmailSettings extends Settings
 {
+    public $onlyRecipient = false;
+
+    public $defaultSender;
+
     protected function initialiseDefaultValues()
     {
         parent::initialiseDefaultValues();
 
-        $request = Context::currentRequest();
-        $host = $request->Server("SERVER_NAME");
+        $request = Application::current()->request();
+        $host = $request->server("SERVER_NAME");
 
-        $this->DefaultSender = new EmailAddress("donotreply@" . $host . ".com");
-        $this->OnlyRecipient = false;
+        $this->defaultSender = new EmailRecipient("donotreply@" . $host . ".com");
     }
 }

@@ -8,30 +8,35 @@ namespace Rhubarb\Crown\Sendables;
 abstract class Sendable
 {
     /**
-     * Called when sending occurs providing an opportunity to log the event.
-     * @return mixed
+     * The list of recipients
+     * @var SendableRecipient[]
      */
-    protected abstract function logSending();
+    protected $recipients = [];
 
     /**
      * Returns the name of the base provider class used to send this sendable
      *
      * @return string
      */
-    protected abstract function getProviderClassName();
+    public abstract function getProviderClassName();
 
     /**
-     * Returns the list of recipients for this sendable.
+     * Returns the list of recipients objects for this sendable.
      *
-     * Sendable types must be able to return a list of recipients. This should return either an array
-     * of values keyed by a string (e.g. email address) or a numerically indexed array containing
-     * strings values (e.g. mobile phone numbers).
-     *
-     * If returning string keys the values can be of any type.
-     *
-     * @return array
+     * @return SendableRecipient[]
      */
-    public abstract function getRecipients();
+    public function getRecipients()
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * Clears the list of recipients
+     */
+    public function clearRecipients()
+    {
+        $this->recipients = [];
+    }
 
     /**
      * Returns a common type for the sendable
@@ -58,19 +63,14 @@ abstract class Sendable
      */
     public abstract function toArray();
 
-    public final function send()
+    public function addRecipient(SendableRecipient $recipient)
     {
-        $this->logSending();
+        foreach($this->recipients as $existingRecipient){
+            if ((string)$existingRecipient == (string)$recipient){
+                return;
+            }
+        }
 
-        $provider = $this->createProvider();
-        $provider->send($this);
-    }
-
-    private function createProvider()
-    {
-        $providerClass = $this->getProviderClassName();
-        $provider = $providerClass::getDefaultProvider();
-
-        return $provider;
+        $this->recipients[] = $recipient;
     }
 }

@@ -19,6 +19,9 @@
 namespace Rhubarb\Crown\Sendables\Email;
 use Rhubarb\Crown\Sendables\SendableProvider;
 
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
+
 /**
  * Performs transmission of emails to recipients.
  *
@@ -28,23 +31,7 @@ use Rhubarb\Crown\Sendables\SendableProvider;
  *
  * @see Email
  */
-abstract class EmailProvider extends SendableProvider
+abstract class EmailProvider extends SendableProvider implements ProviderInterface
 {
-    private static $defaultEmailProviderClassName = '\Rhubarb\Crown\Sendables\Email\PhpMailEmailProvider';
-
-    public static function setDefaultEmailProviderClassName($emailProviderClassName)
-    {
-        self::$defaultEmailProviderClassName = $emailProviderClassName;
-    }
-
-    /**
-     * Returns an instance of the default email provider
-     *
-     * @return EmailProvider
-     */
-    public static function getDefaultProvider()
-    {
-        $class = self::$defaultEmailProviderClassName;
-        return new $class();
-    }
+    use ProviderTrait;
 }

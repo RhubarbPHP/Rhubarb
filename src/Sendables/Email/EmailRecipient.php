@@ -19,8 +19,9 @@
 namespace Rhubarb\Crown\Sendables\Email;
 
 use Rhubarb\Crown\Exceptions\EmailException;
+use Rhubarb\Crown\Sendables\SendableRecipient;
 
-class EmailAddress
+class EmailRecipient extends SendableRecipient
 {
     /**
      * @var string The email address portion e.g. john@hotmail.com

@@ -2,6 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\Sessions;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Encryption\Aes256ComputedKeyEncryptionProvider;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 use Rhubarb\Crown\Sessions\EncryptedSession;
@@ -9,35 +10,31 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class EncryptedSessionTest extends RhubarbTestCase
 {
-    private static $oldEncryptionProvider = "";
-
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        self::$oldEncryptionProvider = EncryptionProvider::setEncryptionProviderClassName(Aes256ComputedKeyEncryptionProvider::class);
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-
-        EncryptionProvider::setEncryptionProviderClassName(self::$oldEncryptionProvider);
+        Container::current()->registerClass(EncryptionProvider::class, Aes256ComputedKeyEncryptionProvider::class);
     }
 
     public function testSessionEncrypts()
     {
-        $session = new UnitTestEncryptedSession();
+        $session = UnitTestEncryptedSession::singleton();
         $session->TestValue = "123456";
-        $raw = $session->exportRawData();
+        $raw = get_object_vars($session);
 
-        $this->assertEquals("lu3RCzBb/lz4HIqFnlHc7A==", $raw["TestValue"]);
+        $this->assertEquals("lu3RCzBb/lz4HIqFnlHc7A==", $session->getEncryptedData()["TestValue"]);
         $this->assertEquals("123456", $session->TestValue);
     }
 }
 
 class UnitTestEncryptedSession extends EncryptedSession
 {
+    public function getEncryptedData()
+    {
+        return $this->encryptedData;
+    }
+
     /**
      * Override to return the encryption key to use.
      *

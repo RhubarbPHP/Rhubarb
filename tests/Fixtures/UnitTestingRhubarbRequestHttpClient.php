@@ -18,7 +18,8 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Http\HttpClient;
 use Rhubarb\Crown\Http\HttpRequest;
 use Rhubarb\Crown\Http\HttpResponse;
@@ -26,8 +27,29 @@ use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Request\JsonRequest;
 use Rhubarb\Crown\Request\WebRequest;
 
-class UnitTestingHttpClient extends HttpClient
+class UnitTestingRhubarbRequestHttpClient extends HttpClient
 {
+    private static $request;
+    private static $requestHistory = [];
+
+    public static function getRequestHistory()
+    {
+        return self::$requestHistory;
+    }
+
+    public static function clearRequestHistory()
+    {
+        self::$requestHistory = [];
+    }
+
+    /**
+     * @return HttpRequest
+     */
+    public static function getLastRequest()
+    {
+        return self::$request;
+    }
+
     /**
      * Executes an HTTP transaction and returns the response.
      *
@@ -36,8 +58,8 @@ class UnitTestingHttpClient extends HttpClient
      */
     public function getResponse(HttpRequest $request)
     {
-        $context = new Context();
-        $context->SimulatedRequestBody = "";
+        $context = new PhpContext();
+        $context->simulatedRequestBody = "";
 
         $headers = $request->getHeaders();
 
@@ -56,11 +78,11 @@ class UnitTestingHttpClient extends HttpClient
                 break;
             case "post":
                 $_SERVER["REQUEST_METHOD"] = "POST";
-                $context->SimulatedRequestBody = $request->getPayload();
+                $context->simulatedRequestBody = $request->getPayload();
                 break;
             case "put":
                 $_SERVER["REQUEST_METHOD"] = "PUT";
-                $context->SimulatedRequestBody = $request->getPayload();
+                $context->simulatedRequestBody = $request->getPayload();
                 break;
         }
 
@@ -73,16 +95,25 @@ class UnitTestingHttpClient extends HttpClient
                 break;
         }
 
-        $simulatedRequest->URI = $request->getUrl();
-        $simulatedRequest->UrlPath = $request->getUrl();
+        $simulatedRequest->uri = $request->getUrl();
+        $simulatedRequest->urlPath = $request->getUrl();
 
-        $context->Request = $simulatedRequest;
+        $rawResponse = Application::current()->generateResponseForRequest($simulatedRequest);
 
-        $rawResponse = Module::GenerateResponseForRequest($simulatedRequest);
+        self::$request = $request;
+        self::$requestHistory[] = $request;
 
         $response = new HttpResponse();
         $response->setResponseBody($rawResponse->formatContent());
 
         return $response;
+    }
+
+    protected function getFakeResponse(HttpRequest $request)
+    {
+        $httpResponse = new HttpResponse();
+        $httpResponse->setResponseBody(json_encode([]));
+
+        return $httpResponse;
     }
 }
