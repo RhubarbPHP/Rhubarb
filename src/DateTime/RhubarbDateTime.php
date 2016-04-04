@@ -38,10 +38,15 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
             if ($formattedDate == "" || $formattedDate == self::INVALID_DATE) {
                 parent::__construct(self::INVALID_DATE, $timezone);
             } else {
-                parent::__construct("now", $timezone);
+                parent::__construct("now");
 
+                $this->setTimezone($dateValue->getTimezone());
                 $this->setDate($dateValue->format("Y"), $dateValue->format("m"), $dateValue->format("d"));
                 $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"));
+
+                if ($timezone !== null) {
+                    $this->setTimezone($timezone);
+                }
             }
         } elseif (is_numeric($dateValue)) {
             parent::__construct("now", $timezone);
