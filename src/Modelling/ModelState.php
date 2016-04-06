@@ -300,15 +300,24 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     public function takeChangeSnapshot()
     {
-        $this->changeSnapshotData = $this->modelData;
+        $this->changeSnapshotData = self::deepCopyArray($this->modelData);
 
-        foreach ($this->changeSnapshotData as $key => $value) {
+        return $this->changeSnapshotData;
+    }
+
+    private static function deepCopyArray(array $data)
+    {
+        $copy = $data;
+
+        foreach ($copy as $key => &$value) {
             if (is_object($value)) {
-                $this->changeSnapshotData[$key] = clone $value;
+                $copy[$key] = clone $value;
+            } elseif (is_array($value)) {
+                $copy[$key] = self::deepCopyArray($value);
             }
         }
 
-        return $this->changeSnapshotData;
+        return $copy;
     }
 
     /**
