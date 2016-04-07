@@ -59,7 +59,7 @@ class UnitTestIndentedMessageLog extends IndentedMessageLog
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected function writeFormattedEntry($message, $category = "", $additionalData = [])
+    protected function writeFormattedEntry($level, $message, $category = "", $additionalData = [])
     {
         $this->entries[] = [$message, $category, $additionalData];
     }

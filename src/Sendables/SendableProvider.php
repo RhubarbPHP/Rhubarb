@@ -36,7 +36,7 @@ abstract class SendableProvider
     private static function createProviderForSendable(Sendable $sendable)
     {
         $providerClass = $sendable->getProviderClassName();
-        $provider = $providerClass::getDefaultProvider();
+        $provider = $providerClass::getProvider();
 
         return $provider;
     }

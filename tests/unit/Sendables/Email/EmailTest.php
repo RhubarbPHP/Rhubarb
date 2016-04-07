@@ -3,7 +3,9 @@
 namespace Rhubarb\Crown\Tests\unit\Email;
 
 use Rhubarb\Crown\DependencyInjection\Container;
-use Rhubarb\Crown\Email\SimpleEmail;
+use Rhubarb\Crown\Sendables\Email\Email;
+use Rhubarb\Crown\Sendables\Email\SimpleEmail;
+use Rhubarb\Crown\Sendables\SendableProvider;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 
@@ -29,9 +31,8 @@ class EmailTest extends RhubarbTestCase
         );
 
         $recipients = $email->getRecipients();
-        next($recipients);
 
-        $this->assertEquals("acuthbert@gcdtech.com", current($email->getRecipients())->email);
+        $this->assertEquals("msmith@gcdtech.com", $recipients[1]->email);
 
         $email->addRecipientsByEmail(
             [
@@ -107,8 +108,9 @@ class EmailTest extends RhubarbTestCase
         // Note this test only confirms the email has made it to the provider.
         $email = Container::instance(SimpleEmail::class);
         $email->addRecipientsByEmail("acuthbert@gcdtech.com")
-            ->SetText("This is a test email")
-            ->Send();
+            ->SetText("This is a test email");
+
+        SendableProvider::selectProviderAndSend($email);
 
         $lastEmail = UnitTestingEmailProvider::getLastEmail();
 

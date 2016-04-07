@@ -104,6 +104,10 @@ abstract class Email extends Sendable
 
     public function addRecipientsByEmail($recipients)
     {
+        if (!is_array($recipients)){
+            $recipients = [$recipients];
+        }
+
         foreach ($recipients as $recipient) {
             $this->addRecipientByEmail($recipient);
         }
