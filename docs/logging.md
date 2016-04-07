@@ -172,13 +172,32 @@ Fields are:
 
 As the name suggests this will record entries in a database table called `tblRhubarbLogEntry`
 
-~~~
-Note: Database logging is an expensive logging option and should not be seen as a log
-which can be left on indefinitely. It can easily double your execution time for complex
-requests and should be used primarily in debugging for short periods where being able
-to query the entries as a database will help expose the issue at large, or provide
-quick aggregations on execution times etc.
-~~~
+> Note: Database logging is an expensive logging option and should not be seen as a log
+> which can be left on indefinitely. It can easily double your execution time for complex
+> requests and should be used primarily in debugging for short periods where being able
+> to query the entries as a database will help expose the issue at large, or provide
+> quick aggregations on execution times etc.
+
+### MonologLog
+
+[Monolog](https://github.com/Seldaek/monolog) is a powerful logging framework used in many open source
+projects. It has great community support and provides a whole host of log destinations. Rhubarb requires
+monolog and so it is available to everyone to use.
+
+To get Monolog working in Rhubarb simply create your logger class as described by the Monolog docs and then
+use the `MonologLog` Rhubarb class to wrap it. For example here we use the ChromeLogHandler to inject log
+messages into the console of Chrome:
+
+``` php
+$logger = new Logger("rhubarb");
+$logger->pushHandler( new ChromePHPHandler() );
+
+Log::AttachLog( new MonologLog(Log::ALL, $logger) );
+```
+
+> If you're wondering why Rhubarb doesn't just use Monolog directly it's because for performance we
+> need to have the delayed calculation of log messages only when an interested log is attached as
+> described above.
 
 ## Creating a Log
 

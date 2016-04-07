@@ -15,3 +15,5 @@
 * Renamed DataStream to RecordStream
 * Removed HttpHeaders class and move functionality to the Response object
 * Removed send() method on Email and Sendable classes. Call SendableProvider::selectProviderAndSend() instead.
+* Added support for Monolog
+* Log::writeEntry is now passed the log level
