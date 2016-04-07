@@ -32,8 +32,5 @@ class RequestTestCase extends RhubarbTestCase
         $_REQUEST = $this->stashSuperglobals['request'];
 
         $this->stashSuperglobals = [];
-
-        // WebRequest as Request is an abstract class
-        WebRequest::resetRequest();
     }
 }

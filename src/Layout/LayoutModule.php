@@ -20,7 +20,8 @@ namespace Rhubarb\Crown\Layout;
 
 require_once __DIR__ . "/../Module.php";
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Layout\ResponseFilters\LayoutFilter;
 use Rhubarb\Crown\Module;
 
@@ -63,8 +64,6 @@ class LayoutModule extends Module
         parent::__construct();
 
         self::setLayoutClassName($defaultLayoutClassName);
-
-        $this->checkForAjaxRequest();
     }
 
     /**
@@ -72,9 +71,7 @@ class LayoutModule extends Module
      */
     private function checkForAjaxRequest()
     {
-        $context = new Context();
-
-        if ($context->IsAjaxRequest) {
+        if (Application::current()->context()->isXhrRequest()) {
             self::disableLayout();
         }
     }
@@ -125,6 +122,8 @@ class LayoutModule extends Module
         parent::initialise();
 
         $this->responseFilters[] = new LayoutFilter();
+
+        $this->checkForAjaxRequest();
     }
 
     /**
@@ -176,7 +175,6 @@ class LayoutModule extends Module
      */
     public static function getBodyItemsAsHtml()
     {
-        return implode("
-", self::$bodyItems);
+        return implode("\n", self::$bodyItems);
     }
 }

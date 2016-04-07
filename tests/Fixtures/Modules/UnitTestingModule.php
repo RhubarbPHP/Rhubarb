@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures\Modules;
 
-use Rhubarb\Crown\Email\EmailProvider;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\LoginProviders\UrlHandlers\ValidateLoginUrlHandler;
 use Rhubarb\Crown\Module;
@@ -19,11 +19,9 @@ use Rhubarb\Stem\Repositories\Repository;
 
 class UnitTestingModule extends Module
 {
-    protected function registerDependantModules()
+    public function getModules()
     {
-        parent::registerDependantModules();
-
-        Module::registerModule(new LayoutModule(TestLayout::class));
+        return [ new LayoutModule(TestLayout::class) ];
     }
 
     protected function initialise()
@@ -34,14 +32,14 @@ class UnitTestingModule extends Module
 
         Repository::setDefaultRepositoryClassName(Offline::class);
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index");
-        $login->setPriority(20);
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/login/index");
+        $login->SetPriority(20);
 
         $this->addUrlHandlers(
             ["/cant/be/here" => $login]
         );
 
-        $login = new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/defo/not/here/login/index/",
+        $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/defo/not/here/login/index/",
             [
                 "login/index/" => new ClassMappedUrlHandler(SimpleContent::class)
                 // We have to give it something to render!
@@ -71,13 +69,13 @@ class UnitTestingModule extends Module
         );
 
         $this->addUrlHandlers("/priority-test/",
-            new ValidateLoginUrlHandler(new UnitTestingLoginProvider(), "/login/index"));
+            new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/login/index"));
 
         $test = new NamespaceMappedUrlHandler('Rhubarb\Leaf\Presenters');
         $test->setPriority(100);
 
         $this->addUrlHandlers("/priority-test/", $test);
 
-        EmailProvider::setDefaultEmailProviderClassName(UnitTestingEmailProvider::class);
+        EmailProvider::setProviderClassName(UnitTestingEmailProvider::class);
     }
 }

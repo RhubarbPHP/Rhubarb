@@ -196,14 +196,15 @@ abstract class Log
     /**
      * The logger should implement this method to perform the actual log committal.
      *
+     * @param int $level The log level this message was raised at.
      * @param string $message The text message to log
-     * @param string $category The category of log message
      * @param int $indent An indent level - if applicable this can be used to make logs more readable.
+     * @param string $category The category of log message
      * @param array $additionalData Any number of additional key value pairs which can be understood by specific
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    abstract protected function writeEntry($message, $indent, $category = "", $additionalData = []);
+    abstract protected function writeEntry($level, $message, $indent, $category = "", $additionalData = []);
 
     public static function createEntry($level, $message, $category = "", $additionalData = [])
     {
@@ -229,7 +230,7 @@ abstract class Log
                     }
                 }
 
-                $log->writeEntry($message, self::$indentLevel, $category, $additionalData);
+                $log->writeEntry($level, $message, self::$indentLevel, $category, $additionalData);
                 $log->lastLogTime = microtime(true);
             }
         }

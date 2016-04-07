@@ -20,9 +20,9 @@ class UrlHandlerTest extends RhubarbTestCase
     {
         // Our test case has setup a handler which should come before the validate login handlers.
         $request = new WebRequest();
-        $request->UrlPath = "/priority-test/simple/";
+        $request->urlPath = "/priority-test/simple/";
 
-        $response = Module::generateResponseForRequest($request);
+        $response = $this->application->generateResponseForRequest($request);
 
         $this->assertNotInstanceOf(RedirectResponse::class, $response);
     }
@@ -37,19 +37,19 @@ class UrlHandlerTest extends RhubarbTestCase
         $parent->setUrl("/parent/");
 
         $request = new WebRequest();
-        $request->UrlPath = "/parent/child/";
+        $request->urlPath = "/parent/child/";
 
         $response = $parent->generateResponse($request);
 
         $this->assertEquals("ObjectB Response", $response);
 
-        $request->UrlPath = "/parent/not-child/";
+        $request->urlPath = "/parent/not-child/";
 
         $response = $parent->generateResponse($request);
 
         $this->assertEquals("ObjectA Response", $response);
 
-        $request->UrlPath = "/not-parent/not-child/";
+        $request->urlPath = "/not-parent/not-child/";
 
         $response = $parent->generateResponse($request);
 
@@ -61,9 +61,9 @@ class UrlHandlerTest extends RhubarbTestCase
         LayoutModule::enableLayout();
 
         $request = new WebRequest();
-        $request->UrlPath = "/computed-url/test/";
+        $request->urlPath = "/computed-url/test/";
 
-        $response = Module::generateResponseForRequest($request);
+        $response = $this->application->generateResponseForRequest($request);
 
         $this->assertEquals("TopComputed URL ResponseTail", $response->getContent());
     }

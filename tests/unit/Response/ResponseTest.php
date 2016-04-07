@@ -7,16 +7,23 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class ResponseTest extends RhubarbTestCase
 {
+    /**
+     * @var Response
+     */
     protected $response = null;
 
     protected function setUp()
     {
         $this->response = new Response();
+
+        parent::setUp();
     }
 
     protected function tearDown()
     {
         $this->response = null;
+
+        parent::tearDown();
     }
 
     public function testConstructed()

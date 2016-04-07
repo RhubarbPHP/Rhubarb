@@ -35,7 +35,7 @@ class DefaultExceptionHandler extends ExceptionHandler
     protected function logException(RhubarbException $er)
     {
         Log::error(
-            "Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
+            "Unhandled " . basename(str_replace('\\','/',get_class($er))) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
             "ERROR",
             ["Exception: " . $er]
         );
@@ -49,8 +49,8 @@ class DefaultExceptionHandler extends ExceptionHandler
         }
 
         $response = new Response();
-        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);
-        $response->setContent("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
+        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);        
+        $response->setContent("Unhandled " . basename(str_replace('\\','/',get_class($er))) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
         return $response;
     }
 

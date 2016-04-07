@@ -20,15 +20,16 @@ namespace Rhubarb\Crown\DataStreams;
 
 require_once __DIR__ . '/../Xml/XmlParser.php';
 require_once __DIR__ . '/../Xml/NodeStrategyCollationDictionary.php';
-require_once __DIR__ . '/DataStream.php';
+require_once __DIR__ . '/RecordStream.php';
 
+use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Xml\NodeStrategyCollationDictionary;
 use Rhubarb\Crown\Xml\XmlParser;
 
 /**
  * Scans an XML document for individual nodes and pops them off through a stream.
  */
-class XmlStream extends DataStream
+class XmlStream extends RecordStream
 {
     /**
      * @var
@@ -74,5 +75,10 @@ class XmlStream extends DataStream
         }
 
         return false;
+    }
+
+    public function appendItem($item)
+    {
+        throw new ImplementationException();
     }
 }

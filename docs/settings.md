@@ -1,76 +1,102 @@
 Settings
 ========
 
-Settings are handled in Rhubarb using classes that extend the base `Settings` class. A settings class
-is a singleton - every time you instantiate it, it is a copy of the same object.
+Settings in Rhubarb are encapsulated in classes that extend the base `Settings` class. A settings class
+should be instantiated as a singleton - it is always the same instance of the object.
 
-Rather than having a single container for all settings, we create individually named settings classes for
-each area of concern. This makes sure that settings classes are easily understood and managed.
+Rather than having a single class or container for all settings, we create individually named settings classes for
+each area of concern. This makes sure that settings classes are easily understood, extended and managed.
 
 ## Using a settings class
 
 There are a number of settings classes which already exist in the Rhubarb framework and core modules. A very
-common one is the `StemSettings` class which stores the default database credentials for stem to access a database
+common one is the `StemSettings` class which stores the default database credentials for stem to access a data
 provider.
 
-Use the class by simply instantiating it and setting or retrieving it's properties.
+Use the class by getting the instance and setting or retrieving it's properties.
 
 ```php
-$stemSettings = new StemSettings();
+$stemSettings = StemSettings::singleton();
 
 // Set properties like this:
-$stemSettings->Host = "localhost";
+$stemSettings->host = "localhost";
 
 // Get them like this:
-print $stemSettings->Database;
+print $stemSettings->database;
 ```
 
-The most common place to set setting properties in in your [app.config.php or site.config.php](files-and-directories)
+The most common place to set setting properties in in your [application module or site.config.php](files-and-directories)
 
 ## Creating a settings class
 
 When you're building a module or scaffold, or any sort of reusuable element that can be configured you should
-create your own settings classes to contain relevant settings.
-
-Setting classes are based upon `ModelState` and so you don't need to define any actual code for handling the
-properties, however because of this it is essential that you put a doc comment at the top to describe the
-settings properties that exist.
+create your own settings class. Setting objects are plain old PHP objects and so you simply need to define
+public fields or setters.
 
 ```php
 /**
  * Provides settings to MyWidget
- *
- * @property string $ServiceToken       The token required to access the widget service
- * @property bool   $AllowPublicUsers   True to allow anyone to use the widget
  */
 class MyWidgetSettings extends Settings
 {
+    /**
+    * @var string The token required to access the widget service
+    */
+    public $serviceToken;
+
+    /**
+    * @var bool True to allow anyone to use the widget
+    */
+    public $allowPublicUsers = false;
 }
 ```
 
-Note that the pattern of using UpperCamelCase because these are magical getter/setters is recommended but not
-mandatory.
-
 ### Setting default values for properties
 
-Some properties must be supplied by users of the class, however others might have sensible default values. Set
-these by overriding the `initialiseDefaultValues()` method. This is simply leveraging behaviour already found
-in `ModelState`.
+Some properties must be set by users of the class, however others might have sensible default values. If the value
+would be a simple scalar type like a string or int these can be set simply by initialising the class fields. If you
+need to initialise a more complex type like an object you can either create the default late using a public getter
+function or you can create it early by overiding the `initialiseDefaultValues()` method.
+
+As a rule of thumb if the default value is expensive to create (an object with a large constructor or one that
+contacts a database for example) you should create it late using the getter approach.
+
+Both approaches are demonstrated in the following example:
 
 ```php
 /**
  * Provides settings to MyWidget
- *
- * @property string $ServiceToken       The token required to access the widget service
- * @property bool   $AllowPublicUsers   True to allow anyone to use the widget. Defaults to true.
  */
 class MyWidgetSettings extends Settings
 {
+    private $reallyComplexObjectValue = null;
+
+    //////////// Late creation approach //////////////
+
+    public function getReallyComplexObjectValue()
+    {
+        // As this value has a high creation overhead we don't
+        // create it until it's been requested.
+        if ($this->reallyComplexObjectValue == null){
+            $this->reallyComplexObjectValue = new ReallyComplexObject();
+        }
+
+        return $this->reallyComplexObjectValue;
+    }
+
+    public function setReallyComplexObjectValue($value)
+    {
+        $this->reallyComplexObjectValue;
+    }
+
+    //////////// Early creation approach //////////////
+
+    public $reallySimpleObjectValue;
+
     protected function initialiseDefaultValues()
     {
-        parent::initialiseDefaultValues();
-
-        $this->AllowPublicUsers = true;
+        // As this value has a low creation overhead we can always instantiate it
+        $this->reallySimpleObjectValue = new ReallySimpleObject();
     }
 }
 ```

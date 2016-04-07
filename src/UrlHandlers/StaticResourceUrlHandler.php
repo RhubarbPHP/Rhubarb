@@ -22,7 +22,6 @@ require_once __DIR__ . "/UrlHandler.php";
 
 use Rhubarb\Crown\Exceptions\StaticResource404Exception;
 use Rhubarb\Crown\Exceptions\StaticResourceNotFoundException;
-use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Response\Response;
@@ -71,7 +70,6 @@ class StaticResourceUrlHandler extends UrlHandler
                     $mime = str_replace("text/plain", "application/javascript", $mime);
                 }
 
-                HttpHeaders::setHeader("Content-type", $mime);
                 $response->setHeader('Content-Type', $mime);
             }
 
@@ -103,7 +101,7 @@ class StaticResourceUrlHandler extends UrlHandler
      */
     protected function getMatchingUrlFragment(Request $request, $currentUrlFragment = '')
     {
-        $url = $request->UrlPath;
+        $url = $request->urlPath;
 
         if ($this->isFolder) {
             $urlDirectory = dirname($url);

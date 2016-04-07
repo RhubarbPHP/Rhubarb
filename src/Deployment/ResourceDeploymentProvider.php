@@ -18,41 +18,13 @@
 
 namespace Rhubarb\Crown\Deployment;
 
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\SingletonProviderTrait;
 use Rhubarb\Crown\Exceptions\DeploymentException;
 
-abstract class ResourceDeploymentProvider
+abstract class ResourceDeploymentProvider implements ProviderInterface
 {
-    private static $resourceDeploymentProvider = null;
-
-    private static $resourceDeploymentProviderClassName = "Rhubarb\Crown\Deployment\RelocationResourceDeploymentProvider";
-
-    public static function setResourceDeploymentProviderClassName($resourceDeploymentProviderClassName)
-    {
-        self::$resourceDeploymentProviderClassName = $resourceDeploymentProviderClassName;
-        self::$resourceDeploymentProvider = null;
-    }
-
-    public static function getResourceDeploymentProvider()
-    {
-        if (self::$resourceDeploymentProvider == null) {
-            $class = self::$resourceDeploymentProviderClassName;
-
-            if (!class_exists($class)) {
-                throw new DeploymentException("The resource deployment Provider class " . $class . " could not be found");
-            }
-
-            $Provider = new $class();
-
-            if (!($Provider instanceof ResourceDeploymentProvider)) {
-                throw new DeploymentException("The resource deployment Provider class " . $class . " is not a ResourceDeploymentProvider.");
-            }
-
-            self::$resourceDeploymentProvider = $Provider;
-        }
-
-        return self::$resourceDeploymentProvider;
-    }
-
+    use SingletonProviderTrait;
 
     public function getDeployedResourceUrl($resourceFilePath)
     {

@@ -19,7 +19,7 @@
 
 namespace Rhubarb\Crown\DataStreams;
 
-require_once __DIR__ . '/DataStream.php';
+require_once __DIR__ . '/RecordStream.php';
 
 use Rhubarb\Crown\Exceptions\EndOfStreamException;
 
@@ -33,7 +33,7 @@ use Rhubarb\Crown\Exceptions\EndOfStreamException;
  * enclosure character if it appears in the cell contents, then you should set the $escapeCharacter
  * property before starting to read your stream.
  */
-class CsvStream extends DataStream
+class CsvStream extends RecordStream
 {
     private $filePath;
 

@@ -39,6 +39,6 @@ class WebRequestSSLOnTest extends RequestTestCase
 
     public function testSSL()
     {
-        $this->assertTrue($this->request->IsSSL);
+        $this->assertTrue($this->request->isSSL());
     }
 }

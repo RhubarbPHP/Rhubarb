@@ -28,13 +28,14 @@ class PhpLog extends IndentedMessageLog
     /**
      * The logger should implement this method to perform the actual log committal.
      *
+     * @param int $level The log level
      * @param string $message The text message to log
      * @param string $category The category of log message
      * @param array $additionalData Any number of additional key value pairs which can be understood by specific
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected function writeFormattedEntry($message, $category = "", $additionalData)
+    protected function writeFormattedEntry($level, $message, $category = "", $additionalData)
     {
         $ip = self::getRemoteIP();
         $category = ($category == "") ? "CORE" : $category;
