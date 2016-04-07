@@ -53,7 +53,7 @@ trait CollectionUrlHandling
 
         $this->matchedUrl = $this->url;
 
-        if (preg_match("|^" . $this->url . "/?([[:digit:]]+)/?|", $uri, $match)) {
+        if (preg_match("`^" . $this->url . "/?([0-9]+)(/|$)`", $uri, $match) && isset($match[1])) {
             $this->resourceIdentifier = $match[1];
             $this->isCollection = false;
 
