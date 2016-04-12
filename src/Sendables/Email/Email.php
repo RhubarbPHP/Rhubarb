@@ -88,9 +88,17 @@ abstract class Email extends Sendable
         return $this->sender;
     }
 
-    public function setSender($senderEmail, $name = "")
+    /**
+     * @param EmailRecipient|string $senderEmail Email address as a string, or an EmailRecipient instance
+     * @param string $name The name of the sender. This is ignored if passing an EmailRecipient instance for $senderEmail
+     * @return $this
+     */
+    public function setSender($senderEmail, $name = null)
     {
-        $this->sender = new EmailRecipient($senderEmail, $name);
+        if (!($senderEmail instanceof EmailRecipient)) {
+            $senderEmail = new EmailRecipient($senderEmail, $name);
+        }
+        $this->sender = $senderEmail;
 
         return $this;
     }
