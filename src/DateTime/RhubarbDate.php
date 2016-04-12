@@ -27,6 +27,8 @@ class RhubarbDate extends RhubarbDateTime
         // Use the parent constructor to parse all accepted date formats
         parent::__construct($dateValue, $timezone);
 
+        $this->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
         // Use the parent constructor again with the parsed date, dropping the time element
         parent::__construct($this->format('Y-m-d 00:00:00'), $timezone);
     }
