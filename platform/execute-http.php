@@ -40,8 +40,7 @@ Log::performance("Rhubarb booted", "ROUTER");
  * @var Application $application
  */
 
-if (isset($_ENV["rhubarb_app"])) {
-    $appClass = $_ENV["rhubarb_app"];
+if ($appClass = getenv('rhubarb_app')) {
     $application = new $appClass();
 } elseif (file_exists("settings/app.config.php")) {
     include_once "settings/app.config.php";

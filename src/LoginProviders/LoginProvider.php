@@ -22,6 +22,9 @@ require_once __DIR__ . "/../Sessions/Session.php";
 
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
+use Rhubarb\Crown\DependencyInjection\SingletonProviderTrait;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Sessions\Session;
 
@@ -30,9 +33,11 @@ use Rhubarb\Crown\Sessions\Session;
  *
  * Login providers provide the framework for authenticating users and storing that logged in status.
  */
-abstract class LoginProvider extends Session
+abstract class LoginProvider extends Session implements ProviderInterface
 {
-    protected $loggedIn = false;
+    use SingletonProviderTrait;
+
+    public $loggedIn = false;
 
     /**
      * Returns True if the user is logged in.
@@ -85,28 +90,5 @@ abstract class LoginProvider extends Session
     public function rememberLogin()
     {
 
-    }
-
-    /**
-     * Returns the default login provider, if one is configured
-     *
-     * @deprecated Use the dependency injection container instead.
-     * @return LoginProvider
-     */
-    public static function getDefaultLoginProvider()
-    {
-        Container::instance(LoginProvider::class);
-    }
-
-    /**
-     * @deprecated Use the dependency injection container instead
-     * @param $className
-     */
-    public static function setDefaultLoginProviderClassName($className)
-    {
-        Application::current()->container()->registerClass(
-            LoginProvider::class,
-            $className
-        );
     }
 }

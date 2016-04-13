@@ -205,7 +205,7 @@ HTML;
 
     public static function getJqueryUrl()
     {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
+        $deployer = ResourceDeploymentProvider::getProvider();
         return $deployer->deployResource(__DIR__ . "/../../../../components/jquery/jquery.min.js");
     }
 
@@ -216,13 +216,13 @@ HTML;
 
     public static function getJqueryUIUrl()
     {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
+        $deployer = ResourceDeploymentProvider::getProvider();
         return $deployer->deployResource(__DIR__ . "/../../../../components/jqueryui/jquery-ui.min.js");
     }
 
     public static function loadJqueryUI()
     {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
+        $deployer = ResourceDeploymentProvider::getProvider();
 
         $themePath = self::getJQueryUIThemePath();
 

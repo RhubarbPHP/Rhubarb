@@ -96,7 +96,20 @@ final class Container
      * @param ...$arguments
      * @return mixed
      */
-    public function singleton($requestedClass, callable $singletonCreationCallback = null)
+    public static function singleton($requestedClass, ...$arguments)
+    {
+        return self::current()->getSingleton($requestedClass, ...$arguments);
+    }
+
+    /**
+     * Creates a singleton object instance of the requested class from the current DI container
+     *
+     * @see getInstance()
+     * @param $requestedClass
+     * @param ...$arguments
+     * @return mixed
+     */
+    public function getSingleton($requestedClass, callable $singletonCreationCallback = null)
     {
         if (!isset($this->singletons[$requestedClass])){
             if ($singletonCreationCallback){

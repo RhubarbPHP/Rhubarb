@@ -18,21 +18,6 @@
 
 namespace Rhubarb\Crown;
 
-require_once __DIR__ . "/Logging/Log.php";
-require_once __DIR__ . "/Request/WebRequest.php";
-require_once __DIR__ . "/Response/HtmlResponse.php";
-require_once __DIR__ . "/UrlHandlers/UrlHandler.php";
-
-use Rhubarb\Crown\Exceptions\ForceResponseException;
-use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
-use Rhubarb\Crown\Exceptions\NonRhubarbException;
-use Rhubarb\Crown\Exceptions\RhubarbException;
-use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
-use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Crown\Request\CliRequest;
-use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\HtmlResponse;
-use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 use Symfony\Component\Console\Command\Command;
 
@@ -139,7 +124,7 @@ abstract class Module
     /**
      * Should your module require other modules, they should be returned here.
      */
-    public function getModules()
+    protected function getModules()
     {
         return [];
     }
@@ -149,7 +134,7 @@ abstract class Module
      *
      * @return UrlHandlers\UrlHandler[]
      */
-    public final function getUrlHandlers()
+    protected final function getUrlHandlers()
     {
         if (!$this->urlHandlersRegistered){
             $this->registerUrlHandlers();
@@ -163,7 +148,7 @@ abstract class Module
      * Returns the registered response filters for this module.
      * @return array
      */
-    public final function getResponseFilters()
+    protected function getResponseFilters()
     {
         return $this->responseFilters;
     }
@@ -191,7 +176,7 @@ abstract class Module
     /**
      * Initialises the module.
      */
-    public final function initialiseModule()
+    protected final function initialiseModule()
     {
         if (!$this->initialised){
             $this->initialise();

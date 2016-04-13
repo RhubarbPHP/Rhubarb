@@ -22,7 +22,7 @@ use Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider;
 use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
-class Application
+class Application extends Module
 {
     /**
      * True to enable developer only functionality
@@ -105,6 +105,8 @@ class Application
     {
         global $unitTesting;
 
+        parent::__construct();
+
         $this->phpContext = new PhpContext();
 
         // $unitTesting is set in execute-test.php
@@ -119,17 +121,10 @@ class Application
         SessionProvider::setProviderClassName(PhpSessionProvider::class);
         ResourceDeploymentProvider::setProviderClassName(RelocationResourceDeploymentProvider::class);
 
-        $modules = $this->getModules();
-
-        foreach($modules as $module){
-            $this->registerModule($module);
-        }
+        $this->registerModule($this);
     }
 
-    protected function getModules()
-    {
-        return [];
-    }
+
 
     /**
      * Gets the dependency injection container
@@ -222,6 +217,9 @@ class Application
      */
     public final function initialiseModules()
     {
+        // Initialise the application 'module' itself.
+        $this->initialiseModule();
+
         foreach ($this->modules as $module) {
             $module->initialiseModule();
         }
@@ -239,7 +237,7 @@ class Application
      *
      * @return \Rhubarb\Crown\ResponseFilters\ResponseFilter[]
      */
-    private function getResponseFilters()
+    private function getAllResponseFilters()
     {
         $filters = [];
 
@@ -339,7 +337,7 @@ class Application
             Log::createEntry(Log::PERFORMANCE_LEVEL | Log::DEBUG_LEVEL, "Output filters started", "ROUTER");
             Log::indent();
 
-            $filters = $this->getResponseFilters();
+            $filters = $this->getAllResponseFilters();
 
             foreach ($filters as $filter) {
                 $response = $filter->processResponse($response);

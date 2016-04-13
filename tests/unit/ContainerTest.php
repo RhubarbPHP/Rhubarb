@@ -82,15 +82,15 @@ class ContainerTest extends RhubarbTestCase
 
     public function testSingletonRequest()
     {
-        $objectA = $this->container->singleton(SimpleClass::class);
+        $objectA = $this->container->getSingleton(SimpleClass::class);
         $objectA->foo = "bar";
-        $objectB = $this->container->singleton(SimpleClass::class);
+        $objectB = $this->container->getSingleton(SimpleClass::class);
 
         $this->assertEquals("bar", $objectB->foo);
 
         $this->container->clearSingleton(SimpleClass::class);
 
-        $objectC = $this->container->singleton(SimpleClass::class, function(){
+        $objectC = $this->container->getSingleton(SimpleClass::class, function(){
             $c = new SimpleClass();
             $c->foo = "bang";
 
@@ -110,7 +110,7 @@ class ContainerTest extends RhubarbTestCase
 
         $this->container->registerSingleton(SimpleClass::class, $simpleClass);
 
-        $objectA = $this->container->singleton(SimpleClass::class);
+        $objectA = $this->container->getSingleton(SimpleClass::class);
 
         $this->assertEquals("bar", $objectA->foo);
 
@@ -123,7 +123,7 @@ class ContainerTest extends RhubarbTestCase
             return $simpleClass;
         });
 
-        $objectA = $this->container->singleton(SimpleClass::class);
+        $objectA = $this->container->getSingleton(SimpleClass::class);
 
         $this->assertEquals("bang", $objectA->foo);
     }

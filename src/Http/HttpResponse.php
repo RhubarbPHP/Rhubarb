@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Http;
 
 use Rhubarb\Crown\PhpContext;
+use Rhubarb\Crown\Request\Request;
 
 class HttpResponse
 {
@@ -63,7 +64,7 @@ class HttpResponse
     public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
     {
         setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
-        $request = PhpContext::createRequest();
+        $request = Request::current();
         $request->cookie($name, $value);
     }
 
