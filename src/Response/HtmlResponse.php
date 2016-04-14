@@ -24,9 +24,6 @@ require_once __DIR__ . "/Response.php";
  * Encapsulates an HTML response to be sent to the browser.
  *
  * Doesn't do anything special yet, but we might want it to.
- *
- * @author marramgrass
- * @copyright GCD Technologies 2012
  */
 class HtmlResponse extends Response
 {

@@ -22,9 +22,6 @@ use Rhubarb\Crown\Request\Request;
 
 /**
  * Adds recognition of one additional folder to be a collection item.
- *
- * @author      acuthbert
- * @copyright   2013 GCD Technologies Ltd.
  */
 trait CollectionUrlHandling
 {

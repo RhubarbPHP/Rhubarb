@@ -24,15 +24,13 @@ global $unitTesting;
 
 $unitTesting = true;
 
-// Change the working directory to the top level project folder.
-chdir(__DIR__ . "/../../../../");
+$dir = __DIR__;
 
 // Initiate our bootstrap script to boot all libraries required.
-require_once __DIR__ . "/boot.php";
+require $dir . "/boot.php";
 
-if ( isset( $argv[1] ) )
-{
-	$script = $argv[1];
-	/** @noinspection PhpIncludeInspection */
-	include( $script );
+if (isset($argv[1])) {
+    $script = $argv[1];
+    /** @noinspection PhpIncludeInspection */
+    include($script);
 }

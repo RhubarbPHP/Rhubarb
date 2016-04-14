@@ -28,9 +28,6 @@ use Rhubarb\Crown\ResponseFilters\ResponseFilter;
 
 /**
  * The response filter that surrounds the response with the HTML provided from a layout template.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class LayoutFilter extends ResponseFilter
 {

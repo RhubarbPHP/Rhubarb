@@ -20,6 +20,11 @@ namespace Rhubarb\Crown\LoginProviders;
 
 require_once __DIR__ . "/../Sessions/Session.php";
 
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
+use Rhubarb\Crown\DependencyInjection\SingletonProviderTrait;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Crown\Sessions\Session;
 
@@ -28,21 +33,18 @@ use Rhubarb\Crown\Sessions\Session;
  *
  * Login providers provide the framework for authenticating users and storing that logged in status.
  */
-abstract class LoginProvider extends Session
+abstract class LoginProvider extends Session implements ProviderInterface
 {
-    /**
-     * Stores the name of the default login provider class
-     *
-     * @var string
-     */
-    private static $defaultLoginProviderClassName = "";
+    use SingletonProviderTrait;
+
+    public $loggedIn = false;
 
     /**
      * Returns True if the user is logged in.
      */
     public function isLoggedIn()
     {
-        return (isset($this->LoggedIn) && ($this->LoggedIn));
+        return (isset($this->loggedIn) && ($this->loggedIn));
     }
 
     /**
@@ -50,7 +52,7 @@ abstract class LoginProvider extends Session
      */
     public function logOut()
     {
-        $this->LoggedIn = false;
+        $this->loggedIn = false;
 
         $this->onLogOut();
 
@@ -65,7 +67,7 @@ abstract class LoginProvider extends Session
      */
     public function forceLogin()
     {
-        $this->LoggedIn = true;
+        $this->loggedIn = true;
         $this->storeSession();
     }
 
@@ -81,31 +83,12 @@ abstract class LoginProvider extends Session
     }
 
     /**
-     * Returns the default login provider, if one is configured
+     * Called to enable "remember me" functionality
      *
-     * @throws \Rhubarb\Crown\Exceptions\ImplementationException Thrown if no default is configured
-     * @see setDefaultLoginProviderClassName()
-     * @return LoginProvider
+     * Extending classes should implement this to enable auto-login.
      */
-    public static function getDefaultLoginProvider()
+    public function rememberLogin()
     {
-        if (self::$defaultLoginProviderClassName == "") {
-            throw new ImplementationException("There is no default login provider class name");
-        }
 
-        $providerClass = self::$defaultLoginProviderClassName;
-        $provider = new $providerClass();
-
-        return $provider;
-    }
-
-    public static function getDefaultLoginProviderClassName()
-    {
-        return self::$defaultLoginProviderClassName;
-    }
-
-    public static function setDefaultLoginProviderClassName($className)
-    {
-        self::$defaultLoginProviderClassName = $className;
     }
 }

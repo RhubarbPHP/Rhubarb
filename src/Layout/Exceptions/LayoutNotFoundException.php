@@ -22,11 +22,6 @@ require_once __DIR__ . "/../../Exceptions/RhubarbException.php";
 
 use Rhubarb\Crown\Exceptions\RhubarbException;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
- */
 class LayoutNotFoundException extends RhubarbException
 {
     public function __construct($layoutClassName)

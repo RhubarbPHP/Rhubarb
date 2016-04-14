@@ -20,11 +20,6 @@ namespace Rhubarb\Crown\Encryption;
 
 require_once __DIR__ . "/HashProvider.php";
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class Sha512HashProvider extends HashProvider
 {
 
@@ -42,9 +37,7 @@ class Sha512HashProvider extends HashProvider
     public function createHash($data, $salt = false)
     {
         if ($salt === false) {
-            $salt = crypt("a34t" . $data . "zxcv@");
-            $parts = explode('$', $salt);
-            $salt = $parts[sizeof($parts) - 1];
+            $salt = sha1(uniqid("sillystring", true) . microtime());
         }
 
         $raw = crypt($data, '$6$rounds=10000$' . $salt . '$');

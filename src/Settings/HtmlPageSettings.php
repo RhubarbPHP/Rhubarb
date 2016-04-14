@@ -22,10 +22,8 @@ use Rhubarb\Crown\Settings;
 
 /**
  * Stores settings relating the page specific properties, normalled used in HTML page generation.
- *
- * @property string $PageTitle  The title of the page.
  */
 class HtmlPageSettings extends Settings
 {
-
+    public $pageTitle = "";
 }

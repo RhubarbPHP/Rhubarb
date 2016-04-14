@@ -101,4 +101,4 @@ class HttpRequest
     {
         return $this->url;
     }
-} 
+}

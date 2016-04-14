@@ -25,4 +25,4 @@ namespace Rhubarb\Crown\Exceptions;
 class CollectionUrlException extends RhubarbException
 {
 
-} 
+}

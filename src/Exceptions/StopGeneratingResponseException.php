@@ -23,9 +23,6 @@ namespace Rhubarb\Crown\Exceptions;
  *
  * This should be used instead of exit; as it allows headers to be correctly outputted and doesn't abort
  * PHP so abruptly.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class StopGeneratingResponseException extends \Exception
 {

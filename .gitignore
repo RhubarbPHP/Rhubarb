@@ -7,4 +7,7 @@ vendor/
 /.idea/
 /deployed/
 /logs/
-/composer.lock
+/bin/
+tests/_output/*
+/cache/
+/build/

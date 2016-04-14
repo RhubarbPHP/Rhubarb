@@ -18,14 +18,18 @@
 
 namespace Rhubarb\Crown\Sessions\SessionProviders;
 
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 use Rhubarb\Crown\Sessions\Session;
 
 /**
  * The base class for session providers
  */
-abstract class SessionProvider
+abstract class SessionProvider implements ProviderInterface
 {
-	public abstract function restoreSession( Session $session );
+    use ProviderTrait;
 
-	public abstract function storeSession( Session $session );
+    abstract public function restoreSession(Session $session);
+
+    abstract public function storeSession(Session $session);
 }

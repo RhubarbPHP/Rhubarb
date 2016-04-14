@@ -19,8 +19,9 @@
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use Rhubarb\Crown\Exceptions\RhubarbException;
+use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Crown\Response\HtmlResponse;
+use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
 /**
@@ -33,23 +34,24 @@ class DefaultExceptionHandler extends ExceptionHandler
 {
     protected function logException(RhubarbException $er)
     {
-        Log::error("Unhandled " . basename(get_class($er)) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
-            "ERROR", $er);
+        Log::error(
+            "Unhandled " . basename(str_replace('\\','/',get_class($er))) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile(),
+            "ERROR",
+            ["Exception: " . $er]
+        );
     }
 
     protected function generateResponseForException(RhubarbException $er)
     {
         $urlHandler = UrlHandler::getExecutingUrlHandler();
-
-        if ($urlHandler){
+        if ($urlHandler != null) {
             return $urlHandler->generateResponseForException($er);
         }
-        else {
-            $response = new HtmlResponse();
-            $response->setContent( "<p>The application failed to start. Please consult the shutdown error log for more details" );
 
-            return $response;
-        }
+        $response = new Response();
+        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);        
+        $response->setContent("Unhandled " . basename(str_replace('\\','/',get_class($er))) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
+        return $response;
     }
 
     protected function handleException(RhubarbException $er)

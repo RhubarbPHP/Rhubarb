@@ -100,7 +100,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      * @param RhubarbDateTime $referenceDate The date to find the previous Monday of. Today if null.
      * @return RhubarbDate
      */
-    public static function PreviousMonday($referenceDate = null)
+    public static function previousMonday($referenceDate = null)
     {
         if ($referenceDate == null) {
             $referenceDate = new RhubarbDateTime("today");
@@ -133,5 +133,21 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
             $dateTime = DateTime::createFromFormat($format, $time, $timezone);
         }
         return new self($dateTime, $timezone);
+    }
+
+    /**
+     * Applies an $interval of $unit
+     *
+     * @param int $interval
+     * @param string $unit DateInterval unit eg 'Y' for year, 'D' for day
+     */
+    public function applyDateInterval($interval, $unit)
+    {
+        if ($interval > 0) {
+            $this->add(new RhubarbDateInterval("P{$interval}{$unit}"));
+        } elseif ($interval < 0) {
+            $interval *= -1;
+            $this->sub(new RhubarbDateInterval("P{$interval}{$unit}"));
+        }
     }
 }

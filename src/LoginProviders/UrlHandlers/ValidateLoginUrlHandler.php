@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\LoginProviders\UrlHandlers;
 
 require_once __DIR__ . "/../../UrlHandlers/UrlHandler.php";
 
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\LoginProviders\LoginProvider;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
@@ -47,8 +48,18 @@ class ValidateLoginUrlHandler extends UrlHandler
         }
 
         if (!$this->loginProvider->isLoggedIn()) {
+
+            $redirectUrl = $this->loginUrl;
+
+            // Capture the existing URL to allow us to redirect to the original page.
+            if ($request->urlPath != "/") {
+                $url = base64_encode($request->urlPath);
+
+                $redirectUrl .= "?rd=" . $url;
+            }
+
             // This is a restricted path - redirect to the login page.
-            $response = new RedirectResponse($this->loginUrl);
+            $response = new RedirectResponse($redirectUrl);
 
             return $response;
         }

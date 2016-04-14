@@ -29,10 +29,10 @@ class AppSettings extends Settings
     {
         parent::initialiseDefaultValues();
 
-        $request = Context::currentRequest();
+        $request = PhpContext::createRequest();
 
-        $scheme = ($request->Server("HTTPS")) ? "https" : "http";
+        $scheme = ($request->server("HTTPS")) ? "https" : "http";
 
-        $this->AppBaseUrl = $scheme . "://" . $request->Server("SERVER_NAME");
+        $this->AppBaseUrl = $scheme . "://" . $request->server("SERVER_NAME");
     }
-} 
+}

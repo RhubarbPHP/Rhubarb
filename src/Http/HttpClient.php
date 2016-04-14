@@ -17,41 +17,47 @@
  */
 
 namespace Rhubarb\Crown\Http;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\ProviderTrait;
 
 /**
  * A base class to provide for HTTP clients
  */
-abstract class HttpClient
+abstract class HttpClient implements ProviderInterface
 {
-	private static $defaultHttpClientClassName = '\Rhubarb\Crown\Http\CurlHttpClient';
+    use ProviderTrait;
 
-	/**
-	 * Executes an HTTP transaction and returns the response.
-	 *
-	 * @param HttpRequest $request
-	 * @return HttpResponse
-	 */
-	public abstract function getResponse( HttpRequest $request );
+    /**
+     * Executes an HTTP transaction and returns the response.
+     *
+     * @param HttpRequest $request
+     * @return HttpResponse
+     */
+    abstract public function getResponse(HttpRequest $request);
 
-	/**
-	 * Sets the name of the class to use for the default HttpClient
-	 *
-	 * @param $defaultHttpClientClassName
-	 */
-	public static function setDefaultHttpClientClassName( $defaultHttpClientClassName )
-	{
-		self::$defaultHttpClientClassName = $defaultHttpClientClassName;
-	}
+    private static $defaultSet = false;
 
-	/**
-	 * Returns an instance of the default HttpClient
-	 *
-	 * @return HttpClient
-	 */
-	public static function getDefaultHttpClient()
-	{
-		$class = self::$defaultHttpClientClassName;
+    /**
+     * @return static
+     */
+    public static function getProvider()
+    {
+        if (!self::$defaultSet){
+            self::setProviderClassName(CurlHttpClient::class);
+            self::$defaultSet = true;
+        }
 
-		return new $class();
-	}
-} 
+        return Container::instance(static::class);
+    }
+
+    /**
+     * Returns an instance of the default HttpClient
+     *
+     * @return HttpClient
+     */
+    public static function getDefaultHttpClient()
+    {
+        return self::getProvider();
+    }
+}

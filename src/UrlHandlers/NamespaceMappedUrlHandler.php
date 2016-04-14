@@ -18,7 +18,8 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Request\WebRequest;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 
 require_once __DIR__ . "/UrlHandler.php";
 
@@ -27,9 +28,6 @@ require_once __DIR__ . "/UrlHandler.php";
  *
  * The handler explodes the url and explores it folder at a time (to allow for passing
  * control to another handler)
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class NamespaceMappedUrlHandler extends UrlHandler
 {
@@ -68,7 +66,7 @@ class NamespaceMappedUrlHandler extends UrlHandler
 
     protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
-        if ($request !== null && $request->IsWebRequest) {
+        if ($request !== null && $request instanceof WebRequest) {
             $url = $currentUrlFragment;
         } else {
             $url = null;
@@ -105,12 +103,12 @@ class NamespaceMappedUrlHandler extends UrlHandler
 
             if (class_exists($objectClass)) {
                 if ($redirectTo !== false) {
-                    UrlHandler::redirectToUrl($this->BuildCompleteChildUrl($redirectTo));
+                    UrlHandler::redirectToUrl($this->buildCompleteChildUrl($redirectTo));
                 }
 
                 $object = new $objectClass();
 
-                if (is_a($object, "\Rhubarb\Crown\Response\GeneratesResponse")) {
+                if (is_a($object, "\Rhubarb\Crown\Response\GeneratesResponseInterface")) {
                     return $this->onTargetFound($object, $request);
                 }
             }
@@ -126,11 +124,11 @@ class NamespaceMappedUrlHandler extends UrlHandler
      *
      * Normally this just asks the $object to generate a response for the request
      *
-     * @param GeneratesResponse $object
+     * @param GeneratesResponseInterface $object
      * @param $request
      * @return mixed
      */
-    protected function onTargetFound(GeneratesResponse $object, $request)
+    protected function onTargetFound(GeneratesResponseInterface $object, $request)
     {
         return $object->generateResponse($request);
     }

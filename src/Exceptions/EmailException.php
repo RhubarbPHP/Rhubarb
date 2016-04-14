@@ -21,4 +21,4 @@ namespace Rhubarb\Crown\Exceptions;
 class EmailException extends RhubarbException
 {
 
-} 
+}

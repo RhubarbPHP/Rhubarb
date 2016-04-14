@@ -20,10 +20,10 @@ namespace Rhubarb\Crown\Scripts;
 
 class ProjectTemplates
 {
-    public function createMinimumProject()
+    public static function createMinimumProject()
     {
-        mkdir( "settings" );
-        file_put_contents( "settings/app.config.php", '<?php
+        mkdir("settings");
+        file_put_contents("settings/app.config.php", '<?php
 
 namespace YourNamespace;
 
@@ -52,12 +52,12 @@ class WebsiteApp extends Module
 
 Module::registerModule(new LayoutModule(__NAMESPACE__ . "\\Layouts\\DefaultLayout"));
 Module::registerModule(new WebsiteApp());
-' );
+');
 
-        mkdir( "src" );
-        mkdir( "tests" );
+        mkdir("src");
+        mkdir("tests");
 
-        file_put_contents( "src/Layouts/DefaultLayout.php", '
+        file_put_contents("src/Layouts/DefaultLayout.php", '
 <?php
 
 namespace YourNamespace\Layouts;

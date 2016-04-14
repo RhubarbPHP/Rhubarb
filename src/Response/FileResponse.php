@@ -25,6 +25,8 @@ class FileResponse extends Response
     private $filePath;
     private $fileName;
 
+    public $deleteOnCompletion = false;
+
     public function __construct($filePath, $fileName = "", $generator = null)
     {
         parent::__construct($generator);
@@ -48,10 +50,14 @@ class FileResponse extends Response
         $this->setHeader('Content-Length', filesize($filePath));
     }
 
-    protected function PrintContent()
+    protected function printContent()
     {
         ob_clean();
 
         readfile($this->filePath);
+
+        if ($this->deleteOnCompletion) {
+            unlink($this->filePath);
+        }
     }
 }

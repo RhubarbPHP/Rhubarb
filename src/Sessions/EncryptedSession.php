@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\Sessions;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 
 /**
@@ -27,28 +28,30 @@ use Rhubarb\Crown\Encryption\EncryptionProvider;
  */
 abstract class EncryptedSession extends Session
 {
+    protected $encryptedData = [];
+
     /**
      * Override to return the encryption key salt to use.
      *
      * @return mixed
      */
-    protected abstract function getEncryptionKeySalt();
+    abstract protected function getEncryptionKeySalt();
 
     public function __set($propertyName, $value)
     {
         $keySalt = $this->getEncryptionKeySalt();
-        $provider = EncryptionProvider::getEncryptionProvider();
+        $provider = Container::instance(EncryptionProvider::class);
 
         $value = $provider->encrypt($value, $keySalt);
 
-        parent::__set($propertyName, $value);
+        $this->encryptedData[$propertyName] = $value;
     }
 
     public function __get($propertyName)
     {
         $keySalt = $this->getEncryptionKeySalt();
-        $provider = EncryptionProvider::getEncryptionProvider();
+        $provider = Container::instance(EncryptionProvider::class);
 
-        return $provider->decrypt(parent::__get($propertyName), $keySalt);
+        return $provider->decrypt($this->encryptedData[$propertyName], $keySalt);
     }
 }

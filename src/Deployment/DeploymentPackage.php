@@ -28,7 +28,7 @@ class DeploymentPackage
         return [];
     }
 
-    public final function deploy()
+    final public function deploy()
     {
         return $this->onDeploy();
     }

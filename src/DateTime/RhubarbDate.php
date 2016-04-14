@@ -26,6 +26,10 @@ class RhubarbDate extends RhubarbDateTime
     {
         parent::__construct($dateValue, $timezone);
 
+        // Set the timezone to the system default in case it was created in a different timezone, so
+        // we can treat it as timezone agnostic
+        $this->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
         // Dates must be timezone agnostic as they don't store a time. We need to 'zero' out the time portion
         parent::setTime(0, 0, 0);
     }
@@ -33,5 +37,11 @@ class RhubarbDate extends RhubarbDateTime
     public function setTime($hour, $minute, $second = 0)
     {
         return parent::setTime(0, 0, 0);
+    }
+
+    public static function createFromFormat($format, $time, $timezone = null)
+    {
+        $date = parent::createFromFormat($format, $time, $timezone);
+        return new RhubarbDate($date);
     }
 }

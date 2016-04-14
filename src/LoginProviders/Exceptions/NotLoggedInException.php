@@ -21,11 +21,6 @@ namespace Rhubarb\Crown\LoginProviders\Exceptions;
 use Exception;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 
-/**
- *
- * @author acuthbert
- * @copyright GCD Technologies 2013
- */
 class NotLoggedInException extends RhubarbException
 {
     public function __construct($privateMessage = "", \Exception $previous = null)
@@ -34,5 +29,4 @@ class NotLoggedInException extends RhubarbException
 
         $this->publicMessage = "Sorry, you must be logged in to complete this action.";
     }
-
 }

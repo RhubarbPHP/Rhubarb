@@ -20,133 +20,34 @@ namespace Rhubarb\Crown;
 
 require_once __DIR__ . "/Modelling/ModelState.php";
 
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\SingletonInterface;
+use Rhubarb\Crown\DependencyInjection\SingletonTrait;
 use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Modelling\ModelState;
 
 /**
  * A base class for creating settings classes.
- *
- * All settings classes extend this base class which in turn extends the Model class meaning that
- * settings classes can also support magical properties.
- *
- * Settings must be set and got through the a settings class that derives from this.
- *
- * All settings data is cached so any instance of your settings class will be sharing the same data.
- *
- * To use a settings class simply instantiate it:
- *
- * $settings = new ModellingSettings();
- * print $settings->Host;
- *
- * All settings have a 'namespace' which is based on the class name of the settings class only - minus
- * the word 'Settings'
- *
- * For quick access you can get settings by simply doing:
- *
- * \Rhubarb\Crown\Settings::GetSetting( "Data", "Host", "127.0.0.1" )
- *
- * Note that this means you cannot have two settings classes with the same name - even if they have
- * different PHP namespaces.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
-abstract class Settings extends ModelState
+abstract class Settings implements SingletonInterface
 {
-	/**
-	 * The private collection of cached model state data for all the sessions.
-	 *
-	 * This provides the Settings class with it's Singleton like behavour.
-	 *
-	 * @var array
-	 */
-	private static $cachedModelData = array();
+    use SingletonTrait;
 
-	/**
-	 * The namespace for this settings object.
-	 *
-	 * @var string
-	 */
-	private $namespace = "";
+    private $needsInitialised = true;
 
-	public function __construct()
-	{
-		$className = basename( str_replace( "\\", "/", get_class( $this ) ) );
-		$this->namespace = str_replace( "Settings", "", $className );
+    protected function __construct()
+    {
+        if ($this->needsInitialised) {
+            $this->needsInitialised = false;
+            $this->initialiseDefaultValues();
+        }
+    }
 
-		$needsInitialised = false;
+    /**
+     * Override this class to set default values for settings.
+     */
+    protected function initialiseDefaultValues()
+    {
 
-		// Get the model data by using the class name
-		if ( !isset( self::$cachedModelData[ $this->namespace ] ) )
-		{
-			self::$cachedModelData[ $this->namespace ] = array();
-
-			// If the model data didn't exist before we know that we are being used for
-			// the first time and we should call the initialiseDefaultValues() function.
-			$needsInitialised = true;
-		}
-
-		$this->modelData = &self::$cachedModelData[ $this->namespace ];
-
-		if ( $needsInitialised )
-		{
-			$this->initialiseDefaultValues();
-		}
-	}
-
-	/**
-	 * Returns the namespace for this settings class.
-	 *
-	 * @return string
-	 */
-	public function getNamespace()
-	{
-		return $this->namespace;
-	}
-
-	/**
-	 * Override this class to set default values for settings.
-	 */
-	protected function initialiseDefaultValues()
-	{
-
-	}
-
-	/**
-	 * Get's a setting without having to use the relevant settings object.
-	 *
-	 * This is a convenience method used to keep code fast and tidy.
-	 *
-	 * @param $namespace
-	 * @param $settingName
-	 * @param null $defaultValue
-	 * @throws Exceptions\SettingMissingException
-	 * @return mixed
-	 */
-	public static function getSetting( $namespace, $settingName, $defaultValue = null )
-	{
-		if ( isset( self::$cachedModelData[ $namespace ][ $settingName ] ) )
-		{
-			return self::$cachedModelData[ $namespace ][ $settingName ];
-		}
-
-		if ( $defaultValue === null )
-		{
-			throw new SettingMissingException( $namespace, $settingName );
-		}
-
-		return $defaultValue;
-	}
-
-	/**
-	 * Removes all the settings for a particular namespace.
-	 *
-	 * Very rarely needed, usually by unit tests.
-	 *
-	 * @param $namespace
-	 */
-	public static function deleteSettingNamespace( $namespace )
-	{
-		unset( self::$cachedModelData[ $namespace ] );
-	}
+    }
 }

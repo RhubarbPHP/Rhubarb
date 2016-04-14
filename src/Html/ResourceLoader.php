@@ -18,15 +18,12 @@
 
 namespace Rhubarb\Crown\Html;
 
-use Rhubarb\Crown\Context;
-use Rhubarb\Crown\Deployment\DeploymentPackage;
-use Rhubarb\Crown\Deployment\ResourceDeploymentHandler;
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
-use Rhubarb\Crown\Exceptions\ResourceNotFound;
 
 class ResourceLoader
 {
-    private static $resources = array();
+    private static $resources = [];
 
     /**
      * Adds javascript script code to the collection
@@ -38,37 +35,7 @@ class ResourceLoader
     {
         $dependantResourceUrls = array_unique($dependantResourceUrls);
 
-        foreach (self::$resources as $index => $resource) {
-            $urls = $resource[1];
-
-            if ($urls == $dependantResourceUrls) {
-                self::$resources[$index][0] .= "
-	$scriptCode";
-                return;
-            }
-        }
-
-        self::$resources[] = array($scriptCode, $dependantResourceUrls);
-    }
-
-    public static function addScriptCodeOnReady($scriptCode, $dependantResourceUrls = [])
-    {
-        // Deploy the composer jquery libraries.
-        $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = "vendor/components/jquery/jquery.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/jquery-ui.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/theme.css";
-        $jQueryUrls = $package->deploy();
-
-        array_splice(
-            $dependantResourceUrls,
-            0,
-            0,
-            $jQueryUrls
-        );
-
-        self::addScriptCode($scriptCode, $dependantResourceUrls);
+        self::$resources[] = [$scriptCode, $dependantResourceUrls];
     }
 
     /**
@@ -102,28 +69,28 @@ class ResourceLoader
      * with finding some libraries like Google maps not working if added to the page via AJAX. Any client
      * side issues with the script loader will now become a major concern and should get addressed quickly.
      *
-     * @see ResourceLoader::AddResource()
+     * @see ResourceLoader::addResource()
      * @return string
      */
     public static function getResourceInjectionHtml()
     {
         $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = __DIR__."/../../resources/resource-manager.js";
+        $package->resourcesToDeploy[] = __DIR__ . "/../../resources/resource-manager.js";
         $urls = $package->deploy();
 
-        $html = "<script src=\"".$urls[0]."\" type=\"text/javascript\"></script>";
+        $html = "<script src=\"" . $urls[0] . "\" type=\"text/javascript\"></script>";
 
-        $context = new Context();
+        $context = Application::current()->context();
 
-        $preLoadedCssFiles = [];
+        $preLoadedFiles = [];
 
         // CSS files are safe to load immediately and might avoid 'flicker' by so doing.
-        if (!$context->IsAjaxRequest) {
+        if (!$context->isXhrRequest()) {
             foreach (self::$resources as $item) {
                 $dependantResources = $item[1];
 
                 foreach ($dependantResources as $resource) {
-                    if (in_array($resource, $preLoadedCssFiles)) {
+                    if (in_array($resource, $preLoadedFiles)) {
                         continue;
                     }
 
@@ -134,30 +101,45 @@ class ResourceLoader
                         $html .= "
 <link type=\"text/css\" rel=\"stylesheet\" href=\"" . $resource . "\" />";
 
-                        $preLoadedCssFiles[] = $resource;
+                        $preLoadedFiles[] = $resource;
+                    }
+
+                    if ($extension == "js") {
+                        $html .= "
+<script type=\"text/javascript\" src=\"" . $resource . "\"></script>";
+
+                        $preLoadedFiles[] = $resource;
                     }
                 }
+            }
+        }
+
+        $groupedItems = [];
+
+        foreach (self::$resources as $index => $resource) {
+            $dependantResources = $resource[1];
+            $dependantResources = array_diff($dependantResources, $preLoadedFiles);
+
+            $urls = implode("", $dependantResources);
+
+            if (!isset($groupedItems[$urls])) {
+                $groupedItems[$urls] = [$resource[0], $dependantResources];
+            } else {
+                $groupedItems[$urls][0] .= "
+	" . $resource[0];
             }
         }
 
         $tags = "";
 
         array_walk(
-            self::$resources,
-            function ($item) use (&$tags, $preLoadedCssFiles) {
-                $source = $item[0];
+            $groupedItems,
+            function ($item) use (&$tags, $preLoadedFiles) {
+                $source = trim($item[0]);
                 $dependantResources = $item[1];
-
-                if ($source == "") {
-                    // CSS files have already been loaded, so we don't need to ask for them to be loaded again. We only
-                    // do this if there is no source code attached to this load. If source is attached we need to include
-                    // the CSS as we don't want the JS to start until the CSS is ready.
-                    $dependantResources = array_diff($dependantResources, $preLoadedCssFiles);
-                }
 
                 if (sizeof($dependantResources) > 0) {
                     $resourcesArray = '[ "' . implode('", "', $dependantResources) . '" ]';
-
 
                     if ($source == "") {
                         $source = 'window.resourceManager.loadResources( ' . $resourcesArray . ' );';
@@ -182,57 +164,15 @@ class ResourceLoader
         );
 
         if (trim($tags) != "") {
-            $html .= "
-<script type=\"text/javascript\">
-$tags</script>";
+            $html .= <<<HTML
+<script type="text/javascript">
+//<![CDATA[
+$tags
+//]]>
+</script>
+HTML;
         }
 
         return $html;
-    }
-
-    public static function getJqueryUrl($version, $cdn = true)
-    {
-        $url = ($cdn) ? "//ajax.googleapis.com/ajax/libs/jquery/" . $version . "/jquery.min.js" :
-            "/client/jquery/jquery-" . $version . ".js";
-
-        if (!$cdn) {
-            // Check the resource exists!
-            $path = __DIR__ . "/Resources" . str_replace("/client/", "/", $url);
-
-            if (!file_exists($path)) {
-                throw new ResourceNotFound($url);
-            }
-        }
-
-        return $url;
-    }
-
-    public static function loadJquery($version, $cdn = true)
-    {
-        self::loadResource(self::getJqueryUrl($version, $cdn));
-    }
-
-    public static function getJqueryUIUrl($version, $cdn = true)
-    {
-        $url = ($cdn) ? "//ajax.googleapis.com/ajax/libs/jqueryui/" . $version . "/jquery-ui.min.js" :
-            "/client/jquery-ui/jquery-ui-" . $version . ".js";
-
-        if (!$cdn) {
-            // Check the resource exists!
-            $path = "libraries/core/modules/ClientSide/Resources" . str_replace("/client/", "/", $url);
-
-            if (!file_exists($path)) {
-                throw new ResourceNotFound($url);
-            }
-        }
-
-        return $url;
-    }
-
-    public static function loadJqueryUI($version, $cdn = true)
-    {
-        self::loadResource(self::getJqueryUIUrl($version, $cdn));
-        self::loadResource("/client/jquery/css/jquery-ui.css");
-        self::loadResource("/client/jquery/css/jquery.ui.theme.css");
     }
 }

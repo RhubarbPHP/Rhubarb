@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Logging;
 
-require_once __DIR__."/IndentedMessageLog.php";
+require_once __DIR__ . "/IndentedMessageLog.php";
 
 /**
  * A log implementation which outputs to the standard php error log
@@ -28,22 +28,25 @@ class PhpLog extends IndentedMessageLog
     /**
      * The logger should implement this method to perform the actual log committal.
      *
+     * @param int $level The log level
      * @param string $message The text message to log
      * @param string $category The category of log message
      * @param array $additionalData Any number of additional key value pairs which can be understood by specific
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected function writeFormattedEntry($message, $category = "", $additionalData)
+    protected function writeFormattedEntry($level, $message, $category = "", $additionalData)
     {
         $ip = self::getRemoteIP();
         $category = ($category == "") ? "CORE" : $category;
 
-        error_log($category .
+        $data = sizeof($additionalData) > 0 ? print_r($additionalData, true) : "";
+
+        error_log(str_pad($category, 8, ' ', STR_PAD_RIGHT) .
             str_pad($this->uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
-            str_pad($this->GetExecutionTime(), 7, ' ', STR_PAD_LEFT) .
-            str_pad($this->GetTimeSinceLastLog(), 7, ' ', STR_PAD_LEFT) .
+            str_pad($this->getExecutionTime(), 7, ' ', STR_PAD_LEFT) .
+            str_pad($this->getTimeSinceLastLog(), 7, ' ', STR_PAD_LEFT) .
             str_pad($ip, 16, ' ', STR_PAD_LEFT) .
-            " " . $message);
+            " " . $message . " " . $data);
     }
 }

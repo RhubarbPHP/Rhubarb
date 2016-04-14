@@ -22,9 +22,6 @@ require_once __DIR__ . "/Response.php";
 
 /**
  * Encapsulates an XML response to be sent to the browser.
- *
- * @author acuthbert
- * @copyright GCD Technologies 2012
  */
 class XmlResponse extends Response
 {

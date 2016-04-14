@@ -18,22 +18,8 @@
 
 namespace Rhubarb\Crown;
 
-require_once __DIR__."/Logging/Log.php";
-require_once __DIR__."/Request/WebRequest.php";
-require_once __DIR__."/Response/HtmlResponse.php";
-require_once __DIR__."/UrlHandlers/UrlHandler.php";
-
-use Rhubarb\Crown\Exceptions\RhubarbException;
-use Rhubarb\Crown\Exceptions\ForceResponseException;
-use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
-use Rhubarb\Crown\Exceptions\NonRhubarbException;
-use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
-use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Crown\Request\CliRequest;
-use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\HtmlResponse;
-use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * The base class of all modules.
@@ -41,28 +27,18 @@ use Rhubarb\Crown\UrlHandlers\UrlHandler;
 abstract class Module
 {
     /**
-     * The collection of registered modules.
-     *
-     * Register a module through RegisterModule
-     *
-     * @see RegisterModule()
-     * @var Module[]
-     */
-    private static $modules = [];
-
-    /**
      * An array of UrlHandlers
      *
      * @var \Rhubarb\Crown\UrlHandlers\UrlHandler[]
      */
-    protected $urlHandlers = array();
+    protected $urlHandlers = [];
 
     /**
      * An array of ResponseFilters
      *
      * @var array
      */
-    protected $responseFilters = array();
+    protected $responseFilters = [];
 
     /**
      * @var string The name of the module. Normally the module class name minus the word Module
@@ -70,16 +46,9 @@ abstract class Module
     protected $moduleName = "";
 
     /**
-     * True if the autoloader has been registered with PHP
-     *
-     * @var bool
-     */
-    protected $autoLoadRegistered = false;
-
-    /**
      * True if the module has been initialised
      *
-     * Note that this is not set as you might expect in Initialise() but rather Module::InitialiseModules()
+     * Note that this is not set as you might expect in Initialise() but rather Module::initialiseModules()
      * This is because as Initialise is designed to be overridden the developer might forget to
      * call the parent and the veracity of this boolean is important.
      *
@@ -98,17 +67,14 @@ abstract class Module
      */
     protected $urlHandlersRegistered = false;
 
-    /**
-     * True indicates we should automatically assume the autoload include will work and ignore
-     * the normal fencing as a performance optimisation.
-     *
-     * @var bool
-     */
-    protected $optimisticAutoloading = true;
-
     public function __construct()
     {
         $this->moduleName = str_ireplace("Module", "", get_class($this));
+    }
+
+    public final function getModuleName()
+    {
+        return $this->moduleName;
     }
 
     protected function addUrlHandlers()
@@ -141,7 +107,10 @@ abstract class Module
 
     private function addUrlHandler($url, UrlHandler $handler, $children = [])
     {
-        $handler->setUrl($url);
+        // If $url is numeric then most likely the $handler can report it's own URL
+        if (!is_numeric($url)) {
+            $handler->setUrl($url);
+        }
 
         $name = $handler->getName();
 
@@ -153,152 +122,35 @@ abstract class Module
     }
 
     /**
-     * Clears the modules collection
-     *
-     * Only really used in unit testing.
+     * Should your module require other modules, they should be returned here.
      */
-    public static function clearModules()
+    protected function getModules()
     {
-        self::$modules = array();
+        return [];
     }
 
     /**
-     * Should your module require other modules, they should register the module here.
-     */
-    protected function registerDependantModules()
-    {
-
-    }
-
-    /**
-     * Register a module with the Core.
+     * Get the finalised collection of url handlers for the module
      *
-     * @static
-     * @param Module $module
+     * @return UrlHandlers\UrlHandler[]
      */
-    public static function registerModule(Module $module)
+    protected final function getUrlHandlers()
     {
-        // We must register dependant modules first!
-        $module->registerDependantModules();
-
-        $moduleClassName = get_class($module);
-
-        // If a module has already been registered the old one should be deregistered and this
-        // one registered in its place as it may have settings that superseed the old one.
-        if (isset(self::$modules[$moduleClassName])) {
-            unset(self::$modules[$moduleClassName]);
+        if (!$this->urlHandlersRegistered){
+            $this->registerUrlHandlers();
+            $this->urlHandlersRegistered = true;
         }
 
-        self::$modules[$moduleClassName] = $module;
-    }
-
-    /**
-     * Returns the collection of Module classes.
-     *
-     * @static
-     * @return \Rhubarb\Crown\Module[]
-     */
-    public static function getAllModules()
-    {
-        return self::$modules;
-    }
-
-    /**
-     * Get's an array of response filters from all registered modules.
-     *
-     * @return \Rhubarb\Crown\ResponseFilters\ResponseFilter[]
-     */
-    public static function getAllResponseFilters()
-    {
-        $modules = self::getAllModules();
-        $filters = array();
-
-        foreach ($modules as $module) {
-            $filters = array_merge($filters, $module->responseFilters);
-        }
-
-        return $filters;
-    }
-
-    protected function getUrlHandlers()
-    {
         return $this->urlHandlers;
     }
 
     /**
-     * Get's a currently registered URL handler by it's name.
-     *
-     * Used to modify the URL handlers registered by dependant modules. You should consider the simpler
-     * approach of simply re-registering a new handler with the same name.
-     *
-     * @param $handlerName
-     * @return bool|UrlHandler
+     * Returns the registered response filters for this module.
+     * @return array
      */
-    protected static function getUrlHandlerByName($handlerName)
+    protected function getResponseFilters()
     {
-        $handlers = self::getAllUrlHandlers();
-
-        if (isset($handlers[$handlerName])) {
-            return $handlers[$handlerName];
-        }
-
-        return false;
-    }
-
-    /**
-     * Get's an array of url handlers from all registered modules.
-     *
-     * @return \Rhubarb\Crown\UrlHandlers\UrlHandler[]
-     */
-    public static function getAllUrlHandlers()
-    {
-        $modules = self::getAllModules();
-        $handlers = array();
-
-        foreach ($modules as $module) {
-            $handlers = array_merge($handlers, $module->getUrlHandlers());
-        }
-
-        uasort($handlers, function ($a, $b) {
-            $aPriority = $a->getPriority();
-            $bPriority = $b->getPriority();
-
-            if ($aPriority == $bPriority) {
-                return ($a->getCreationOrder() > $b->getCreationOrder());
-            }
-
-            return ($aPriority <= $bPriority);
-        });
-
-        return $handlers;
-    }
-
-    /**
-     * Asks all modules to initialise themselves.
-     */
-    public static function initialiseModules()
-    {
-        $modules = self::getAllModules();
-
-        foreach ($modules as $module) {
-            if (!$module->initialised) {
-                $module->initialise();
-                $module->initialised = true;
-            }
-        }
-
-        foreach ($modules as $module) {
-            if (!$module->urlHandlersRegistered) {
-                $module->registerUrlHandlers();
-                $module->urlHandlersRegistered = true;
-            }
-        }
-    }
-
-    public function clearUrlHandlers()
-    {
-        $this->urlHandlers = [];
-        $this->urlHandlersRegistered = false;
+        return $this->responseFilters;
     }
 
     /**
@@ -312,114 +164,37 @@ abstract class Module
     }
 
     /**
-     * Generates the response content for the client.
+     * Override to execute setups the module requires.
      *
-     * This is normally called by platform/execute-http.php and must be called after all
-     * modules have been registered to guarantee the correct output.
-     *
-     * @static
-     * @param Request\Request $request
-     * @return string
-     */
-    public static function generateResponseForRequest(Request\Request $request)
-    {
-        // Set the current request to be this one.
-        $context = new Context();
-        $context->Request = $request;
-
-        $additionalData = [];
-        if ($request instanceof WebRequest) {
-            if (!empty($request->GetData)) {
-                $additionalData = $request->GetData;
-            }
-        }
-
-        Log::createEntry(Log::PERFORMANCE_LEVEL | Log::DEBUG_LEVEL, function () use ($request) {
-            if ($request instanceof WebRequest) {
-                return "Generating response for url " . $request->UrlPath;
-            }
-
-            if ($request instanceof CliRequest) {
-                return "Starting CLI response";
-            }
-
-            return "";
-        }, "ROUTER", $additionalData);
-
-        Log::indent();
-
-        $handlers = self::getAllUrlHandlers();
-
-        // an empty-string Response to fall back on if nothing else is generated
-        $response = new HtmlResponse();
-        $response->SetContent('');
-
-        $filterResponse = true;
-
-        try {
-            // Iterate over each handler and ask them to generate a response.
-            // If they do return a response we return that and exit the loop.
-            // If they return false then we assume they couldn't handle the URL
-            // and continue to the next handler.
-            foreach ($handlers as $handler) {
-                $generatedResponse = $handler->generateResponse($request);
-
-                if ($generatedResponse !== false) {
-                    Log::Debug(function () use ($handler) {
-                        return ["Handler `" . get_class($handler) . "` generated response.", []];
-                    }, "ROUTER");
-
-                    // it should be preferred for a handler to return a Response object,
-                    // but checking this here retains the option for them to just return
-                    // their output
-                    if ($generatedResponse instanceof Response) {
-                        $response = $generatedResponse;
-                    } else {
-                        $response->setContent($generatedResponse);
-                    }
-
-                    break;
-                }
-            }
-        } catch (ForceResponseException $er) {
-            $response = $er->getResponse();
-            $filterResponse = false;
-        } catch (StopGeneratingResponseException $er) {
-            $filterResponse = false;
-        } catch (RhubarbException $er) {
-            $response = ExceptionHandler::processException($er);
-        } catch (\Exception $er) {
-            $response = ExceptionHandler::processException(new NonRhubarbException($er));
-        }
-
-        if ($filterResponse) {
-            Log::createEntry(Log::PERFORMANCE_LEVEL | Log::DEBUG_LEVEL, "Output filters started", "ROUTER");
-            Log::indent();
-
-            $filters = self::getAllResponseFilters();
-
-            foreach ($filters as $filter) {
-                $response = $filter->processResponse($response);
-            }
-
-            Log::createEntry(Log::PERFORMANCE_LEVEL | Log::DEBUG_LEVEL, "Output filters finished", "ROUTER");
-            Log::outdent();
-        }
-
-        Log::performance("Response generated", "ROUTER");
-        Log::outdent();
-
-        return $response;
-    }
-
-    /**
-     * Override to setup the module with the various classes this module supports.
-     *
-     * Code for module setup must occur here as during the constructor the auto load
-     * mechanisms won't yet be in place.
+     * Code for module setup must occur here rather than the constructor as this module may get discarded
+     * in preference for another instance.
      */
     protected function initialise()
     {
+    }
 
+    /**
+     * Initialises the module.
+     */
+    protected final function initialiseModule()
+    {
+        if (!$this->initialised){
+            $this->initialise();
+            $this->initialised = true;
+        }
+    }
+
+    /**
+     * An opportunity for the module to return a list custard command line commands to register.
+     *
+     * Note that modules are asked for commands in the same order in which the modules themselves
+     * were registered. This allows extending modules or scaffolds to superseed a command with an
+     * improved version by simply reregistering a command with the same name.
+     *
+     * @return Command[]
+     */
+    public function getCustardCommands()
+    {
+        return [];
     }
 }

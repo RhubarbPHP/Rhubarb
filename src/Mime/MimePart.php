@@ -20,6 +20,15 @@ namespace Rhubarb\Crown\Mime;
 
 class MimePart
 {
+    const MIME_TYPE_APPLICATION_JSON = 'application/json';
+    const MIME_TYPE_IMAGE_GIF = 'image/gif';
+    const MIME_TYPE_IMAGE_JPEG = 'image/jpeg';
+    const MIME_TYPE_IMAGE_PNG = 'image/png';
+    const MIME_TYPE_TEXT_PLAIN = 'text/plain';
+    const MIME_TYPE_TEXT_HTML = 'text/html';
+    const MIME_TYPE_TEXT_CSS = 'text/css';
+
+
     /**
      * @var string[]
      */
@@ -58,7 +67,7 @@ class MimePart
     /**
      * Transforms the part as per the transform encoding header and returns the transformed result.
      */
-    public final function getTransformedBody()
+    final public function getTransformedBody()
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -81,7 +90,7 @@ class MimePart
      *
      * @param $transformedBody
      */
-    public final function setTransformedBody($transformedBody)
+    final public function setTransformedBody($transformedBody)
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -170,4 +179,4 @@ class MimePart
 
         return $string;
     }
-} 
+}

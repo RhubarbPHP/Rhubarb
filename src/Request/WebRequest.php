@@ -25,60 +25,120 @@ use Rhubarb\Crown;
 /**
  * Encapsulates the current web request.
  *
- * @property-read bool $IsWebRequest
- * @property-read bool $IsSSL
- *
- * @property-read array $ServerData
- * @property-read array $GetData
- * @property-read array $PostData
- * @property-read array $FilesData
- * @property-read array $CookieData
- * @property-read array $SessionData
- * @property-read array $RequestData
- * @property-read array $HeaderData
- *
  * @property string $URI
  * @property string $Host
- * @property string $UrlPath
+ * @property string $urlPath
+ * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  *
- * @author marramgrass
- * @copyright GCD Technologies 2012
+ * @method mixed get(string $property, string $defaultValue=null) Return a value from the query string optionally using a default value.
+ * @method mixed post(string $property, string $defaultValue=null) Return a value from the post data optionally using a default value.
+ * @method mixed files(string $property, string $defaultValue=null) Return a value from the files collection optionally using a default value.
+ * @method mixed cookie(string $property, string $defaultValue=null) Return a value from the cookies optionally using a default value.
+ * @method mixed session(string $property, string $defaultValue=null) Return a value from the session optionally using a default value.
+ * @method mixed header(string $property, string $defaultValue=null) Return a value from the headers optionally using a default value.
  */
 class WebRequest extends Request
 {
+    public $serverData;
+    public $getData;
+    public $postData;
+    public $requestData;
+    public $filesData;
+    public $cookieData;
+    public $sessionData;
+    public $headerData;
+
+    public $host;
+    public $uri;
+    public $urlPath;
+
+    private $urlBase;
+
     public function initialise()
     {
-        $this->modelData['IsWebRequest'] = true;
+        $this->superGlobalMethodNames = [
+            'env',
+            'server',
+            'get',
+            'post',
+            'request',
+            'files',
+            'cookie',
+            'session',
+            'header'
+        ];
 
-        // take copies of the relevant superglobals in case they get
-        // modified later
-        $this->modelData['ServerData'] = isset($_SERVER) ? $_SERVER : [];
-        $this->modelData['GetData'] = isset($_GET) ? $_GET : [];
-        $this->modelData['PostData'] = isset($_POST) ? $_POST : [];
-        $this->modelData['FilesData'] = isset($_FILES) ? $_FILES : [];
-        $this->modelData['CookieData'] = isset($_COOKIE) ? $_COOKIE : [];
-        $this->modelData['SessionData'] = isset($_SESSION) ? $_SESSION : [];
-        $this->modelData['RequestData'] = isset($_REQUEST) ? $_REQUEST : [];
-        $this->modelData['HeaderData'] = [];
+        $this->serverData = isset($_SERVER) ? $_SERVER : [];
+        $this->getData = isset($_GET) ? $_GET : [];
+        $this->postData = isset($_POST) ? $_POST : [];
+        $this->postData = isset($_REQUEST) ? $_REQUEST : [];
+        $this->filesData = isset($_FILES) ? $_FILES : [];
+        $this->cookieData = isset($_COOKIE) ? $_COOKIE : [];
+        $this->sessionData = isset($_SESSION) ? $_SESSION : [];
+        $this->headerData = [];
 
         if (function_exists("getallheaders")) {
-            $this->modelData['HeaderData'] = \getallheaders();
+            $this->headerData = \getallheaders();
         } else {
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, "http_") === 0) {
-                    $this->Header(str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5))))),
-                        $value);
+                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
+                    $this->header($key, $value);
                 }
             }
         }
 
-        $this->Host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        $this->URI = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '';
-        $this->UrlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+        $this->host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
+        $this->uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        $this->urlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
     }
 
-    public function getIsSSL()
+    /**
+     * Creates a URL for a URI using the existing http scheme, host and port of this request (e.g. http://localhost/)
+     *
+     * @param string $uri The URI to compose a URL for.
+     * @return string
+     */
+    public function createUrl($uri = '/')
     {
-        return !(empty($this->ServerData['HTTPS']) || $this->ServerData['HTTPS'] === 'off');
+        if (!isset($this->urlBase)) {
+            $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+            $protocol = strtolower($_SERVER['SERVER_PROTOCOL']);
+            $protocol = substr($protocol, 0, strpos($protocol, '/')) . (($ssl) ? 's' : '');
+
+            $host = $this->host;
+            if (strpos($host, ':') === false) {
+                $port = $_SERVER['SERVER_PORT'];
+                $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
+                $host = $this->host . $port;
+            }
+
+            $this->urlBase = $protocol . '://' . $host;
+        }
+
+        if ($uri !== '' && strpos($uri, '/') === false) {
+            $uri = '/' . $uri;
+        }
+
+        return $this->urlBase.$uri;
+    }
+
+    public function isSSL()
+    {
+        return !(empty($this->serverData['HTTPS']) || $this->serverData['HTTPS'] === 'off');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAcceptsRequestMimeType()
+    {
+        $typeString = strtolower($this->header("Accept"));
+
+        if (strpos($typeString, '*/*') !== false || $typeString == "") {
+            return "text/html";
+        }
+
+        return $typeString;
     }
 }

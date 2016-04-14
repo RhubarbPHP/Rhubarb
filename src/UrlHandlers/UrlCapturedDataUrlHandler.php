@@ -29,10 +29,20 @@ class UrlCapturedDataUrlHandler extends ClassMappedUrlHandler
         $object = $this->createHandlingClass();
 
         if (method_exists($object, "SetUrlCapturedData")) {
-            call_user_func(array($object, "SetUrlCapturedData"), $this->capturedData);
+            call_user_func([$object, "SetUrlCapturedData"], $this->capturedData);
         }
 
         return $object->generateResponse($request);
+    }
+
+    /**
+     * Returns the data captured by the handler.
+     *
+     * @return mixed
+     */
+    public function getCapturedData()
+    {
+        return $this->capturedData;
     }
 
     /**

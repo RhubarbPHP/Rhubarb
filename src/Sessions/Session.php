@@ -18,7 +18,9 @@
 
 namespace Rhubarb\Crown\Sessions;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Sessions\Exceptions\SessionProviderNotFoundException;
+use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\Settings;
 
 require_once __DIR__ . "/../Settings.php";
@@ -32,13 +34,9 @@ require_once __DIR__ . "/../Settings.php";
  * Simply call StoreSession() to save the session. The session is restored upon first use automatically.
  *
  * @see StoreSession()
- * @author acuthbert
- * @copyright GCD Technologies 2013
  */
 class Session extends Settings
 {
-    private static $defaultSessionProviderClassName = "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider";
-
     /**
      * @var \Rhubarb\Crown\Sessions\SessionProviders\SessionProvider
      */
@@ -51,7 +49,7 @@ class Session extends Settings
      *
      * @return SessionProviders\SessionProvider
      */
-    protected final function getSessionProvider()
+    final protected function getSessionProvider()
     {
         if ($this->sessionProvider == null) {
             $this->sessionProvider = $this->getNewSessionProvider();
@@ -80,36 +78,7 @@ class Session extends Settings
      */
     protected function getNewSessionProvider()
     {
-        $class = self::$defaultSessionProviderClassName;
-
-        return new $class();
-    }
-
-    /**
-     * Get's the class name in use for the default session provider.
-     *
-     * Used mainly by unit tests.
-     *
-     * @return string
-     */
-    public static function getDefaultSessionProviderClassName()
-    {
-        return self::$defaultSessionProviderClassName;
-    }
-
-    /**
-     * Changes the name of the class used as the default session provider.
-     *
-     * @param $defaultSessionProviderClassName
-     * @throws Exceptions\SessionProviderNotFoundException Thrown if the class name provided doesn't exist.
-     */
-    public static function setDefaultSessionProviderClassName($defaultSessionProviderClassName)
-    {
-        if (!class_exists($defaultSessionProviderClassName)) {
-            throw new SessionProviderNotFoundException($defaultSessionProviderClassName);
-        }
-
-        self::$defaultSessionProviderClassName = $defaultSessionProviderClassName;
+        return Container::instance(SessionProvider::class);
     }
 
     /**

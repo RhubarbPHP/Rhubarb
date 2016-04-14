@@ -42,7 +42,7 @@ class StringTools
             }
         }
 
-        $keys = array($keysToInclude);
+        $keys = [$keysToInclude];
 
         for ($i = 4; $i < func_num_args(); $i++) {
             $keys[] = func_get_arg($i);
@@ -238,6 +238,7 @@ class StringTools
         $includeSearch = false,
         $returnIfNoMatch = false
     ) {
+
         $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
         $start = $posFunction($string, $search);
         if ($start === false) {
@@ -296,30 +297,6 @@ class StringTools
     }
 
     /**
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralise($string, $number)
-    {
-        return $number != 1 ? $string . "s" : $string;
-    }
-
-    /**
-     * Alias of Pluralise.
-     *
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralize($string, $number)
-    {
-        return self::pluralise($string, $number);
-    }
-
-    /**
      * Returns a sentence with each word in $wordList concatenated with commas between each,
      * and "and" between the last 2 words. Skips any empty values in the list.
      *
@@ -330,8 +307,56 @@ class StringTools
     public static function listToSentence($wordList)
     {
         $wordList = array_filter($wordList);
-        $sentence = implode("< ", $wordList);
+        $sentence = implode(", ", $wordList);
 
         return preg_replace('/^(.+)(, )([^,]+)$/', '$1 and $3', $sentence);
+    }
+
+    /**
+     * Returns the namespace from a full class name, conveniently accessed from ClassName::class
+     *
+     * e.g. "Rhubarb\Crown\String\StringTools" will return "Rhubarb\Crown\String"
+     *
+     * @param string $fullyQualifiedClassName
+     * @return string
+     */
+    public static function getNamespaceFromClass($fullyQualifiedClassName)
+    {
+        return substr($fullyQualifiedClassName, 0, strrpos($fullyQualifiedClassName, '\\'));
+    }
+
+    /**
+     * Removes the namespace from a full class name and returns the short class name
+     *
+     * e.g. "Rhubarb\Crown\String\StringTools" will return "StringTools"
+     *
+     * @param string $fullyQualifiedClassName
+     * @return string
+     */
+    public static function getShortClassNameFromNamespace($fullyQualifiedClassName)
+    {
+        return substr($fullyQualifiedClassName, strrpos($fullyQualifiedClassName, '\\') + 1);
+    }
+
+    /**
+     * Replaces only the first matched instance of a string
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @param bool $caseSensitive
+     * @return mixed
+     */
+    public static function replaceFirst($search, $replace, $subject, $caseSensitive = true)
+    {
+        if ($caseSensitive) {
+            $pos = strpos($subject, $search);
+        } else {
+            $pos = stripos($subject, $search);
+        }
+        if ($pos !== false) {
+            return substr_replace($subject, $replace, $pos, strlen($search));
+        }
+        return $subject;
     }
 }

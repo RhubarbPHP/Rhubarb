@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Crown\Logging;
 
-require_once __DIR__."/Log.php";
+require_once __DIR__ . "/Log.php";
 
 /**
  * Provides additional abstraction of logging to handle indentation by adding
@@ -26,23 +26,24 @@ require_once __DIR__."/Log.php";
  */
 abstract class IndentedMessageLog extends Log
 {
-    protected final function writeEntry($message, $indent, $category = "", $additionalData = [])
+    final protected function writeEntry($level, $message, $indent, $category = "", $additionalData = [])
     {
         if ($indent) {
             $message = str_repeat("    ", $indent) . $message;
         }
 
-        $this->writeFormattedEntry($message, $category, $additionalData);
+        $this->writeFormattedEntry($level, $message, $category, $additionalData);
     }
 
     /**
      * The logger should implement this method to perform the actual log committal.
      *
+     * @param int $level The log level
      * @param string $message The text message to log
      * @param string $category The category of log message
      * @param array $additionalData Any number of additional key value pairs which can be understood by specific
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected abstract function writeFormattedEntry($message, $category = "", $additionalData);
+    abstract protected function writeFormattedEntry($level, $message, $category = "", $additionalData);
 }
