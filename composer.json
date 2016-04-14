@@ -10,22 +10,21 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
-	"version": "1.0.x-dev",
 	"require": {
 	  "php": ">=5.6.0"
 	},
   	"require-dev": {
-	    "rhubarbphp/custard": "dev-master@dev",
-	    "rhubarbphp/module-stem": "^1.0.0@dev",
-		"rhubarbphp/module-build-status-updater": "dev-debug as 1.0.3",
+	    "rhubarbphp/custard": "^1.0.0",
+	    "rhubarbphp/module-stem": "^1.0.0",
+		"rhubarbphp/module-build-status-updater": "^1.0.0",
 		"tan-tan-kanarek/github-php-client": "dev-master as 1.0",
-		"codeception/codeception": "*",
-		"phploc/phploc": "*",
+		"codeception/codeception": "^2.0.0",
+		"phploc/phploc": "^3.0.0",
 		"theseer/phpdox": "*",
-		"phpmd/phpmd": "*",
-		"squizlabs/php_codesniffer": "*",
-		"sebastian/phpcpd": "*",
-		"pdepend/pdepend": "*"
+		"phpmd/phpmd": "^2.0.0",
+		"squizlabs/php_codesniffer": "^2.0.0",
+		"sebastian/phpcpd": "^2.0.0",
+		"pdepend/pdepend": "^2.0.0"
 	},
 	"config": {
 		"bin-dir": "bin/"

@@ -1,13 +1,13 @@
-### 1.0.x
+# Change log
 
 ### 1.0.0
 
 * Added codeception
-* Added a changelog
+* **Added a changelog!**
 * Fixed failing tests
 * Added build.xml
 * Added depending injection container
-* Created Application object
+* **Created Application object**
 * Refactored Context to PhpContext
 * Removed all independant top level statics except for the new Application::current(). All other statics
   come back to this one allowing more than one Rhubarb application to be resident for unit testing.
