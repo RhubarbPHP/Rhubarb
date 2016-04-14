@@ -86,13 +86,12 @@ class WebRequest extends Request
     public function getUrlBase($append = '')
     {
         if (!isset($this->modelData['UrlBase'])) {
-            $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
-            $protocol = strtolower($_SERVER['SERVER_PROTOCOL']);
-            $protocol = substr($protocol, 0, strpos($protocol, '/')) . (($ssl) ? 's' : '');
+            $ssl = $this->getIsSSL();
+            $protocol = 'http' . (($ssl) ? 's' : '');
 
             $host = $this->Host;
             if (strpos($host, ':') === false) {
-                $port = $_SERVER['SERVER_PORT'];
+                $port = $this->modelData['ServerData']['SERVER_PORT'];
                 $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
                 $host = $this->Host . $port;
             }
