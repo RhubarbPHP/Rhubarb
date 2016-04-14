@@ -51,14 +51,6 @@ class LayoutModuleTest extends RhubarbTestCase
 
         $_SERVER["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
 
-        $module = new LayoutModule(TestLayout2::class);
-        $module->initialiseModule();
-
-        // Ajax request
-        $this->assertTrue(LayoutModule::isDisabled());
-
-        unset($_SERVER["HTTP_X_REQUESTED_WITH"]);
-
         LayoutModule::enableLayout();
     }
 

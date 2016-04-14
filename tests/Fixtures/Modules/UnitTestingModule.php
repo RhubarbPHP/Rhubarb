@@ -30,8 +30,6 @@ class UnitTestingModule extends Module
 
         parent::initialise();
 
-        Repository::setDefaultRepositoryClassName(Offline::class);
-
         $login = new ValidateLoginUrlHandler(UnitTestingLoginProvider::singleton(), "/login/index");
         $login->SetPriority(20);
 

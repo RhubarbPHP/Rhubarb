@@ -20,24 +20,24 @@ class ApplicationTest extends Test
         $application = new Application();
         $application->registerModule(new UnitTestingModule());
 
-        $this->assertCount(2, $application->getRegisteredModules());
-        $this->assertInstanceOf(LayoutModule::class, $application->getRegisteredModules()[0]);
-        $this->assertInstanceOf(UnitTestingModule::class, $application->getRegisteredModules()[1]);
+        $this->assertCount(3, $application->getRegisteredModules());
+        $this->assertInstanceOf(LayoutModule::class, $application->getRegisteredModules()[1]);
+        $this->assertInstanceOf(UnitTestingModule::class, $application->getRegisteredModules()[2]);
 
         $secondModule = new UnitTestingModuleB();
         $secondModule->foo = "bar";
 
         $application->registerModule($secondModule);
 
-        $this->assertCount(3, $application->getRegisteredModules());
+        $this->assertCount(4, $application->getRegisteredModules());
 
         $secondModule = new UnitTestingModuleB();
         $secondModule->foo = "bing";
 
         $application->registerModule($secondModule);
 
-        $this->assertCount(3, $application->getRegisteredModules());
-        $this->assertEquals("bing", $application->getRegisteredModules()[2]->foo);
+        $this->assertCount(4, $application->getRegisteredModules());
+        $this->assertEquals("bing", $application->getRegisteredModules()[3]->foo);
     }
 
     public function testApplicationRuns()

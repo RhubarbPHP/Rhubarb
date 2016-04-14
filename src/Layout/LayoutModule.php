@@ -67,16 +67,6 @@ class LayoutModule extends Module
     }
 
     /**
-     * Check for an AJAX request and disable layouts if it exists.
-     */
-    private function checkForAjaxRequest()
-    {
-        if (Application::current()->context()->isXhrRequest()) {
-            self::disableLayout();
-        }
-    }
-
-    /**
      * Returns the class name of the layout that should be used for the current request.
      *
      * @return string
@@ -122,8 +112,6 @@ class LayoutModule extends Module
         parent::initialise();
 
         $this->responseFilters[] = new LayoutFilter();
-
-        $this->checkForAjaxRequest();
     }
 
     /**
