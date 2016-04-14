@@ -19,18 +19,11 @@
 namespace Rhubarb\Crown\Html;
 
 use Rhubarb\Crown\Application;
-use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
-use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
 
 class ResourceLoader
 {
     private static $resources = [];
-
-    /**
-     * @var string Allows a custom JQuery UI theme to be used
-     */
-    public static $jqueryUiThemePath;
 
     /**
      * Adds javascript script code to the collection
@@ -43,26 +36,6 @@ class ResourceLoader
         $dependantResourceUrls = array_unique($dependantResourceUrls);
 
         self::$resources[] = [$scriptCode, $dependantResourceUrls];
-    }
-
-    public static function addScriptCodeOnReady($scriptCode, $dependantResourceUrls = [])
-    {
-        // Deploy the composer jquery libraries.
-        $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jquery/jquery.min.js";
-        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/jquery-ui.min.js";
-        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
-        $package->resourcesToDeploy[] = __DIR__ . "/../../../../components/jqueryui/themes/ui-lightness/theme.css";
-        $jQueryUrls = $package->deploy();
-
-        array_splice(
-            $dependantResourceUrls,
-            0,
-            0,
-            $jQueryUrls
-        );
-
-        self::addScriptCode($scriptCode, $dependantResourceUrls);
     }
 
     /**
@@ -201,52 +174,5 @@ HTML;
         }
 
         return $html;
-    }
-
-    public static function getJqueryUrl()
-    {
-        $deployer = ResourceDeploymentProvider::getProvider();
-        return $deployer->deployResource(__DIR__ . "/../../../../components/jquery/jquery.min.js");
-    }
-
-    public static function loadJquery()
-    {
-        self::loadResource(self::getJqueryUrl());
-    }
-
-    public static function getJqueryUIUrl()
-    {
-        $deployer = ResourceDeploymentProvider::getProvider();
-        return $deployer->deployResource(__DIR__ . "/../../../../components/jqueryui/jquery-ui.min.js");
-    }
-
-    public static function loadJqueryUI()
-    {
-        $deployer = ResourceDeploymentProvider::getProvider();
-
-        $themePath = self::getJQueryUIThemePath();
-
-        self::loadResource($deployer->deployResource($themePath . "/jquery-ui.css"));
-
-        $imagePath = $themePath . "/images/";
-        $imageExtensions = ["png", "jpg", "jpeg", "gif"];
-
-        $dh = opendir($imagePath);
-        while ($file = readdir($dh)) {
-            if (!is_dir($imagePath . $file) && in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions)) {
-                $deployer->deployResource($imagePath . $file);
-            }
-        }
-
-        self::loadResource(self::getJqueryUIUrl());
-    }
-
-    private static function getJQueryUIThemePath()
-    {
-        if (isset(self::$jqueryUiThemePath)) {
-            return self::$jqueryUiThemePath;
-        } else {
-            return __DIR__ . '/../../../../components/jqueryui/themes/base';
-        }
     }
 }

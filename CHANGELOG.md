@@ -19,3 +19,4 @@
 * Removed send() method on Email and Sendable classes. Call SendableProvider::selectProviderAndSend() instead.
 * Added support for Monolog
 * Log::writeEntry is now passed the log level
+* Removed references to jquery in composer.json and ResourceLoader
