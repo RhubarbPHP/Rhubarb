@@ -238,7 +238,6 @@ class StringTools
         $includeSearch = false,
         $returnIfNoMatch = false
     ) {
-
         $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
         $start = $posFunction($string, $search);
         if ($start === false) {
@@ -251,6 +250,42 @@ class StringTools
             return substr($string, $start);
         }
         return substr($string, $start, $maxChars);
+    }
+
+    /**
+     * Returns all characters in $string before the first (or last, depending on $firstOccurrence switch) match of $search
+     *
+     * @param string $string
+     * @param string $search
+     * @param bool $firstOccurrence True to end at first match, false to end at the last match
+     * @param int|null $maxChars If null, all characters before the match will be returned. If specified, no more than this will be returned.
+     * @param bool $caseSensitive
+     * @param bool $includeSearch If true, the returned value will include the matched occurrence of $search.
+     * @param mixed $returnIfNoMatch This value will be returned if $search is not found in $string
+     *
+     * @return string
+     */
+    public static function getCharsBeforeMatch(
+        $string,
+        $search,
+        $firstOccurrence = false,
+        $maxChars = null,
+        $caseSensitive = true,
+        $includeSearch = false,
+        $returnIfNoMatch = false
+    ) {
+        $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
+        $index = $posFunction($string, $search);
+        if ($index === false) {
+            return $returnIfNoMatch;
+        }
+        if ($includeSearch) {
+            $index -= strlen($search);
+        }
+        if ($maxChars === null) {
+            return substr($string, 0, $index);
+        }
+        return substr($string, $index - $maxChars, $index);
     }
 
     /**
