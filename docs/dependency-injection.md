@@ -28,20 +28,20 @@ $container = Container::current();
 
 ## Creating objects
 
-Simply call the `instance` method and pass the name of the class you want to create:
+Simply call the `getInstance` method and pass the name of the class you want to create:
 
 ``` php
-$rocket = $container->instance(Rocket::class);
+$rocket = $container->getInstance(Rocket::class);
 ```
 
 In this example you will receive a rocket instance or to be more specific an object that either is a Rocket
 instance or something that derives from Rocket as a base class.
 
-If you know your object constructor carries arguments you can pass those as arguments to the `instance` method:
+If you know your object constructor carries arguments you can pass those as arguments to the `getInstance` method:
 
 ``` php
 $name = "Vesuvius";
-$rocket = $container->instance(Rocket::class, $name);
+$rocket = $container->getInstance(Rocket::class, $name);
 ```
 
 ## Registering mappings
@@ -53,7 +53,7 @@ class. To remap a class to a specific sub class simply call `registerClass`:
 $container->registerClass(Rocket::class, NasaShuttle::class);
 
 $name = "Vesuvius";
-$rocket = $container->instance(Rocket::class, $name);
+$rocket = $container->getInstance(Rocket::class, $name);
 // $rocket is now an instance of NasaShuttle
 ```
 
@@ -62,7 +62,7 @@ The `registerClass` call should normally be made in the initialise method of a M
 ## Satisfying Dependencies
 
 If the constructor requires other objects as arguments the container will try and satisfy those arguments by
-making a call to its `instance` method for each of the arguments required. Consider the following improvement
+making a call to its `getInstance` method for each of the arguments required. Consider the following improvement
 on the Rocket class:
 
 ``` php
@@ -86,11 +86,11 @@ class Houston extends GroundControl
 $container->registerClass(GroundControl::class, Houston::class);
 
 $name = "Vesuvius";
-$rocket = $container->instance(Rocket::class, $name);
+$rocket = $container->getInstance(Rocket::class, $name);
 // $rocket is now an instance of NasaShuttle with Houston as its ground controller.
 ```
 
-Note that here we're still passing the name as an argument to the `instance` method - the container is
+Note that here we're still passing the name as an argument to the `getInstance` method - the container is
 supplying all the other arguments as it understands them to be dependencies.
 
 If you do need to supply a specific dependency instead of using the container's mappings you can simply
@@ -99,13 +99,13 @@ pass it as an argument:
 ``` php
 $name = "Vesuvius";
 $control = new StarCity();
-$rocket = $container->instance(Rocket::class, $control, $name);
+$rocket = $container->getInstance(Rocket::class, $control, $name);
 // $rocket is now an instance of NasaShuttle with StarCity as its ground controller...
 ```
 
 This works for any number of arguments and will descend through every constructor. The dependencies must be
 instantiable without any arguments and once the container meets an argument that is not an object or not supplied
-in the call to `instance()` it will stop trying to complete any more arguments.
+in the call to `getInstance()` it will stop trying to complete any more arguments.
 
 ## Singletons
 
@@ -118,36 +118,36 @@ argument:
 $container->registerClass(Rocket::class, NasaShuttle::class, true);
 \\\ Now we'll only ever have one rocket...
 
-$a = $container->instance(Rocket::class);
-$b = $container->instance(Rocket::class);
+$a = $container->getInstance(Rocket::class);
+$b = $container->getInstance(Rocket::class);
 
 \\ $a is the same instance as $b
 ```
 
-Alternatively the caller can request that any object be returned as a singleton simply by calling `singleton()`
-instead of `instance()`. This will work whether or not the class has a singleton mapping, although without the
+Alternatively the caller can request that any object be returned as a singleton simply by calling `getSingleton()`
+instead of `getInstance()`. This will work whether or not the class has a singleton mapping, although without the
 mapping it can't be guaranteed that there won't be other instances in use elsewhere.
 
 ``` php
 $container->registerClass(Rocket::class, NasaShuttle::class);
 
-$a = $container->singleton(Rocket::class);
+$a = $container->getSingleton(Rocket::class);
 $a->foo = "bar";
 
-$b = $container->singleton(Rocket::class);
+$b = $container->getSingleton(Rocket::class);
 
 \\ $a is the same instance as $b
 \\ and $b->foo == "bar";
 ```
 
 If you need to control the creation of the singleton more precisely you can supply a callback function as a second
-argument to `singleton`. Only in the event that the singleton doesn't already exist will the call back be called.
+argument to `getSingleton`. Only in the event that the singleton doesn't already exist will the call back be called.
 The call back should return the instance that will now serve as the singleton instance.
 
 ``` php
 $container->registerClass(Rocket::class, NasaShuttle::class);
 
-$shuttle = $container->singleton(Rocket::class, function(){
+$shuttle = $container->getSingleton(Rocket::class, function(){
     $shuttle = new NasaShuttle();
     $shuttle->upgradeEngines();
 
@@ -184,14 +184,39 @@ $container->registerSingleton(Rocket::class, function(){
 This code has the same affect as the previous example with the additional advantage that the shuttle class
 isn't created unless the singleton is requested.
 
-To clarify passing a callback to `singleton()` and `registerSingleton()` has mostly the same effect with the
-main difference being that `singleton()` will call the callback immediately if the singleton doesn't already
-exist. `singleton()` also returns a singleton instance whereas `registerSingleton()` returns void.
+To clarify passing a callback to `getSingleton()` and `registerSingleton()` has mostly the same effect with the
+main difference being that `getSingleton()` will call the callback immediately if the singleton doesn't already
+exist. `getSingleton()` also returns a singleton instance whereas `registerSingleton()` returns void.
+
+### Static shortcuts
+
+To make the container easier to use there are two shortcut methods. Instead of
+
+``` php
+$container = Container::current();
+$rocket = $container->getInstance(Rocket::class);
+```
+
+You can use the static `instance` method on the container instead:
+
+``` php
+$rocket = Container::instance(Rocket::class);
+```
+
+This static call will use the active container.
+
+Similarly there is a shortcut for getSingleton:
+
+``` php
+$rocket = Container::singleton(Rocket::class);
+```
+
+> Using the static calls is the preferred way of using the container to request objects.
 
 ### The SingletonInterface and SingletonTrait
 
-Instead of having to instantiate singletons by calling the `singleton` method on the container and passing a
-class name, it's possible to give any class a static function called `singleton` of its own. This makes using
+Instead of having to instantiate singletons by calling the `getSingleton` method on the container and passing a
+class name, it's possible to give any class a static function called `getSingleton` of its own. This makes using
 the singleton pattern more straight forward.
 
 To apply this behaviour you should implement the `SingletonInterface` and then use the `SingletonTrait`:
@@ -239,7 +264,7 @@ class MyClassThatNeedsToHashSomething
     }
 }
 
-$hasher = Container::current()->instance(MyClassThatNeedsToHashSomething::class);
+$hasher = Container::current()->getInstance(MyClassThatNeedsToHashSomething::class);
 ```
 
 Alternatively a provider can be given to you directly within your code:
@@ -283,7 +308,7 @@ class MyHeavyWeightClass
     }
 }
 
-$mystery = Container::current()->instance(MyHeavyWeightClass::class);
+$mystery = Container::current()->getInstance(MyHeavyWeightClass::class);
 ```
 
 As soon as the `MyHeavyWeightClass` is created a `ReallySlowToCreateProvider` is created regardless of the fact

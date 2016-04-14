@@ -1,5 +1,7 @@
 ### 1.0.x
 
+### 1.0.0
+
 * Added codeception
 * Added a changelog
 * Fixed failing tests

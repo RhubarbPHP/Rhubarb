@@ -79,8 +79,8 @@ $unitTesting = $app->unitTesting;
 
 ## Creating and registering an Application object
 
-To serve a response Rhubarb needs to boot an application. You can either create your own Application class
-and configure it in the constructor, or you can instantiate the base Application class and configure it.
+To serve a response Rhubarb needs to boot an application. You can either define your own Application class
+or you can create an instance of the base Application class and configure it.
 
 The most important thing to do when creating or configuring an application is to register the modules. The following
 two examples show how to do this with an extended Application class or a directly configured class.
@@ -104,9 +104,7 @@ $app = new Application();
 $app->registerModule(new MyModule());
 ```
 
-The approach of configuring the base application object is obviously simpler. Extending the class is quite common
-for boot strap applications that allow you to extend the application and add additional modules. For example you
-could extend a BlogApplication and add a custom module to inject some new [UrlHandlers](url-handlers).
+> The recommended approach is to create a bespoke Application class for your application.
 
 ### Registering the application
 
@@ -134,3 +132,9 @@ you need to add the following directive:
 ```
 SetEnv rhubarb_app "\My\WebApp\MyApplication"
 ```
+
+## Application as a Module
+
+The Application class extends the Module class and can be considered the "root" or top level module of the
+application. As such your application class can define url handlers, initialise components and require other
+modules.
