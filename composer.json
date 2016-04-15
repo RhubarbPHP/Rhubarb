@@ -20,7 +20,6 @@
 	},
 	"require-dev": {
 	    "rhubarbphp/custard": "^1.0.0",
-	    "rhubarbphp/module-stem": "^1.0.0",
 		"rhubarbphp/module-build-status-updater": "^1.0.0",
 		"tan-tan-kanarek/github-php-client": "dev-master as 1.0",
 		"codeception/codeception": "^2.0.0",

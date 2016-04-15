@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb0df9f28bfe2e5ef6da4528a3f724c3",
+    "hash": "be616d6c29ee8e71119a09cfe82c69f5",
     "packages": [],
     "packages-dev": [
         {
@@ -1389,58 +1389,6 @@
                 "status"
             ],
             "time": "2015-11-26 16:08:22"
-        },
-        {
-            "name": "rhubarbphp/module-stem",
-            "version": "1.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RhubarbPHP/Module.Stem.git",
-                "reference": "1674206996789e06fb94d26d09a8c188eee7c6a0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RhubarbPHP/Module.Stem/zipball/1674206996789e06fb94d26d09a8c188eee7c6a0",
-                "reference": "1674206996789e06fb94d26d09a8c188eee7c6a0",
-                "shasum": ""
-            },
-            "require": {
-                "rhubarbphp/rhubarb": "^1.0.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "^2.0",
-                "pdepend/pdepend": "*",
-                "phploc/phploc": "*",
-                "phpmd/phpmd": "*",
-                "rhubarbphp/custard": "^1.0.4",
-                "rhubarbphp/module-build-status-updater": "dev-debug as 1.0.3",
-                "sebastian/phpcpd": "*",
-                "squizlabs/php_codesniffer": "*",
-                "tan-tan-kanarek/github-php-client": "dev-master as 1.0",
-                "theseer/phpdox": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Rhubarb\\Stem\\": "src/",
-                    "Rhubarb\\Stem\\Tests\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "A data modelling and ORM module for the Rhubarb PHP framework",
-            "homepage": "http://www.rhubarbphp.com/",
-            "keywords": [
-                "Modelling",
-                "data",
-                "framework",
-                "model",
-                "orm",
-                "php"
-            ],
-            "time": "2016-04-15 16:14:16"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -2979,7 +2927,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "rhubarbphp/module-stem": 20,
         "tan-tan-kanarek/github-php-client": 20
     },
     "prefer-stable": false,
