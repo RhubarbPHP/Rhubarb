@@ -10,10 +10,15 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	},
 	"require": {
 	  "php": ">=5.6.0"
 	},
-  	"require-dev": {
+	"require-dev": {
 	    "rhubarbphp/custard": "^1.0.0",
 	    "rhubarbphp/module-stem": "^1.0.0",
 		"rhubarbphp/module-build-status-updater": "^1.0.0",
