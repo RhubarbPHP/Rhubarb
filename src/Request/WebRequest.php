@@ -102,13 +102,12 @@ class WebRequest extends Request
     public function createUrl($uri = '/')
     {
         if (!isset($this->urlBase)) {
-            $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
-            $protocol = strtolower($_SERVER['SERVER_PROTOCOL']);
-            $protocol = substr($protocol, 0, strpos($protocol, '/')) . (($ssl) ? 's' : '');
+            $ssl = $this->getIsSSL();
+            $protocol = 'http' . (($ssl) ? 's' : '');
 
             $host = $this->host;
             if (strpos($host, ':') === false) {
-                $port = $_SERVER['SERVER_PORT'];
+                $port = $serverData['SERVER_PORT'];
                 $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
                 $host = $this->host . $port;
             }
