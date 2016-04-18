@@ -291,7 +291,7 @@ class Application extends Module
 
         // an empty-string Response to fall back on if nothing else is generated
         $response = new HtmlResponse();
-        $response->SetContent('');
+        $response->setContent('');
 
         $filterResponse = true;
 
@@ -304,7 +304,7 @@ class Application extends Module
                 $generatedResponse = $handler->generateResponse($request);
 
                 if ($generatedResponse !== false) {
-                    Log::Debug(function () use ($handler) {
+                    Log::debug(function () use ($handler) {
                         return ["Handler `" . get_class($handler) . "` generated response.", []];
                     }, "ROUTER");
 
@@ -321,6 +321,11 @@ class Application extends Module
                 }
             }
         } catch (ForceResponseException $er) {
+            // Clear any previous output in buffers to ensure we only send the forced response
+            while (ob_get_level()) {
+                ob_end_clean();
+            }
+
             $response = $er->getResponse();
             $filterResponse = false;
         } catch (StopGeneratingResponseException $er) {
