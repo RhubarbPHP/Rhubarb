@@ -2,6 +2,11 @@
 
 ### 1.0.x
 
+* Removed: **boot.php**
+* Added: boot-rhubarb.php Does what boot.php used to do - includes auto-loader and sets working directory
+* Added: boot-application.php Includes boot-rhubarb.php and then sets up the default application from either
+         settings/app.config.php or the Application class using the environment variable `rhubarb_app`
+
 ### 1.0.0
 
 * Added:    codeception

@@ -1,4 +1,4 @@
 <?php
 // This is global bootstrap for autoloading
 require_once __DIR__."/../vendor/autoload.php";
-require_once __DIR__."/../platform/boot.php";
+require_once __DIR__."/../platform/boot-application.php";

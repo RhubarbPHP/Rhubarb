@@ -21,7 +21,7 @@
  */
 
 // Initiate our bootstrap script to boot all libraries required.
-require_once __DIR__ . "/boot.php";
+require_once __DIR__ . "/boot-application.php";
 
 // Disable exception trapping as there will be no valid URL handler able to return a sensible
 // interpretation of the exception details. CLI scripts are never seen publicly so it is more

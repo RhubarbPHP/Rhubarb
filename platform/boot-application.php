@@ -16,21 +16,12 @@
  *  limitations under the License.
  */
 
-/**
- * A bootstrapper to setup the Rhubarb platform when running unit tests
- */
+include_once(__DIR__ . '/boot-rhubarb.php');
 
-global $unitTesting;
-
-$unitTesting = true;
-
-$dir = __DIR__;
-
-// Initiate our bootstrap script to boot all libraries required.
-require $dir . "/boot-application.php";
-
-if (isset($argv[1])) {
-    $script = $argv[1];
-    /** @noinspection PhpIncludeInspection */
-    include($script);
+/** @var \Rhubarb\Crown\Application $application */
+if ($appClass = getenv('rhubarb_app')) {
+    $application = new $appClass();
+} elseif (file_exists('settings/app.config.php')) {
+    include_once 'settings/app.config.php';
 }
+$application->initialiseModules();
