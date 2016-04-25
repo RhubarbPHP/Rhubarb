@@ -263,9 +263,6 @@ class Application extends Module
     {
         $this->setAsRunningApplication();
         $this->request = $request;
-
-        $this->initialiseModules();
-
         $this->activeRequest = $request;
 
         $additionalData = [];

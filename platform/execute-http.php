@@ -28,7 +28,7 @@ use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Logging\Log;
 
 // Initiate our bootstrap script to boot all libraries required.
-require_once __DIR__ . "/boot.php";
+require_once __DIR__ . "/boot-application.php";
 
 require_once __DIR__ . "/../src/Logging/Log.php";
 require_once __DIR__ . "/../src/Module.php";
@@ -39,12 +39,6 @@ Log::performance("Rhubarb booted", "ROUTER");
 /**
  * @var Application $application
  */
-
-if ($appClass = getenv('rhubarb_app')) {
-    $application = new $appClass();
-} elseif (file_exists("settings/app.config.php")) {
-    include_once "settings/app.config.php";
-}
 
 if (!isset($application)) {
     Log::warning("HTTP request made with no application loaded.", "ROUTER");
