@@ -1,12 +1,15 @@
 Events
 ======
 
-PHP does not provide events as a first class feature. However using closures we can achieve much the same thing.
+PHP does not provide events as a first class language feature. However using closures we can achieve much the same thing.
 
-Rhubarb provides the `EventEmitter` trait which you can use in any class to add event dispatching support. Any
-object can listen for events.
+Rhubarb provides two strategies for implementing event handling: the `EventEmitter` trait and the `Event` object.
 
-## Dispatching Events
+## EventEmitter
+
+The `EventEmitter` which you can use in any class to add event dispatching support to any existing object.
+
+### Dispatching Events
 
 Firstly use the trait on your class:
 
@@ -35,7 +38,7 @@ class MyClass
 }
 ```
 
-## Listening to events
+### Listening to events
 
 Simply call the public `attachEventHandler()` method of the object that raises events and pass the name of the
 event to listen to and an anonymous function to be used as a callback. The callback can define arguments that
@@ -48,7 +51,7 @@ $myClass->attachEventHandler("SomethingInterestingHappened", function($arg1, $ar
 });
 ```
 
-## Returning Values
+### Returning Values
 
 An event handling callback can return a value. The first listener to an event to return a value will itself be
 returned as the result of `raiseEvent` to the event emitter.
@@ -103,7 +106,7 @@ $myClass->attachEventHandler("SomethingInterestingHappened", function($arg1, $ar
 });
 ```
 
-## Clearing and replacing event handlers
+### Clearing and replacing event handlers
 
 To remove all event handlers from an emitter simply call `clearEventHandlers()`. This is protected so must
 be called from within the emitter.
@@ -123,7 +126,7 @@ $myClass->replaceEventHandler("SomethingInterestingHappened", function(){
 });
 ```
 
-## Using constants for event names
+### Using constants for event names
 
 As event names are strings it is quite common to find an event handler isn't firing because of a simple misspelling
 or perhaps someone has renamed the emitted event. A good practice is to use constants instead of string literals
@@ -153,3 +156,73 @@ $myClass->attachEventHandler(MyClass::EVENT_SOMETHING_INTERESTING_HAPPENED, func
     return $arg1.$arg2;
 });
 ```
+
+## The `Event` object
+
+One down side of the EventEmitter is that event names are simple strings often leading to simple errors where
+events aren't hooked up properly because of misspellings or refactoring excercises gone wrong. This can be
+mitigated to some degree by using constants for event names but a developer still can't easily see what events
+are emitted by your object.
+
+A more formal approach to events uses the `Event` object.
+
+### Define the event property
+
+For each event you plan to raise you should add a public named property and initialise this to an instance
+of 'Event':
+
+``` php
+class MyClass
+{
+    /**
+    * @var Event
+    */
+    public $splinesReticulated;
+
+    public function __construct()
+    {
+        $this->splinesReticulated = new Event();
+    }
+}
+```
+
+### Attach a handler
+
+Simply call the attachHandler() method on the event property and pass a callback function to call when
+the event is triggered.
+
+```php
+$object = new MyClass();
+$object->splinesReticulated->attachHandler(function(){
+    // Do something now the splines have reticulated
+});
+```
+
+### Raise the event
+
+Call the event property like a method from within your class:
+
+``` php
+class MyClass
+{
+    /**
+    * @var Event
+    */
+    public $splinesReticulated;
+
+    public function __construct()
+    {
+        $this->splinesReticulated = new Event();
+    }
+
+    public function reticulateSplines()
+    {
+        // Reticulate the splines
+        $this->splinesReticulated();
+    }
+
+}
+```
+
+### Arguments, return values and response call backs.
+
