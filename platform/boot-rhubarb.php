@@ -35,8 +35,4 @@ if(file_exists(__DIR__."/../vendor/autoload.php")){
 /** @noinspection PhpIncludeInspection */
 include_once(VENDOR_DIR . "/autoload.php");
 
-// Move the working directory up one from the application root. This is primarily a security feature
-// to ensure any files pushed onto the filesystem through a vulnerability can't be as easily
-// referenced in a follow up request. However you should not rely on the current working director when
-// performing file IO, instead use file paths relative to the current code file using __DIR__
-chdir(VENDOR_DIR."/../");
+define("APPLICATION_ROOT_DIR", realpath(VENDOR_DIR."/../"));

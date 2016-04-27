@@ -1,11 +1,13 @@
 # Change log
 
-### 1.0.x
+### 1.1.0
 
-* Removed: **boot.php**
-* Added: boot-rhubarb.php Does what boot.php used to do - includes auto-loader and sets working directory
-* Added: boot-application.php Includes boot-rhubarb.php and then sets up the default application from either
-         settings/app.config.php or the Application class using the environment variable `rhubarb_app`
+* Removed:  **boot.php**
+* Added:    boot-rhubarb.php Does what boot.php used to do - includes auto-loader and sets working directory
+* Added:    boot-application.php Includes boot-rhubarb.php and then sets up the default application from either
+            settings/app.config.php or the Application class using the environment variable `rhubarb_app`
+* Added:    The Event object - a new approach to events
+* Changed:  Rhubarb no longer changes the working directory but defines an APPLICATION_ROOT_DIR constant instead.
 
 ### 1.0.0
 

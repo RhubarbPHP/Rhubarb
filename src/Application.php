@@ -124,7 +124,18 @@ class Application extends Module
         $this->registerModule($this);
     }
 
-
+    /**
+     * Sets the active request for the application.
+     *
+     * Normally this is handled transparently however unit tests may wish to inject a mock request object
+     * here.
+     *
+     * @param Request $request
+     */
+    public function setCurrentRequest(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Gets the dependency injection container
@@ -177,6 +188,9 @@ class Application extends Module
         $this->modules[$module->getModuleName()] = $module;
     }
 
+    /**
+     * @return Module[]
+     */
     public final function getRegisteredModules()
     {
         return array_values($this->modules);

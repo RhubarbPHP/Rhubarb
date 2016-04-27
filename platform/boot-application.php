@@ -24,4 +24,11 @@ if ($appClass = getenv('rhubarb_app')) {
 } elseif (file_exists('settings/app.config.php')) {
     include_once 'settings/app.config.php';
 }
-$application->initialiseModules();
+
+if (isset($application)) {
+    $application->initialiseModules();
+} else {
+    // We need an application object for dependency injection and the developer hasn't given us one
+    // Create an empty application as a back stop.
+    $application = new \Rhubarb\Crown\Application();
+}
