@@ -21,8 +21,8 @@ include_once(__DIR__ . '/boot-rhubarb.php');
 /** @var \Rhubarb\Crown\Application $application */
 if ($appClass = getenv('rhubarb_app')) {
     $application = new $appClass();
-} elseif (file_exists('settings/app.config.php')) {
-    include_once 'settings/app.config.php';
+} elseif (file_exists(APPLICATION_ROOT_DIR.'/settings/app.config.php')) {
+    include_once APPLICATION_ROOT_DIR.'/settings/app.config.php';
 }
 
 if (isset($application)) {
