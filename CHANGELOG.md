@@ -1,5 +1,9 @@
 # Change log
 
+### 1.1.1
+
+* Changed:  Initialisation order of modules is now reversed    
+
 ### 1.1.0
 
 * Removed:  **boot.php**

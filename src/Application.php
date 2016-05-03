@@ -231,12 +231,12 @@ class Application extends Module
      */
     public final function initialiseModules()
     {
-        // Initialise the application 'module' itself.
-        $this->initialiseModule();
-
         foreach ($this->modules as $module) {
             $module->initialiseModule();
         }
+
+        // Initialise the application 'module' itself.
+        $this->initialiseModule();
 
         $handlers = [];
         foreach ($this->modules as $module) {
