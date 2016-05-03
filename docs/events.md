@@ -200,7 +200,7 @@ $object->splinesReticulated->attachHandler(function(){
 
 ### Raise the event
 
-Call the event property like a method from within your class:
+Call the event's `raise()` method to raise the event to all attached handlers:
 
 ``` php
 class MyClass
@@ -218,7 +218,7 @@ class MyClass
     public function reticulateSplines()
     {
         // Reticulate the splines
-        $this->splinesReticulated();
+        $this->splinesReticulated->raise();
     }
 
 }
@@ -226,3 +226,20 @@ class MyClass
 
 ### Arguments, return values and response call backs.
 
+These operate in exactly the same way as for the EventEmitter. You can pass any number of arguments,
+receive a return value (first handler to do so) and pass a callback function as the final argument which
+is passed to handlers so that all handlers can return value.s
+
+``` php
+$myEvent->attachHandler(function($arg1, $arg2){
+    return "First handler return value";
+});
+
+$myEvent->attachHandler(function($arg1, $arg2){
+    return "Second handler return value";
+});
+
+$myEvent->raise("arg 1 value", "arg 2 value", function($response){
+    // This call back is called for each return value from the handlers above.
+});
+```
