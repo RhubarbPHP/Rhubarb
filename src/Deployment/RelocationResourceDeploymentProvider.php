@@ -41,8 +41,6 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
         $url = "/deployed/" . ltrim(str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath))),'/');
 
-        $this->alreadyDeployed[$resourceFilePath] = $url;
-
         return $url;
     }
 

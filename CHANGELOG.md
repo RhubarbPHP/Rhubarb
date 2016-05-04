@@ -1,5 +1,10 @@
 # Change log
 
+### 1.1.x
+
+* Changed:  Container::instance() now throws ClassMappingException if the mapped class is abstract
+* Bug:      RelocationResourceDeploymentProvider not deploying if getDeployedUrls already called.
+
 ### 1.1.1
 
 * Changed:  Initialisation order of modules is now reversed    

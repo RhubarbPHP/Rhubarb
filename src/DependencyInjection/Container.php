@@ -4,6 +4,7 @@ namespace Rhubarb\Crown\DependencyInjection;
 
 use ReflectionMethod;
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Exceptions\ClassMappingException;
 
 /**
  * Rhubarb's dependency container
@@ -59,6 +60,11 @@ final class Container
         }
 
         $reflection = new \ReflectionClass($class);
+
+        if ($reflection->isAbstract()){
+            throw new ClassMappingException($class);
+        }
+
         $constructor = $reflection->getConstructor();
 
         if ($constructor == null){

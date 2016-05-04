@@ -113,7 +113,7 @@ class Application extends Module
         $this->unitTesting = (isset($unitTesting) && $unitTesting) ? true : false;
         $this->developerMode = false;
         $this->live = false;
-        $this->applicationRootPath = realpath(VENDOR_DIR."/../");
+        $this->applicationRootPath = APPLICATION_ROOT_DIR;
 
         $this->setAsRunningApplication();
 
