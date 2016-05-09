@@ -59,4 +59,9 @@ class Event
 
         return $firstResponse;
     }
+
+    function __invoke(...$arguments)
+    {
+        $this->raise(...$arguments);
+    }
 }
