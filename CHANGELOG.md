@@ -2,6 +2,9 @@
 
 ### 1.1.x
 
+### 1.1.2
+
+* Added:    WebsiteSettings settings class as a place to set a website's root URL.
 * Changed:  Container::instance() now throws ClassMappingException if the mapped class is abstract
 * Bug:      RelocationResourceDeploymentProvider not deploying if getDeployedUrls already called.
 
