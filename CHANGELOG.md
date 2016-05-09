@@ -2,6 +2,8 @@
 
 ### 1.1.x
 
+* Removed:  Removed conflicting AppSettings class in lieu of WebsiteSettings.
+
 ### 1.1.2
 
 * Added:    WebsiteSettings settings class as a place to set a website's root URL.
