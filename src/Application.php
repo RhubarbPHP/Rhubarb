@@ -347,11 +347,6 @@ class Application extends Module
                 }
             }
         } catch (ForceResponseException $er) {
-            // Clear any previous output in buffers to ensure we only send the forced response
-            while (ob_get_level()) {
-                ob_end_clean();
-            }
-
             $response = $er->getResponse();
             $filterResponse = false;
         } catch (StopGeneratingResponseException $er) {
