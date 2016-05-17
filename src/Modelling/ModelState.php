@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Modelling;
 
 use JsonSerializable;
 use Rhubarb\Crown\Events\EventEmitter;
+use Rhubarb\Stem\Models\Model;
 
 /**
  * A starting point for modelling objects, not necessarily just those connected to databases.
@@ -261,7 +262,11 @@ class ModelState implements \ArrayAccess, JsonSerializable
     final public function importData($data)
     {
         foreach ($data as $property => $value) {
-            $this[$property] = $value;
+            if ($this[$property] instanceof ModelState){
+                $this[$property]->importData($value);
+            } else {
+                $this[$property] = $value;
+            }
         }
     }
 
