@@ -39,6 +39,11 @@ class BinaryResponse extends Response
         $this->setHeader('Content-Length', strlen($binaryData));
     }
 
+    public function getBinaryData()
+    {
+        return $this->binaryData;
+    }
+
     protected function printContent()
     {
         ob_clean();
