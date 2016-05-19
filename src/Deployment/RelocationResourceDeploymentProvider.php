@@ -40,7 +40,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
         $url = "/deployed/" . str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath)));
 
-        $this->alreadyDeployed[$resourceFilePath] = $url . '?' . filemtime($resourceFilePath);
+        $this->alreadyDeployed[$resourceFilePath] = $url;
 
         return $url;
     }
@@ -85,6 +85,10 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
         if (!$result) {
             throw new DeploymentException("The file $resourceFilePath could not be deployed. Please check file permissions.");
+        }
+
+        if (preg_match('/(\.js|\.css)$/', $resourceFilePath, $match)) {
+            $urlPath .= '?' . filemtime($resourceFilePath) . $match[1];
         }
 
         $this->alreadyDeployed[$originalResourceFilePath] = $urlPath;
