@@ -18,14 +18,15 @@
 
 namespace Rhubarb\Crown\Exceptions;
 
-use Exception;
-
 /**
  * A wrapper exception to allow exceptions that don't extend from Core Exception to be treated as though they do.
  */
 class NonRhubarbException extends RhubarbException
 {
-    public function __construct(Exception $nonRhubarbException)
+    /**
+     * @param \Exception|\Error $nonRhubarbException
+     */
+    public function __construct($nonRhubarbException)
     {
         parent::__construct(basename(get_class($nonRhubarbException)) . " - " . $nonRhubarbException->getMessage());
 
