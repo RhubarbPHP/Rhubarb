@@ -163,7 +163,7 @@ abstract class ExceptionHandler implements ProviderInterface
         /**
          * @var ExceptionSettings $exceptionSettings
          */
-        $exceptionSettings = Container::instance(ExceptionSettings::class);
+        $exceptionSettings = ExceptionSettings::singleton();
         return $exceptionSettings->exceptionTrappingOn;
     }
 
