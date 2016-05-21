@@ -416,4 +416,14 @@ class Application extends Module
 
         return $this->sharedData[$key];
     }
+
+    /**
+     * Obliterate a shared array.
+     * 
+     * @param $key
+     */
+    public function clearSharedArray($key)
+    {
+        unset($this->sharedData[$key]);
+    }
 }
