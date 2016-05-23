@@ -31,11 +31,11 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
 
         $cwd = Application::current()->applicationRootPath;
 
-        $this->assertFileExists("deployed/" . str_replace($cwd, "", __FILE__));
-        $this->assertFileExists("deployed/" . str_replace($cwd, "", __DIR__ . "/../../../src/Deployment/Deployable.php"));
+        $this->assertFileExists(APPLICATION_ROOT_DIR."/deployed/" . str_replace($cwd, "", __FILE__));
+        $this->assertFileExists(APPLICATION_ROOT_DIR."/deployed/" . str_replace($cwd, "", __DIR__ . "/../../../src/Deployment/Deployable.php"));
 
-        unlink("deployed/" . str_replace($cwd, "", __FILE__));
-        unlink("deployed/" . str_replace($cwd, "", __DIR__ . "/../../../src/Deployment/Deployable.php"));
+        unlink(APPLICATION_ROOT_DIR."/deployed/" . str_replace($cwd, "", __FILE__));
+        unlink(APPLICATION_ROOT_DIR."/deployed/" . str_replace($cwd, "", __DIR__ . "/../../../src/Deployment/Deployable.php"));
     }
 
     public function testDeploymentUrls()

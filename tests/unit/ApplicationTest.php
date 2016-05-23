@@ -59,6 +59,7 @@ class ApplicationTest extends Test
     {
         $application = new Application();
         $application->registerModule(new UnitTestingModule());
+        $application->initialiseModules();
 
         $request = new WebRequest();
         $request->urlPath = "/";
