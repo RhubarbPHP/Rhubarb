@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4dc2ee6bfce8641092e511c91d6508c3",
-    "content-hash": "f53f3aa64b25c9d642e7b9e9ce0511a9",
+    "hash": "0b50927f0752b6698a2775d27e64f69d",
+    "content-hash": "1cd871e39afb488ce302589bffed79ac",
     "packages": [],
     "packages-dev": [
         {
@@ -1346,21 +1346,20 @@
         },
         {
             "name": "rhubarbphp/module-build-status-updater",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RhubarbPHP/Module.BuildStatusUpdater.git",
-                "reference": "963ad96a01cca4c97b19aa21497906b4820a03a7"
+                "reference": "d7ca344de0481a453c9f9cf68bf72c9328cac6d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RhubarbPHP/Module.BuildStatusUpdater/zipball/963ad96a01cca4c97b19aa21497906b4820a03a7",
-                "reference": "963ad96a01cca4c97b19aa21497906b4820a03a7",
+                "url": "https://api.github.com/repos/RhubarbPHP/Module.BuildStatusUpdater/zipball/d7ca344de0481a453c9f9cf68bf72c9328cac6d8",
+                "reference": "d7ca344de0481a453c9f9cf68bf72c9328cac6d8",
                 "shasum": ""
             },
             "require": {
                 "gentle/bitbucket-api": "0.7.1",
-                "rhubarbphp/rhubarb": "^1.0.0",
                 "tan-tan-kanarek/github-php-client": "^1.0.0"
             },
             "require-dev": {
@@ -1390,7 +1389,7 @@
                 "rhubarb",
                 "status"
             ],
-            "time": "2016-05-23 11:21:44"
+            "time": "2016-05-23 11:45:05"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

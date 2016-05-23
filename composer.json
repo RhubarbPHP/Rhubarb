@@ -20,7 +20,7 @@
 	},
 	"require-dev": {
 	    "rhubarbphp/custard": "^1.0.0",
-		"rhubarbphp/module-build-status-updater": "^1.0.0",
+		"rhubarbphp/module-build-status-updater": "^1.0.5",
 		"codeception/codeception": "^2.0.0",
 		"phploc/phploc": "^3.0.0",
 		"theseer/phpdox": "0.8.1.1",
