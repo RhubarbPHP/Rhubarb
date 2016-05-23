@@ -1,8 +1,10 @@
 # Change log
 
-### 1.1.x
+### 1.1.3
 
 * Removed:  Removed conflicting AppSettings class in lieu of WebsiteSettings.
+* Added:    Means to remove shared array data from the application
+* Fixed:    Bug in shouldTrapException
 
 ### 1.1.2
 
