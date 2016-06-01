@@ -50,6 +50,8 @@ class MultiPartFormDataRequest extends WebRequest
             $raw_data .= $chunk;
         }
 
+        $raw_data = ltrim($raw_data);
+
         /* Close the streams */
         fclose($putStream);
 
