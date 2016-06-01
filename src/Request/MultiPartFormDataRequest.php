@@ -42,30 +42,30 @@ class MultiPartFormDataRequest extends WebRequest
         /* PUT data comes in on the stdin stream */
         $putStream = fopen("php://input", "r");
 
-        $raw_data = '';
+        $rawData = '';
 
         /* Read the data 1 KB at a time
            and write to the file */
         while ($chunk = fread($putStream, 1024)) {
-            $raw_data .= $chunk;
+            $rawData .= $chunk;
         }
 
-        $raw_data = ltrim($raw_data);
+        $rawData = ltrim($rawData);
 
         /* Close the streams */
         fclose($putStream);
 
         // Fetch content and determine boundary
-        $boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));
+        $boundary = substr($rawData, 0, strpos($rawData, "\r\n"));
 
         if (empty($boundary)) {
-            parse_str($raw_data, $data);
+            parse_str($rawData, $data);
             $GLOBALS['_PUT'] = $data;
             return;
         }
 
         // Fetch each part
-        $parts = array_slice(explode($boundary, $raw_data), 1);
+        $parts = array_slice(explode($boundary, $rawData), 1);
         $data = [];
 
         foreach ($parts as $part) {
@@ -76,12 +76,12 @@ class MultiPartFormDataRequest extends WebRequest
 
             // Separate content from headers
             $part = ltrim($part, "\r\n");
-            list($raw_headers, $body) = explode("\r\n\r\n", $part, 2);
+            list($rawHeaders, $body) = explode("\r\n\r\n", $part, 2);
 
             // Parse the headers list
-            $raw_headers = explode("\r\n", $raw_headers);
+            $rawHeaders = explode("\r\n", $rawHeaders);
             $headers = [];
-            foreach ($raw_headers as $header) {
+            foreach ($rawHeaders as $header) {
                 list($name, $value) = explode(':', $header);
                 $headers[strtolower($name)] = ltrim($value, ' ');
             }
@@ -89,7 +89,7 @@ class MultiPartFormDataRequest extends WebRequest
             // Parse the Content-Disposition to get the field name, etc.
             if (isset($headers['content-disposition'])) {
                 $filename = null;
-                $tmp_name = null;
+                $tmpName = null;
                 preg_match(
                     '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
                     $headers['content-disposition'],
@@ -108,20 +108,20 @@ class MultiPartFormDataRequest extends WebRequest
                     $filename = $matches[4];
 
                     //get tmp name
-                    $filename_parts = pathinfo($filename);
-                    $tmp_name = tempnam(ini_get('upload_tmp_dir'), $filename_parts['filename']);
+                    $filenameParts = pathinfo($filename);
+                    $tmpName = tempnam(ini_get('upload_tmp_dir'), $filenameParts['filename']);
 
                     //populate $_FILES with information, size may be off in multibyte situation
                     $_FILES[$matches[2]] = [
                         'error' => 0,
                         'name' => $filename,
-                        'tmp_name' => $tmp_name,
+                        'tmp_name' => $tmpName,
                         'size' => strlen($body),
                         'type' => $value,
                     ];
 
                     //place in temporary directory
-                    file_put_contents($tmp_name, $body);
+                    file_put_contents($tmpName, $body);
                 } //Parse Field
                 else {
                     $data[$name] = substr($body, 0, strlen($body) - 2);
