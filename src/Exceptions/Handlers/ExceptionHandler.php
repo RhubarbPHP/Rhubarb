@@ -1,24 +1,27 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use ErrorException;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\DependencyInjection\ProviderInterface;
+use Rhubarb\Crown\DependencyInjection\SingletonProviderTrait;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Response\Response;
@@ -26,9 +29,9 @@ use Rhubarb\Crown\Response\Response;
 /**
  * The base ExceptionHandler class
  */
-abstract class ExceptionHandler
+abstract class ExceptionHandler implements ProviderInterface
 {
-    private static $exceptionTrappingOn = false;
+    use SingletonProviderTrait;
 
     /**
      * Should be overriden by extends of this base class to do the actual processing with the exception
@@ -36,16 +39,29 @@ abstract class ExceptionHandler
      * @param RhubarbException $er
      * @return Response
      */
-    protected abstract function handleException(RhubarbException $er);
+    abstract protected function handleException(RhubarbException $er);
+
+    private static $defaultSet = false;
 
     /**
-     * @var string
+     * @return static
      */
-    private static $exceptionHandlerClassName = '\Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler';
+    public static function getProvider()
+    {
+        if (!self::$defaultSet) {
+            self::setProviderClassName(DefaultExceptionHandler::class);
+            self::$defaultSet = true;
+        }
+        return Container::instance(static::class);
+    }
 
     public static function disableExceptionTrapping()
     {
-        self::$exceptionTrappingOn = false;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = ExceptionSettings::singleton();
+        $exceptionSettings->exceptionTrappingOn = false;
 
         ini_set("display_errors", true);
 
@@ -55,7 +71,11 @@ abstract class ExceptionHandler
 
     public static function enableExceptionTrapping()
     {
-        self::$exceptionTrappingOn = true;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = ExceptionSettings::singleton();
+        $exceptionSettings->exceptionTrappingOn = true;
 
         ini_set("display_errors", false);
 
@@ -68,7 +88,11 @@ abstract class ExceptionHandler
             }
 
             // Dispatch the exception to the handler.
-            $response = self::ProcessException($er);
+            /**
+             * @var ExceptionHandler $handler
+             */
+            $handler = Container::instance(ExceptionHandler::class);
+            $response = $handler->processException($er);
             $response->send();
         });
 
@@ -86,53 +110,43 @@ abstract class ExceptionHandler
 
         // Make sure we handle fatal errors too.
         register_shutdown_function(function () use ($exceptionHandler) {
-            if (self::$exceptionTrappingOn) {
+            /**
+             * @var ExceptionSettings $exceptionSettings
+             */
+            $exceptionSettings = ExceptionSettings::singleton();
+            if ($exceptionSettings->exceptionTrappingOn) {
                 $error = error_get_last();
 
                 if ($error != null) {
                     // Ensure we're in the project root directory, as some webservers (e.g. apache) can change
                     // the working directory during shutdown.
                     chdir(__DIR__.'/../../../../../../');
-                    
-                    $logsPath = __DIR__.'/../../../../../../logs';
-                    if (!file_exists($logsPath)) {
-                        mkdir($logsPath);
+
+                    if (!file_exists("shutdown_logs")) {
+                        @mkdir("shutdown_logs");
                     }
 
-                    file_put_contents($logsPath."/shutdown_errors.txt", "[" . date("Y-m-d H:i:s") . "]
-					Type: {$error["type"]}
-					Message: {$error["message"]}
-					File: {$error["file"]}
-					Line: {$error["line"]}\r\n\r\n", FILE_APPEND);
+                    @file_put_contents(
+                        'shutdown_logs/' . date("Y-m-d_H-i-s") . '.txt',
+                        "Type: {$error["type"]}\n".
+                        "Message: {$error["message"]}\n".
+                        "File: {$error["file"]}\n".
+                        "Line: {$error["line"]}\n\n",
+                        FILE_APPEND
+                    );
                 }
 
                 if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
-                    $exceptionHandler(new ErrorException($error["message"], 0, $error["type"], $error["file"],
-                        $error["line"]));
+                    $exceptionHandler(new ErrorException(
+                        $error["message"],
+                        0,
+                        $error["type"],
+                        $error["file"],
+                        $error["line"]
+                    ));
                 }
             }
         });
-    }
-
-    /**
-     * Sets the name of the exception handler class to use when exceptions are raised.
-     *
-     * @param $exceptionHandlerClassName
-     */
-    public static function setExceptionHandlerClassName($exceptionHandlerClassName)
-    {
-        self::$exceptionHandlerClassName = $exceptionHandlerClassName;
-    }
-
-    /**
-     * @return ExceptionHandler
-     */
-    protected static function getExceptionHandler()
-    {
-        $class = self::$exceptionHandlerClassName;
-        $handler = new $class();
-
-        return $handler;
     }
 
     /**
@@ -144,9 +158,13 @@ abstract class ExceptionHandler
      * @param RhubarbException $er
      * @return bool
      */
-    protected static function shouldTrapException(RhubarbException $er)
+    protected function shouldTrapException(RhubarbException $er)
     {
-        return self::$exceptionTrappingOn;
+        /**
+         * @var ExceptionSettings $exceptionSettings
+         */
+        $exceptionSettings = ExceptionSettings::singleton();
+        return $exceptionSettings->exceptionTrappingOn;
     }
 
     /**
@@ -156,11 +174,10 @@ abstract class ExceptionHandler
      * @return Response
      * @throws RhubarbException
      */
-    public final static function processException(RhubarbException $er)
+    final public function processException(RhubarbException $er)
     {
-        if (self::shouldTrapException($er)) {
-            $exceptionHandler = self::getExceptionHandler();
-            return $exceptionHandler->handleException($er);
+        if ($this->shouldTrapException($er)) {
+            return $this->handleException($er);
         } else {
             // If exception trapping is disabled we should just rethrow the exception.
             throw $er;

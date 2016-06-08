@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Logging;
@@ -196,14 +196,15 @@ abstract class Log
     /**
      * The logger should implement this method to perform the actual log committal.
      *
+     * @param int $level The log level this message was raised at.
      * @param string $message The text message to log
-     * @param string $category The category of log message
      * @param int $indent An indent level - if applicable this can be used to make logs more readable.
+     * @param string $category The category of log message
      * @param array $additionalData Any number of additional key value pairs which can be understood by specific
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected abstract function writeEntry($message, $indent, $category = "", $additionalData = []);
+    abstract protected function writeEntry($level, $message, $indent, $category = "", $additionalData = []);
 
     public static function createEntry($level, $message, $category = "", $additionalData = [])
     {
@@ -229,7 +230,7 @@ abstract class Log
                     }
                 }
 
-                $log->writeEntry($message, self::$indentLevel, $category, $additionalData);
+                $log->writeEntry($level, $message, self::$indentLevel, $category, $additionalData);
                 $log->lastLogTime = microtime(true);
             }
         }

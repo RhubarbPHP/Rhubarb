@@ -1,26 +1,25 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Html;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Deployment\ResourceDeploymentPackage;
-use Rhubarb\Crown\Deployment\ResourceDeploymentProvider;
 
 class ResourceLoader
 {
@@ -37,26 +36,6 @@ class ResourceLoader
         $dependantResourceUrls = array_unique($dependantResourceUrls);
 
         self::$resources[] = [$scriptCode, $dependantResourceUrls];
-    }
-
-    public static function addScriptCodeOnReady($scriptCode, $dependantResourceUrls = [])
-    {
-        // Deploy the composer jquery libraries.
-        $package = new ResourceDeploymentPackage();
-        $package->resourcesToDeploy[] = "vendor/components/jquery/jquery.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/jquery-ui.min.js";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/jquery-ui.min.css";
-        $package->resourcesToDeploy[] = "vendor/components/jqueryui/themes/ui-lightness/theme.css";
-        $jQueryUrls = $package->deploy();
-
-        array_splice(
-            $dependantResourceUrls,
-            0,
-            0,
-            $jQueryUrls
-        );
-
-        self::addScriptCode($scriptCode, $dependantResourceUrls);
     }
 
     /**
@@ -90,7 +69,7 @@ class ResourceLoader
      * with finding some libraries like Google maps not working if added to the page via AJAX. Any client
      * side issues with the script loader will now become a major concern and should get addressed quickly.
      *
-     * @see ResourceLoader::AddResource()
+     * @see ResourceLoader::addResource()
      * @return string
      */
     public static function getResourceInjectionHtml()
@@ -101,12 +80,12 @@ class ResourceLoader
 
         $html = "<script src=\"" . $urls[0] . "\" type=\"text/javascript\"></script>";
 
-        $context = new Context();
+        $context = Application::current()->context();
 
         $preLoadedFiles = [];
 
         // CSS files are safe to load immediately and might avoid 'flicker' by so doing.
-        if (!$context->IsAjaxRequest) {
+        if (!$context->isXhrRequest()) {
             foreach (self::$resources as $item) {
                 $dependantResources = $item[1];
 
@@ -156,7 +135,7 @@ class ResourceLoader
         array_walk(
             $groupedItems,
             function ($item) use (&$tags, $preLoadedFiles) {
-                $source = $item[0];
+                $source = trim($item[0]);
                 $dependantResources = $item[1];
 
                 if (sizeof($dependantResources) > 0) {
@@ -195,30 +174,5 @@ HTML;
         }
 
         return $html;
-    }
-
-    public static function getJqueryUrl()
-    {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource("vendor/components/jquery/jquery.min.js");
-    }
-
-    public static function loadJquery()
-    {
-        self::loadResource(self::getJqueryUrl());
-    }
-
-    public static function getJqueryUIUrl()
-    {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-        return $deployer->deployResource("vendor/components/jqueryui/jquery-ui.min.js");
-    }
-
-    public static function loadJqueryUI()
-    {
-        $deployer = ResourceDeploymentProvider::getResourceDeploymentProvider();
-
-        self::loadResource($deployer->deployResource("vendor/components/jqueryui/themes/base/jquery-ui.css"));
-        self::loadResource(self::getJqueryUIUrl());
     }
 }

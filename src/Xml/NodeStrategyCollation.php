@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Xml;
@@ -28,15 +28,15 @@ class NodeStrategyCollation extends NodeStrategyRead
     /**
      * @param callable $callBack
      */
-    public function __construct($callBack)
+    public function __construct( $callBack )
     {
-        parent::__construct($callBack);
+        parent::__construct( $callBack );
     }
 
-    public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
+    public function parse( \XMLReader $xmlReader, $startingDepth = 0, $parseOne = false )
     {
         $this->startDepth = $startingDepth;
-        parent::parse($xmlReader, $startingDepth, $parseOne);
+        parent::parse( $xmlReader, $startingDepth, $parseOne );
     }
 
     /**
@@ -47,22 +47,23 @@ class NodeStrategyCollation extends NodeStrategyRead
      *
      * @return Node The node with children collated will be passed to the callback
      */
-    protected function processNode(Node $node, \XMLReader $xmlReader)
+    protected function processNode( Node $node, \XMLReader $xmlReader )
     {
-        $node = parent::processNode($node, $xmlReader);
-        $children = [];
+        $node = parent::processNode( $node, $xmlReader );
+        $children = [ ];
 
-        if (!$xmlReader->isEmptyElement) {
+        if( !$xmlReader->isEmptyElement )
+        {
             $scanner = new NodeStrategyTraversal();
-            $scanner->addNodeHandler('*', new self(function ($node) use (&$children) {
+            $scanner->addNodeHandler( '*', new self( function ( $node ) use ( &$children )
+            {
                 $children[] = $node;
-            }));
-            $scanner->parse($xmlReader, $this->startDepth);
+            } ) );
+            $scanner->parse( $xmlReader, $this->startDepth );
         }
 
         $node->children = $children;
 
         return $node;
     }
-
 }

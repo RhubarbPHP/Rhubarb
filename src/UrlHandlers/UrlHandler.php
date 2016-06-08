@@ -1,34 +1,34 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\UrlHandlers;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Request\Request;
-use Rhubarb\Crown\Response\GeneratesResponse;
+use Rhubarb\Crown\Response\GeneratesResponseInterface;
 use Rhubarb\Crown\Response\HtmlResponse;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\Response\Response;
 
-require_once __DIR__ . "/../Response/GeneratesResponse.php";
+require_once __DIR__ . "/../Response/GeneratesResponseInterface.php";
 
 /**
  * The base class for URL Handlers.
@@ -40,7 +40,7 @@ require_once __DIR__ . "/../Response/GeneratesResponse.php";
  * We return false rather than an exception for performance reasons.
  *
  */
-abstract class UrlHandler implements GeneratesResponse
+abstract class UrlHandler implements GeneratesResponseInterface
 {
     /**
      * The URL stub which will allow this handler to consider a response
@@ -121,6 +121,8 @@ abstract class UrlHandler implements GeneratesResponse
         $this->creationOrder = self::$creationOrderCount;
 
         $this->addChildUrlHandlers($childUrlHandlers);
+
+        $this->url = $this->getDefaultUrl();
     }
 
     public static function setExecutingUrlHandler(UrlHandler $handler)
@@ -164,11 +166,22 @@ abstract class UrlHandler implements GeneratesResponse
         $this->url = $url;
     }
 
+    /**
+     * Returns the default URL fragment for this handler.
+     *
+     * This is seldom overriden - in most cases it is better to simply call setUrl() when
+     * configuring the handler or use the key/value pair syntax when registering the handler.
+     */
+    protected function getDefaultUrl()
+    {
+        return "";
+    }
+
     public function getUrl()
     {
-        $parentUrl = ( $this->parentHandler ) ? $this->parentHandler->matchingUrl : "";
+        $parentUrl = ($this->parentHandler) ? $this->parentHandler->matchingUrl : "";
 
-        return $parentUrl.$this->url;
+        return $parentUrl . $this->url;
     }
 
     public function getParentHandler()
@@ -215,12 +228,20 @@ abstract class UrlHandler implements GeneratesResponse
     }
 
     /**
+     * @return string
+     */
+    public function getHandledUrl()
+    {
+        return $this->handledUrl;
+    }
+
+    /**
      * Return the response if appropriate or false if no response could be generated.
      *
      * @param mixed $request
      * @return bool|Response
      */
-    protected abstract function generateResponseForRequest($request = null);
+    abstract protected function generateResponseForRequest($request = null);
 
     /**
      * Takes a URL fragment understood by a child handler and adds back the parents URL fragment to form a complete URL.
@@ -239,9 +260,9 @@ abstract class UrlHandler implements GeneratesResponse
 
     protected function getAbsoluteHandledUrl()
     {
-        $request = Context::currentRequest();
+        $request = PhpContext::createRequest();
 
-        return $request->Server("REQUEST_SCHEME") . "://" . $request->Server("SERVER_NAME") . $this->handledUrl;
+        return $request->server("REQUEST_SCHEME") . "://" . $request->server("SERVER_NAME") . $this->handledUrl;
     }
 
     /**
@@ -256,7 +277,7 @@ abstract class UrlHandler implements GeneratesResponse
     public function generateResponse($request = null, $currentUrlFragment = false)
     {
         if ($currentUrlFragment === false) {
-            $currentUrlFragment = $request->UrlPath;
+            $currentUrlFragment = $request->urlPath;
         }
 
         if (!$this->matchesRequest($request, $currentUrlFragment)) {
@@ -271,7 +292,7 @@ abstract class UrlHandler implements GeneratesResponse
 
         Log::indent();
 
-        $context = new Context();
+        $context = new PhpContext();
         $context->UrlHandler = $this;
 
         $this->matchingUrl = $this->getMatchingUrlFragment($request, $currentUrlFragment);
@@ -310,6 +331,7 @@ abstract class UrlHandler implements GeneratesResponse
     public function generateResponseForException(RhubarbException $er)
     {
         $response = new HtmlResponse();
+        $response->setResponseCode(Response::HTTP_STATUS_SERVER_ERROR_GENERIC);
         $response->setContent($er->getPublicMessage());
 
         return $response;

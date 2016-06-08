@@ -1,25 +1,34 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Mime;
 
 class MimePart
 {
+    const MIME_TYPE_APPLICATION_JSON = 'application/json';
+    const MIME_TYPE_IMAGE_GIF = 'image/gif';
+    const MIME_TYPE_IMAGE_JPEG = 'image/jpeg';
+    const MIME_TYPE_IMAGE_PNG = 'image/png';
+    const MIME_TYPE_TEXT_PLAIN = 'text/plain';
+    const MIME_TYPE_TEXT_HTML = 'text/html';
+    const MIME_TYPE_TEXT_CSS = 'text/css';
+
+
     /**
      * @var string[]
      */
@@ -58,7 +67,7 @@ class MimePart
     /**
      * Transforms the part as per the transform encoding header and returns the transformed result.
      */
-    public final function getTransformedBody()
+    final public function getTransformedBody()
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -81,7 +90,7 @@ class MimePart
      *
      * @param $transformedBody
      */
-    public final function setTransformedBody($transformedBody)
+    final public function setTransformedBody($transformedBody)
     {
         $encoding = (isset($this->headers["Content-Transfer-Encoding"])) ? $this->headers["Content-Transfer-Encoding"] : "";
 
@@ -170,4 +179,4 @@ class MimePart
 
         return $string;
     }
-} 
+}

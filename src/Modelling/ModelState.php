@@ -1,25 +1,26 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Modelling;
 
 use JsonSerializable;
 use Rhubarb\Crown\Events\EventEmitter;
+use Rhubarb\Stem\Models\Model;
 
 /**
  * A starting point for modelling objects, not necessarily just those connected to databases.
@@ -67,13 +68,20 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
     /**
      * Override this to attach internal property change notification handlers.
+     *
+     * Use addPropertyChangedNotificationHandler within this method to add handlers.
      */
     protected function attachPropertyChangedNotificationHandlers()
     {
-
     }
 
-    public final function addPropertyChangedNotificationHandler($propertyNames, $callback)
+    /**
+     * When the named properties are changed, the callable method provided will be called and passed details of the change.
+     *
+     * @param string|string[] $propertyNames The name of a property, or an array of property names
+     * @param callable $callback A callable which will receive 3 parameters: $newValue, $propertyName, $oldValue
+     */
+    final public function addPropertyChangedNotificationHandler($propertyNames, $callback)
     {
         if (!is_array($propertyNames)) {
             $propertyNames = [$propertyNames];
@@ -112,7 +120,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * @param $propertyName
      * @param $value
      */
-    protected final function setModelValue($propertyName, $value)
+    final protected function setModelValue($propertyName, $value)
     {
         try {
             $oldValue = (isset($this->modelData[$propertyName])) ? $this->modelData[$propertyName]: null;
@@ -130,7 +138,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
         if ($oldValue != $value) {
             if (!$this->propertyChangeEventsDisabled) {
-               // Don't fire changes if they are disabled.
+                // Don't fire changes if they are disabled.
                 $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
                 $this->traitRaiseEvent("AfterChange", $this);
             }
@@ -191,7 +199,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * This protects the unwary developer from exposing internal secrets by using models that be serialised or
      * published. It is a chore to populate but it is better to be safe than sorry!
      *
-     * @return Array
+     * @return array
      */
     protected function getPublicPropertyList()
     {
@@ -202,9 +210,9 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Exports an array of model values that have been marked safe for public consumption.
      *
-     * @return Array
+     * @return array
      */
-    public final function exportPublicData()
+    final public function exportPublicData()
     {
         $publicProperties = $this->getPublicPropertyList();
 
@@ -249,12 +257,16 @@ class ModelState implements \ArrayAccess, JsonSerializable
     /**
      * Imports an array of model values that have been marked safe for public consumption.
      *
-     * @param Array $data
+     * @param array $data
      */
-    public final function importData($data)
+    final public function importData($data)
     {
         foreach ($data as $property => $value) {
-            $this[$property] = $value;
+            if ($this[$property] instanceof ModelState){
+                $this[$property]->importData($value);
+            } else {
+                $this[$property] = $value;
+            }
         }
     }
 
@@ -265,16 +277,17 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     public function hasChanged()
     {
-        foreach ($this->modelData as $key => $value) {
-            if (!isset($this->changeSnapshotData[$key]) || $this->changeSnapshotData[$key] != $value) {
-                // Something was added or changed.
+        foreach ($this->modelData as $property => $value) {
+            if ($this->hasPropertyChanged($property)) {
                 return true;
             }
         }
 
-        foreach ($this->changeSnapshotData as $key => $value) {
-            if (!isset($this->modelData[$key])) {
-                // Something was removed.
+        // In case model data has been manually unset
+        $manuallyUnsetProperties = array_diff_key($this->changeSnapshotData, $this->modelData);
+        foreach ($manuallyUnsetProperties as $property => $value) {
+            // If it wasn't null before, that's a change
+            if ($value !== null) {
                 return true;
             }
         }
@@ -303,6 +316,9 @@ class ModelState implements \ArrayAccess, JsonSerializable
         return $this->changeSnapshotData;
     }
 
+    /**
+     * @return array Values which were added / modified since last snapshot. Does not include removed/NULLed values
+     */
     public function getModelChanges()
     {
         $differences = [];
@@ -310,31 +326,50 @@ class ModelState implements \ArrayAccess, JsonSerializable
          * array_diff_assoc couldn't tell that two RhubarbDateTimes were different
          * so we're not using that any more.
          * */
-        foreach ($this->modelData as $key => $modelDataValue) {
-            if (
-                (!isset($this->changeSnapshotData[$key]) && $modelDataValue) ||
-                (isset($this->changeSnapshotData[$key]) && $this->changeSnapshotData[$key] != $modelDataValue)
-            ) {
-                $differences[$key] = $modelDataValue;
+        foreach ($this->modelData as $property => $value) {
+            if ($this->hasPropertyChanged($property)) {
+                $differences[$property] = $value;
             }
         }
+
+        // Because people might manually call unset on $this->modelData[ 'field' ]
+        $manuallyUnsetProperties = array_diff_key($this->changeSnapshotData, $this->modelData);
+        foreach ($manuallyUnsetProperties as $property => $value) {
+            $differences[$property] = null;
+        }
+
         return $differences;
     }
 
     /**
-     * Returns true if the specified property has changed since the last snapshot
+     * @param string $propertyName
+     *
+     * @return bool TRUE if the specified property has changed since the last snapshot
      */
     public function hasPropertyChanged($propertyName)
     {
-        if (!isset($this->modelData[$propertyName])) {
-            return false;
+        $propertyValue = null;
+        $inSnapshot = isset($this->changeSnapshotData[$propertyName]);
+        $inModelData = isset($this->modelData[$propertyName]);
+        if (!$inModelData && $inSnapshot) {
+            // Key removed.
+            return true;
+        } elseif ($inModelData) {
+            // Determine the current value (if it's safe to do so)
+            $propertyValue = $this->modelData[$propertyName];
         }
 
-        if (!isset($this->changeSnapshotData[$propertyName])) {
+        if (!$inSnapshot) {
+            if ($propertyValue === null) {
+                // Value is NULL so isset will have failed. Setting a previously unset key to NULL is treated as no change
+                return false;
+            }
+
+            // Key added
             return true;
         }
-
-        if ($this->modelData[$propertyName] != $this->changeSnapshotData[$propertyName]) {
+        if ($this->changeSnapshotData[$propertyName] != $propertyValue) {
+            // Key changed
             return true;
         }
 
@@ -347,7 +382,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * This should not be used unless you fully understand the difference between this method
      * and ExportData()
      *
-     * @see Rhubarb\Crown\Data\Repositories\Repository::StoreObjectData()
+     * @see Rhubarb\Crown\Data\Repositories\Repository::storeObjectData()
      */
     public function exportRawData()
     {
@@ -378,7 +413,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * The data does not pass through any applicable Set methods or data transforms. If required to do so
      * call ImportData() instead, but understand the performance penalty of doing so.
      *
-     * @param Array $data
+     * @param array $data
      */
     public function importRawData($data)
     {
@@ -476,7 +511,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      */
     public function offsetUnset($offset)
     {
-        unset($this->modelData[$offset]);
+        $this->modelData[$offset] = null;
     }
 
     /**

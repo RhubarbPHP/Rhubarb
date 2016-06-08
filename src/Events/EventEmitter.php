@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Events;
@@ -58,6 +58,16 @@ trait EventEmitter
         }
 
         $this->attachEventHandler($event, $delegate);
+    }
+
+    /**
+     * Removes all previously attached handlers for a given event.
+     *
+     * @param $event
+     */
+    public function detachEventHandlers($event)
+    {
+        $this->eventHandlers[$event] = [];
     }
 
     /**
@@ -115,15 +125,15 @@ trait EventEmitter
         foreach ($this->eventHandlers[$event] as $delegate) {
             $answer = call_user_func_array($delegate, $args);
 
+            if ($callBack !== false && $answer !== null) {
+                call_user_func($callBack, $answer);
+            }
+
             // If we don't have a result yet - make this the result. This way the first event handler to
             // return a non null result will be the overall result of the event.
             if ($result === null) {
                 $result = $answer;
             }
-        }
-
-        if ($callBack !== false) {
-            call_user_func($callBack, $result);
         }
 
         return $result;

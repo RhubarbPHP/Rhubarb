@@ -1,23 +1,24 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Sessions;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Encryption\EncryptionProvider;
 
 /**
@@ -27,28 +28,30 @@ use Rhubarb\Crown\Encryption\EncryptionProvider;
  */
 abstract class EncryptedSession extends Session
 {
+    protected $encryptedData = [];
+
     /**
      * Override to return the encryption key salt to use.
      *
      * @return mixed
      */
-    protected abstract function getEncryptionKeySalt();
+    abstract protected function getEncryptionKeySalt();
 
     public function __set($propertyName, $value)
     {
         $keySalt = $this->getEncryptionKeySalt();
-        $provider = EncryptionProvider::getEncryptionProvider();
+        $provider = Container::instance(EncryptionProvider::class);
 
         $value = $provider->encrypt($value, $keySalt);
 
-        parent::__set($propertyName, $value);
+        $this->encryptedData[$propertyName] = $value;
     }
 
     public function __get($propertyName)
     {
         $keySalt = $this->getEncryptionKeySalt();
-        $provider = EncryptionProvider::getEncryptionProvider();
+        $provider = Container::instance(EncryptionProvider::class);
 
-        return $provider->decrypt(parent::__get($propertyName), $keySalt);
+        return $provider->decrypt($this->encryptedData[$propertyName], $keySalt);
     }
 }

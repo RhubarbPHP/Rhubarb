@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\String;
@@ -237,8 +237,7 @@ class StringTools
         $caseSensitive = true,
         $includeSearch = false,
         $returnIfNoMatch = false
-    )
-    {
+    ) {
         $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
         $start = $posFunction($string, $search);
         if ($start === false) {
@@ -251,6 +250,42 @@ class StringTools
             return substr($string, $start);
         }
         return substr($string, $start, $maxChars);
+    }
+
+    /**
+     * Returns all characters in $string before the first (or last, depending on $firstOccurrence switch) match of $search
+     *
+     * @param string $string
+     * @param string $search
+     * @param bool $firstOccurrence True to end at first match, false to end at the last match
+     * @param int|null $maxChars If null, all characters before the match will be returned. If specified, no more than this will be returned.
+     * @param bool $caseSensitive
+     * @param bool $includeSearch If true, the returned value will include the matched occurrence of $search.
+     * @param mixed $returnIfNoMatch This value will be returned if $search is not found in $string
+     *
+     * @return string
+     */
+    public static function getCharsBeforeMatch(
+        $string,
+        $search,
+        $firstOccurrence = false,
+        $maxChars = null,
+        $caseSensitive = true,
+        $includeSearch = false,
+        $returnIfNoMatch = false
+    ) {
+        $posFunction = "str" . ($firstOccurrence ? "" : "r") . ($caseSensitive ? "" : "i") . "pos";
+        $index = $posFunction($string, $search);
+        if ($index === false) {
+            return $returnIfNoMatch;
+        }
+        if ($includeSearch) {
+            $index -= strlen($search);
+        }
+        if ($maxChars === null) {
+            return substr($string, 0, $index);
+        }
+        return substr($string, $index - $maxChars, $index);
     }
 
     /**
@@ -297,30 +332,6 @@ class StringTools
     }
 
     /**
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralise($string, $number)
-    {
-        return $number != 1 ? $string . "s" : $string;
-    }
-
-    /**
-     * Alias of Pluralise.
-     *
-     * @param string $string Word that you wish to pluralise
-     * @param int $number Quantity to determine whether the string should be pluralised
-     *
-     * @return string Pluralised string
-     */
-    public static function pluralize($string, $number)
-    {
-        return self::pluralise($string, $number);
-    }
-
-    /**
      * Returns a sentence with each word in $wordList concatenated with commas between each,
      * and "and" between the last 2 words. Skips any empty values in the list.
      *
@@ -360,5 +371,27 @@ class StringTools
     public static function getShortClassNameFromNamespace($fullyQualifiedClassName)
     {
         return substr($fullyQualifiedClassName, strrpos($fullyQualifiedClassName, '\\') + 1);
+    }
+
+    /**
+     * Replaces only the first matched instance of a string
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @param bool $caseSensitive
+     * @return mixed
+     */
+    public static function replaceFirst($search, $replace, $subject, $caseSensitive = true)
+    {
+        if ($caseSensitive) {
+            $pos = strpos($subject, $search);
+        } else {
+            $pos = stripos($subject, $search);
+        }
+        if ($pos !== false) {
+            return substr_replace($subject, $replace, $pos, strlen($search));
+        }
+        return $subject;
     }
 }

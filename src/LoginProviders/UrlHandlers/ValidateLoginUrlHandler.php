@@ -1,26 +1,26 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\LoginProviders\UrlHandlers;
 
 require_once __DIR__ . "/../../UrlHandlers/UrlHandler.php";
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\LoginProviders\LoginProvider;
 use Rhubarb\Crown\Response\RedirectResponse;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
@@ -49,12 +49,11 @@ class ValidateLoginUrlHandler extends UrlHandler
 
         if (!$this->loginProvider->isLoggedIn()) {
 
-            $request = Context::currentRequest();
             $redirectUrl = $this->loginUrl;
 
             // Capture the existing URL to allow us to redirect to the original page.
-            if ($request->UrlPath != "/") {
-                $url = base64_encode($request->UrlPath);
+            if ($request->urlPath != "/") {
+                $url = base64_encode($request->urlPath);
 
                 $redirectUrl .= "?rd=" . $url;
             }

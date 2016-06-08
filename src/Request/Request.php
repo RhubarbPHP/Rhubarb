@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Request;
@@ -21,6 +21,8 @@ namespace Rhubarb\Crown\Request;
 require_once __DIR__ . "/../Settings.php";
 
 use Rhubarb\Crown;
+use Rhubarb\Crown\Application;
+use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
 
 /**
@@ -32,47 +34,108 @@ use Rhubarb\Crown\Exceptions\AttemptToModifyReadOnlyPropertyException;
  *
  * This is an abstract class.
  *
- * @method mixed env(string $name, mixed $value = null) access an environment value
- * @method mixed server(string $name, mixed $value = null) access a server value
- * @method mixed get(string $name, mixed $value = null) access a GET value
- * @method mixed post(string $name, mixed $value = null) access a POST value
- * @method mixed files(string $name, mixed $value = null) access details of a posted file
- * @method mixed cookie(string $name, mixed $value = null) access a cookie value
- * @method mixed session(string $name, mixed $value = null) access a session value
- * @method mixed request(string $name, mixed $value = null) access a request value (get/post/cookie)
- * @method mixed header(string $name, mixed $value = null) access a header value
+ * @method mixed env(string $property, string $defaultValue=null) Return a value from the query string optionally using a default value.
  */
-abstract class Request extends Crown\Settings
+abstract class Request
 {
-    /**
-     * @var array
-     */
-    static protected $originalRequestData = null;
+    protected $superGlobalMethodNames = ["env"];
 
     /**
-     * @var bool Have we copied the superglobals yet?
+     * Environment data captured from $_ENV
+     *
+     * @var string[]
+     */
+    protected $envData;
+
+    /**
+     * @var bool Have we initialised yet?
      */
     protected $hasInitialised = false;
+
+    /**
+     * @var PhpContext The originating PhpContext object
+     */
+    private $phpContext;
 
     /**
      * Subclasses may not override the constructor.
      */
     final public function __construct()
     {
-        parent::__construct();
-
         if (!$this->hasInitialised) {
-            $this->modelData['EnvData'] = $_ENV;
+            $this->envData = $_ENV;
             $this->initialise();
 
             $this->hasInitialised = true;
         }
+    }
 
-        // Stash the initial state of the request for reference in
-        // case this instance gets modified
-        if (self::$originalRequestData === null) {
-            self::$originalRequestData = $this->modelData;
+    /**
+     * Returns the active request from the currently running application.
+     *
+     * @return Request
+     */
+    public final static function current()
+    {
+        return Application::current()->request();
+    }
+
+    /**
+     * Get's the PHP Context that originated this request.
+     *
+     * @return PhpContext
+     */
+    protected function getOriginatingPhpContext()
+    {
+        return $this->phpContext;
+    }
+
+    /**
+     * Creates a request object from the PHP context
+     *
+     * @return Request
+     */
+    public final static function fromPhpContext(PhpContext $phpContext)
+    {
+        if ($phpContext->isCliInvocation()) {
+            $request = new CliRequest();
+        } else {
+            $contentType = (isset($_SERVER["CONTENT_TYPE"])) ? strtolower($_SERVER["CONTENT_TYPE"]) : "";
+
+            // Special check for multipart, because the header could be multipart/form-data
+            // followed by boundary
+            $multipartType = "multipart/form-data";
+            if (strpos($contentType, $multipartType) === 0) {
+                $contentType = $multipartType;
+            }
+
+            // Firefox puts a charset on the end of the content type line
+            $parts = explode(";", $contentType);
+            $contentType = $parts[0];
+
+            switch ($contentType) {
+                case "application/octet-stream":
+                case "image/jpeg":
+                case "image/jpg":
+                case "image/gif":
+                case "image/png":
+                    $request = new BinaryRequest();
+                    break;
+                case "application/json":
+                    $request = new JsonRequest();
+                    break;
+                case "multipart/form-data":
+                    $request = new MultiPartFormDataRequest();
+                    break;
+                default:
+                    $request = new WebRequest();
+                    break;
+            }
         }
+
+        $request->phpContext = $phpContext;
+
+        return $request;
     }
 
     /**
@@ -86,48 +149,6 @@ abstract class Request extends Crown\Settings
     abstract public function initialise();
 
     /**
-     * Magical getter, taking account of Original request data.
-     *
-     * @param mixed $propertyName
-     *
-     * @return mixed
-     */
-    public function __get($propertyName)
-    {
-        if (substr($propertyName, 0, 8) === 'Original') {
-            if (method_exists($this, "get" . $propertyName)) {
-                return call_user_func([$this, "get" . $propertyName]);
-            }
-
-            $originalPropertyName = substr($propertyName, 8);
-
-            if (isset(self::$originalRequestData[$originalPropertyName])) {
-                return self::$originalRequestData[$originalPropertyName];
-            }
-
-            return null;
-        }
-
-        return parent::__get($propertyName);
-    }
-
-    /**
-     * Magic setter, guarding against attempts to set Original... properties.
-     *
-     * @param string $propertyName
-     * @param mixed $value
-     * @throws AttemptToModifyReadOnlyPropertyException
-     */
-    public function __set($propertyName, $value)
-    {
-        if (substr($propertyName, 0, 8) === 'Original') {
-            throw new AttemptToModifyReadOnlyPropertyException("Attempt to modify Original Data of a request");
-        }
-
-        parent::__set($propertyName, $value);
-    }
-
-    /**
      * Magic method to handle superglobal accessors.
      *
      * @param string $name
@@ -136,26 +157,9 @@ abstract class Request extends Crown\Settings
      */
     public function __call($name, array $arguments)
     {
-        $superglobalMethodNames = [
-            'env',
-            'server',
-            'get',
-            'post',
-            'files',
-            'cookie',
-            'session',
-            'request',
-            'header'
-        ];
-
-        if (in_array(strtolower($name), $superglobalMethodNames)) {
-            if (count($arguments) == 1) {
-                return $this->getSuperglobalValue($name, $arguments[0]);
-            } else {
-                if (count($arguments) == 2) {
-                    $this->setSuperglobalValue($name, $arguments[0], $arguments[1]);
-                }
-            }
+        if (in_array(strtolower($name), $this->superGlobalMethodNames)) {
+            array_splice($arguments,0,0,[$name]);
+            return call_user_func_array([$this, "getSuperglobalValue"], $arguments);
         }
     }
 
@@ -167,41 +171,19 @@ abstract class Request extends Crown\Settings
      *
      * @return mixed
      */
-    protected function getSuperglobalValue($superglobal, $index)
+    protected function getSuperglobalValue($superglobal, $index, $defaultValue = null)
     {
-        $propertyName = ucfirst(strtolower($superglobal)) . 'Data';
+        $propertyName = $superglobal . 'Data';
 
-        if (!isset($this->modelData[$propertyName]) ||
-            !isset($this->modelData[$propertyName][$index])
-        ) {
-            return null;
+        if (isset($this->$propertyName)){
+            $data = $this->$propertyName;
+
+            if (isset($data[$index])){
+                return $data[$index];
+            }
         }
 
-        return $this->modelData[$propertyName][$index];
-    }
-
-    /**
-     * Set the value stored against one of the request superglobals.
-     *
-     * Passing a value of null unsets the index.
-     *
-     * @param string $superglobal
-     * @param mixed $index
-     * @param mixed $value
-     */
-    protected function setSuperglobalValue($superglobal, $index, $value = null)
-    {
-        $propertyName = ucfirst(strtolower($superglobal)) . 'Data';
-
-        if (!isset($this->modelData[$propertyName])) {
-            $this->modelData[$propertyName] = [];
-        }
-
-        $this->modelData[$propertyName][$index] = $value;
-
-        if ($value === null) {
-            unset($this->modelData[$propertyName][$index]);
-        }
+        return $defaultValue;
     }
 
     /**
@@ -210,18 +192,6 @@ abstract class Request extends Crown\Settings
     public function reset()
     {
         $this->hasInitialised = false;
-        self::$originalRequestData = null;
-
-        $this->modelData = [];
-    }
-
-    /**
-     * Static method to return the request to its uninitialised state.
-     */
-    public static function resetRequest()
-    {
-        $instance = new static();
-        $instance->reset();
     }
 
     /**

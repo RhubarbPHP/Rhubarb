@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2016 RhubarbPHP.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 if (!window.rhubarb) {
     window.rhubarb = {};
 }
@@ -36,11 +52,12 @@ window.rhubarb.validation.ValidationError = function (name, error) {
         var placeHolder = window.rhubarb.validation.findValidationPlaceHolder(validationHostContainer, this.name);
 
         if (placeHolder != false) {
+            placeHolder.innerHTML = this.error;
+            placeHolder.className = 'validation-placeholder validation-error';
             if (!window.rhubarb.validation.Scrolled) {
                 placeHolder.scrollIntoView();
                 window.rhubarb.validation.Scrolled = true;
             }
-            placeHolder.innerHTML = this.error;
         }
 
         for (var i in this.subErrors) {
@@ -102,7 +119,7 @@ window.rhubarb.validation.Validator = function (name) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.Validator.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.Validator.prototype.constructor = window.rhubarb.validation.Validator;
@@ -113,7 +130,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
     validator.name = json.name;
     validator.validateAll = json.settings.validateAll;
 
-    for (i in json.settings.validations) {
+    for (var i in json.settings.validations) {
         var validationJson = json.settings.validations[i];
         var type = validationJson.type;
         var name = validationJson.name;
@@ -125,8 +142,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
         if (type == "validator") {
             validationObject = window.rhubarb.validation.Validator.fromJson(settings);
             validationObject.name = name;
-        }
-        else {
+        } else {
             validationObject = new window.rhubarb.validation[type](name, settings);
         }
 
@@ -135,7 +151,7 @@ window.rhubarb.validation.Validator.fromJson = function (json) {
     }
 
     return validator;
-}
+};
 
 window.rhubarb.validation.EqualTo = function (name, settings) {
     window.rhubarb.validation.BaseValidation.apply(this, arguments);
@@ -149,7 +165,7 @@ window.rhubarb.validation.EqualTo = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualTo.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualTo.prototype.constructor = window.rhubarb.validation.EqualTo;
@@ -166,10 +182,27 @@ window.rhubarb.validation.EqualToModelProperty = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualToModelProperty.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualToModelProperty.prototype.constructor = window.rhubarb.validation.EqualToModelProperty;
+
+window.rhubarb.validation.ExactLength = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.exactLength = settings.exactLength;
+
+    this.validate = function (value) {
+        if (value.length != this.exactLength) {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+
+        return true;
+    }
+};
+
+window.rhubarb.validation.ExactLength.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.ExactLength.prototype.constructor = window.rhubarb.validation.ExactLength;
 
 window.rhubarb.validation.HasValue = function (name, settings) {
     window.rhubarb.validation.BaseValidation.apply(this, arguments);
@@ -181,7 +214,54 @@ window.rhubarb.validation.HasValue = function (name, settings) {
 
         return true;
     }
-}
+};
 
 window.rhubarb.validation.EqualTo.prototype = new window.rhubarb.validation.BaseValidation();
 window.rhubarb.validation.EqualTo.prototype.constructor = window.rhubarb.validation.EqualTo;
+
+window.rhubarb.validation.MatchesRegEx = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.regEx = new RegExp(settings.regEx);
+
+    this.validate = function (value) {
+        if (value.match(this.regEx)) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.MatchesRegEx.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.MatchesRegEx.prototype.constructor = window.rhubarb.validation.MatchesRegEx;
+
+window.rhubarb.validation.GreaterThan = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.validate = function (value) {
+        if ((settings.equalTo && value >= settings.greaterThan) || value > settings.greaterThan) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.GreaterThan.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.GreaterThan.prototype.constructor = window.rhubarb.validation.GreaterThan;
+
+window.rhubarb.validation.LessThan = function (name, settings) {
+    window.rhubarb.validation.BaseValidation.apply(this, arguments);
+
+    this.validate = function (value) {
+        if ((settings.equalTo && value <= settings.lessThan) || value < settings.lessThan) {
+            return true;
+        } else {
+            throw new window.rhubarb.validation.ValidationError(this.name, this.failedMessage)
+        }
+    }
+};
+
+window.rhubarb.validation.LessThan.prototype = new window.rhubarb.validation.BaseValidation();
+window.rhubarb.validation.LessThan.prototype.constructor = window.rhubarb.validation.LessThan;

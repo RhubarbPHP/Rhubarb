@@ -1,24 +1,26 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Sessions;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Sessions\Exceptions\SessionProviderNotFoundException;
+use Rhubarb\Crown\Sessions\SessionProviders\SessionProvider;
 use Rhubarb\Crown\Settings;
 
 require_once __DIR__ . "/../Settings.php";
@@ -35,8 +37,6 @@ require_once __DIR__ . "/../Settings.php";
  */
 class Session extends Settings
 {
-    private static $defaultSessionProviderClassName = "Rhubarb\Crown\Sessions\SessionProviders\PhpSessionProvider";
-
     /**
      * @var \Rhubarb\Crown\Sessions\SessionProviders\SessionProvider
      */
@@ -49,7 +49,7 @@ class Session extends Settings
      *
      * @return SessionProviders\SessionProvider
      */
-    protected final function getSessionProvider()
+    final protected function getSessionProvider()
     {
         if ($this->sessionProvider == null) {
             $this->sessionProvider = $this->getNewSessionProvider();
@@ -78,36 +78,7 @@ class Session extends Settings
      */
     protected function getNewSessionProvider()
     {
-        $class = self::$defaultSessionProviderClassName;
-
-        return new $class();
-    }
-
-    /**
-     * Get's the class name in use for the default session provider.
-     *
-     * Used mainly by unit tests.
-     *
-     * @return string
-     */
-    public static function getDefaultSessionProviderClassName()
-    {
-        return self::$defaultSessionProviderClassName;
-    }
-
-    /**
-     * Changes the name of the class used as the default session provider.
-     *
-     * @param $defaultSessionProviderClassName
-     * @throws Exceptions\SessionProviderNotFoundException Thrown if the class name provided doesn't exist.
-     */
-    public static function setDefaultSessionProviderClassName($defaultSessionProviderClassName)
-    {
-        if (!class_exists($defaultSessionProviderClassName)) {
-            throw new SessionProviderNotFoundException($defaultSessionProviderClassName);
-        }
-
-        self::$defaultSessionProviderClassName = $defaultSessionProviderClassName;
+        return Container::instance(SessionProvider::class);
     }
 
     /**

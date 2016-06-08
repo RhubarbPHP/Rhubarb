@@ -1,30 +1,32 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\Http;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\PhpContext;
+use Rhubarb\Crown\Request\Request;
 
 class HttpResponse
 {
     private $headers = [];
 
     private $responseBody = "";
+    private $responseCode = "";
 
     public function getHeader($header, $defaultValue = null)
     {
@@ -62,7 +64,7 @@ class HttpResponse
     public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
     {
         setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
-        $request = Context::currentRequest();
+        $request = Request::current();
         $request->cookie($name, $value);
     }
 
@@ -74,5 +76,41 @@ class HttpResponse
     public static function unsetCookie($name, $path = "/", $domain = null)
     {
         self::setCookie($name, null, -1000, $path, $domain);
+    }
+
+    /**
+     * @return string
+     */
+    public function getResponseCode()
+    {
+        return $this->responseCode;
+    }
+
+    /**
+     * @param string $responseCode
+     */
+    public function setResponseCode($responseCode)
+    {
+        $this->responseCode = $responseCode;
+    }
+
+    public function isSuccess()
+    {
+        return $this->responseCode >= 200 && $this->responseCode <= 299;
+    }
+
+    public function isRedirect()
+    {
+        return $this->responseCode >= 300 && $this->responseCode <= 399;
+    }
+
+    public function isRequestError()
+    {
+        return $this->responseCode >= 400 && $this->responseCode <= 499;
+    }
+
+    public function isServerError()
+    {
+        return $this->responseCode >= 500 && $this->responseCode <= 599;
     }
 }

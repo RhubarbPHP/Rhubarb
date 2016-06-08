@@ -1,25 +1,25 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 
 namespace Rhubarb\Crown\DataStreams;
 
-require_once __DIR__ . '/DataStream.php';
+require_once __DIR__ . '/RecordStream.php';
 
 use Rhubarb\Crown\Exceptions\EndOfStreamException;
 
@@ -33,7 +33,7 @@ use Rhubarb\Crown\Exceptions\EndOfStreamException;
  * enclosure character if it appears in the cell contents, then you should set the $escapeCharacter
  * property before starting to read your stream.
  */
-class CsvStream extends DataStream
+class CsvStream extends RecordStream
 {
     private $filePath;
 
@@ -85,7 +85,7 @@ class CsvStream extends DataStream
         parent::__construct();
     }
 
-    public function GetFilePath()
+    public function getFilePath()
     {
         return $this->filePath;
     }
@@ -159,7 +159,10 @@ class CsvStream extends DataStream
 
             $csvDataLength = strlen($csvData);
 
-            for ($i = 0; $i < $csvDataLength; $i++) {
+            // Check for and skip UTF8 BOM
+            $startByte = $csvDataLength > 2 && substr($csvData, 0, 3) === b"\xEF\xBB\xBF" ? 3 : 0;
+
+            for ($i = $startByte; $i < $csvDataLength; $i++) {
                 $byte = $csvData[$i];
 
                 if ($i < $csvDataLength - 1 && $inEnclosure) {
@@ -333,11 +336,16 @@ class CsvStream extends DataStream
             $enclosedData = [];
 
             foreach ($dataToWrite as $value) {
-                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos($value,
-                            $this->delimiter) !== false)
+                if ((strpos($value, $this->enclosure) !== false) || (strpos($value, "\n") !== false) || (strpos(
+                            $value,
+                            $this->delimiter
+                        ) !== false)
                 ) {
-                    $enclosedData[] = $this->enclosure . str_replace($this->enclosure,
-                            $escapeCharacter . $this->enclosure, $value) . $this->enclosure;
+                    $enclosedData[] = $this->enclosure . str_replace(
+                            $this->enclosure,
+                            $escapeCharacter . $this->enclosure,
+                            $value
+                        ) . $this->enclosure;
                 } else {
                     $enclosedData[] = $value;
                 }
