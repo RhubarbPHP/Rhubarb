@@ -1,3 +1,5 @@
 develop
 
 * Fix: PHP 5.6 caused issues with usage of crypt with no salt parameter
+* Fix: Shutdown exceptions weren't logged when running under apache in some circumstances
+* Change: Shutdown exceptions cause a white screen. Now prints a simple statement directing the developer to the log
