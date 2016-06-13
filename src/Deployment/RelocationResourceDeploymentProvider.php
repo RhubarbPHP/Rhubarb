@@ -80,6 +80,9 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             }
         }
 
+        if (file_exists($localPath) && filemtime($localPath) > $resourceFilePath)
+
+        $result = false;
         $result = @copy($resourceFilePath, $localPath);
 
         if (!$result) {
