@@ -86,6 +86,10 @@ abstract class ExceptionHandler
 
         // Make sure we handle fatal errors too.
         register_shutdown_function(function () use ($exceptionHandler) {
+            if (!self::$exceptionTrappingOn) {
+                return;
+            }
+
             $error = error_get_last();
 
             if ($error != null) {
