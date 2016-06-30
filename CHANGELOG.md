@@ -1,5 +1,9 @@
 # Change log
 
+### 1.1.x
+
+* Added:    Debug logging in PhpMailEmailProvider
+
 ### 1.1.3
 
 * Removed:  Removed conflicting AppSettings class in lieu of WebsiteSettings.

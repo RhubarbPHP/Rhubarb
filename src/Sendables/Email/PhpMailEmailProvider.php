@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\Sendables\Email;
 
+use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\Sendables\Sendable;
 
 require_once __DIR__ . '/EmailProvider.php';
@@ -26,11 +27,20 @@ class PhpMailEmailProvider extends EmailProvider
 {
     public function send(Sendable $email)
     {
+        $recipientList = $email->getRecipientList();
+
+        Log::debug("Sending message to ".$recipientList,"EMAIL");
+
         mail(
-            $email->getRecipientList(),
+            $recipientList,
             $email->getSubject(),
             $email->getBodyRaw(),
             $email->getMailHeadersAsString()
         );
+
+        Log::indent();
+        Log::debug("Sent message to ".$recipientList,"EMAIL");
+        Log::outdent();
+
     }
 }
