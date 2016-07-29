@@ -52,7 +52,9 @@ class FileResponse extends Response
 
     protected function printContent()
     {
-        ob_clean();
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
 
         readfile($this->filePath);
 
