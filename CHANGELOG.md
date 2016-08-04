@@ -6,6 +6,7 @@
 * Fixed:    Better handling of times and timezones in RhubarbDateTime
 * Added:    HttpResponseException can be given the origination request
 * Added:    Debug logging in PhpMailEmailProvider
+* Changed:  Application:current() will now create an empty application if one hasn't already been registered
 
 ### 1.1.3
 
