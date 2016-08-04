@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eee66cd4d684a5841733827a32dbe917",
-    "content-hash": "4ea41a743c55508c4e34c4db608e863d",
+    "hash": "5294803aefd204bad8e2a2691595c365",
+    "content-hash": "9a120677d8cc34ef19488672283f6133",
     "packages": [],
     "packages-dev": [
         {
@@ -1375,16 +1375,16 @@
         },
         {
             "name": "rhubarbphp/custard",
-            "version": "1.0.8",
+            "version": "1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RhubarbPHP/Custard.git",
-                "reference": "2c238e2eba0322aa93682132edfab31891c7f3df"
+                "reference": "9bbb26787291013724db4e3b261624efe795a599"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RhubarbPHP/Custard/zipball/2c238e2eba0322aa93682132edfab31891c7f3df",
-                "reference": "2c238e2eba0322aa93682132edfab31891c7f3df",
+                "url": "https://api.github.com/repos/RhubarbPHP/Custard/zipball/9bbb26787291013724db4e3b261624efe795a599",
+                "reference": "9bbb26787291013724db4e3b261624efe795a599",
                 "shasum": ""
             },
             "require": {
@@ -1417,7 +1417,7 @@
                 "rhubarb",
                 "tools"
             ],
-            "time": "2016-05-11 21:38:29"
+            "time": "2016-08-04 21:46:40"
         },
         {
             "name": "rhubarbphp/module-build-status-updater",
