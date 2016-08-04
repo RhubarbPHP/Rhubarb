@@ -2,6 +2,7 @@
 
 ### 1.1.4
 
+* Added:    Read strategy for XML traversal and other XML node traversal fixes
 * Fixed:    Better handling of times and timezones in RhubarbDateTime
 * Added:    HttpResponseException can be given the origination request
 * Added:    Debug logging in PhpMailEmailProvider

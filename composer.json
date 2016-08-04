@@ -10,11 +10,6 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "1.1.2-dev"
-		}
-	},
 	"require": {
 	  "php": ">=5.6.0"
 	},
