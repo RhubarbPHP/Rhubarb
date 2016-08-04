@@ -30,7 +30,8 @@ class PhpMailEmailProvider extends EmailProvider
             $email->getRecipientList(),
             $email->getSubject(),
             $email->getBodyRaw(),
-            $email->getMailHeadersAsString()
+            $email->getMailHeadersAsString(),
+            "-f".$this->getSender()->email
         );
     }
 }
