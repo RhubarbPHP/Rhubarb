@@ -1,7 +1,9 @@
 # Change log
 
-### 1.1.x
+### 1.1.4
 
+* Fixed:    Better handling of times and timezones in RhubarbDateTime
+* Added:    HttpResponseException can be given the origination request
 * Added:    Debug logging in PhpMailEmailProvider
 
 ### 1.1.3
