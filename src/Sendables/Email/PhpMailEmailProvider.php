@@ -36,7 +36,7 @@ class PhpMailEmailProvider extends EmailProvider
             $email->getSubject(),
             $email->getBodyRaw(),
             $email->getMailHeadersAsString(),
-            "-f".$this->getSender()->email
+            "-f".$email->getSender()->email
         );
 
         Log::indent();
