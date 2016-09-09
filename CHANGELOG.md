@@ -2,6 +2,11 @@
 
 ### 1.1.x
 
+### 1.1.5
+
+* Added:    HTTP request header case insensitivity support per RFC2616
+* Fixed:    Setting web request headers when getallheaders is unavailable
+* Fixed:    Unit tests running stand alone, without codeception
 
 ### 1.1.4
 
