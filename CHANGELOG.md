@@ -3,7 +3,8 @@
 ### 1.1.x
 
 
-* Fixed:      Unit tests running stand alone, without codeception
+* Fixed:    Setting web request headers when getallheaders is unavailable
+* Fixed:    Unit tests running stand alone, without codeception
 
 ### 1.1.4
 

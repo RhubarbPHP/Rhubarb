@@ -84,7 +84,7 @@ class WebRequest extends Request
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, "http_") === 0) {
                     $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
-                    $this->header($key, $value);
+                    $this->headerData[$key] = $value;
                 }
             }
         }
