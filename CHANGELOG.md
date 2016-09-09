@@ -3,6 +3,8 @@
 ### 1.1.x
 
 
+* Fixed:      Unit tests running stand alone, without codeception
+
 ### 1.1.4
 
 * Added:    Read strategy for XML traversal and other XML node traversal fixes
