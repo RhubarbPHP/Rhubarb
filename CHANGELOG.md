@@ -2,6 +2,10 @@
 
 ### 1.1.x
 
+### 1.1.6
+
+* Fixed:    Header value case bug introduced in 1.1.5
+
 ### 1.1.5
 
 * Added:    HTTP request header case insensitivity support per RFC2616

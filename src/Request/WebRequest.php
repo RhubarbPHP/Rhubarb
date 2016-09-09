@@ -157,7 +157,11 @@ class WebRequest extends Request
         // RFC2616 (HTTP 1.1) requires headers to be case insensitive, so convert all headers to lower case
         if(!$this->headerCaseSet) {
             $this->headerCaseSet = true;
-            $this->serverData = array_map('strtolower', $this->serverData);
+            $lowerCaseHeaders = [];
+            foreach($this->headerData as $key => $value) {
+                $lowerCaseHeaders[strtolower($key)] = $value;
+            }
+            $this->headerData = $lowerCaseHeaders;
         }
         return $this->getSuperglobalValue('header', strtolower($name), $defaultValue);
     }
