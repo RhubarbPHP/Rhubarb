@@ -2,6 +2,8 @@
 
 ### 1.1.x
 
+* Fixed:    Dependency injection static memory issues in HttpClient
+* Changed:  CURLOPT_SSL_VERIFYPEER should be true on all curl requests
 * Changed:  A MultiPartFormDataRequest now provides a MimeDocument as it's payload
 * Fixed:    MimeDocument RFC 1341 compliant boundary header detection
 
