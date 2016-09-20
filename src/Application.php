@@ -391,8 +391,20 @@ class Application extends Module
         return $this->request;
     }
 
+    /**
+     * Returns the currently active Application instance
+     * @return Application
+     */
     public static final function current()
     {
+        // If we don't have an application it's possible we're running a custard command that
+        // operates on the code base rather than the application itself. In these scenarios we
+        // may not have an application defined. We create an empty one in this case so a DI
+        // container will still be available.
+        if (!self::$currentApplication){
+            self::$currentApplication = new Application();
+        }
+
         return self::$currentApplication;
     }
 

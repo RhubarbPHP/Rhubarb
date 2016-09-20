@@ -17,117 +17,57 @@
 
 namespace Rhubarb\Crown\Request;
 
+use Rhubarb\Crown\Mime\MimeDocument;
+
 class MultiPartFormDataRequest extends WebRequest
 {
 
-    public function getPayload()
+    /** @var null|string */
+    private $rawRequest = null;
+
+    /**
+     * @return string
+     */
+    public function getRawRequest()
     {
-        // Support multipart file PUT operations
-        if (isset($this->serverData['REQUEST_METHOD']) && $this->serverData['REQUEST_METHOD'] === 'PUT') {
-            $this->parsePut();
+        // return raw request if set - this is for testing purposes
+        if ($this->rawRequest !== null) {
+            return $this->rawRequest;
         }
 
-        $requestBody = array_merge($_FILES, $_POST);
-        return $requestBody;
+        /* PUT data only comes in on the stdin stream, so I'm reading for that for POST/PUT/FILES*/
+        $requestStream = fopen('php://input', 'r');
+
+        $requestBody = '';
+        // read
+        while ($chunk = fread($requestStream, 1024)) {
+            $requestBody .= $chunk;
+        }
+        $requestBody = ltrim($requestBody);
+
+        fclose($requestStream);
+
+        $headers = '';
+        foreach ($this->headerData as $header => $value) {
+            $headers .= "{$header}: {$value}\n";
+        }
+
+        return $headers . "\n" . $requestBody;
     }
 
     /**
-     * Parses PUT request input into $_FILES
-     * @link http://stackoverflow.com/a/18678678
+     * @param string $rawRequest
      */
-    private function parsePut()
+    public function setRawRequest($rawRequest)
     {
-        global $_PUT;
+        $this->rawRequest = $rawRequest;
+    }
 
-        /* PUT data comes in on the stdin stream */
-        $putStream = fopen("php://input", "r");
-
-        $rawData = '';
-
-        /* Read the data 1 KB at a time
-           and write to the file */
-        while ($chunk = fread($putStream, 1024)) {
-            $rawData .= $chunk;
-        }
-
-        $rawData = ltrim($rawData);
-
-        /* Close the streams */
-        fclose($putStream);
-
-        // Fetch content and determine boundary
-        $boundary = substr($rawData, 0, strpos($rawData, "\r\n"));
-
-        if (empty($boundary)) {
-            parse_str($rawData, $data);
-            $GLOBALS['_PUT'] = $data;
-            return;
-        }
-
-        // Fetch each part
-        $parts = array_slice(explode($boundary, $rawData), 1);
-        $data = [];
-
-        foreach ($parts as $part) {
-            // If this is the last part, break
-            if ($part == "--\r\n") {
-                break;
-            }
-
-            // Separate content from headers
-            $part = ltrim($part, "\r\n");
-            list($rawHeaders, $body) = explode("\r\n\r\n", $part, 2);
-
-            // Parse the headers list
-            $rawHeaders = explode("\r\n", $rawHeaders);
-            $headers = [];
-            foreach ($rawHeaders as $header) {
-                list($name, $value) = explode(':', $header);
-                $headers[strtolower($name)] = ltrim($value, ' ');
-            }
-
-            // Parse the Content-Disposition to get the field name, etc.
-            if (isset($headers['content-disposition'])) {
-                $filename = null;
-                $tmpName = null;
-                preg_match(
-                    '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
-                    $headers['content-disposition'],
-                    $matches
-                );
-                list(, $type, $name) = $matches;
-
-                //Parse File
-                if (isset($matches[4])) {
-                    //if labeled the same as previous, skip
-                    if (isset($_FILES[$matches[2]])) {
-                        continue;
-                    }
-
-                    //get filename
-                    $filename = $matches[4];
-
-                    //get tmp name
-                    $filenameParts = pathinfo($filename);
-                    $tmpName = tempnam(ini_get('upload_tmp_dir'), $filenameParts['filename']);
-
-                    //populate $_FILES with information, size may be off in multibyte situation
-                    $_FILES[$matches[2]] = [
-                        'error' => 0,
-                        'name' => $filename,
-                        'tmp_name' => $tmpName,
-                        'size' => strlen($body),
-                        'type' => $value,
-                    ];
-
-                    //place in temporary directory
-                    file_put_contents($tmpName, $body);
-                } //Parse Field
-                else {
-                    $data[$name] = substr($body, 0, strlen($body) - 2);
-                }
-            }
-        }
-        $GLOBALS['_PUT'] = $data;
+    /**
+     * @return MimeDocument
+     */
+    public function getPayload()
+    {
+        return MimeDocument::fromString($this->getRawRequest());
     }
 }

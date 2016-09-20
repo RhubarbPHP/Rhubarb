@@ -44,12 +44,13 @@ class DefaultExceptionHandler extends ExceptionHandler
     protected function generateResponseForException(RhubarbException $er)
     {
         $urlHandler = UrlHandler::getExecutingUrlHandler();
+
         if ($urlHandler != null) {
             return $urlHandler->generateResponseForException($er);
         }
 
         $response = new Response();
-        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);        
+        $response->setResponseCode(HttpHeaders::HTTP_STATUS_SERVER_ERROR_GENERIC);
         $response->setContent("Unhandled " . basename(str_replace('\\','/',get_class($er))) . " `" . $er->getMessage() . "` in line " . $er->getLine() . " in " . $er->getFile() . " (" . $er->getPrivateMessage() . ")");
         return $response;
     }

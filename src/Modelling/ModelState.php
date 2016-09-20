@@ -123,7 +123,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
     final protected function setModelValue($propertyName, $value)
     {
         try {
-            $oldValue = isset($this->modelData[$propertyName]) ? $this->modelData[$propertyName] : null;
+            $oldValue = (isset($this->modelData[$propertyName])) ? $this->modelData[$propertyName]: null;
         } catch (\Exception $ex) {
             // Catch any exceptions thrown when trying to retrieve the old value for the sake
             // of comparison to trigger the property changed handlers.

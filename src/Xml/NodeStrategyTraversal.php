@@ -18,24 +18,26 @@
 
 namespace Rhubarb\Crown\Xml;
 
-require_once __DIR__ . '/NodeStrategy.php';
+require_once __DIR__ . '/NodeStrategyRead.php';
 
-class NodeStrategyTraversal extends NodeStrategy
+class NodeStrategyTraversal extends NodeStrategyRead
 {
-    private $nodeHandlers = [];
+    protected $nodeHandlers = [];
 
     public function addNodeHandler($nodeName, NodeStrategy $strategy)
     {
-        $this->nodeHandlers[$nodeName] = $strategy;
+        $this->nodeHandlers[ $nodeName ] = $strategy;
 
         return $this;
     }
 
     public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
     {
+        parent::parse($xmlReader, $startingDepth, $parseOne);
+
         // Keep scanning elements while we have elements to scan and we are still within our scope
         // namely that the depth is greater than our own depth.
-        while ($xmlReader->read() && ($xmlReader->depth > $startingDepth)) {
+        while ($xmlReader->read() && ( $xmlReader->depth > $startingDepth )) {
             if ($xmlReader->nodeType == \XMLReader::ELEMENT) {
                 foreach ($this->nodeHandlers as $name => $strategy) {
                     if ($name == "*" || $name == $xmlReader->name) {

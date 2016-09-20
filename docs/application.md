@@ -17,7 +17,7 @@ is more likely to have greater coverage.
 ### Retrieving the current application
 
 Rhubarb can host more than one application in a single execution. The currently running application can be
-returend from `Application::current()`
+returned from `Application::current()`
 
 ``` php
 $app = Application::current();

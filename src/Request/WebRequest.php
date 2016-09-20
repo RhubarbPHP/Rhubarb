@@ -55,6 +55,9 @@ class WebRequest extends Request
 
     private $urlBase;
 
+    /** @var bool Indicates that header keys have been set to lower case */
+    private $headerCaseSet = false;
+
     public function initialise()
     {
         $this->superGlobalMethodNames = [
@@ -81,10 +84,12 @@ class WebRequest extends Request
         if (function_exists("getallheaders")) {
             $this->headerData = \getallheaders();
         } else {
+            $this->headerCaseSet = true;
             foreach ($_SERVER as $key => $value) {
-                if (stripos($key, "http_") === 0) {
-                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))));
-                    $this->header($key, $value);
+                $key = strtolower($key);
+                if (strpos($key, 'http_') === 0) {
+                    $key = str_replace('_', '-', substr($key, 5));
+                    $this->headerData[$key] = $value;
                 }
             }
         }
@@ -140,5 +145,24 @@ class WebRequest extends Request
         }
 
         return $typeString;
+    }
+
+    /**
+     * @param $name
+     * @param null|mixed $defaultValue
+     * @return mixed|null
+     */
+    public function header($name, $defaultValue = null) {
+
+        // RFC2616 (HTTP 1.1) requires headers to be case insensitive, so convert all headers to lower case
+        if(!$this->headerCaseSet) {
+            $this->headerCaseSet = true;
+            $lowerCaseHeaders = [];
+            foreach($this->headerData as $key => $value) {
+                $lowerCaseHeaders[strtolower($key)] = $value;
+            }
+            $this->headerData = $lowerCaseHeaders;
+        }
+        return $this->getSuperglobalValue('header', strtolower($name), $defaultValue);
     }
 }

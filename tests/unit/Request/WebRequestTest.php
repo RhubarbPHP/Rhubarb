@@ -22,7 +22,8 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RequestTestCase;
 
 class WebRequestTest extends RequestTestCase
 {
-    protected $request = null;
+    /** @var Webrequest */
+    protected $request;
 
     protected function setUp()
     {
@@ -34,6 +35,7 @@ class WebRequestTest extends RequestTestCase
         $_SERVER['SCRIPT_URI'] = 'http://gcdtech.com/foo';
         $_SERVER['REQUEST_URI'] = '/foo';
         $_SERVER['SCRIPT_NAME'] = '/foo';
+        $_SERVER['HTTP_authorization'] = 'test';
 
         $_GET = ["test" => "value"];
         $_POST = [];
@@ -70,5 +72,10 @@ class WebRequestTest extends RequestTestCase
     public function testNoSSL()
     {
         $this->assertFalse($this->request->isSSL());
+    }
+
+    public function testCaseSensitiveHeaders()
+    {
+        $this->assertEquals('test', $this->request->header('Authorization'));
     }
 }
