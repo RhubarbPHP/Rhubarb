@@ -159,4 +159,15 @@ class MimeDocumentTest extends RhubarbTestCase
         ));
         self::assertCount(count($documentWithQuotedBoundary->getParts()), $documentWithUnQuotedBoundary->getParts());
     }
+
+    public function testHeaderCaseInsensitivity()
+    {
+        $documentWithCorrectCase = MimeDocument::fromString($this->message1);
+        $caseInsensitiveDocument = MimeDocument::fromString(str_replace(
+            'Content-Type:',
+            'content-type:',
+            $this->message1
+        ));
+        self::assertCount(count($documentWithCorrectCase->getParts()), $caseInsensitiveDocument->getParts());
+    }
 }
