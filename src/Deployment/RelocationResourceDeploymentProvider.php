@@ -80,10 +80,12 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             }
         }
 
-        $result = @copy($resourceFilePath, $localPath);
+        if (!file_exists($localPath) || (filemtime($resourceFilePath) > filemtime($localPath))) {
+            $result = @copy($resourceFilePath, $localPath);
 
-        if (!$result) {
-            throw new DeploymentException("The file $resourceFilePath could not be deployed. Please check file permissions.");
+            if (!$result) {
+                throw new DeploymentException("The file $resourceFilePath could not be deployed. Please check file permissions.");
+            }
         }
 
         $this->alreadyDeployed[$originalResourceFilePath] = $urlPath;

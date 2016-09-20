@@ -10,16 +10,11 @@
 		    "Rhubarb\\Crown\\Tests\\": "tests/"
 		}
 	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "1.1.2-dev"
-		}
-	},
 	"require": {
 	  "php": ">=5.6.0"
 	},
 	"require-dev": {
-	    "rhubarbphp/custard": "^1.0.0",
+	    "rhubarbphp/custard": "^1.0.9",
 		"rhubarbphp/module-build-status-updater": "^1.0.5",
 		"codeception/codeception": "^2.0.0",
 		"phploc/phploc": "^3.0.0",

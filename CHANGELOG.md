@@ -1,5 +1,25 @@
 # Change log
 
+### 1.1.x
+
+### 1.1.6
+
+* Fixed:    Header value case bug introduced in 1.1.5
+
+### 1.1.5
+
+* Added:    HTTP request header case insensitivity support per RFC2616
+* Fixed:    Setting web request headers when getallheaders is unavailable
+* Fixed:    Unit tests running stand alone, without codeception
+
+### 1.1.4
+
+* Added:    Read strategy for XML traversal and other XML node traversal fixes
+* Fixed:    Better handling of times and timezones in RhubarbDateTime
+* Added:    HttpResponseException can be given the origination request
+* Added:    Debug logging in PhpMailEmailProvider
+* Changed:  Application:current() will now create an empty application if one hasn't already been registered
+
 ### 1.1.3
 
 * Removed:  Removed conflicting AppSettings class in lieu of WebsiteSettings.

@@ -18,49 +18,52 @@
 
 namespace Rhubarb\Crown\Xml;
 
-require_once __DIR__ . '/NodeStrategy.php';
+require_once __DIR__ . '/NodeStrategyRead.php';
 
-class NodeStrategyCollation extends NodeStrategy
+class NodeStrategyCollation extends NodeStrategyRead
 {
-    private $callBack;
 
-    public function __construct($callBack)
+    private $startDepth;
+
+    /**
+     * @param callable $callBack
+     */
+    public function __construct( $callBack )
     {
-        $this->callBack = $callBack;
+        parent::__construct( $callBack );
     }
 
-    public function parse(\XMLReader $xmlReader, $startingDepth = 0, $parseOne = false)
+    public function parse( \XMLReader $xmlReader, $startingDepth = 0, $parseOne = false )
     {
-        $node = new Node();
-        $node->name = $xmlReader->name;
-        $node->depth = $xmlReader->depth;
-        $node->text = $xmlReader->readString();
+        $this->startDepth = $startingDepth;
+        parent::parse( $xmlReader, $startingDepth, $parseOne );
+    }
 
-        if ($xmlReader->moveToFirstAttribute()) {
-            do {
-                $node->attributes[$xmlReader->name] = $xmlReader->value;
-            } while ($xmlReader->moveToNextAttribute());
+    /**
+     * The collation strategy should to collate all child nodes before callback
+     *
+     * @param Node       $node
+     * @param \XMLReader $xmlReader
+     *
+     * @return Node The node with children collated will be passed to the callback
+     */
+    protected function processNode( Node $node, \XMLReader $xmlReader )
+    {
+        $node = parent::processNode( $node, $xmlReader );
+        $children = [ ];
+
+        if( !$xmlReader->isEmptyElement )
+        {
+            $scanner = new NodeStrategyTraversal();
+            $scanner->addNodeHandler( '*', new self( function ( $node ) use ( &$children )
+            {
+                $children[] = $node;
+            } ) );
+            $scanner->parse( $xmlReader, $this->startDepth );
         }
-
-        $children = [];
-
-        $scanner = new NodeStrategyTraversal();
-        $scanner->addNodeHandler("*", new self(function ($node) use (&$children) {
-            $children[] = $node;
-        }));
-
-        $scanner->parse($xmlReader, $startingDepth);
 
         $node->children = $children;
 
-        $node = $this->processNode($node);
-
-        $callBack = $this->callBack;
-        $callBack($node);
-    }
-
-    protected function processNode(Node $node)
-    {
         return $node;
     }
 }

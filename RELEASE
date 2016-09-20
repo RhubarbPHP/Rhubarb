@@ -1,4 +1,0 @@
-develop
-
-* Fix: Shutdown exceptions weren't logged when running under apache in some circumstances
-* Change: Shutdown exceptions cause a white screen. Now prints a simple statement directing the developer to the log

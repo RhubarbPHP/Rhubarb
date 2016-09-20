@@ -28,3 +28,6 @@ Toolkit Classes:
     . StringTools:string-tools
     . Mime:mime
     . Xml:xml
+Custard:
+    . Introduction & Setup:custard/
+    . Creating a custard command:custard/make-your-own
