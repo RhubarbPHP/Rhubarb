@@ -35,7 +35,7 @@ class StaticResourceUrlHandler extends UrlHandler
 
     private $isFolder = false;
 
-    private $staticFile = false;
+    protected $staticFile = false;
 
     public function __construct($folderOrFilePath, $children = [])
     {

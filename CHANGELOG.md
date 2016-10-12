@@ -1,6 +1,8 @@
 # Change log
 
-### 1.1.x
+### 1.1.7
+
+* Changed:  $staticFile in StaticResourceUrlHandler is now protected
 
 ### 1.1.6
 
