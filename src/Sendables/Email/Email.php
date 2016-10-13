@@ -80,12 +80,22 @@ abstract class Email extends Sendable
     public function getSender()
     {
         if ($this->sender == null) {
-            $emailSettings = EmailSettings::singleton();
-
-            return $emailSettings->defaultSender;
+            return $this->getDefaultSender();
         }
 
         return $this->sender;
+    }
+
+    /**
+     * Returns a default sender when none is supplied.
+     *
+     * @return EmailRecipient
+     */
+    protected function getDefaultSender()
+    {
+        $emailSettings = EmailSettings::singleton();
+
+        return $emailSettings->defaultSender;
     }
 
     /**
