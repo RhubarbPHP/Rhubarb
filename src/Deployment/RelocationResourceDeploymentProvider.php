@@ -88,6 +88,10 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             }
         }
 
+        if (preg_match('/(\.js|\.css)$/', $resourceFilePath, $match)) {
+            $urlPath .= '?' . filemtime($resourceFilePath) . $match[1];
+        }
+
         $this->alreadyDeployed[$originalResourceFilePath] = $urlPath;
 
         return $urlPath;

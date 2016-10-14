@@ -113,7 +113,7 @@ class WebRequest extends Request
 
             $host = $this->host;
             if (strpos($host, ':') === false) {
-                $port = $serverData['SERVER_PORT'];
+                $port = $this->serverData['SERVER_PORT'];
                 $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
                 $host = $this->host . $port;
             }
