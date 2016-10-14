@@ -30,13 +30,12 @@ use Rhubarb\Crown;
  * @property string $urlPath
  * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  *
- * @method mixed get(string $property, string $defaultValue=null) Return a value from the query string optionally using a default value.
- * @method mixed post(string $property, string $defaultValue=null) Return a value from the post data optionally using a default value.
- * @method mixed request(string $property, string $defaultValue=null) Return a value from the post data optionally using a default value.
- * @method mixed files(string $property, string $defaultValue=null) Return a value from the files collection optionally using a default value.
- * @method mixed cookie(string $property, string $defaultValue=null) Return a value from the cookies optionally using a default value.
- * @method mixed session(string $property, string $defaultValue=null) Return a value from the session optionally using a default value.
- * @method mixed header(string $property, string $defaultValue=null) Return a value from the headers optionally using a default value.
+ * @method mixed get(string $property, string $defaultValue = null) Return a value from the query string optionally using a default value.
+ * @method mixed post(string $property, string $defaultValue = null) Return a value from the post data optionally using a default value.
+ * @method mixed request(string $property, string $defaultValue = null) Return a value from the post data optionally using a default value.
+ * @method mixed files(string $property, string $defaultValue = null) Return a value from the files collection optionally using a default value.
+ * @method mixed cookie(string $property, string $defaultValue = null) Return a value from the cookies optionally using a default value.
+ * @method mixed session(string $property, string $defaultValue = null) Return a value from the session optionally using a default value.
  */
 class WebRequest extends Request
 {
@@ -108,7 +107,7 @@ class WebRequest extends Request
     public function createUrl($uri = '/')
     {
         if (!isset($this->urlBase)) {
-            $ssl = $this->getIsSSL();
+            $ssl = $this->isSSL();
             $protocol = 'http' . (($ssl) ? 's' : '');
 
             $host = $this->host;
@@ -125,7 +124,7 @@ class WebRequest extends Request
             $uri = '/' . $uri;
         }
 
-        return $this->urlBase.$uri;
+        return $this->urlBase . $uri;
     }
 
     public function isSSL()
@@ -152,13 +151,13 @@ class WebRequest extends Request
      * @param null|mixed $defaultValue
      * @return mixed|null
      */
-    public function header($name, $defaultValue = null) {
-
+    public function header($name, $defaultValue = null)
+    {
         // RFC2616 (HTTP 1.1) requires headers to be case insensitive, so convert all headers to lower case
-        if(!$this->headerCaseSet) {
+        if (!$this->headerCaseSet) {
             $this->headerCaseSet = true;
             $lowerCaseHeaders = [];
-            foreach($this->headerData as $key => $value) {
+            foreach ($this->headerData as $key => $value) {
                 $lowerCaseHeaders[strtolower($key)] = $value;
             }
             $this->headerData = $lowerCaseHeaders;
