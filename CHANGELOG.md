@@ -2,6 +2,12 @@
 
 ### 1.1.x
 
+### 1.1.9
+
+* Fixed:    Reference to nonexistant $serverData in WebRequest
+* Changed:  Using file modified time on JS and CSS URLs deployed by RelocationResourceDeploymentProvider
+* Changed:  FileResponse and Application clear any level of output buffering before output
+
 ### 1.1.8
 
 * Changed:  Means to better set a default sender for emails
