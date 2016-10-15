@@ -1,6 +1,8 @@
 # Change log
 
-### 1.1.x
+### 1.1.10
+
+* Fixed:    Request (get merged with post) data wasn't handled property
 
 ### 1.1.9
 
