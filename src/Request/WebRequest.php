@@ -74,7 +74,7 @@ class WebRequest extends Request
         $this->serverData = isset($_SERVER) ? $_SERVER : [];
         $this->getData = isset($_GET) ? $_GET : [];
         $this->postData = isset($_POST) ? $_POST : [];
-        $this->postData = isset($_REQUEST) ? $_REQUEST : [];
+        $this->requestData = isset($_REQUEST) ? $_REQUEST : [];
         $this->filesData = isset($_FILES) ? $_FILES : [];
         $this->cookieData = isset($_COOKIE) ? $_COOKIE : [];
         $this->sessionData = isset($_SESSION) ? $_SESSION : [];
