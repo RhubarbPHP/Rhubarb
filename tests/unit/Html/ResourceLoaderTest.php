@@ -27,7 +27,7 @@ class ResourceLoaderTest extends RhubarbTestCase
         ResourceLoader::addScriptCode("alert(123)");
         $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js\" type=\"text/javascript\"></script><script type=\"text/javascript\">
+        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js?1476715053.js\" type=\"text/javascript\"></script><script type=\"text/javascript\">
 //<![CDATA[
 window.resourceManager.runWhenDocumentReady( function()
 {
@@ -41,7 +41,7 @@ window.resourceManager.runWhenDocumentReady( function()
         ResourceLoader::addScriptCode("doThis();", ["a.js", "b.js"]);
         $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js?1476715053.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\" src=\"a.js\"></script>
 <script type=\"text/javascript\" src=\"b.js\"></script><script type=\"text/javascript\">
 //<![CDATA[
@@ -96,7 +96,7 @@ window.resourceManager.runWhenDocumentReady( function()
 
         $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        $this->assertEquals('<script src="/deployed/resources/resource-manager.js" type="text/javascript"></script>
+        $this->assertEquals('<script src="/deployed/resources/resource-manager.js?1476715053.js" type="text/javascript"></script>
 <link type="text/css" rel="stylesheet" href="/css/base.css" />', $scripts);
     }
 
@@ -109,7 +109,7 @@ window.resourceManager.runWhenDocumentReady( function()
 
         $scripts = ResourceLoader::getResourceInjectionHtml();
 
-        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js\" type=\"text/javascript\"></script>
+        $this->assertEquals("<script src=\"/deployed/resources/resource-manager.js?1476715053.js\" type=\"text/javascript\"></script>
 <script type=\"text/javascript\" src=\"/a.js\"></script>
 <script type=\"text/javascript\" src=\"/b.js\"></script><script type=\"text/javascript\">
 //<![CDATA[
