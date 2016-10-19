@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Response;
 
+use Rhubarb\Crown\Xml\SimpleXmlTranscoder;
+
 require_once __DIR__ . "/Response.php";
 
 /**
@@ -30,5 +32,13 @@ class XmlResponse extends Response
         parent::__construct($generator);
 
         $this->setHeader('Content-Type', 'text/xml');
+    }
+
+    public function formatContent()
+    {
+        if($this->content != '' && !is_string($this->content)) {
+            return SimpleXmlTranscoder::encode(parent::formatContent());
+        }
+        return parent::formatContent();
     }
 }

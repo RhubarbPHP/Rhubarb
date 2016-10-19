@@ -2,6 +2,10 @@
 
 ### 1.1.x
 
+### 1.1.12
+
+* Added:    Support for automatically encoded XML responses
+
 ### 1.1.11
 
 * Added:    Support for text/xml http Accept headers
