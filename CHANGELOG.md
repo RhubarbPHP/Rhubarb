@@ -2,6 +2,10 @@
 
 ### 1.1.x
 
+### 1.1.11
+
+* Added:    SimpleXMLTranscoder Helper class for replicating json_encode/json_decode functionality with XML
+
 ### 1.1.10
 
 * Fixed:    Request (get merged with post) data wasn't handled property
