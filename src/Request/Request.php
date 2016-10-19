@@ -124,6 +124,10 @@ abstract class Request
                 case "application/json":
                     $request = new JsonRequest();
                     break;
+                case "text/xml":
+                case "application/xml":
+                    $request = new XmlRequest();
+                    break;
                 case "multipart/form-data":
                     $request = new MultiPartFormDataRequest();
                     break;

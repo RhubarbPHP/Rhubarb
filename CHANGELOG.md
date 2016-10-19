@@ -4,6 +4,7 @@
 
 ### 1.1.11
 
+* Added:    Support for text/xml http Accept headers
 * Added:    XmlRequest object
 * Added:    SimpleXMLTranscoder Helper class for replicating json_encode/json_decode functionality with XML
 
