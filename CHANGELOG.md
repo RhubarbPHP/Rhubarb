@@ -1,5 +1,7 @@
 # Change log
 
+### 1.1.x
+
 ### 1.1.13
 
 * Fixed:    BinaryResponse used ob_clean() which threw notices if not in a buffering context
