@@ -355,7 +355,7 @@ class CsvStream extends RecordStream
         fwrite($this->fileStream, "\n" . implode($this->delimiter, $enclosedData));
     }
 
-    private function writeHeaders()
+    public function writeHeaders()
     {
         $this->open(true);
 

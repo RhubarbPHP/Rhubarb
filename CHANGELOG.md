@@ -1,6 +1,9 @@
 # Change log
 
-### 1.1.x
+### 1.1.13
+
+* Fixed:    BinaryResponse used ob_clean() which threw notices if not in a buffering context
+* Fixed:    CsvStream::writeHeaders() is now public to allow writing empty CSV files with a header.
 
 ### 1.1.12
 
