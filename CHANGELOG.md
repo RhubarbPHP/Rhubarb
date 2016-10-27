@@ -1,6 +1,8 @@
 # Change log
 
-### 1.1.x
+### 1.1.15
+
+Fixed:      Fix for writeheaders in CsvStream
 
 ### 1.1.14
 
