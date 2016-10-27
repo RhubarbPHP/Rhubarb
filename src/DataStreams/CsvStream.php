@@ -376,5 +376,7 @@ class CsvStream extends RecordStream
         }
 
         fwrite($this->fileStream, implode($this->delimiter, $enclosedData));
+
+        $this->needToWriteHeaders = false;
     }
 }
