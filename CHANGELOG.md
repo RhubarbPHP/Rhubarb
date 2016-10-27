@@ -1,5 +1,7 @@
 # Change log
 
+### 1.1.x
+
 ### 1.1.14
 
 * Fixed:    EncryptedSession wasn't encrypting
