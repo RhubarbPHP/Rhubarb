@@ -40,9 +40,7 @@ class PhpSessionProvider extends SessionProvider
         $namespace = get_class($session);
 
         if (isset($_SESSION[$namespace])) {
-            foreach($_SESSION[$namespace] as $key => $value ){
-                $session->$key = $value;
-            }
+            $session->setSessionData($_SESSION[$namespace]);
         }
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
@@ -62,7 +60,7 @@ class PhpSessionProvider extends SessionProvider
 
         $namespace = get_class($session);
 
-        $_SESSION[$namespace] = get_object_vars($session);
+        $_SESSION[$namespace] = $session->extractSessionData();
 
         // Close the session to make sure we aren't locking other process for this user, e.g.
         // simultaneous AJAX requests.
