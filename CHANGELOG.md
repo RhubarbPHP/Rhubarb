@@ -1,5 +1,7 @@
 # Change log
 
+### 1.1.x
+
 ### 1.1.16
 
 Fixed:	    Email::getMimeDocument() now does something...
