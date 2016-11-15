@@ -1,14 +1,17 @@
 # Change log
 
-### 1.1.x
+### 1.1.17
+
+* Changed:  Trapped exceptions handled by generic UrlHandler on AJAX request will now just output the message without layout HTML
+* Fixed:    Call to HttpHeaders for an HTTP code. HttpHeaders class no longer exists, codes are in Request now
 
 ### 1.1.16
 
-Fixed:	    Email::getMimeDocument() now does something...
+* Fixed:    Email::getMimeDocument() now does something...
 
 ### 1.1.15
 
-Fixed:      Fix for writeheaders in CsvStream
+* Fixed:    Fix for writeheaders in CsvStream
 
 ### 1.1.14
 
