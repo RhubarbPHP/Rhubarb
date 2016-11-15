@@ -17,10 +17,7 @@
 
 namespace Rhubarb\Crown\Tests\unit\UrlHandlers;
 
-use Rhubarb\Crown\PhpContext;
-use Rhubarb\Crown\HttpHeaders;
 use Rhubarb\Crown\Layout\LayoutModule;
-use Rhubarb\Crown\Module;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class NamespaceMappedHandlerTest extends RhubarbTestCase
