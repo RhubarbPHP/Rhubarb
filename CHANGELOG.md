@@ -1,5 +1,9 @@
 # Change log
 
+### 1.1.18
+
+* Added:    Email can now have a different reply to from the sender
+
 ### 1.1.17
 
 * Changed:  Trapped exceptions handled by generic UrlHandler on AJAX request will now just output the message without layout HTML

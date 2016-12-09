@@ -63,6 +63,19 @@ abstract class Email extends Sendable
         return $this->attachments;
     }
 
+
+    /**
+     * Returns the Reply-To recipient for the email.
+     *
+     * Defaults to calling getSender()
+     *
+     * @return EmailRecipient
+     */
+    public function getReplyToRecipient()
+    {
+        return $this->getSender();
+    }
+
     /**
      * @return string
      */
