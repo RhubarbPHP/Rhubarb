@@ -73,7 +73,7 @@ abstract class Request
     /**
      * Returns the active request from the currently running application.
      *
-     * @return Request
+     * @return Request|static
      */
     public final static function current()
     {
