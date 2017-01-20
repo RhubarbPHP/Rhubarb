@@ -295,10 +295,11 @@ class StringTools
      *
      * @param string $string
      * @param array $data
+     * @param bool $replaceEmptyValues Set to false to leave the placeholders in the text for any values which are empty/not set in the data
      *
      * @return string
      */
-    public static function parseTemplateString($string, $data)
+    public static function parseTemplateString($string, $data, $replaceEmptyValues = true)
     {
         $args = func_get_args();
         $dataSources = [];
@@ -325,7 +326,10 @@ class StringTools
                 }
             }
 
-            $html = str_replace($regs[0], (string)$value, $html);
+            $value = (string)$value;
+            if ($replaceEmptyValues || $value != "") {
+                $html = str_replace($regs[0], (string)$value, $html);
+            }
         }
 
         return $html;
