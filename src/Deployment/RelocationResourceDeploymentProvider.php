@@ -24,7 +24,7 @@ use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\DeploymentException;
 
 /**
- * A simple resource deployment handler that simply moves resources to a central, publically available deployed folder.
+ * A simple resource deployment handler that simply moves resources to a central, publicly available deployed folder.
  */
 class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 {
