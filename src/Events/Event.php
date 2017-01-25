@@ -19,35 +19,51 @@ namespace Rhubarb\Crown\Events;
 
 class Event
 {
+    /** @var callable[] */
     private $eventHandlers = [];
 
     /**
      * Attach an event handler
      *
-     * @param callable $delegate
+     * @param callable $handler
+     * @param string $key An optional unique identifier for the handler in case you wish to specifically remove it later
      */
-    public function attachHandler(callable $delegate)
+    public function attachHandler(callable $handler, $key = null)
     {
-        $this->eventHandlers[] = $delegate;
+        if ($key !== null) {
+            $this->eventHandlers[$key] = $handler;
+        } else {
+            $this->eventHandlers[] = $handler;
+        }
     }
 
+    /**
+     * Call all handlers for the event with the passed arguments.
+     * If there are multiple event handlers, this will return the earliest non-null response from the handlers.
+     * If you need to receive response data from multiple handlers, you can pass a callback function as the last argument.
+     * The callback function will only be called for any handler which returns a value.
+     *
+     * @param array ...$arguments
+     * @return mixed
+     */
     public function raise(...$arguments)
     {
         $firstResponse = null;
 
+        /** @var callable $callBack */
         $callBack = false;
 
         $count = count($arguments);
-        if (($count > 0) && is_object($arguments[$count - 1]) && is_callable($arguments[$count - 1])) {
+        if ($count > 0 && is_object($arguments[$count - 1]) && is_callable($arguments[$count - 1])) {
             $callBack = $arguments[$count - 1];
             $arguments = array_slice($arguments, 0, -1);
         }
 
-        foreach($this->eventHandlers as $handler){
+        foreach ($this->eventHandlers as $handler) {
             $response = $handler(...$arguments);
 
             if ($response !== null) {
-                if ($callBack){
+                if ($callBack) {
                     $callBack($response);
                 }
 
@@ -60,7 +76,39 @@ class Event
         return $firstResponse;
     }
 
-    function __invoke(...$arguments)
+    /**
+     * Removes all handlers from the event
+     */
+    public function clearHandlers()
+    {
+        $this->eventHandlers = [];
+    }
+
+    /**
+     * Removes a specific handler based on its key (see the $key argument when calling attachHandler()
+     *
+     * @param string $key
+     */
+    public function removeHandlerWithKey($key)
+    {
+        unset($this->eventHandlers[$key]);
+    }
+
+    /**
+     * Removes a specific handler. You must pass a reference to the same handler you originally attached.
+     *
+     * @param callable $handler
+     */
+    public function removeHandler(callable $handler)
+    {
+        $key = array_search($handler, $this->eventHandlers, true);
+
+        if ($key !== false) {
+            unset($this->eventHandlers[$key]);
+        }
+    }
+
+    public function __invoke(...$arguments)
     {
         $this->raise(...$arguments);
     }
