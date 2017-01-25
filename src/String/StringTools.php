@@ -398,4 +398,18 @@ class StringTools
         }
         return $subject;
     }
+
+    /**
+     * Converts a string from CamelCasing to separated-words, with specifiable separator and lowercase conversion.
+     *
+     * @param $string
+     * @param string $separator The character to separate the words with
+     * @param bool $toLowerCase
+     * @return string
+     */
+    public static function camelCaseToSeparated($string, $separator = '-', $toLowerCase = true)
+    {
+        $separated = preg_replace(['/([a-z\d])([A-Z])/', '/([^' . preg_quote($separator) . '])([A-Z][a-z])/'], '$1' . $separator . '$2', $string);
+        return $toLowerCase ? strtolower($separated) : $separated;
+    }
 }
