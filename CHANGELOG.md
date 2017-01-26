@@ -1,5 +1,11 @@
 # Change log
 
+### 1.1.19
+
+* Added:    Methods allowing removal of all/specific handlers from an Event
+* Added:    StringTools::camelCaseToSeparated, allowing change of CamelCase to e.g. snake_case or hyphenated-string
+* Changed:  Extra parameter to StringTools::parseTemplateString allowing you to leave placeholders that weren't matched by data
+            
 ### 1.1.18
 
 * Added:    Email can now have a different reply to from the sender
