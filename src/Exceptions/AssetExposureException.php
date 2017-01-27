@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright (c) 2016 RhubarbPHP.
+ * Copyright (c) 2017 RhubarbPHP.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,12 @@
  * limitations under the License.
  */
 
-// This is global bootstrap for autoloading
-require_once __DIR__."/../vendor/autoload.php";
-require_once __DIR__."/../platform/boot-rhubarb.php";
+namespace Rhubarb\Crown\Exceptions;
+
+class AssetExposureException extends AssetException
+{
+    public function __construct($token, \Exception $previous)
+    {
+        parent::__construct($token, "The asset '".$token."' is not exposable through a URL.", $previous);
+    }
+}
