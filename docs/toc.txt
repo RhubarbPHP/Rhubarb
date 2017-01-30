@@ -17,6 +17,7 @@ Common Patterns:
     . Sendables:sendables
     . Encryption:encryption
     . Deploying Resources:deployment
+    . Asset Storage:assets
     . Logging:logging
     . Handling Exceptions:exceptions
     . Dates and Times:date-time

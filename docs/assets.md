@@ -161,7 +161,7 @@ overall transfer speed will be much slower. Here's an example of streaming strai
 $streamHandle = $asset->getStream();
 
 while (!feof($streamHandle)) {
-    $buffer = fread($handle, 8192);
+    $buffer = fread($streamHandle, 8192);
     echo $buffer;
     ob_flush();
     flush();
@@ -204,8 +204,102 @@ This provider has only two settings in LocalStorageAssetCatalogueSettings:
 `$storageRootPath`
 :   Sets the folder where all assets are stored.
  
-`$urlMap`
-:   If you can provide access to uploaded files publically via the webserver you can tell the provider about the
-    mappings that are in place to allow it to fulfil getUrl()
+`$rootUrl`
+:   If you can provide access to uploaded files publically via the
+    webserver directly you can tell the provider what URL stub finds
+    the root of the storage directory.
+    
+    Once set to a non empty string the provider will be able to
+    return URLs when `getUrl()` is called on an Asset object.
+    
+    Consider carefully if exposing assets is something you should allow.
+    Public URLs can be favourited, shared and even indexed
+    by search engines depending on the circumstances. For more granular
+    control you can extend LocalStorageAssetCatalogueProvide into
+    multiple derived classes with separate root paths - one for
+    publically accessible assets and one for private assets.
+    
+    Alternatively you can use the AssetUrlHandler to get programmatical
+    control over access. 
 
 ### S3AssetCatalogueProvider
+
+### MigrateableAssetCatalogueProvider
+
+While assets are represented by tokens which are very robust, sometimes
+a particular asset catalogue needs retired and replaced with a new
+repository. Most often local storage needs to be 'upgraded' with
+cloud storage. Assets themselves are easily migrated from one
+provider to another but how can we continue to use the original tokens?
+
+We could 'find and replace' during migration but this might mean
+scanning all tables and columns or maintaining a 'map' of where
+asset tokens are being stored which is unlikely to be maintained and
+when it's really needed would be inaccurate.
+
+A solution is to use the MigrateableAssetCatalogueProvider scaffold.
+Its benefits are only had by using it from the start - you can't
+retro fit it later.
+
+Essentially it proxies the tokens returned by 'real' asset providers,
+stores them in repository and returns a new token that just represents
+the ID in the repository.
+
+All subsequent interactions are with the 'proxy' asset.
+
+This allows migrations to happen in the background while your
+application need never be aware.
+
+> Note while this provides a solution for the application's own use
+> of the tokens, it cannot provide a solution if asset public URLs
+> have been used or distributed. Once migrated the asset should issue
+> correct URLs but anyone trying to access the old URL will probably
+> be disappointed to find the asset 'missing'.
+
+## Fallback asset URLs
+
+If the provider you are using doesn't support public URLs or you need
+fine grained control over access you can use the AssetUrlHandler to
+make individual categories of assets available. This handler takes 
+extracts a category and token from the URL and providing the category
+matches that from the token will retrieve and stream the resource to
+the client.
+
+``` php
+class MyApplication extends Application
+{
+    protected function registerUrlHandlers()
+    {
+        $this->addUrlHandlers(
+          [
+              "/avatars/" => new AssetUrlHandler('avatars')
+          ]
+        );
+    }
+}
+```
+
+### Customising asset exposure
+
+If you need to permit asset exposure in a more controlled way simply
+extend the AssetUrlHandler class and override the `isPermitted()`
+function. You can access the `token` property to analyse the asset
+or as is more common consider the status of a login provider for
+example.
+
+``` php
+class MySecureAssetUrlHandler exteds AssetUrlHandler
+{
+    protected function isPermitted()
+    {
+        $login = MyLoginProvider::singleton();
+        
+        return $login->isLoggedIn();
+    }
+}
+```
+
+Basing exposure permission on login status is so common a stock
+version of this is available in Rhubarb called
+`LoginValidatedAssetUrlHandler`.
+

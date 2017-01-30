@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Assets;
 
 use Rhubarb\Crown\Exceptions\AssetException;
+use Rhubarb\Crown\Exceptions\AssetExposureException;
 use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Logging\Log;
 
@@ -112,6 +113,12 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
 
     public function getUrl(Asset $asset)
     {
+        $settings = LocalStorageAssetCatalogueSettings::singleton();
 
+        if (!$settings->rootUrl){
+            throw new AssetExposureException($asset->getToken());
+        }
+
+        return rtrim($settings->rootUrl, '/').'/'.$asset->getProviderData()["file"];
     }
 }

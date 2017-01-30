@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\Exceptions;
 
 class AssetExposureException extends AssetException
 {
-    public function __construct($token, \Exception $previous)
+    public function __construct($token, \Exception $previous = null)
     {
         parent::__construct($token, "The asset '".$token."' is not exposable through a URL.", $previous);
     }

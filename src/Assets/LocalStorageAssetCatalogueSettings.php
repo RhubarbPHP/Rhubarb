@@ -28,4 +28,14 @@ class LocalStorageAssetCatalogueSettings extends Settings
      * @var string
      */
     public $storageRootPath;
+
+    /**
+     * To provide public URLs for assets you should give the URL that points to the storage root folder.
+     *
+     * Use with caution - public URLs should not be enabled if the catalogue ccntains uploads you would rather
+     * keep private.
+     * 
+     * @var string
+     */
+    public $rootUrl;
 }
