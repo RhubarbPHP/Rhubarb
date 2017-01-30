@@ -66,7 +66,7 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
         return $category;
     }
 
-    public function createAssetFromFile($filePath)
+    public function createAssetFromFile($filePath, $commonProperties)
     {
         $root = $this->getRootPath();
 
@@ -85,9 +85,12 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
         rename($filePath, $path."/".$newName);
 
         // Create the token.
-        $data = ["file" => $newName];
+        $commonProperties["file"] = $newName;
 
-        return $this->createToken($data);
+        $token = $this->createToken($commonProperties);
+        $asset = new Asset($token, $this, $commonProperties);
+
+        return $asset;
     }
 
     public function getStream(Asset $asset)

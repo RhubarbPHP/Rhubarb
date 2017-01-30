@@ -46,7 +46,8 @@ class AssetCatalogueProviderTests extends RhubarbTestCase
         file_put_contents($file, $content);
 
         $provider = $this->getProvider();
-        $token = $provider->createAssetFromFile($file);
+        $asset = $provider->createAssetFromFile($file, []);
+        $token = $asset->getToken();
 
         $asset = $provider->getAsset($token);
         $asset->writeToFile($file);

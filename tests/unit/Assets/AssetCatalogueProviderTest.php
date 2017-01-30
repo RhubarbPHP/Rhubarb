@@ -20,10 +20,29 @@ namespace Rhubarb\Crown\Tests\Assets;
 
 use Rhubarb\Crown\Assets\Asset;
 use Rhubarb\Crown\Assets\AssetCatalogueProvider;
+use Rhubarb\Crown\Assets\AssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class AssetCatalogueProviderTest extends RhubarbTestCase
 {
+    protected $file = __DIR__."/wrapper.txt";
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $settings = AssetCatalogueSettings::singleton();
+        $settings->jwtKey = "rhubarbphp";
+
+        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings->storageRootPath = __DIR__."/data";
+
+        file_put_contents($this->file,"test");
+    }
+
+
     public function testProviderMapping()
     {
         AssetCatalogueProvider::setProviderClassName(TestAssetCatalogueProvider::class);
@@ -36,12 +55,41 @@ class AssetCatalogueProviderTest extends RhubarbTestCase
         
         $this->assertInstanceOf(Test2AssetCatalogueProvider::class, $provider);
     }
+
+    public function testStorageWrapper()
+    {
+        AssetCatalogueProvider::setProviderClassName(LocalStorageAssetCatalogueProvider::class, "test");
+
+        $asset = AssetCatalogueProvider::storeAsset($this->file, "test");
+        $stream = $asset->getStream();
+
+        $content = stream_get_contents($stream);
+        $this->assertEquals("test", $content);
+    }
+
+    public function testAssetProperties()
+    {
+        AssetCatalogueProvider::setProviderClassName(LocalStorageAssetCatalogueProvider::class, "test");
+
+        $asset = AssetCatalogueProvider::storeAsset($this->file, "test");
+
+        $this->assertEquals("text/plain; charset=us-ascii", $asset->mimeType);
+        $this->assertEquals("wrapper.txt", $asset->name);
+        $this->assertEquals(4, $asset->size);
+
+        $asset = AssetCatalogueProvider::getAsset($asset->getToken());
+
+        $this->assertEquals("text/plain; charset=us-ascii", $asset->mimeType);
+        $this->assertEquals("wrapper.txt", $asset->name);
+        $this->assertEquals(4, $asset->size);
+    }
+
 }
 
 class TestAssetCatalogueProvider extends AssetCatalogueProvider
 {
 
-    public function createAssetFromFile($filePath)
+    public function createAssetFromFile($filePath, $commonProperties)
     {
     }
 

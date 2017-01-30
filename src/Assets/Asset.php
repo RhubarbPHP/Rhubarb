@@ -39,6 +39,27 @@ class Asset
     private $sourceProvider;
 
     /**
+     * The mime type of this asset
+     *
+     * @var string
+     */
+    public $mimeType;
+
+    /**
+     * The name of this asset
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * The size of this asset in bytes
+     *
+     * @var int
+     */
+    public $size;
+
+    /**
      * An array of data important only to the source provider
      *
      * @var array
@@ -50,6 +71,18 @@ class Asset
         $this->token = $token;
         $this->sourceProvider = $sourceProvider;
         $this->providerData = $providerData;
+
+        if (isset($providerData["mimeType"])){
+            $this->mimeType = $providerData["mimeType"];
+        }
+
+        if (isset($providerData["name"])){
+            $this->name = $providerData["name"];
+        }
+
+        if (isset($providerData["size"])){
+            $this->size = $providerData["size"];
+        }
     }
 
     /**

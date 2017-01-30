@@ -36,6 +36,35 @@ abstract class AssetCatalogueProvider
     }
 
     /**
+     * Stores an asset currently held in a local file in a given asset category
+     *
+     * @param string $filePath
+     * @param string $category
+     * @return Asset
+     */
+    public static function storeAsset($filePath, $category)
+    {
+        // A sane default
+        $mime = "application/octet-stream";
+
+        if (function_exists("finfo_open")){
+            $info = new \finfo(FILEINFO_MIME);
+            $mime = $info->file($filePath);
+        }
+
+        $provider = self::getProvider($category);
+        $asset = $provider->createAssetFromFile($filePath, [
+            "name" => basename($filePath),
+            "size" => filesize($filePath),
+            "mimeType" => $mime
+        ]);
+
+        $asset->mimeType = $mime;
+
+        return $asset;
+    }
+
+    /**
      * Gets the key used to sign JWT tokens.
      * @return string
      * @throws AssetException
@@ -56,9 +85,10 @@ abstract class AssetCatalogueProvider
      * Creates an asset by loading from the given file path.
      *
      * @param $filePath
+     * @param $commonProperties
      * @return Asset
      */
-    public abstract function createAssetFromFile($filePath);
+    public abstract function createAssetFromFile($filePath, $commonProperties);
 
     /**
      * Gets a PHP resource stream to allow reading the asset in chunks
@@ -135,7 +165,7 @@ abstract class AssetCatalogueProvider
      * Returns an instance of the correct provider for a given category
      *
      * @param string $assetCategory The category of provider - or empty for the default provider
-     * @return mixed
+     * @return AssetCatalogueProvider
      */
     public static function getProvider($assetCategory = "")
     {
