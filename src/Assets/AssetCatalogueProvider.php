@@ -48,16 +48,41 @@ abstract class AssetCatalogueProvider
         if ($key == "") {
             throw new AssetException("", "No token key is defined in AssetCatalogueSettings");
         }
+
         return $key;
     }
 
+    /**
+     * Creates an asset by loading from the given file path.
+     *
+     * @param $filePath
+     * @return Asset
+     */
     public abstract function createAssetFromFile($filePath);
 
+    /**
+     * Gets a PHP resource stream to allow reading the asset in chunks
+     * @param Asset $asset
+     * @return mixed
+     */
     public abstract function getStream(Asset $asset);
 
+    /**
+     * If exposable, returns a URL for giving to the client for fetching the asset
+     *
+     * @param Asset $asset
+     * @return string
+     */
     public abstract function getUrl(Asset $asset);
 
-    public function createToken($data)
+    /**
+     * Creates a JWT token to encode an asset using the passed data array.
+     *
+     * @param $data
+     * @return string
+     * @throws AssetException
+     */
+    protected function createToken($data)
     {
         $key = self::getJwtKey();
 
@@ -73,6 +98,13 @@ abstract class AssetCatalogueProvider
         return $jwt;
     }
 
+    /**
+     * Recreates an asset from the data in the passed token.
+     *
+     * @param $token
+     * @return Asset
+     * @throws AssetException
+     */
     public static function getAsset($token)
     {
         $key = self::getJwtKey();
