@@ -18,12 +18,41 @@
 
 namespace Rhubarb\Crown\Tests\unit\Assets;
 
+use Rhubarb\Crown\Assets\AssetCatalogueSettings;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Exceptions\AssetExposureException;
 
 class LocalStorageAssetCatalogueProviderTest extends AssetCatalogueProviderTests
 {
     protected function getProvider()
     {
         return new LocalStorageAssetCatalogueProvider();
+    }
+
+    public function testUrls()
+    {
+        $settings = AssetCatalogueSettings::singleton();
+        $settings->jwtKey = "rhubarbphp";
+
+        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings->storageRootPath = __DIR__."/data";
+        $settings->rootUrl = "/data/";
+
+        $content = uniqid();
+        $file = __DIR__.'/test.txt';
+        file_put_contents($file, $content);
+
+        $provider = $this->getProvider();
+        $asset = $provider->createAssetFromFile($file, []);
+
+        $url = $asset->getUrl();
+
+        $this->assertEquals("/data/".$asset->getProviderData()["file"], $url);
+
+        $settings->rootUrl = "";
+
+        $this->expectException(AssetExposureException::class);
+        $url = $asset->getUrl();
     }
 }
