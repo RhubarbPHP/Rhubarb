@@ -79,6 +79,12 @@ class AssetUrlHandler extends UrlHandler
             throw new AssetExposureException($this->token);
         }
 
+        $asset = AssetCatalogueProvider::getAsset($this->token);
+
+        if ($this->assetCategory != $asset->getProviderData()["category"]){
+            throw new AssetExposureException($this->token);
+        }
+
         // For performance reasons this handler has to forgo the normal response object
         // pattern and output directly to the client. This also means we have to use
         // the raw headers command with a warning suppression  to avoid unit tests breaking.
@@ -87,8 +93,6 @@ class AssetUrlHandler extends UrlHandler
                 ob_end_clean();
             }
         }
-
-        $asset = AssetCatalogueProvider::getAsset($this->token);
 
         @header("Content-type: ".$asset->mimeType, true);
         @header("Content-disposition: attachment; filename=\"".$asset->name."\"");

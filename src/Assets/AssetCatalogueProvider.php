@@ -59,7 +59,8 @@ abstract class AssetCatalogueProvider
         $asset = $provider->createAssetFromFile($filePath, [
             "name" => basename($filePath),
             "size" => filesize($filePath),
-            "mimeType" => $mime
+            "mimeType" => $mime,
+            "category" => $category
         ]);
 
         $asset->mimeType = $mime;
