@@ -294,9 +294,9 @@ application need never be aware.
 
 If the provider you are using doesn't support public URLs or you need
 fine grained control over access you can use the AssetUrlHandler to
-make individual categories of assets available. This handler takes 
+make individual categories of assets available. This handler  
 extracts a category and token from the URL and providing the category
-matches that from the token will retrieve and stream the resource to
+matches that from the token it will retrieve and stream the resource to
 the client.
 
 ``` php
