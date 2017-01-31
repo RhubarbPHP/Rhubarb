@@ -224,7 +224,41 @@ This provider has only two settings in LocalStorageAssetCatalogueSettings:
 
 ### S3AssetCatalogueProvider
 
-### MigrateableAssetCatalogueProvider
+`gcdtech/module-aws-s3-asset-catalogue-provider`
+
+Stores assets in an S3 bucket.
+
+This module depends upon `gcdtech/module-aws` and requires you to complete
+the standard AWS connection settings:
+
+`$iniCredentialsFile`
+:   Optional: The path to an AWS ini credentials file. Read the
+    [AWS SDK](http://docs.aws.amazon.com/aws-sdk-php/v3/guide/guide/credentials.html)
+    documentation for more details. If no ini file path is specified the AWS SDK will
+    try to determine credentials via it's alternative mechanisms.
+    
+`$region`
+:   The region should match the region in which your bucket will reside e.g. eu-west-1
+
+`$profile`
+:   Optional: If your credentials file contains multiple profiles you can specify which
+    named profile to use otherwise the default profile is assumed.
+    
+To configure the provider you should use S3AssetCatalogueProviderSettings:
+
+`$bucket`
+:   The name of the bucket in AWS which will act as the storage container for your
+    assets. The bucket must already exist.
+ 
+`$cloudFrontUrlMap`
+:   A mapping array using category names as keys to partial Cloud Front CDN URLs.
+    Each category needs mapped individually to allow this behaviour to be controlled
+    at that level and additionally Cloud Front allows you to give different URLS to 
+    different slices of the bucket with different settings if required.
+
+### MigratableAssetCatalogueProvider
+
+`gcdtech/scaffold-migratable-asset-catalogue-provider`
 
 While assets are represented by tokens which are very robust, sometimes
 a particular asset catalogue needs retired and replaced with a new
@@ -237,7 +271,7 @@ scanning all tables and columns or maintaining a 'map' of where
 asset tokens are being stored which is unlikely to be maintained and
 when it's really needed would be inaccurate.
 
-A solution is to use the MigrateableAssetCatalogueProvider scaffold.
+A solution is to use the MigratableAssetCatalogueProvider scaffold.
 Its benefits are only had by using it from the start - you can't
 retro fit it later.
 
