@@ -60,6 +60,13 @@ class Asset
     public $size;
 
     /**
+     * The asset category
+     *
+     * @var string
+     */
+    public $category;
+
+    /**
      * An array of data important only to the source provider
      *
      * @var array
@@ -82,6 +89,10 @@ class Asset
 
         if (isset($providerData["size"])){
             $this->size = $providerData["size"];
+        }
+
+        if (isset($providerData["category"])){
+            $this->category = $providerData["category"];
         }
     }
 

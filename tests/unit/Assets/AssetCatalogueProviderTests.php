@@ -26,6 +26,8 @@ use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class AssetCatalogueProviderTests extends RhubarbTestCase
 {
+    const TEST_CATEGORY = 'test';
+
     /**
      * @return AssetCatalogueProvider
      */
@@ -47,7 +49,7 @@ class AssetCatalogueProviderTests extends RhubarbTestCase
         file_put_contents($file, $content);
 
         $provider = $this->getProvider();
-        $asset = $provider->createAssetFromFile($file, []);
+        $asset = $provider->createAssetFromFile($file, ["category" => self::TEST_CATEGORY]);
         $token = $asset->getToken();
 
         $asset = $provider->getAsset($token);
