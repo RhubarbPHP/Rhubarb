@@ -54,6 +54,10 @@ class AssetCatalogueProviderTest extends RhubarbTestCase
         $provider = AssetCatalogueProvider::getProvider("TestCategory");
         
         $this->assertInstanceOf(Test2AssetCatalogueProvider::class, $provider);
+
+        $provider = AssetCatalogueProvider::getProvider("DefaultCategory");
+
+        $this->assertInstanceOf(TestAssetCatalogueProvider::class, $provider);
     }
 
     public function testStorageWrapper()

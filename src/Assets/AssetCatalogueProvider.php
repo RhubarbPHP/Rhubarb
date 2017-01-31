@@ -178,10 +178,17 @@ abstract class AssetCatalogueProvider
      *
      * @param string $assetCategory The category of provider - or empty for the default provider
      * @return AssetCatalogueProvider
+     * @throws AssetException Thrown if a provider could not be found for the given category
      */
     public static function getProvider($assetCategory = "")
     {
-        $class = self::$providerMap[$assetCategory];
+        if (isset(self::$providerMap[$assetCategory])) {
+            $class = self::$providerMap[$assetCategory];
+        } elseif (isset(self::$providerMap[""])){
+            $class = self::$providerMap[""];
+        } else {
+            throw new AssetException("", "No provider mapping could be found for category '".$assetCategory."'");
+        }
 
         $provider = new $class();
 

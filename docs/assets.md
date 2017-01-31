@@ -66,6 +66,9 @@ class MyApplication extends Application
 }
 ```
 
+The category name is optional. If you don't provide one the provider
+will be treated as the default provider for all unmapped categories. 
+
 Providers are registered only with a class name. As asset tokens carry just the name of the provider needed to
 fetch an asset, it is important that providers don't have parameters that are easy to change.
 
