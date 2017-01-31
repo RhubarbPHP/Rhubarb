@@ -22,7 +22,7 @@ use Rhubarb\Crown\Assets\Asset;
 use Rhubarb\Crown\Assets\AssetCatalogueProvider;
 use Rhubarb\Crown\Assets\AssetCatalogueSettings;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
-use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class AssetCatalogueProviderTest extends RhubarbTestCase
@@ -36,7 +36,7 @@ class AssetCatalogueProviderTest extends RhubarbTestCase
         $settings = AssetCatalogueSettings::singleton();
         $settings->jwtKey = "rhubarbphp";
 
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $settings->storageRootPath = __DIR__."/data";
 
         file_put_contents($this->file,"test");
@@ -98,6 +98,10 @@ class TestAssetCatalogueProvider extends AssetCatalogueProvider
     }
 
     public function getUrl(Asset $asset)
+    {
+    }
+
+    public function deleteAsset(Asset $asset)
     {
     }
 }

@@ -21,6 +21,9 @@ namespace Rhubarb\Crown\Assets;
 use Firebase\JWT\JWT;
 use Rhubarb\Crown\Exceptions\AssetException;
 
+/**
+ * A base class which describes a pattern of abstraction for storing assets.
+ */
 abstract class AssetCatalogueProvider
 {
     private static $providerMap = [];
@@ -63,6 +66,14 @@ abstract class AssetCatalogueProvider
 
         return $asset;
     }
+
+    /**
+     * Deletes the given asset
+     *
+     * @param Asset $asset
+     * @return mixed
+     */
+    public abstract function deleteAsset(Asset $asset);
 
     /**
      * Gets the key used to sign JWT tokens.

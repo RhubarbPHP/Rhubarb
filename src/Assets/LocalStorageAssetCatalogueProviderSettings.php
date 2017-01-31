@@ -21,14 +21,26 @@ namespace Rhubarb\Crown\Assets;
 use Rhubarb\Crown\Settings;
 
 /**
- * General settings related to asset catalogue provision.
+ * Settings relevant to the LocalStorageAssetCatalogueProvider
+ *
+ * @see LocalStorageAssetCatalogueProvider
  */
-class AssetCatalogueSettings extends Settings
+class LocalStorageAssetCatalogueProviderSettings extends Settings
 {
     /**
-     * A string key to use for signing asset tokens (JWT tokens)
-     *
+     * The path to the storage root folder.
+     * 
      * @var string
      */
-    public $jwtKey;
+    public $storageRootPath;
+
+    /**
+     * To provide public URLs for assets you should give the URL that points to the storage root folder.
+     *
+     * Use with caution - public URLs should not be enabled if the catalogue ccntains uploads you would rather
+     * keep private.
+     * 
+     * @var string
+     */
+    public $rootUrl;
 }

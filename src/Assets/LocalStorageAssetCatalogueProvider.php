@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Assets;
 
 use Rhubarb\Crown\Exceptions\AssetException;
 use Rhubarb\Crown\Exceptions\AssetExposureException;
+use Rhubarb\Crown\Exceptions\AssetNotFoundException;
 use Rhubarb\Crown\Exceptions\SettingMissingException;
 use Rhubarb\Crown\Logging\Log;
 
@@ -30,7 +31,7 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
 {
     private function getRootPath()
     {
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $rootFolder = $settings->storageRootPath;
         
         if ($rootFolder == ""){
@@ -72,8 +73,8 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
         $root = $this->getRootPath();
 
         $uniqueString = uniqid();
-        $uniqueFolder = substr($uniqueString,0, 2);
-        $uniquePrefix = substr($uniqueString,2);
+        $uniqueFolder = substr($uniqueString,-2);
+        $uniquePrefix = substr($uniqueString,0,-2);
         $newName = $uniqueFolder."/".$uniquePrefix."_".basename($filePath);
 
         $path = $root."/".$this->getCategoryDirectory();
@@ -96,14 +97,12 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
 
     public function getStream(Asset $asset)
     {
-        // Get the file name from the provider data
-        $data = $asset->getProviderData();
-        $path = $this->getRootPath()."/".$this->getCategoryDirectory()."/".$data["file"];
+        $path = $this->getAssetPath($asset);
 
         if (!file_exists($path)){
             Log::error("The LocalStorageAssetCatalogueProvider could not recover the asset at path ".$path, "ASSETS");
 
-            throw new AssetException($asset->getToken(), "An asset could not be found. For details of the asset location please review the error log.");
+            throw new AssetNotFoundException($asset->getToken(), "An asset could not be found. For details of the asset location please review the error log.");
         }
 
         $handle = fopen($path, "r");
@@ -113,12 +112,37 @@ class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
 
     public function getUrl(Asset $asset)
     {
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
 
         if (!$settings->rootUrl){
             throw new AssetExposureException($asset->getToken());
         }
 
         return rtrim($settings->rootUrl, '/').'/'.$asset->getProviderData()["file"];
+    }
+
+    public function deleteAsset(Asset $asset)
+    {
+        $path = $this->getAssetPath($asset);
+
+        if (!file_exists($path)){
+            throw new AssetNotFoundException($asset->getToken());
+        }
+
+        unlink($path);
+    }
+
+    /**
+     * Returns the local path for the given asset.
+     *
+     * @param Asset $asset
+     * @return string
+     */
+    protected function getAssetPath(Asset $asset):string
+    {
+        // Get the file name from the provider data
+        $data = $asset->getProviderData();
+        $path = $this->getRootPath() . "/" . $this->getCategoryDirectory() . "/" . $data["file"];
+        return $path;
     }
 }

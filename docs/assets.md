@@ -250,11 +250,11 @@ To configure the provider you should use S3AssetCatalogueProviderSettings:
 :   The name of the bucket in AWS which will act as the storage container for your
     assets. The bucket must already exist.
  
-`$cloudFrontUrlMap`
-:   A mapping array using category names as keys to partial Cloud Front CDN URLs.
+`$categoryUrlMap`
+:   A mapping array using category names as keys to partial CDN URL stubs.
     Each category needs mapped individually to allow this behaviour to be controlled
-    at that level and additionally Cloud Front allows you to give different URLS to 
-    different slices of the bucket with different settings if required.
+    at that level and additionally a CDN like Cloud Front allows you to give different
+    URLS to different slices of the bucket with different settings if required.
 
 ### MigratableAssetCatalogueProvider
 

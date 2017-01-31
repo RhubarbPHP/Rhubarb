@@ -158,4 +158,12 @@ class Asset
     {
         return $this->token;
     }
+
+    /**
+     * Removes the asset from the provider.
+     */
+    public function delete()
+    {
+        $this->sourceProvider->deleteAsset($this);
+    }
 }

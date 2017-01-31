@@ -27,7 +27,7 @@ class ResourceLoaderTest extends RhubarbTestCase
         ResourceLoader::addScriptCode("alert(123)");
         $scripts = ResourceLoader::getResourceInjectionHtml();
         $fileName = "";
-        $pathToFile = "resources/resource-manager.js";
+        $pathToFile = __DIR__."/../../../resources/resource-manager.js";
         if(file_exists($pathToFile))
         {
             $fileName = filemtime($pathToFile);
@@ -47,7 +47,7 @@ window.resourceManager.runWhenDocumentReady( function()
         ResourceLoader::addScriptCode("doThis();", ["a.js", "b.js"]);
         $scripts = ResourceLoader::getResourceInjectionHtml();
         $fileName = "";
-        $pathToFile = "resources/resource-manager.js";
+
         if(file_exists($pathToFile))
         {
             $fileName = filemtime($pathToFile);
@@ -68,39 +68,6 @@ window.resourceManager.runWhenDocumentReady( function()
 </script>", $scripts);
     }
 
-    /*
-        public function testLoadJquery()
-        {
-            ResourceLoader::clearResources();
-
-            ResourceLoader::loadJquery("1.8.3", false);
-
-            $scripts = ResourceLoader::getResourceInjectionHtml();
-
-            $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
-    <script type=\"text/javascript\">
-    window.resourceManager.loadResources( [ \"/client/jquery/jquery-1.8.3.js\" ] );
-    </script>", $scripts);
-
-            ResourceLoader::clearResources();
-
-            ResourceLoader::loadJquery("1.8.3", true);
-
-            $scripts = ResourceLoader::getResourceInjectionHtml();
-
-            $this->assertEquals("<script src=\"/client/resource-manager.js\" type=\"text/javascript\"></script>
-    <script type=\"text/javascript\">
-    window.resourceManager.loadResources( [ \"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\" ] );
-    </script>", $scripts);
-
-            ResourceLoader::clearResources();
-
-            $this->setExpectedException(\Rhubarb\Crown\ClientSide\Exceptions\ClientSideResourceNotFound::class);
-
-            // A very large version number that won't exist locally.
-            ResourceLoader::loadJquery("1991.8.3", false);
-        }
-    */
     public function testLoadingStylesheetTwice()
     {
         ResourceLoader::clearResources();
@@ -110,7 +77,7 @@ window.resourceManager.runWhenDocumentReady( function()
 
         $scripts = ResourceLoader::getResourceInjectionHtml();
         $fileName = "";
-        $pathToFile = "resources/resource-manager.js";
+        $pathToFile = __DIR__."/../../../resources/resource-manager.js";
         if(file_exists($pathToFile))
         {
             $fileName = filemtime($pathToFile);
@@ -129,7 +96,7 @@ window.resourceManager.runWhenDocumentReady( function()
 
         $scripts = ResourceLoader::getResourceInjectionHtml();
         $fileName = "";
-        $pathToFile = "resources/resource-manager.js";
+        $pathToFile = __DIR__."/../../../resources/resource-manager.js";
         if(file_exists($pathToFile))
         {
             $fileName = filemtime($pathToFile);

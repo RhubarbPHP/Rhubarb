@@ -57,6 +57,12 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
         $headers = $response->getHeaders();
 
         $this->assertEquals("/nmh/ObjectA/", $headers["Location"]);
+
+        // Because our own processing stack unwraps all buffering PHP Unit will throw a
+        // warning message as it's expecting buffering to be still engaged after the test
+        // has finished. Here we 'pretend' to start buffering again just to get rid of the
+        // warning.
+        ob_start();
     }
 
     public function testHandlerRedirectsToIndexPage()
@@ -69,5 +75,11 @@ class NamespaceMappedHandlerTest extends RhubarbTestCase
         $headers = $response->getHeaders();
 
         $this->assertEquals("/nmh/SubFolder/index/", $headers["Location"]);
+
+        // Because our own processing stack unwraps all buffering PHP Unit will throw a
+        // warning message as it's expecting buffering to be still engaged after the test
+        // has finished. Here we 'pretend' to start buffering again just to get rid of the
+        // warning.
+        ob_start();
     }
 }

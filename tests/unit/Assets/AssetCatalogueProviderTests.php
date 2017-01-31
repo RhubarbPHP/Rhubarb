@@ -20,7 +20,8 @@ namespace Rhubarb\Crown\Tests\unit\Assets;
 
 use Rhubarb\Crown\Assets\AssetCatalogueProvider;
 use Rhubarb\Crown\Assets\AssetCatalogueSettings;
-use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
+use Rhubarb\Crown\Exceptions\AssetNotFoundException;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 
 class AssetCatalogueProviderTests extends RhubarbTestCase
@@ -33,12 +34,12 @@ class AssetCatalogueProviderTests extends RhubarbTestCase
         return null;
     }
 
-    public function testAssetIsStoredAndRetrieved()
+    public function testAssetIsStoredAndRetrievedAndDeleted()
     {
         $settings = AssetCatalogueSettings::singleton();
         $settings->jwtKey = "rhubarbphp";
 
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $settings->storageRootPath = __DIR__."/data";
 
         $content = uniqid();
@@ -55,5 +56,21 @@ class AssetCatalogueProviderTests extends RhubarbTestCase
         $transferredContent = file_get_contents($file);
 
         $this->assertEquals($content, $transferredContent);
+
+        $asset->delete();
+
+        try {
+            $asset = $provider->getAsset($token);
+            $asset->getStream();
+            $this->fail("The asset should no longer be available - it's been deleted");
+        } catch (AssetNotFoundException $er){
+        }
+
+        try {
+            $asset->delete();
+            $this->fail("The asset should no be deleteable any more.");
+        } catch (AssetNotFoundException $er){
+
+        }
     }
 }

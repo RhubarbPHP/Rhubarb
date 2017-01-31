@@ -5,7 +5,7 @@ namespace Rhubarb\Crown\Tests\Assets;
 use Rhubarb\Crown\Assets\AssetCatalogueProvider;
 use Rhubarb\Crown\Assets\AssetCatalogueSettings;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
-use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
 use Rhubarb\Crown\Assets\LoginValidatedAssetUrlHandler;
 use Rhubarb\Crown\Exceptions\AssetExposureException;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
@@ -22,7 +22,7 @@ class LoginValidatedAssetUrlHandlerTest extends RhubarbTestCase
 
         AssetCatalogueProvider::setProviderClassName(LocalStorageAssetCatalogueProvider::class, "test");
 
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $settings->storageRootPath = __DIR__."/data";
 
         $content = "url-test";

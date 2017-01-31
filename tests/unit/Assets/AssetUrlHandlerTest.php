@@ -6,7 +6,7 @@ use Rhubarb\Crown\Assets\AssetCatalogueProvider;
 use Rhubarb\Crown\Assets\AssetCatalogueSettings;
 use Rhubarb\Crown\Assets\AssetUrlHandler;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
-use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
@@ -20,7 +20,7 @@ class AssetUrlHandlerTest extends RhubarbTestCase
 
         AssetCatalogueProvider::setProviderClassName(LocalStorageAssetCatalogueProvider::class, "test");
 
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $settings->storageRootPath = __DIR__."/data";
 
         $content = "url-test";

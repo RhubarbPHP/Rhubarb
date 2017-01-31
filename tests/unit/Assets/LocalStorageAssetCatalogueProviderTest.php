@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\Tests\unit\Assets;
 
 use Rhubarb\Crown\Assets\AssetCatalogueSettings;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
-use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueSettings;
+use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
 use Rhubarb\Crown\Exceptions\AssetExposureException;
 
 class LocalStorageAssetCatalogueProviderTest extends AssetCatalogueProviderTests
@@ -35,7 +35,7 @@ class LocalStorageAssetCatalogueProviderTest extends AssetCatalogueProviderTests
         $settings = AssetCatalogueSettings::singleton();
         $settings->jwtKey = "rhubarbphp";
 
-        $settings = LocalStorageAssetCatalogueSettings::singleton();
+        $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $settings->storageRootPath = __DIR__."/data";
         $settings->rootUrl = "/data/";
 
@@ -52,7 +52,14 @@ class LocalStorageAssetCatalogueProviderTest extends AssetCatalogueProviderTests
 
         $settings->rootUrl = "";
 
-        $this->expectException(AssetExposureException::class);
-        $url = $asset->getUrl();
+
+        try {
+            $asset->getUrl();
+            $this->fail("The asset is not exposable any more");
+        } catch (AssetExposureException $er){
+
+        }
+
+        $asset->delete();
     }
 }
