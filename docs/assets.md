@@ -79,7 +79,7 @@ Where a provider does have settings that need configured these are usually handl
          parent::initialise();
          
          // Set the top level storage directory for local storage.
-         $settings = LocalStorageAssetCatalogueSettings::singleton();
+         $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
          $settings->storageRootPath = __DIR__."/../data/";
          
          AssetCatalogueProvider::setProviderClassName(
@@ -199,7 +199,7 @@ This provides storage of files on the filesystem local to the running PHP instan
 is the cheapest and simplest option however the biggest issue is that disk space will become a limitation at some
 point.
 
-This provider has only two settings in LocalStorageAssetCatalogueSettings:
+This provider has only two settings in LocalStorageAssetCatalogueProviderSettings:
 
 `$storageRootPath`
 :   Sets the folder where all assets are stored.
