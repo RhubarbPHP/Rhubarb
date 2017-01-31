@@ -177,4 +177,14 @@ class Asset
     {
         $this->sourceProvider->deleteAsset($this);
     }
+
+    /**
+     * Gets the source provider that holds this asset.
+     * 
+     * @return AssetCatalogueProvider
+     */
+    public function getProvider()
+    {
+        return $this->sourceProvider;
+    }
 }
