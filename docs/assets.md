@@ -224,7 +224,7 @@ This provider has only two settings in LocalStorageAssetCatalogueSettings:
 
 ### S3AssetCatalogueProvider
 
-`gcdtech/module-aws-s3-asset-catalogue-provider`
+`gcdtech/module-amazon-s3-asset-catalogue-provider`
 
 Stores assets in an S3 bucket.
 
