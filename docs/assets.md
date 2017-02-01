@@ -135,7 +135,7 @@ If you have a token and want to use the stored asset you call the static functio
 on `AssetCatalogueProvider`:
 
 ``` php
-$asset = AssetCatalogueProvider($token);
+$asset = AssetCatalogueProvider::getAsset($token);
 ```
 
 Here `$asset` is the same Asset object we had in the previous example.

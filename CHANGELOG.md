@@ -1,5 +1,9 @@
 # Change log
 
+### 1.2.0
+
+* Added:    Assets concept added with AssetCatalogueProvider and LocalStorageAssetCatalogueProvider classes added.
+
 ### 1.1.19
 
 * Added:    Methods allowing removal of all/specific handlers from an Event
