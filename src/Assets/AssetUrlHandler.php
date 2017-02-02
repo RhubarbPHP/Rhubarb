@@ -19,9 +19,13 @@
 namespace Rhubarb\Crown\Assets;
 
 use Rhubarb\Crown\Application;
+use Rhubarb\Crown\Exceptions\AssetException;
 use Rhubarb\Crown\Exceptions\AssetExposureException;
+use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
 use Rhubarb\Crown\Request\Request;
+use Rhubarb\Crown\Response\NotAuthorisedResponse;
+use Rhubarb\Crown\Response\NotFoundResponse;
 use Rhubarb\Crown\Response\Response;
 use Rhubarb\Crown\UrlHandlers\UrlHandler;
 
@@ -75,26 +79,39 @@ class AssetUrlHandler extends UrlHandler
      */
     protected function generateResponseForRequest($request = null)
     {
-        if (!$this->isPermitted()){
-            throw new AssetExposureException($this->token);
-        }
+        try {
+            if (!$this->isPermitted()) {
+                throw new AssetExposureException($this->token);
+            }
 
-        $asset = $this->getAsset();
+            $asset = $this->getAsset();
 
-        // For performance reasons this handler has to forgo the normal response object
-        // pattern and output directly to the client. This also means we have to use
-        // the raw headers command with a warning suppression  to avoid unit tests breaking.
-        if (!Application::current()->unitTesting) {
-            while (ob_get_level()) {
-                ob_end_clean();
+            // For performance reasons this handler has to forgo the normal response object
+            // pattern and output directly to the client. This also means we have to use
+            // the raw headers command with a warning suppression  to avoid unit tests breaking.
+            if (!Application::current()->unitTesting) {
+                while (ob_get_level()) {
+                    ob_end_clean();
+                }
+            }
+
+            $stream = $asset->getStream();
+
+            @header("Content-type: ".$asset->mimeType, true);
+            @header("Content-disposition: filename=\"".$asset->name."\"");
+            @header("Content-length: ".$asset->size);
+
+        } catch (AssetException $er){
+            $image = $this->getMissingAssetDetails();
+            if ($image){
+                $stream = $image["stream"];
+
+                @header("Content-type: ".$image["mimeType"], true);
+                @header("Content-length: ".$image["size"]);
+            } else {
+                throw new ForceResponseException(new NotFoundResponse());
             }
         }
-
-        @header("Content-type: ".$asset->mimeType, true);
-        @header("Content-disposition: filename=\"".$asset->name."\"");
-        @header("Content-length: ".$asset->size);
-
-        $stream = $asset->getStream();
 
         while (!feof($stream)) {
             $buffer = fread($stream, 8192);
@@ -105,6 +122,28 @@ class AssetUrlHandler extends UrlHandler
         fclose($stream);
 
         throw new StopGeneratingResponseException();
+    }
+
+    /**
+     * Returns the stream to be used whenever the handler cannot find or return the asset.*
+     *
+     * Return null to push a 404 response. Otherwise return an array with the following keys:
+     *
+     * stream => A PHP stream resource handle
+     * size => The size of the image in bytes
+     * mimeType => The mime type of the image
+     */
+    protected function getMissingAssetDetails()
+    {
+        $handle = fopen("php://memory","rw");
+        fwrite($handle,base64_decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII"));
+        fseek($handle,0);
+
+        return [
+            "stream" => $handle,
+            "size" => 68,
+            "mimeType" => "image/png"
+            ];
     }
 
     /**
@@ -120,6 +159,7 @@ class AssetUrlHandler extends UrlHandler
         if ($this->assetCategory != $asset->getProviderData()["category"]) {
             throw new AssetExposureException($this->token);
         }
+
         return $asset;
     }
 }

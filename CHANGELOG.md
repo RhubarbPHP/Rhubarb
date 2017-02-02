@@ -1,5 +1,10 @@
 # Change log
 
+### 1.2.3
+
+* Added:    AssetUrlHandler now supports getMissingAssetDetails() to provide fall back files
+* Added:    NotFoundResponse added
+
 ### 1.2.2
 
 * Change:   AssetUrlHandler no longer uses attachment for content-disposition
