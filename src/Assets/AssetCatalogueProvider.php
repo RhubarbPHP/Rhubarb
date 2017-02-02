@@ -190,7 +190,7 @@ abstract class AssetCatalogueProvider
             throw new AssetException("", "No provider mapping could be found for category '".$assetCategory."'");
         }
 
-        $provider = new $class();
+        $provider = new $class($assetCategory);
 
         return $provider;
     }

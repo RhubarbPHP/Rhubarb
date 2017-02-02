@@ -1,5 +1,9 @@
 # Change log
 
+### 1.2.1
+
+* Fixed:    Category was not being given to the asset providers correctly.
+
 ### 1.2.0
 
 * Added:    Assets concept added with AssetCatalogueProvider and LocalStorageAssetCatalogueProvider classes added.
