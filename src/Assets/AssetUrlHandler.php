@@ -79,11 +79,7 @@ class AssetUrlHandler extends UrlHandler
             throw new AssetExposureException($this->token);
         }
 
-        $asset = AssetCatalogueProvider::getAsset($this->token);
-
-        if ($this->assetCategory != $asset->getProviderData()["category"]){
-            throw new AssetExposureException($this->token);
-        }
+        $asset = $this->getAsset();
 
         // For performance reasons this handler has to forgo the normal response object
         // pattern and output directly to the client. This also means we have to use
@@ -95,7 +91,7 @@ class AssetUrlHandler extends UrlHandler
         }
 
         @header("Content-type: ".$asset->mimeType, true);
-        @header("Content-disposition: attachment; filename=\"".$asset->name."\"");
+        @header("Content-disposition: filename=\"".$asset->name."\"");
         @header("Content-length: ".$asset->size);
 
         $stream = $asset->getStream();
@@ -109,5 +105,21 @@ class AssetUrlHandler extends UrlHandler
         fclose($stream);
 
         throw new StopGeneratingResponseException();
+    }
+
+    /**
+     * Gets the asset for the current URL
+     *
+     * @return Asset
+     * @throws AssetExposureException
+     */
+    protected function getAsset()
+    {
+        $asset = AssetCatalogueProvider::getAsset($this->token);
+
+        if ($this->assetCategory != $asset->getProviderData()["category"]) {
+            throw new AssetExposureException($this->token);
+        }
+        return $asset;
     }
 }

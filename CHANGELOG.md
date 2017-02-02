@@ -1,5 +1,9 @@
 # Change log
 
+### 1.2.2
+
+* Change:   AssetUrlHandler no longer uses attachment for content-disposition
+
 ### 1.2.1
 
 * Fixed:    Category was not being given to the asset providers correctly.
