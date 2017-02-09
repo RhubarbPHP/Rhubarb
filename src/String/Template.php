@@ -39,7 +39,9 @@ class Template
             $field = $match[1];
 
             $t = str_replace($match[0], "", $t);
-            $template = str_replace($match[0], $data[$field], $template);
+            if (isset($data[$field])) {
+                $template = str_replace($match[0], $data[$field], $template);
+            }
         }
 
         return $template;
