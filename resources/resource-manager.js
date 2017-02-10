@@ -313,7 +313,7 @@ window.resourceManager =
         var self = this;
 
         var interval = setInterval(function () {
-            if (document.readyState == "complete") {
+            if (document.readyState == "interactive") {
                 clearInterval(interval);
 
                 self.documentReady = true;
