@@ -35,13 +35,11 @@ class Template
     {
         $t = $template;
 
-        while (preg_match("/[{]([^}]+)[}]/", $t, $match)) {
+        while (preg_match('/[{]([^\s}]+)[}]/', $t, $match)) {
             $field = $match[1];
 
             $t = str_replace($match[0], "", $t);
-            if (isset($data[$field])) {
-                $template = str_replace($match[0], $data[$field], $template);
-            }
+            $template = str_replace($match[0], isset($data[$field]) ? $data[$field] : '', $template);
         }
 
         return $template;
