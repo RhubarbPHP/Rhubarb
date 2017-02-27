@@ -313,7 +313,10 @@ window.resourceManager =
         var self = this;
 
         var interval = setInterval(function () {
-            if (document.readyState == "interactive" || document.readyState == "complete") {
+            // IE10 and lower don't handle "interactive" properly - it fires before the DOM is loaded
+            // Check for attachEvent to detect IE10 and lower (it was removed in IE11)
+            // Otherwise if the readyState isn't "loading" then it's either "complete" or "interactive"
+            if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading') {
                 clearInterval(interval);
 
                 self.documentReady = true;
