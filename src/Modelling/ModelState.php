@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Modelling;
 
 use JsonSerializable;
 use Rhubarb\Crown\Events\EventEmitter;
+use Rhubarb\Crown\Logging\Log;
 
 /**
  * A starting point for modelling objects, not necessarily just those connected to databases.
@@ -135,7 +136,13 @@ class ModelState implements \ArrayAccess, JsonSerializable
             $this->attachChangeListenerToModelProperty($propertyName, $value);
         }
 
-        if ($oldValue != $value) {
+        // Temporary code to help debug an issue on Vertigo
+        $notEqual = false;
+        if ((is_object($oldValue) && is_int($value)) || (is_int($oldValue) && is_object($value))) {
+            Log::error("ModelState trying to compare object to integer", 'ERROR', ['OldValue' => $oldValue, 'NewValue' => $value]);
+            $notEqual = true;
+        }
+        if ($notEqual || $oldValue != $value) {
             if (!$this->propertyChangeEventsDisabled) {
                 // Don't fire changes if they are disabled.
                 $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
