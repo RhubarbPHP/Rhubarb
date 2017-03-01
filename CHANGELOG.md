@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.1
+
+* Changed:  GreedyUrlHandler is now passed the parent url handler as the first argument if there is a parent handler
+
 ### 1.3.0
 
 * Added:    CallableUrlHandler

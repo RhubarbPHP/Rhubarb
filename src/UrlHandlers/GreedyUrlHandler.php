@@ -81,6 +81,12 @@ class GreedyUrlHandler extends CallableUrlHandler
             return false;
         }
 
+        $parent = $this->getParentHandler();
+
+        if ($parent){
+            array_splice($this->extractedArguments, 0, 0, [$parent]);
+        }
+
         return parent::generateResponseForRequest($request);
     }
 
