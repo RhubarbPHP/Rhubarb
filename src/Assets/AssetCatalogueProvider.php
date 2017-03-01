@@ -20,6 +20,7 @@ namespace Rhubarb\Crown\Assets;
 
 use Firebase\JWT\JWT;
 use Rhubarb\Crown\Exceptions\AssetException;
+use Rhubarb\Crown\Logging\Log;
 
 /**
  * A base class which describes a pattern of abstraction for storing assets.
@@ -56,16 +57,22 @@ abstract class AssetCatalogueProvider
         }
 
         $provider = self::getProvider($category);
-        $asset = $provider->createAssetFromFile($filePath, [
-            "name" => basename($filePath),
-            "size" => filesize($filePath),
-            "mimeType" => $mime,
-            "category" => $category
-        ]);
 
-        $asset->mimeType = $mime;
+        try {
+            $asset = $provider->createAssetFromFile($filePath, [
+                "name" => basename($filePath),
+                "size" => filesize($filePath),
+                "mimeType" => $mime,
+                "category" => $category
+            ]);
 
-        return $asset;
+            $asset->mimeType = $mime;
+            return $asset;
+        } catch (AssetException $er){
+            Log::error("Error creating asset from file '$filePath': ".$er->getPrivateMessage());
+        }
+
+        return null;
     }
 
     /**

@@ -36,6 +36,7 @@ use Rhubarb\Crown;
  * @method mixed files(string $property, string $defaultValue = null) Return a value from the files collection optionally using a default value.
  * @method mixed cookie(string $property, string $defaultValue = null) Return a value from the cookies optionally using a default value.
  * @method mixed session(string $property, string $defaultValue = null) Return a value from the session optionally using a default value.
+ * @method mixed server(string $property, string $defaultValue = null) Return a value from the server optionally using a default value.
  */
 class WebRequest extends Request
 {
