@@ -1,5 +1,13 @@
 # Change log
 
+### 1.3.0
+
+* Added:    CallableUrlHandler
+* Added:    GreedyUrlHandler
+* Added:    NumericGreedyUrlHandler
+* Added:    Some logging when asset creation from file fails
+* Added:    WebRequest didn't document the server() call properly.
+
 ### 1.2.3
 
 * Added:    AssetUrlHandler now supports getMissingAssetDetails() to provide fall back files
