@@ -107,10 +107,11 @@ class StringTools
     public static function makePlural($singular)
     {
         $singulars = [
+            'day' => 'days',
             "ch" => "ches",
             "s" => "ses",
             "x" => "xes",
-            "y" => "ies"
+            "y" => "ies",
         ];
 
         foreach ($singulars as $singularEnding => $pluralEnding) {
