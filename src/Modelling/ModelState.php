@@ -368,6 +368,11 @@ class ModelState implements \ArrayAccess, JsonSerializable
             // Key added
             return true;
         }
+
+        if ((is_string($propertyValue) && is_string($this->changeSnapshotData[$propertyName])) && $this->changeSnapshotData[$propertyName] !== $propertyValue) {
+            return true;
+        }
+
         if ($this->changeSnapshotData[$propertyName] != $propertyValue) {
             // Key changed
             return true;
