@@ -10,7 +10,7 @@ Normally an application will have just one Application object. It is possible to
 instances which can be used when unit testing. For example a SaaS application might need to instantiate it's
 landlord application in order to test particular API calls. This can be achieved with acceptance or functional
 testing using many tools (codeception, selenium, phantomjs) however it is so much easier to unit test it
-is more likely to have greater coverage.
+as it is more likely to have greater coverage.
 
 ## Using the Application object
 
@@ -35,7 +35,7 @@ $request = $app->request();
 $container = $app->container();
 ```
 
-The are also a number of other useful states the application keeps track of:
+There are also a number of other useful states the application keeps track of:
 
 ### Live mode
 
@@ -115,7 +115,7 @@ To serve requests you need to register the application. There are two main ways 
 
 #### Creating the application in app.config.php
 
-An example app.config.php file might would look like this.
+An example app.config.php file might look like this.
 
 ``` php
 namespace My\WebsiteApp;
