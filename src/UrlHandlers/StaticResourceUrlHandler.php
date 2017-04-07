@@ -101,14 +101,11 @@ class StaticResourceUrlHandler extends UrlHandler
      */
     protected function getMatchingUrlFragment(Request $request, $currentUrlFragment = '')
     {
-        $url = $request->urlPath;
-
+        $url = $currentUrlFragment;
         if ($this->isFolder) {
             $urlDirectory = dirname($url);
-
             if (strpos($urlDirectory, $this->url) === 0) {
-                $this->staticFile = $this->folderOrFilePath . str_replace($this->url, "", $url);
-
+                $this->staticFile = $this->folderOrFilePath . preg_replace('/^'.$this->url.'/', "", $url);
                 if (!file_exists($this->staticFile)) {
                     throw new StaticResource404Exception($url);
                 }
@@ -118,7 +115,6 @@ class StaticResourceUrlHandler extends UrlHandler
                 $this->staticFile = $this->folderOrFilePath;
             }
         }
-
         return ($this->staticFile !== false);
     }
 }
