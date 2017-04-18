@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\Http;
 
 use Rhubarb\Crown\Context;
 
-class HttpResponse
+class HttpResponse implements \JsonSerializable
 {
     private $headers = [];
 
@@ -111,5 +111,14 @@ class HttpResponse
     public function isServerError()
     {
         return $this->responseCode >= 500 && $this->responseCode <= 599;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'headers' => $this->headers,
+            'responseCode' => $this->responseCode,
+            'responseBody' => $this->responseBody
+        ];
     }
 }
