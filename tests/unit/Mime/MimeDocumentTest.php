@@ -148,4 +148,26 @@ class MimeDocumentTest extends RhubarbTestCase
             "2q34r2\r\n" .
             "423423", $part->getRawBody());
     }
+
+    public function testBoundaryHeaderQuoting()
+    {
+        $documentWithQuotedBoundary = MimeDocument::fromString($this->message1);
+        $documentWithUnQuotedBoundary = MimeDocument::fromString(preg_replace(
+            '#boundary="(.+?)"#',
+            'boundary=$1',
+            $this->message1
+        ));
+        self::assertCount(count($documentWithQuotedBoundary->getParts()), $documentWithUnQuotedBoundary->getParts());
+    }
+
+    public function testHeaderCaseInsensitivity()
+    {
+        $documentWithCorrectCase = MimeDocument::fromString($this->message1);
+        $caseInsensitiveDocument = MimeDocument::fromString(str_replace(
+            'Content-Type:',
+            'content-type:',
+            $this->message1
+        ));
+        self::assertCount(count($documentWithCorrectCase->getParts()), $caseInsensitiveDocument->getParts());
+    }
 }
