@@ -93,6 +93,9 @@
 
 * Changed:  $staticFile in StaticResourceUrlHandler is now protected
 
+* Changed:  A MultiPartFormDataRequest now provides a MimeDocument as it's payload
+* Fixed:    MimeDocument RFC 1341 compliant boundary header detection
+
 ### 1.1.6
 
 * Fixed:    Header value case bug introduced in 1.1.5

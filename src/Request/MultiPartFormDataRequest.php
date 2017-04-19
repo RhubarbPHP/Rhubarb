@@ -17,12 +17,57 @@
 
 namespace Rhubarb\Crown\Request;
 
+use Rhubarb\Crown\Mime\MimeDocument;
+
 class MultiPartFormDataRequest extends WebRequest
 {
 
+    /** @var null|string */
+    private $rawRequest = null;
+
+    /**
+     * @return string
+     */
+    public function getRawRequest()
+    {
+        // return raw request if set - this is for testing purposes
+        if ($this->rawRequest !== null) {
+            return $this->rawRequest;
+        }
+
+        /* PUT data only comes in on the stdin stream, so I'm reading for that for POST/PUT/FILES*/
+        $requestStream = fopen('php://input', 'r');
+
+        $requestBody = '';
+        // read
+        while ($chunk = fread($requestStream, 1024)) {
+            $requestBody .= $chunk;
+        }
+        $requestBody = ltrim($requestBody);
+
+        fclose($requestStream);
+
+        $headers = '';
+        foreach ($this->headerData as $header => $value) {
+            $headers .= "{$header}: {$value}\n";
+        }
+
+        return $headers . "\n" . $requestBody;
+    }
+
+    /**
+     * @param string $rawRequest
+     */
+    public function setRawRequest($rawRequest)
+    {
+        $this->rawRequest = $rawRequest;
+    }
+
+    /**
+     * @return MimeDocument
+     */
     public function getPayload()
     {
-        $requestBody = array_merge($_FILES, $_POST);
-        return $requestBody;
+        return MimeDocument::fromString($this->getRawRequest());
     }
 }
