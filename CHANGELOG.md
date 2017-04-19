@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.2
+
+* Fixed:    Fix for static url handler not being nestable
+
 ### 1.3.1
 
 * Changed:  GreedyUrlHandler is now passed the parent url handler as the first argument if there is a parent handler
