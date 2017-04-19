@@ -4,7 +4,7 @@ Dependency Injection
 [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) is one way to follow the
 [dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle). When using
 dependency injection you aren't responsible for supplying the dependencies for an object, a broker or container
-performs that task. The actual dependencies are configured at highest possible level through a configuration
+performs that task. The actual dependencies are configured at the highest possible level through a configuration
 for the application. This means an application can have a heavily used, critical dependency, changed to use a
 different class by changing a single line in one file.
 
