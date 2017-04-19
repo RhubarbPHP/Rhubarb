@@ -22,7 +22,7 @@ The most common use of filters are for Layouts
 ## Layouts
 
 The normal pattern for generating HTML output is to let your response generating classes create the core
-HTML of the content area of a page and the surround the content with HTML provided by a layout class. The layout
+HTML of the content area of a page and then surround the content with HTML provided by a layout class. The layout
 of a page frequently includes the header, footer and navigation elements of a page which are usually the same
 on every page.
 
@@ -83,7 +83,7 @@ function `LayoutModule::setLayoutClassName()` at any point during response gener
 before the layout itself is used to filter the response*. You cannot therefore decide to change the layout from
 within the default layout itself.
 
-Alternatively instead of passing a class name of the default layout to the constructor of the `LayoutModule` you
+Alternatively instead of passing the class name of the default layout to the constructor of the `LayoutModule` you
 can pass a callback function instead. This function will be called for every request and should return the name
 of the class name to use. It can access the request object or any other contextual information to make this
 choice:
@@ -110,8 +110,8 @@ class MyModule extends Module
 
 ### Extending Layouts
 
-As layouts are normal PHP classes they are easily extended from boiler plates. Its a good pattern to start
-building a library of boiler plates for different type of applications to make layout creation easier.
+As layouts are normal PHP classes they are easily extended from boiler plates. It's a good pattern to start
+building a library of boiler plates for different types of applications to make layout creation easier.
 
 When adopting this strategy your base class should implement printLayout and call a range of other
 protected functions to make it easier to extend without having to cut and paste large blocks of HTML:

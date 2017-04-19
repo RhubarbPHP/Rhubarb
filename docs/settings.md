@@ -25,7 +25,7 @@ $stemSettings->host = "localhost";
 print $stemSettings->database;
 ```
 
-The most common place to set setting properties in in your [application module or site.config.php](files-and-directories)
+The most common place to set setting properties in your [application module or site.config.php](files-and-directories)
 
 ## Creating a settings class
 
@@ -56,7 +56,7 @@ class MyWidgetSettings extends Settings
 Some properties must be set by users of the class, however others might have sensible default values. If the value
 would be a simple scalar type like a string or int these can be set simply by initialising the class fields. If you
 need to initialise a more complex type like an object you can either create the default late using a public getter
-function or you can create it early by overiding the `initialiseDefaultValues()` method.
+function or you can create it early by overriding the `initialiseDefaultValues()` method.
 
 As a rule of thumb if the default value is expensive to create (an object with a large constructor or one that
 contacts a database for example) you should create it late using the getter approach.

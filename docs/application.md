@@ -9,7 +9,7 @@ are the first object asked to generate a response for a given request.
 Normally an application will have just one Application object. It is possible to create secondary application
 instances which can be used when unit testing. For example a SaaS application might need to instantiate it's
 landlord application in order to test particular API calls. This can be achieved with acceptance or functional
-testing using many tools (codeception, selenium, phantomjs) however acceptance tests are usually harder to create and so the easier it is to unit test the more likely it is to be covered.
+testing using many tools (codeception, selenium, phantomjs) however acceptance tests are usually harder to maintain and support - unit testing can be a much less expensive way to provide the test coverage.
 
 ## Using the Application object
 
