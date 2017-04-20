@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.3
+
+* Fixed:    Fix broken static url resource handler
+
 ### 1.3.2
 
 * Fixed:    Fix for static url handler not being nestable
