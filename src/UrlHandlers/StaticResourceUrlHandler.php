@@ -105,7 +105,7 @@ class StaticResourceUrlHandler extends UrlHandler
         if ($this->isFolder) {
             $urlDirectory = dirname($url);
             if (strpos($urlDirectory, $this->url) === 0) {
-                $this->staticFile = $this->folderOrFilePath . preg_replace('/^'.$this->url.'/', "", $url);
+                $this->staticFile = $this->folderOrFilePath . preg_replace('|^'.$this->url.'|', "", $url);
                 if (!file_exists($this->staticFile)) {
                     throw new StaticResource404Exception($url);
                 }
