@@ -36,6 +36,6 @@ $this->addUrlHandlers(
 ]);
 ```
 
-Creating HTML directly with a response generating class is however generally a bad idea as it doesn't separate
-the view level (HTML) from the processing logic. Instead it's usually better to use a pattern like MVP which you
-can find in the `leaf` module.
+Creating HTML directly with a response generating class is usually reserved for very simple use cases. For normal
+interactive HTML it's better to use a design pattern like MVP which you can find in the [leaf](/manual/module.leaf/)
+module.
