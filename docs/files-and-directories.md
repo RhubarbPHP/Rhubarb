@@ -29,8 +29,8 @@ tests/
     the src folder.
 
 settings/app.config.php
-:   For a normal project serving a single application this file will create and configure the
-    [application](application#content).
+:   For a normal project serving a single application often this file will create and configure the
+    root [Application](application#content) object.
 
 settings/site.config.php
 :   It's good practice to move any settings unique to the deployment of your application into a separate
