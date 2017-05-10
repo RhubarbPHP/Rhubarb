@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.4
+
+* Added:    Added body css class to HtmlPageSettings
+
 ### 1.3.3
 
 * Fixed:    Fix broken static url resource handler
