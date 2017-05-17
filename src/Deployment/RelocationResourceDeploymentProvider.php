@@ -18,8 +18,6 @@
 
 namespace Rhubarb\Crown\Deployment;
 
-require_once __DIR__ . "/ResourceDeploymentProvider.php";
-
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\DeploymentException;
 

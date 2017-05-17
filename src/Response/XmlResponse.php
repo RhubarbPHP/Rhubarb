@@ -20,8 +20,6 @@ namespace Rhubarb\Crown\Response;
 
 use Rhubarb\Crown\Xml\SimpleXmlTranscoder;
 
-require_once __DIR__ . "/Response.php";
-
 /**
  * Encapsulates an XML response to be sent to the browser.
  */

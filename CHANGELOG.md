@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.6
+
+* Changed:  Removed some direct require statements to allow manual website to load additional vendor autoloaders
+
 ### 1.3.5
 
 * Added:    CsvStream now supports being passed an external stream
