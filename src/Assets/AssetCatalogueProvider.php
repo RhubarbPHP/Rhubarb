@@ -70,6 +70,7 @@ abstract class AssetCatalogueProvider
             return $asset;
         } catch (AssetException $er){
             Log::error("Error creating asset from file '$filePath': ".$er->getPrivateMessage());
+            throw $er;
         }
 
         return null;

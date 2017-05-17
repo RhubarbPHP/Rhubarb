@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.5
+
+* Added:    CsvStream now supports being passed an external stream
+
 ### 1.3.4
 
 * Added:    Added body css class to HtmlPageSettings

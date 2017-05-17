@@ -39,6 +39,8 @@ class CsvStream extends RecordStream
 
     private $fileStream = null;
 
+    private $externalStream = false;
+
     private $writable = false;
 
     private $headers = null;
@@ -78,9 +80,15 @@ class CsvStream extends RecordStream
      */
     public $escapeCharacter = null;
 
-    public function __construct($filePath)
+    public function __construct($filePathOrStream)
     {
-        $this->filePath = $filePath;
+        if (is_resource($filePathOrStream)){
+            $this->externalStream = true;
+            $this->fileStream = $filePathOrStream;
+            $this->readHeaders();
+        } else {
+            $this->filePath = $filePathOrStream;
+        }
 
         parent::__construct();
     }
@@ -98,14 +106,18 @@ class CsvStream extends RecordStream
 
     public function readHeaders()
     {
-        $this->close();
+        if (!$this->externalStream) {
+            $this->close();
 
-        if (!file_exists($this->filePath)) {
-            $this->needToWriteHeaders = true;
-            return $this->headers = [];
+            if (!$this->fileStream) {
+                if (!file_exists($this->filePath)) {
+                    $this->needToWriteHeaders = true;
+                    return $this->headers = [];
+                }
+
+                $this->fileStream = fopen($this->filePath, "r");
+            }
         }
-
-        $this->fileStream = fopen($this->filePath, "r");
 
         $rawCsvData = $this->readCsvLine($this->trimHeadings);
 
