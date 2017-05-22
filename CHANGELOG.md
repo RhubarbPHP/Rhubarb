@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.7
+
+* Fixed:    readHeaders() in CsvStream prevents reading headers twice
+
 ### 1.3.6
 
 * Changed:  Removed some direct require statements to allow manual website to load additional vendor autoloaders

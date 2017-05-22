@@ -106,6 +106,10 @@ class CsvStream extends RecordStream
 
     public function readHeaders()
     {
+        if ($this->headers !== null){
+            return $this->headers;
+        }
+
         if (!$this->externalStream) {
             $this->close();
 
