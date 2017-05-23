@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.8
+
+* Added:    Allowed overriding AssetUrlHandlers streaming behaviour
+
 ### 1.3.7
 
 * Fixed:    readHeaders() in CsvStream prevents reading headers twice
