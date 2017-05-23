@@ -24,13 +24,13 @@ use Rhubarb\Crown\Sendables\Sendable;
 class UnitTestingEmailProvider extends EmailProvider
 {
     /**
-     * @var Email
+     * @var array
      */
-    private static $_lastEmail;
+    private static $_emailHistory;
 
     public function send(Sendable $email)
     {
-        self::$_lastEmail = $email;
+        self::$_emailHistory [] = $email;
     }
 
     /**
@@ -38,6 +38,14 @@ class UnitTestingEmailProvider extends EmailProvider
      */
     public static function getLastEmail()
     {
-        return self::$_lastEmail;
+        return self::$_emailHistory[count($_emailHistory) - 1];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEmailHistory()
+    {
+        return self::$_emailHistory;
     }
 }
