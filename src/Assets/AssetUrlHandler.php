@@ -68,7 +68,6 @@ class AssetUrlHandler extends UrlHandler
         return false;
     }
 
-
     /**
      * Return the response if appropriate or false if no response could be generated.
      *
@@ -97,9 +96,11 @@ class AssetUrlHandler extends UrlHandler
 
             $stream = $asset->getStream();
 
-            @header("Content-type: ".$asset->mimeType, true);
-            @header("Content-disposition: filename=\"".$asset->name."\"");
-            @header("Content-length: ".$asset->size);
+            if (!Application::current()->unitTesting) {
+                @header("Content-type: " . $asset->mimeType, true);
+                @header("Content-disposition: filename=\"" . $asset->name . "\"");
+                @header("Content-length: " . $asset->size);
+            }
 
         } catch (AssetException $er){
             $image = $this->getMissingAssetDetails();
@@ -113,15 +114,20 @@ class AssetUrlHandler extends UrlHandler
             }
         }
 
+        $this->streamToOutput($stream);
+
+        fclose($stream);
+
+        throw new StopGeneratingResponseException();
+    }
+
+    protected function streamToOutput($stream)
+    {
         while (!feof($stream)) {
             $buffer = fread($stream, 8192);
             echo $buffer;
             flush();
         }
-
-        fclose($stream);
-
-        throw new StopGeneratingResponseException();
     }
 
     /**

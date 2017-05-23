@@ -85,7 +85,8 @@ class CsvStream extends RecordStream
         if (is_resource($filePathOrStream)){
             $this->externalStream = true;
             $this->fileStream = $filePathOrStream;
-            $this->readHeaders();
+            $data = stream_get_meta_data($filePathOrStream);
+            $this->writable = ($data["mode"] == "a" || $data["mode"] = "w" || $data["mode"] = "w+" || $data["mode"] == "a+");
         } else {
             $this->filePath = $filePathOrStream;
         }
@@ -248,8 +249,6 @@ class CsvStream extends RecordStream
         if ($this->fileStream !== null) {
             if ($allowWriting && !$this->writable) {
                 $this->close();
-            } else {
-                return $this->fileStream;
             }
         }
 
@@ -258,7 +257,7 @@ class CsvStream extends RecordStream
             // so we must read headers first.
             $this->readHeaders();
 
-            if ($allowWriting) {
+            if ($allowWriting && !$this->externalStream) {
                 // For writing we need to reclose and open the stream in write mode.
                 $this->close();
             } else {
@@ -267,11 +266,16 @@ class CsvStream extends RecordStream
             }
         }
 
+        if ($this->fileStream){
+            return $this->fileStream;
+        }
+
         $mode = ($allowWriting) ? "a+" : "r";
 
         $this->remnantBuffer = "";
         $this->fileStream = fopen($this->filePath, $mode);
         $this->writable = $allowWriting;
+
         return $this->fileStream;
     }
 
