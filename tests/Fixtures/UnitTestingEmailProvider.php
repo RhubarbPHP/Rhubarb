@@ -38,7 +38,7 @@ class UnitTestingEmailProvider extends EmailProvider
      */
     public static function getLastEmail()
     {
-        return self::$_emailHistory[count($_emailHistory) - 1];
+        return self::$_emailHistory[count(self::$_emailHistory) - 1];
     }
 
     /**
