@@ -143,6 +143,8 @@ class CsvStream extends RecordStream
 
         $values = [];
 
+        $this->lastItemLength = 0;
+
         $addValue = function (&$value) use (&$values, $trimValues) {
             $values[] = utf8_encode($trimValues ? trim($value) : $value);
             $value = "";
@@ -212,6 +214,8 @@ class CsvStream extends RecordStream
                             if (($csvDataLength > $i) && ($csvData[$i] == "\r" || $csvData[$i] == "\n")) {
                                 $i++;
                             }
+
+                            $this->lastItemLength = $i;
 
                             $this->remnantBuffer = substr($csvData, $i);
 
@@ -373,6 +377,13 @@ class CsvStream extends RecordStream
         }
 
         fwrite($this->fileStream, "\n" . implode($this->delimiter, $enclosedData));
+    }
+
+    private $lastItemLength = 0;
+
+    public function getLastItemLength()
+    {
+        return $this->lastItemLength;
     }
 
     public function writeHeaders()

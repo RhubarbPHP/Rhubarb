@@ -1,5 +1,13 @@
 # Change log
 
+### 1.3.9
+
+* Added:    CsvStream has new method getLastItemSize() which returns the number of bytes the last read item was composed of
+            Used to allow progress reports of tasks that eat through CSV files from a stream where only the stream length is known.
+* Added:    AssetCatalogueProvider::storeAsset has a new optional argument to allow the asset to be stored with a different name
+* Added:    AssetCatalogueProvider::storeAsset would detect CSV files as text/plain mime type. File extension detection overrides this
+            to text/csv 
+
 ### 1.3.8
 
 * Added:    Allowed overriding AssetUrlHandlers streaming behaviour

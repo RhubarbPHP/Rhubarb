@@ -46,21 +46,28 @@ abstract class AssetCatalogueProvider
      * @param string $category
      * @return Asset
      */
-    public static function storeAsset($filePath, $category)
+    public static function storeAsset($filePath, $category, $storeAs = "")
     {
         // A sane default
         $mime = "application/octet-stream";
 
-        if (function_exists("finfo_open")){
-            $info = new \finfo(FILEINFO_MIME);
-            $mime = $info->file($filePath);
+        $name = ($storeAs == "") ? basename($filePath) : $storeAs;
+
+        // CSV is detected as text/plain - change this if.
+        if (preg_match("/\\.csv$/i", $name)){
+            $mime = "text/csv";
+        } else {
+            if (function_exists("finfo_open")) {
+                $info = new \finfo(FILEINFO_MIME);
+                $mime = $info->file($filePath);
+            }
         }
 
         $provider = self::getProvider($category);
 
         try {
             $asset = $provider->createAssetFromFile($filePath, [
-                "name" => basename($filePath),
+                "name" => $name,
                 "size" => filesize($filePath),
                 "mimeType" => $mime,
                 "category" => $category
