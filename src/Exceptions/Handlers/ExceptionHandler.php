@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\Exceptions\Handlers;
 
 use ErrorException;
+use Rhubarb\Crown\Exceptions\ErrorWithTraceException;
 use Rhubarb\Crown\Exceptions\NonRhubarbException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
 use Rhubarb\Crown\Response\Response;
@@ -81,7 +82,9 @@ abstract class ExceptionHandler
                 return;
             }
 
-            throw new ErrorException($message, 0, $code, $file, $line);
+            ob_start();
+            debug_print_backtrace();
+            throw new ErrorWithTraceException($message, 0, $code, $file, $line, ob_get_clean());
         });
 
         // Make sure we handle fatal errors too.
@@ -112,12 +115,15 @@ abstract class ExceptionHandler
             }
 
             if ($error != null && ($error["type"] == E_ERROR || $error["type"] == E_COMPILE_ERROR)) {
-                $exceptionHandler(new ErrorException(
+                ob_start();
+                debug_print_backtrace();
+                $exceptionHandler(new ErrorWithTraceException(
                     $error["message"],
                     0,
                     $error["type"],
                     $error["file"],
-                    $error["line"]
+                    $error["line"],
+                    ob_get_clean()
                 ));
             }
         });
