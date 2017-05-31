@@ -138,7 +138,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
 
         // Temporary code to help debug an issue on Vertigo
         $notEqual = false;
-        if (($oldValue instanceof \stdClass && !is_object($value)) || (!is_object($oldValue) && $value instanceof \stdClass)) {
+        if ((is_object($oldValue) && is_int($value)) || (is_int($oldValue) && is_object($value))) {
             Log::error("ModelState trying to compare object to integer", 'ERROR', ['OldValue' => $oldValue, 'NewValue' => $value]);
             $notEqual = true;
         }
