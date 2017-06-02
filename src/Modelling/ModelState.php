@@ -136,17 +136,25 @@ class ModelState implements \ArrayAccess, JsonSerializable
             $this->attachChangeListenerToModelProperty($propertyName, $value);
         }
 
+        if ($this->propertyChangeEventsDisabled) {
+            return;
+        }
+
+        $different = false;
         try {
             if ($oldValue != $value) {
-                if (!$this->propertyChangeEventsDisabled) {
-                    // Don't fire changes if they are disabled.
-                    $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
-                    $this->traitRaiseEvent("AfterChange", $this);
-                }
+                $different = true;
             }
         } catch (\Throwable $throwable) {
-            // Temporary code to help debug an issue on Vertigo
-            Log::error("ModelState trying to compare object to integer", 'ERROR', ['OldValue' => $oldValue, 'NewValue' => $value, 'Throwable' => $throwable]);
+            $different = true;
+        } catch (\Exception $exception) {
+            $different = true;
+        }
+
+        if ($different) {
+            // Don't fire changes if they are disabled.
+            $this->raisePropertyChangedCallbacks($propertyName, $value, $oldValue);
+            $this->traitRaiseEvent("AfterChange", $this);
         }
     }
 
