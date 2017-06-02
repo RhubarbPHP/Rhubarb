@@ -118,7 +118,9 @@ class AssetUrlHandler extends UrlHandler
 
         fclose($stream);
 
-        throw new StopGeneratingResponseException();
+        // We need to guarantee that no headers are output after this point. Unfortunately the
+        // only fool proof way is to exit PHP.
+        exit;
     }
 
     protected function streamToOutput($stream)

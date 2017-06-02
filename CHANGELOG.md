@@ -1,5 +1,10 @@
 # Change log
 
+### 1.3.10
+
+* Fixed:    Depending on circumentsance the AssetUrlHandler could cause additional headers to be output after content causing warnings and 
+            content length issues.
+
 ### 1.3.9
 
 * Added:    CsvStream has new method getLastItemSize() which returns the number of bytes the last read item was composed of
