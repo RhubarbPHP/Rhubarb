@@ -413,4 +413,61 @@ class StringTools
         $separated = preg_replace(['/([a-z\d])([A-Z])/', '/([^' . preg_quote($separator) . '])([A-Z][a-z])/'], '$1' . $separator . '$2', $string);
         return $toLowerCase ? strtolower($separated) : $separated;
     }
+
+    /**
+     * Detects URLs (as loosely as reasonable) in text and calls a callback function for each. Default behaviour is to insert HTML links for each URL.
+     *
+     * @param $text  String to find URLs in
+     * @param callable|null $formatLink  Will be called for each URL detected. If null, default behaviour will happen (inserting a link for each URL)
+     * @param bool $openLinksInNewWindow  If $formatHashTag is not set, created links will open in new browser window
+     * @return string
+     */
+    public static function detectUrls($text, callable $formatLink = null, $openLinksInNewWindow = true)
+    {
+        if ($formatLink == null) {
+            $formatLink = function ($url) use ($openLinksInNewWindow) {
+                $scheme = '';
+                if (strpos($url, '://') === false) {
+                    $scheme = 'http://';
+                }
+
+                return '<a href="' . $scheme . $url . '"' . ($openLinksInNewWindow ? ' target="_blank"' : '') . '>' . $url . '</a>';
+            };
+        }
+
+        $urlRegex = '/(^|\s)((?:https?:\/\/)?(?:[\da-z-]+)(?:\.(?:[\da-z-]+))*(?:\.[a-z]{2,6})(?::\d+)?(?:\/[\w%-.~:\/?#\[\]@!$&\'()*+,;=.-]*)*\/?)($|[\s,.])/i';
+
+        while (preg_match($urlRegex, $text, $match, PREG_OFFSET_CAPTURE)) {
+            list($url, $index) = $match[2];
+            $text = substr($text, 0, $index) . $formatLink($url) . substr($text, $index + strlen($url));
+        }
+
+        return $text;
+    }
+
+    /**
+     * Detects HashTags in a string and calls a callback function for each. Default behaviour is to insert HTML links for each HashTag.
+     *
+     * @param string $text  String to find HashTags in
+     * @param callable|null $formatHashTag  Will be called for each HashTag detected. If null, default behaviour will happen (inserting a link for each HashTag)
+     * @param string $url  If $formatHashTag is not set, this will prefix any linked HashTag
+     * @param bool $openLinksInNewWindow  If $formatHashTag is not set, created links will open in new browser window
+     * @return string
+     */
+    public static function detectHashTags($text, callable $formatHashTag = null, $url = '', $openLinksInNewWindow = true)
+    {
+        if ($formatHashTag == null) {
+            $formatHashTag = function ($hashTag) use ($url, $openLinksInNewWindow) {
+                return '<a href="' . $url . urlencode($hashTag) . ($openLinksInNewWindow ? ' target="_blank"' : '') . '">' . $hashTag . '</a>';
+            };
+        }
+
+        $hashTagRegex = '/(^|\s)(#\w+)($|[^<])/';
+        while (preg_match($hashTagRegex, $text, $match, PREG_OFFSET_CAPTURE)) {
+            list($hashTag, $index) = $match[2];
+            $text = substr($text, 0, $index) . $formatHashTag($hashTag) . strpos($text, $index + strlen($hashTag));
+        }
+
+        return $text;
+    }
 }
