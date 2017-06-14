@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.11
+
+* Fixed:    AssetUrlHandler no longer exits during unit testing.
+
 ### 1.3.10
 
 * Fixed:    Depending on circumentsance the AssetUrlHandler could cause additional headers to be output after content causing warnings and 

@@ -119,8 +119,11 @@ class AssetUrlHandler extends UrlHandler
         fclose($stream);
 
         // We need to guarantee that no headers are output after this point. Unfortunately the
-        // only fool proof way is to exit PHP.
-        exit;
+        // only fool proof way is to exit PHP. We do fence for unit testing however to stop it
+        // stopping a test suite.
+        if (!Application::current()->unitTesting) {
+            exit;
+        }
     }
 
     protected function streamToOutput($stream)
