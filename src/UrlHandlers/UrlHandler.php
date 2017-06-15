@@ -358,12 +358,6 @@ abstract class UrlHandler implements GeneratesResponseInterface
             $currentUrlFragment .= "/";
         }
 
-        // Some URL Handlers don't have a url at all in which case we assume they apply
-        // before even considering the url.
-        if ($this->url == "") {
-            return "/";
-        }
-
         if (stripos($currentUrlFragment, $this->url) === 0) {
             return $this->url;
         }
