@@ -8,6 +8,7 @@ use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProvider;
 use Rhubarb\Crown\Assets\LocalStorageAssetCatalogueProviderSettings;
 use Rhubarb\Crown\Assets\LoginValidatedAssetUrlHandler;
 use Rhubarb\Crown\Exceptions\AssetExposureException;
+use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\StopGeneratingResponseException;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\LoginProviders\UnitTestingLoginProvider;
@@ -38,12 +39,13 @@ class LoginValidatedAssetUrlHandlerTest extends RhubarbTestCase
         $request->urlPath = "/data/".$asset->getToken();
 
         $handler = new LoginValidatedAssetUrlHandler("test", UnitTestingLoginProvider::class);
+        $handler->failOver = false;
         $handler->setUrl("/data/");
 
         try {
             $handler->generateResponse($request);
             $this->fail("We shouldn't have been allowed here");
-        } catch( AssetExposureException $er){
+        } catch( ForceResponseException $er){
         }
 
         $login->login();

@@ -1,5 +1,10 @@
 # Change log
 
+### 1.3.12
+
+* Fixed:    Unit tests
+* Added:    UnitTestingEmailProvider now can be queried for multiple emails.
+
 ### 1.3.11
 
 * Fixed:    AssetUrlHandler no longer exits during unit testing.

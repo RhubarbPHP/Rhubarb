@@ -41,6 +41,11 @@ class AssetUrlHandler extends UrlHandler
 
     protected $token;
 
+    /**
+     * @var bool True if the handler should fail over to a default asset if the one requested isn't servable.
+     */
+    public $failOver = true;
+
     public function __construct($assetCategory, $childUrlHandlers = [])
     {
         parent::__construct($childUrlHandlers);
@@ -101,14 +106,17 @@ class AssetUrlHandler extends UrlHandler
                 @header("Content-disposition: filename=\"" . $asset->name . "\"");
                 @header("Content-length: " . $asset->size);
             }
-
         } catch (AssetException $er){
-            $image = $this->getMissingAssetDetails();
-            if ($image){
-                $stream = $image["stream"];
+            if ($this->failOver) {
+                $image = $this->getMissingAssetDetails();
+                if ($image) {
+                    $stream = $image["stream"];
 
-                @header("Content-type: ".$image["mimeType"], true);
-                @header("Content-length: ".$image["size"]);
+                    @header("Content-type: " . $image["mimeType"], true);
+                    @header("Content-length: " . $image["size"]);
+                } else {
+                    throw new ForceResponseException(new NotFoundResponse());
+                }
             } else {
                 throw new ForceResponseException(new NotFoundResponse());
             }
