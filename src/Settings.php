@@ -20,11 +20,8 @@ namespace Rhubarb\Crown;
 
 require_once __DIR__ . "/Modelling/ModelState.php";
 
-use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\DependencyInjection\SingletonInterface;
 use Rhubarb\Crown\DependencyInjection\SingletonTrait;
-use Rhubarb\Crown\Exceptions\SettingMissingException;
-use Rhubarb\Crown\Modelling\ModelState;
 
 /**
  * A base class for creating settings classes.

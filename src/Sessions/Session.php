@@ -82,6 +82,28 @@ class Session extends Settings
     }
 
     /**
+     * Populates the session with data from the storage provider.
+     *
+     * @param array $data
+     */
+    public function setSessionData($data = [])
+    {
+        foreach($data as $key => $value ){
+            $this->$key = $value;
+        }
+    }
+
+    /**
+     * Extracts session data to an array for storage
+     *
+     * @return array
+     */
+    public function extractSessionData()
+    {
+        return get_object_vars($this);
+    }
+
+    /**
      * Stores the session using the current Provider
      */
     public function storeSession()

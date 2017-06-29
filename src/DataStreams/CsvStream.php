@@ -39,6 +39,8 @@ class CsvStream extends RecordStream
 
     private $fileStream = null;
 
+    private $externalStream = false;
+
     private $writable = false;
 
     private $headers = null;
@@ -78,9 +80,16 @@ class CsvStream extends RecordStream
      */
     public $escapeCharacter = null;
 
-    public function __construct($filePath)
+    public function __construct($filePathOrStream)
     {
-        $this->filePath = $filePath;
+        if (is_resource($filePathOrStream)){
+            $this->externalStream = true;
+            $this->fileStream = $filePathOrStream;
+            $data = stream_get_meta_data($filePathOrStream);
+            $this->writable = ($data["mode"] == "a" || $data["mode"] = "w" || $data["mode"] = "w+" || $data["mode"] == "a+");
+        } else {
+            $this->filePath = $filePathOrStream;
+        }
 
         parent::__construct();
     }
@@ -98,14 +107,22 @@ class CsvStream extends RecordStream
 
     public function readHeaders()
     {
-        $this->close();
-
-        if (!file_exists($this->filePath)) {
-            $this->needToWriteHeaders = true;
-            return $this->headers = [];
+        if ($this->headers !== null){
+            return $this->headers;
         }
 
-        $this->fileStream = fopen($this->filePath, "r");
+        if (!$this->externalStream) {
+            $this->close();
+
+            if (!$this->fileStream) {
+                if (!file_exists($this->filePath)) {
+                    $this->needToWriteHeaders = true;
+                    return $this->headers = [];
+                }
+
+                $this->fileStream = fopen($this->filePath, "r");
+            }
+        }
 
         $rawCsvData = $this->readCsvLine($this->trimHeadings);
 
@@ -125,6 +142,8 @@ class CsvStream extends RecordStream
         $readFullLine = false;
 
         $values = [];
+
+        $this->lastItemLength = 0;
 
         $addValue = function (&$value) use (&$values, $trimValues) {
             $values[] = utf8_encode($trimValues ? trim($value) : $value);
@@ -196,6 +215,8 @@ class CsvStream extends RecordStream
                                 $i++;
                             }
 
+                            $this->lastItemLength = $i;
+
                             $this->remnantBuffer = substr($csvData, $i);
 
                             break 3;
@@ -232,8 +253,6 @@ class CsvStream extends RecordStream
         if ($this->fileStream !== null) {
             if ($allowWriting && !$this->writable) {
                 $this->close();
-            } else {
-                return $this->fileStream;
             }
         }
 
@@ -242,7 +261,7 @@ class CsvStream extends RecordStream
             // so we must read headers first.
             $this->readHeaders();
 
-            if ($allowWriting) {
+            if ($allowWriting && !$this->externalStream) {
                 // For writing we need to reclose and open the stream in write mode.
                 $this->close();
             } else {
@@ -251,11 +270,16 @@ class CsvStream extends RecordStream
             }
         }
 
+        if ($this->fileStream){
+            return $this->fileStream;
+        }
+
         $mode = ($allowWriting) ? "a+" : "r";
 
         $this->remnantBuffer = "";
         $this->fileStream = fopen($this->filePath, $mode);
         $this->writable = $allowWriting;
+
         return $this->fileStream;
     }
 
@@ -355,7 +379,14 @@ class CsvStream extends RecordStream
         fwrite($this->fileStream, "\n" . implode($this->delimiter, $enclosedData));
     }
 
-    private function writeHeaders()
+    private $lastItemLength = 0;
+
+    public function getLastItemLength()
+    {
+        return $this->lastItemLength;
+    }
+
+    public function writeHeaders()
     {
         $this->open(true);
 
@@ -376,5 +407,7 @@ class CsvStream extends RecordStream
         }
 
         fwrite($this->fileStream, implode($this->delimiter, $enclosedData));
+
+        $this->needToWriteHeaders = false;
     }
 }

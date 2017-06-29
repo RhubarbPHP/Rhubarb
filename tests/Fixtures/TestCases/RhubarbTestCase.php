@@ -17,6 +17,8 @@
 
 namespace Rhubarb\Crown\Tests\Fixtures\TestCases;
 
+use Codeception\Lib\Di;
+use Codeception\Test\Unit;
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
@@ -25,7 +27,7 @@ use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
 /**
  * This base class adds basic setup and teardown for unit testing within Rhubarb's core
  */
-class RhubarbTestCase extends \Codeception\TestCase\Test
+class RhubarbTestCase extends Unit
 {
     /**
      * @var \UnitTester
@@ -41,14 +43,23 @@ class RhubarbTestCase extends \Codeception\TestCase\Test
 
     protected function setUp()
     {
+        // This shim bridges support between codeception and phpstorm.
+        $meta = $this->getMetadata();
+        $meta->setServices(
+            [
+                "di" => new Di()
+            ]
+        );
+
         $this->application = new Application();
         $this->application->unitTesting = true;
         $this->application->context()->simulateNonCli = false;
         $this->application->registerModule(new UnitTestingModule());
         $this->application->initialiseModules();
 
-
         ExceptionHandler::disableExceptionTrapping();
+
+        return parent::setUp();
     }
 
     protected function tearDown()

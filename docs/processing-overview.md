@@ -14,7 +14,7 @@ the context of the request:
 
 execute-http.php
 :   Called by a webserver serving an HttpRequest to Rhubarb. The webserver must be instructed to route all
-    requests to this PHP script with the exception of static files that can be served directlys.
+    requests to this PHP script with the exception of static files that can be served directly.
 
 execute-cli.php
 :   Called when executing a script from a terminal.

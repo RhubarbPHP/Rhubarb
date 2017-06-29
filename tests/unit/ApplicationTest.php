@@ -17,19 +17,30 @@
 
 namespace Rhubarb\Crown\Tests;
 
-use Codeception\TestCase\Test;
+use Codeception\Lib\Di;
+use Codeception\Test\Unit;
 use Rhubarb\Crown\Application;
-use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
-use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
-use Rhubarb\Crown\Exceptions\Handlers\ExceptionSettings;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Request\WebRequest;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
 use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModuleB;
 use Rhubarb\Crown\Tests\Fixtures\SimpleContent;
 
-class ApplicationTest extends Test
+class ApplicationTest extends Unit
 {
+    protected function setUp()
+    {
+        // This shim bridges support between codeception and phpstorm.
+        $meta = $this->getMetadata();
+        $meta->setServices(
+            [
+                "di" => new Di()
+            ]
+        );
+
+        return parent::setUp();
+    }
+
     public function testApplicationCanHaveModules()
     {
         $application = new Application();

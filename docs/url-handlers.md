@@ -8,7 +8,7 @@ URL Handlers extend the `UrlHandler` class and must be created and registered wi
 method of a Module.
 
 URL Handlers are registered to handle a particular URL 'stub'. Rhubarb iterates over all the registered handlers
-in turn and if the stub is found withing the current URL then the URL is asked to generate the response. A URL
+in turn and if the stub is found within the current URL then the URL is asked to generate the response. A URL
 handler may refuse to generate the response in which case Rhubarb will continue to the next matching handler.
 
 For example a URL handler with a stub of '/app/contacts/' would be given the opportunity to handle the following
@@ -21,7 +21,7 @@ requests:
 /app/contacts/1/history/
 ```
 
-A handler can have child handlers in which case the child handlers will normally be asked if they would be able
+A handler can have child handlers and when this is the case the child handlers will normally be asked if they would be able
 to generate a response instead. Child handlers also are registered with a stub however this stub should be set
 to match against the remaining portion of the URL.
 

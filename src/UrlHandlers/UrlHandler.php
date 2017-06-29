@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\UrlHandlers;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Exceptions\ForceResponseException;
 use Rhubarb\Crown\Exceptions\RhubarbException;
@@ -330,7 +331,14 @@ abstract class UrlHandler implements GeneratesResponseInterface
 
     public function generateResponseForException(RhubarbException $er)
     {
-        $response = new HtmlResponse();
+        $context = Application::current()->context();
+
+        if ($context->isXhrRequest()) {
+            $response = new Response();
+        } else {
+            $response = new HtmlResponse();
+        }
+
         $response->setResponseCode(Response::HTTP_STATUS_SERVER_ERROR_GENERIC);
         $response->setContent($er->getPublicMessage());
 
@@ -348,12 +356,6 @@ abstract class UrlHandler implements GeneratesResponseInterface
     {
         if ($currentUrlFragment[strlen($currentUrlFragment) - 1] != "/") {
             $currentUrlFragment .= "/";
-        }
-
-        // Some URL Handlers don't have a url at all in which case we assume they apply
-        // before even considering the url.
-        if ($this->url == "") {
-            return "/";
         }
 
         if (stripos($currentUrlFragment, $this->url) === 0) {

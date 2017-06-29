@@ -65,7 +65,7 @@ extending some of the user interface elements and schemas to tailor it to the pr
 
 While rare it is possible to completely replace a module with a completely different one even if a dependancy
 is requiring the original module. Simply create the new module with the same class name (but different namespace)
-and make sure it is depended upon by your application. It should trump the original one.
+and make sure it is depended upon by your application. It should trump the original one because it will be registered after the original.
 
 > Replacing modules like this should be done only with extreme caution. Without replacing the entire
 > functionality of the target module it's quite likely something will break. Where only a small portion of

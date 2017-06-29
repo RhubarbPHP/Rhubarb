@@ -46,7 +46,7 @@ class BinaryResponse extends Response
 
     protected function printContent()
     {
-        ob_clean();
+        @ob_clean();
 
         print $this->binaryData;
     }

@@ -24,11 +24,11 @@ namespace Rhubarb\Crown\Exceptions;
 class SettingMissingException extends RhubarbException
 {
     /**
-     * @param string $namespace
+     * @param string $class
      * @param string $settingName
      */
-    public function __construct($namespace, $settingName)
+    public function __construct($class, $settingName)
     {
-        parent::__construct("The setting $namespace.$settingName has not been set.");
+        parent::__construct("The setting $class.$settingName has not been set.");
     }
 }

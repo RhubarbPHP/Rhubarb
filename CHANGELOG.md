@@ -1,6 +1,147 @@
 # Change log
 
-### 1.1.x
+### 1.3.13
+
+* Fixed:    Issue with how empty urls on URL handlers are handled.
+
+### 1.3.12
+
+* Fixed:    Unit tests
+* Added:    UnitTestingEmailProvider now can be queried for multiple emails.
+
+### 1.3.11
+
+* Fixed:    AssetUrlHandler no longer exits during unit testing.
+
+### 1.3.10
+
+* Fixed:    Depending on circumentsance the AssetUrlHandler could cause additional headers to be output after content causing warnings and 
+            content length issues.
+
+### 1.3.9
+
+* Added:    CsvStream has new method getLastItemSize() which returns the number of bytes the last read item was composed of
+            Used to allow progress reports of tasks that eat through CSV files from a stream where only the stream length is known.
+* Added:    AssetCatalogueProvider::storeAsset has a new optional argument to allow the asset to be stored with a different name
+* Added:    AssetCatalogueProvider::storeAsset would detect CSV files as text/plain mime type. File extension detection overrides this
+            to text/csv 
+
+### 1.3.8
+
+* Added:    Allowed overriding AssetUrlHandlers streaming behaviour
+
+### 1.3.7
+
+* Fixed:    readHeaders() in CsvStream prevents reading headers twice
+
+### 1.3.6
+
+* Changed:  Removed some direct require statements to allow manual website to load additional vendor autoloaders
+
+### 1.3.5
+
+* Added:    CsvStream now supports being passed an external stream
+
+### 1.3.4
+
+* Added:    Added body css class to HtmlPageSettings
+
+### 1.3.3
+
+* Fixed:    Fix broken static url resource handler
+
+### 1.3.2
+
+* Fixed:    Fix for static url handler not being nestable
+
+### 1.3.1
+
+* Changed:  GreedyUrlHandler is now passed the parent url handler as the first argument if there is a parent handler
+
+### 1.3.0
+
+* Added:    CallableUrlHandler
+* Added:    GreedyUrlHandler
+* Added:    NumericGreedyUrlHandler
+* Added:    Some logging when asset creation from file fails
+* Added:    WebRequest didn't document the server() call properly.
+
+### 1.2.3
+
+* Added:    AssetUrlHandler now supports getMissingAssetDetails() to provide fall back files
+* Added:    NotFoundResponse added
+
+### 1.2.2
+
+* Change:   AssetUrlHandler no longer uses attachment for content-disposition
+
+### 1.2.1
+
+* Fixed:    Category was not being given to the asset providers correctly.
+
+### 1.2.0
+
+* Added:    Assets concept added with AssetCatalogueProvider and LocalStorageAssetCatalogueProvider classes added.
+
+### 1.1.19
+
+* Added:    Methods allowing removal of all/specific handlers from an Event
+* Added:    StringTools::camelCaseToSeparated, allowing change of CamelCase to e.g. snake_case or hyphenated-string
+* Changed:  Extra parameter to StringTools::parseTemplateString allowing you to leave placeholders that weren't matched by data
+            
+### 1.1.18
+
+* Added:    Email can now have a different reply to from the sender
+
+### 1.1.17
+
+* Changed:  Trapped exceptions handled by generic UrlHandler on AJAX request will now just output the message without layout HTML
+* Fixed:    Call to HttpHeaders for an HTTP code. HttpHeaders class no longer exists, codes are in Request now
+
+### 1.1.16
+
+* Fixed:    Email::getMimeDocument() now does something...
+
+### 1.1.15
+
+* Fixed:    Fix for writeheaders in CsvStream
+
+### 1.1.14
+
+* Fixed:    EncryptedSession wasn't encrypting
+
+### 1.1.13
+
+* Fixed:    BinaryResponse used ob_clean() which threw notices if not in a buffering context
+* Fixed:    CsvStream::writeHeaders() is now public to allow writing empty CSV files with a header.
+
+### 1.1.12
+
+* Added:    Support for automatically encoded XML responses
+
+### 1.1.11
+
+* Added:    Support for text/xml http Accept headers
+* Added:    XmlRequest object
+* Added:    SimpleXMLTranscoder Helper class for replicating json_encode/json_decode functionality with XML
+
+### 1.1.10
+
+* Fixed:    Request (get merged with post) data wasn't handled property
+
+### 1.1.9
+
+* Fixed:    Reference to nonexistant $serverData in WebRequest
+* Changed:  Using file modified time on JS and CSS URLs deployed by RelocationResourceDeploymentProvider
+* Changed:  FileResponse and Application clear any level of output buffering before output
+
+### 1.1.8
+
+* Changed:  Means to better set a default sender for emails
+
+### 1.1.7
+
+* Changed:  $staticFile in StaticResourceUrlHandler is now protected
 
 * Fixed:    Dependency injection static memory issues in HttpClient
 * Changed:  CURLOPT_SSL_VERIFYPEER should be true on all curl requests

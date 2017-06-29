@@ -37,21 +37,36 @@ abstract class EncryptedSession extends Session
      */
     abstract protected function getEncryptionKeySalt();
 
-    public function __set($propertyName, $value)
+    public function setSessionData($data = [])
     {
+        $decryptedData = [];
+
         $keySalt = $this->getEncryptionKeySalt();
         $provider = Container::instance(EncryptionProvider::class);
 
-        $value = $provider->encrypt($value, $keySalt);
+        foreach($data as $key => $value){
+            $decryptedData[$key] = $provider->decrypt($value, $keySalt);
+        }
 
-        $this->encryptedData[$propertyName] = $value;
+        parent::setSessionData($decryptedData);
     }
 
-    public function __get($propertyName)
+    public function extractSessionData()
     {
+        $data = parent::extractSessionData();
+        $encrypted = [];
+
         $keySalt = $this->getEncryptionKeySalt();
         $provider = Container::instance(EncryptionProvider::class);
 
-        return $provider->decrypt($this->encryptedData[$propertyName], $keySalt);
+        foreach($data as $key => $value){
+            if (is_object($value) || is_array($value)){
+                continue;
+            }
+
+            $encrypted[$key] = $provider->encrypt($value, $keySalt);
+        }
+
+        return $encrypted;
     }
 }

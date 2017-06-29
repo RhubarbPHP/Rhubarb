@@ -46,7 +46,7 @@ RedirectResponse
 ## Setting the response code
 
 A response should carry an appropriate HTTP response code. The default will be a 200 response for a normal
-HtmlResponse. To change the response code call `setResponseCode()` amd `setResponseMessage()` with the appropriate
+HtmlResponse. To change the response code call `setResponseCode()` and `setResponseMessage()` with the appropriate
 code and message.
 
 The Response object defines a range of constants mapped to common response codes for your convenience.
@@ -66,8 +66,8 @@ with the client.
 
 ## Forcing a response
 
-Sometimes in the middle of generating a standard response your application need to abort the generation of the
-standard response and issue another type of response instead. If using a pattern like MVP the code that
+Sometimes in the middle of generating a standard response your application may need to abort the generation of the
+standard response and issue another type of response instead. If you're using a pattern like MVP the code that
 needs to issue the new response has no control over the actual generation of the response class.
 
 On occasions like this simply throw a `ForceResponseException` passing the response you would like returned to the client.

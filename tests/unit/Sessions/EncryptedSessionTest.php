@@ -35,16 +35,24 @@ class EncryptedSessionTest extends RhubarbTestCase
     public function testSessionEncrypts()
     {
         $session = UnitTestEncryptedSession::singleton();
-        $session->TestValue = "123456";
-        $raw = get_object_vars($session);
+        $session->testValue = "123456";
 
-        $this->assertEquals("lu3RCzBb/lz4HIqFnlHc7A==", $session->getEncryptedData()["TestValue"]);
-        $this->assertEquals("123456", $session->TestValue);
+        $provider = new UnitTestingSessionProvider();
+        $provider->storeSession($session);
+
+        $this->assertEquals("lu3RCzBb/lz4HIqFnlHc7A==", $_SESSION[UnitTestEncryptedSession::class]["testValue"]);
+
+        Container::current()->clearSingleton(UnitTestEncryptedSession::class);
+
+        $session = UnitTestEncryptedSession::singleton();
+        $this->assertEquals("123456", $session->testValue);
     }
 }
 
 class UnitTestEncryptedSession extends EncryptedSession
 {
+    public $testValue;
+
     public function getEncryptedData()
     {
         return $this->encryptedData;

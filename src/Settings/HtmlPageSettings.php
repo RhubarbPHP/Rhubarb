@@ -26,4 +26,5 @@ use Rhubarb\Crown\Settings;
 class HtmlPageSettings extends Settings
 {
     public $pageTitle = "";
+    public $bodyCssClass = "";
 }

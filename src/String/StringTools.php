@@ -295,10 +295,11 @@ class StringTools
      *
      * @param string $string
      * @param array $data
+     * @param bool $replaceEmptyValues Set to false to leave the placeholders in the text for any values which are empty/not set in the data
      *
      * @return string
      */
-    public static function parseTemplateString($string, $data)
+    public static function parseTemplateString($string, $data, $replaceEmptyValues = true)
     {
         $args = func_get_args();
         $dataSources = [];
@@ -325,7 +326,10 @@ class StringTools
                 }
             }
 
-            $html = str_replace($regs[0], (string)$value, $html);
+            $value = (string)$value;
+            if ($replaceEmptyValues || $value != "") {
+                $html = str_replace($regs[0], (string)$value, $html);
+            }
         }
 
         return $html;
@@ -393,5 +397,19 @@ class StringTools
             return substr_replace($subject, $replace, $pos, strlen($search));
         }
         return $subject;
+    }
+
+    /**
+     * Converts a string from CamelCasing to separated-words, with specifiable separator and lowercase conversion.
+     *
+     * @param $string
+     * @param string $separator The character to separate the words with
+     * @param bool $toLowerCase
+     * @return string
+     */
+    public static function camelCaseToSeparated($string, $separator = '-', $toLowerCase = true)
+    {
+        $separated = preg_replace(['/([a-z\d])([A-Z])/', '/([^' . preg_quote($separator) . '])([A-Z][a-z])/'], '$1' . $separator . '$2', $string);
+        return $toLowerCase ? strtolower($separated) : $separated;
     }
 }

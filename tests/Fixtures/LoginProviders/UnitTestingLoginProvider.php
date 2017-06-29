@@ -23,6 +23,6 @@ class UnitTestingLoginProvider extends LoginProvider
 {
     public function login()
     {
-        $this->LoggedIn = true;
+        $this->loggedIn = true;
     }
 }

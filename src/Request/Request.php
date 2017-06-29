@@ -73,7 +73,7 @@ abstract class Request
     /**
      * Returns the active request from the currently running application.
      *
-     * @return Request
+     * @return Request|static
      */
     public final static function current()
     {
@@ -123,6 +123,10 @@ abstract class Request
                     break;
                 case "application/json":
                     $request = new JsonRequest();
+                    break;
+                case "text/xml":
+                case "application/xml":
+                    $request = new XmlRequest();
                     break;
                 case "multipart/form-data":
                     $request = new MultiPartFormDataRequest();

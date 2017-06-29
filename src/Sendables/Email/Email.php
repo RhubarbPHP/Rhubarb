@@ -63,6 +63,19 @@ abstract class Email extends Sendable
         return $this->attachments;
     }
 
+
+    /**
+     * Returns the Reply-To recipient for the email.
+     *
+     * Defaults to calling getSender()
+     *
+     * @return EmailRecipient
+     */
+    public function getReplyToRecipient()
+    {
+        return $this->getSender();
+    }
+
     /**
      * @return string
      */
@@ -80,12 +93,22 @@ abstract class Email extends Sendable
     public function getSender()
     {
         if ($this->sender == null) {
-            $emailSettings = EmailSettings::singleton();
-
-            return $emailSettings->defaultSender;
+            return $this->getDefaultSender();
         }
 
         return $this->sender;
+    }
+
+    /**
+     * Returns a default sender when none is supplied.
+     *
+     * @return EmailRecipient
+     */
+    protected function getDefaultSender()
+    {
+        $emailSettings = EmailSettings::singleton();
+
+        return $emailSettings->defaultSender;
     }
 
     /**
@@ -145,68 +168,82 @@ abstract class Email extends Sendable
         return "Email";
     }
 
+    /**
+     * Gets a MimeDocument to represent this email.
+     *
+     * @return MimeDocument
+     */
     public function getMimeDocument()
     {
+        $textPart = false;
+        $htmlPart = false;
 
+        $html = $this->getHtml();
+        $text = $this->getText();
+        $subject = $this->getSubject();
+
+        /**
+         * @var string|bool Tracks which part should contain the text and html parts.
+         */
+        $alternativePart = false;
+
+        if (count($this->attachments) > 0) {
+            $mime = new MimeDocument("multipart/mixed", crc32($html) . crc32($text) . crc32($subject));
+        } else {
+            $mime = new MimeDocument("multipart/alternative", crc32($html) . crc32($text) . crc32($subject));
+
+            // The outer mime part is our alternative part
+            $alternativePart = $mime;
+        }
+
+        if ($text != "") {
+            $textPart = new MimePartText("text/plain");
+            $textPart->setTransformedBody($text);
+        }
+
+        if ($html != "") {
+            $htmlPart = new MimePartText("text/html");
+            $htmlPart->setTransformedBody($html);
+        }
+
+        if ($text != "" && $html != "") {
+            if (count($this->attachments) > 0) {
+                // As this email has attachments we need to create an alternative part to store the text and html
+                $alternativePart = new MimeDocument("multipart/alternative");
+
+                $mime->addPart($alternativePart);
+            }
+
+            $alternativePart->addPart($textPart);
+            $alternativePart->addPart($htmlPart);
+        } else {
+            if ($text != "") {
+                $mime->addPart($textPart);
+            }
+
+            if ($html != "") {
+                $mime->addPart($htmlPart);
+            }
+        }
+
+        foreach ($this->attachments as $attachment) {
+            $mime->addPart(MimePartBinaryFile::fromLocalPath($attachment->path, $attachment->name));
+        }
+
+        $mime->addHeader("To", $this->getRecipientList());
+        $mime->addHeader("From", $this->getSender()->getRfcFormat());
+        $mime->addHeader("Subject", $this->getSubject());
+
+        return $mime;
     }
 
     public function getBodyRaw()
     {
         $html = $this->getHtml();
         $text = $this->getText();
-        $subject = $this->getSubject();
 
         if ($html != "" || count($this->attachments) > 0) {
-            $textPart = false;
-            $htmlPart = false;
-
-            /**
-             * @var string|bool Tracks which part should contain the text and html parts.
-             */
-            $alternativePart = false;
-
-            if (count($this->attachments) > 0) {
-                $mime = new MimeDocument("multipart/mixed", crc32($html) . crc32($text) . crc32($subject));
-            } else {
-                $mime = new MimeDocument("multipart/alternative", crc32($html) . crc32($text) . crc32($subject));
-
-                // The outer mime part is our alternative part
-                $alternativePart = $mime;
-            }
-
-            if ($text != "") {
-                $textPart = new MimePartText("text/plain");
-                $textPart->setTransformedBody($text);
-            }
-
-            if ($html != "") {
-                $htmlPart = new MimePartText("text/html");
-                $htmlPart->setTransformedBody($html);
-            }
-
-            if ($text != "" && $html != "") {
-                if (count($this->attachments) > 0) {
-                    // As this email has attachments we need to create an alternative part to store the text and html
-                    $alternativePart = new MimeDocument("multipart/alternative");
-
-                    $mime->addPart($alternativePart);
-                }
-
-                $alternativePart->addPart($textPart);
-                $alternativePart->addPart($htmlPart);
-            } else {
-                if ($text != "") {
-                    $mime->addPart($textPart);
-                }
-
-                if ($html != "") {
-                    $mime->addPart($htmlPart);
-                }
-            }
-
-            foreach ($this->attachments as $attachment) {
-                $mime->addPart(MimePartBinaryFile::fromLocalPath($attachment->path, $attachment->name));
-            }
+            $mime = $this->getMimeDocument();
 
             return $mime->getTransformedBody();
         } else {
