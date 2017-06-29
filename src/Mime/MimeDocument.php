@@ -139,7 +139,7 @@ class MimeDocument extends MimePart
             $line = trim($line);
 
             if (!$boundary) {
-                if (preg_match("/Content-Type: (multipart\/.+);\s+boundary=\"([^\"]+)\"/", $line, $match)) {
+                if (preg_match("/Content-Type: (multipart\/.+);\s+boundary=\"?([^\"]+)\"?/i", $line, $match)) {
                     $document->boundary = $match[2];
                     $document->setContentType($match[1]);
                     $boundary = $match[2];

@@ -17,16 +17,20 @@
  */
 
 namespace Rhubarb\Crown\Http;
+
 use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\DependencyInjection\ProviderInterface;
 use Rhubarb\Crown\DependencyInjection\ProviderTrait;
+use Rhubarb\Crown\Exceptions\ClassMappingException;
 
 /**
  * A base class to provide for HTTP clients
  */
 abstract class HttpClient implements ProviderInterface
 {
-    use ProviderTrait;
+    use ProviderTrait {
+        ProviderTrait::getProvider as traitGetProvider;
+    }
 
     /**
      * Executes an HTTP transaction and returns the response.
@@ -36,19 +40,17 @@ abstract class HttpClient implements ProviderInterface
      */
     abstract public function getResponse(HttpRequest $request);
 
-    private static $defaultSet = false;
-
     /**
      * @return static
      */
     public static function getProvider()
     {
-        if (!self::$defaultSet){
-            self::setProviderClassName(CurlHttpClient::class);
-            self::$defaultSet = true;
+        try {
+            return static::traitGetProvider();
+        } catch (ClassMappingException $ex) {
+            static::setProviderClassName(CurlHttpClient::class);
+            return static::traitGetProvider();
         }
-
-        return Container::instance(static::class);
     }
 
     /**
@@ -58,6 +60,6 @@ abstract class HttpClient implements ProviderInterface
      */
     public static function getDefaultHttpClient()
     {
-        return self::getProvider();
+        return static::getProvider();
     }
 }
