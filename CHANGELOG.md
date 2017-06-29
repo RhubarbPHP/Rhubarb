@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.14
+
+* Added:    Enables support for MultiPartFormData PUT requests
+
 ### 1.3.13
 
 * Fixed:    Issue with how empty urls on URL handlers are handled.
