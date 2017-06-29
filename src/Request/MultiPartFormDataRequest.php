@@ -19,6 +19,8 @@ namespace Rhubarb\Crown\Request;
 
 class MultiPartFormDataRequest extends WebRequest
 {
+    private $unitTestRequestFile;
+
     public function getPayload()
     {
         // Support multipart file PUT operations
@@ -28,6 +30,11 @@ class MultiPartFormDataRequest extends WebRequest
 
         $requestBody = array_merge($_FILES, $_POST);
         return $requestBody;
+    }
+
+    public function setUnitTestRequestFile($fileName)
+    {
+        $this->unitTestRequestFile = $fileName;
     }
 
     /**
@@ -71,7 +78,7 @@ class MultiPartFormDataRequest extends WebRequest
                 $contentType = 'application/x-www-form-urlencoded';
             // Fallthrough intentional - no boundary supplied with multipart content-type, so treat as url encoded
             case 'application/x-www-form-urlencoded':
-                parse_str(file_get_contents('php://input'), $_POST);
+                parse_str(file_get_contents($this->unitTestRequestFile ?: 'php://input'), $_POST);
                 return;
             default:
                 return;
@@ -82,7 +89,7 @@ class MultiPartFormDataRequest extends WebRequest
         $chunkLength = 8096;
         $raw_headers = '';
 
-        $stream = fopen('php://input', 'rb');
+        $stream = fopen($this->unitTestRequestFile ?: 'php://input', 'rb');
 
         $sanity = fgets($stream, strlen($boundary) + 5);
 
