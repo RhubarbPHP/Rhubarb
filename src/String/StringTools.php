@@ -107,6 +107,7 @@ class StringTools
     public static function makePlural($singular)
     {
         $singulars = [
+            'ey' => 'eys',
             'day' => 'days',
             "ch" => "ches",
             "s" => "ses",
