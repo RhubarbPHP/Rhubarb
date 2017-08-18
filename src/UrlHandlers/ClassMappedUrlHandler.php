@@ -22,6 +22,10 @@ class ClassMappedUrlHandler extends UrlHandler
 {
     private $className = "";
 
+    /**
+     * @param string $className
+     * @param array $children
+     */
     public function __construct($className, $children = [])
     {
         parent::__construct($children);
