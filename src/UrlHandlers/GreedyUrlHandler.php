@@ -55,6 +55,14 @@ class GreedyUrlHandler extends CallableUrlHandler
     private $extractedArguments = [];
 
     /**
+     * @return array
+     */
+    public function getExtractedArguments()
+    {
+        return $this->extractedArguments;
+    }
+
+    /**
      * True if a match was found, false if not.
      *
      * @var bool

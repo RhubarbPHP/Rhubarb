@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.15
+
+* Added:    CallableUrlHandler now passes parent handler into the callback
+
 ### 1.3.14
 
 * Added:    Enables support for MultiPartFormData PUT requests

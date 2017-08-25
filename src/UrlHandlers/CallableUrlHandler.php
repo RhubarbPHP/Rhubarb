@@ -57,11 +57,14 @@ class CallableUrlHandler extends UrlHandler
     protected function createGenerator()
     {
         $callable = $this->callable;
+        $parent = $this->getParentHandler();
 
-        /**
-         * @var GeneratesResponseInterface $generator
-         */
-        $generator = $callable();
-        return $generator;
+        if ($parent){
+            $object = $callable($parent);
+        } else {
+            $object = $callable();
+        }
+
+        return $object;
     }
 }
