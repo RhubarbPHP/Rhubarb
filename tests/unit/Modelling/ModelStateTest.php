@@ -59,6 +59,12 @@ class ModelStateTest extends RhubarbTestCase
 
         $model->takeChangeSnapshot();
 
+        $model->NewProperty = "0123";
+
+        $this->assertTrue($model->hasChanged());
+
+        $model->takeChangeSnapshot();
+
         $model->NewProperty = null;
 
         $this->assertTrue($model->hasChanged());
