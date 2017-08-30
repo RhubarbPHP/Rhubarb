@@ -29,17 +29,24 @@ class Template
      *
      * @param $template
      * @param $data
+     * @param $keepPlaceholders
+     *
      * @return string
      */
-    public static function parseTemplate($template, $data)
+    public static function parseTemplate($template, $data, $keepPlaceholders = false)
     {
         $t = $template;
 
-        while (preg_match("/[{]([^}]+)[}]/", $t, $match)) {
-            $field = $match[1];
+        $hasMatches = preg_match_all("/[{]([^}]+)[}]/", $t, $matches);
 
-            $t = str_replace($match[0], "", $t);
-            $template = str_replace($match[0], $data[$field], $template);
+        if ($hasMatches) {
+            foreach ($matches[ 0 ] as $key => $match) {
+                if (isset($data[$matches[1][$key]])) {
+                    $template = str_replace($match, $data[$matches[1][$key]], $template);
+                } else if (!$keepPlaceholders) {
+                    $template = str_replace($match, '', $template);
+                }
+            }
         }
 
         return $template;
