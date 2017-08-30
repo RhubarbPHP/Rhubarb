@@ -38,7 +38,7 @@ class TemplateTest extends RhubarbTestCase
         $template = "Something to parse, but that you can't parse, because there is no {data}";
 
         $this->assertEquals(
-            $template, Template::parseTemplate($template, [])
+            $template, Template::parseTemplate($template, [], true)
         );
     }
 }

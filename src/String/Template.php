@@ -29,10 +29,11 @@ class Template
      *
      * @param $template
      * @param $data
+     * @param $keepMissingData
      *
      * @return string
      */
-    public static function parseTemplate($template, $data)
+    public static function parseTemplate($template, $data, $keepMissingData = false)
     {
         $t = $template;
 
@@ -42,6 +43,10 @@ class Template
             foreach ($matches[ 0 ] as $key => $match) {
                 if (isset($data[$matches[1][$key]])) {
                     $template = str_replace($match, $data[$matches[1][$key]], $template);
+                } else {
+                    if (!$keepMissingData) {
+                        $template = str_replace($match, '', $template);
+                    }
                 }
             }
         }
