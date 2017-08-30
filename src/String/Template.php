@@ -43,7 +43,7 @@ class Template
             foreach ($matches[ 0 ] as $key => $match) {
                 if (isset($data[$matches[1][$key]])) {
                     $template = str_replace($match, $data[$matches[1][$key]], $template);
-                } else if (!$keepMissingData) {
+                } else if (!$keepPlaceholders) {
                     $template = str_replace($match, '', $template);
                 }
             }
