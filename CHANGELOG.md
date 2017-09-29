@@ -1,5 +1,8 @@
 # Change log
 
+### 1.3.18
+* Added: SMS Sendable support
+
 ### 1.3.15
 
 * Added:    CallableUrlHandler now passes parent handler into the callback
