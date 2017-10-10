@@ -25,8 +25,10 @@ use Rhubarb\Crown\Sendables\Sendable;
  *
  * This class is abstract as the getText() method must be implemented to satisfy the implementation.
  */
-abstract class SMS extends Sendable
+class SMS extends Sendable
 {
+    private $text;
+
     public function addRecipientByNumber($recipientNumber)
     {
         $this->addRecipient(new SMSRecipient($recipientNumber));
@@ -66,11 +68,43 @@ abstract class SMS extends Sendable
 
     public function getSendableType()
     {
-        return "SMS";
+        return 'SMS';
     }
 
     public function getProviderClassName()
     {
         return SMSProvider::class;
+    }
+
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Sendable types must be able to return a text representation of it's message body.
+     *
+     * This is used by sending frameworks to store and index outgoing communications.
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Expresses the sendable as an array allowing it to be serialised, stored and recovered later.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'recipients' => $this->getRecipientList(),
+            'text' => $this->getText(),
+        ];
     }
 }
