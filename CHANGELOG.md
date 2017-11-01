@@ -1,9 +1,17 @@
 # Change log
 
-### 1.3.16
+### 1.3.18
 
 * Changed:  HttpResponse::setCookie() allow for passing null to $expirySecondsFromNow for a session cookie
 * Changed:  HttpResponse::setCookie() doesn't call setcookie() if unit testing
+
+### 1.3.17
+
+* Fixed:    PHP 7.1 support with conditional RhubarbDate definition (new $microseconds argument causing string errors)
+
+### 1.3.16
+
+* Added:    String/Template now supports $keepPlaceHolders
 
 ### 1.3.15
 
