@@ -1,5 +1,10 @@
 # Change log
 
+### 1.3.16
+
+* Changed:  HttpResponse::setCookie() allow for passing null to $expirySecondsFromNow for a session cookie
+* Changed:  HttpResponse::setCookie() doesn't call setcookie() if unit testing
+
 ### 1.3.15
 
 * Added:    CallableUrlHandler now passes parent handler into the callback

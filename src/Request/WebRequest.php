@@ -26,7 +26,7 @@ use Rhubarb\Crown;
  * Encapsulates the current web request.
  *
  * @property string $URI
- * @property string $Host
+ * @property string $host
  * @property string $urlPath
  * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  *
