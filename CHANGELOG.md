@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.19
+
+* Changed:  JSON serialising RhubarbDateTime with an invalid time will return null instead of an empty string 
+
 ### 1.3.18
 
 * Changed:  HttpResponse::setCookie() allow for passing null to $expirySecondsFromNow for a session cookie
