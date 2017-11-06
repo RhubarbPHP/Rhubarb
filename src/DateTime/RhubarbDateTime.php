@@ -127,11 +127,11 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      *
      * @param string $format Format accepted by date().
      * @param string $time String representing the time.
-     * @param \DateTimeZone $timezone A DateTimeZone object representing the desired time zone.
+     * @param $timezone A DateTimeZone object representing the desired time zone.
      *
      * @return RhubarbDateTime
      */
-    public static function createFromFormat($format, $time, \DateTimeZone $timezone = null)
+    public static function createFromFormat($format, $time, $timezone = null)
     {
         if ($timezone == null) {
             $dateTime = DateTime::createFromFormat($format, $time);
