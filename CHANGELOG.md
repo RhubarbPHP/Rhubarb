@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.20
+
+* Changed: RhubarbDateTime removed type declaration due to warning being produced when running PHP 7
+
 ### 1.3.19
 
 * Changed:  JSON serialising RhubarbDateTime with an invalid time will return null instead of an empty string 
