@@ -56,8 +56,8 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             throw new DeploymentException("The file $originalResourceFilePath could not be found. Please check the file exists.");
         }
 
-        if (!file_exists("deployed")) {
-            if (!mkdir("deployed", 0777, true)) {
+        if (!file_exists(PUBLIC_ROOT_DIR."/deployed")) {
+            if (!mkdir(PUBLIC_ROOT_DIR."/deployed", 0777, true)) {
                 throw new DeploymentException("The deployment folder could not be created. Check file permissions to the 'deployed' folder.");
             }
         }
@@ -70,7 +70,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
         $cwd = Application::current()->applicationRootPath;
 
         $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
-        $localPath = $cwd . $urlPath;
+        $localPath = PUBLIC_ROOT_DIR.$urlPath;
 
         if (!file_exists(dirname($localPath))) {
             if (!mkdir(dirname($localPath), 0777, true)) {

@@ -1,5 +1,10 @@
 # Change log
 
+### 1.3.21
+
+* Changed: Added support for custom PUBLIC_ROOT_DIR to specify a top level folder for writing files to be served by the webserver
+* Changed: Support for .htaccess with apache 2.4 where REDIRECT_URL is used in preference to SCRIPT_NAME
+
 ### 1.3.20
 
 * Changed: RhubarbDateTime removed type declaration due to warning being produced when running PHP 7
