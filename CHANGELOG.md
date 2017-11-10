@@ -1,5 +1,9 @@
 # Change log
 
+### 1.3.22
+
+* Added:   Response method for setting headers from an array
+
 ### 1.3.21
 
 * Changed: Added support for custom PUBLIC_ROOT_DIR to specify a top level folder for writing files to be served by the webserver
