@@ -1,5 +1,9 @@
 # Change log
 
+### 1.4.0
+
+* Changed: Removed Login exceptions that are particular to specific login mechanisms. 
+
 ### 1.3.22
 
 * Added:   Response method for setting headers from an array
