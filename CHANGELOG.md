@@ -1,5 +1,9 @@
 # Change log
 
+### 1.4.1
+
+* Changed: PhpSessionProvider now sets HttpOnly to true
+
 ### 1.4.0
 
 * Changed: Removed Login exceptions that are particular to specific login mechanisms. 
