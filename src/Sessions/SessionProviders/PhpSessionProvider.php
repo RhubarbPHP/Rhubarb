@@ -29,6 +29,12 @@ use Rhubarb\Crown\Sessions\Session;
  */
 class PhpSessionProvider extends SessionProvider
 {
+    public function __construct()
+    {
+        // Ensure session cookie is http only
+        session_set_cookie_params(0, '/', '', false, true);
+    }
+
     public function restoreSession(Session $session)
     {
         $context = Application::current()->context();

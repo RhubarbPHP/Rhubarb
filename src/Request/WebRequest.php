@@ -26,7 +26,7 @@ use Rhubarb\Crown;
  * Encapsulates the current web request.
  *
  * @property string $URI
- * @property string $Host
+ * @property string $host
  * @property string $urlPath
  * @property string $UrlBase Base url for the current request (e.g. http://localhost) without trailing slash
  *
@@ -96,7 +96,7 @@ class WebRequest extends Request
 
         $this->host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
         $this->uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-        $this->urlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+        $this->urlPath = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '');
     }
 
     /**

@@ -1,7 +1,46 @@
 # Change log
 
-### 1.3.18
+### 1.5.0
+
 * Added: SMS Sendable support
+
+### 1.4.1
+
+* Changed: PhpSessionProvider now sets HttpOnly to true
+
+### 1.4.0
+
+* Changed: Removed Login exceptions that are particular to specific login mechanisms. 
+
+### 1.3.22
+
+* Added:   Response method for setting headers from an array
+
+### 1.3.21
+
+* Changed: Added support for custom PUBLIC_ROOT_DIR to specify a top level folder for writing files to be served by the webserver
+* Changed: Support for .htaccess with apache 2.4 where REDIRECT_URL is used in preference to SCRIPT_NAME
+
+### 1.3.20
+
+* Changed: RhubarbDateTime removed type declaration due to warning being produced when running PHP 7
+
+### 1.3.19
+
+* Changed:  JSON serialising RhubarbDateTime with an invalid time will return null instead of an empty string 
+
+### 1.3.18
+
+* Changed:  HttpResponse::setCookie() allow for passing null to $expirySecondsFromNow for a session cookie
+* Changed:  HttpResponse::setCookie() doesn't call setcookie() if unit testing
+
+### 1.3.17
+
+* Fixed:    PHP 7.1 support with conditional RhubarbDate definition (new $microseconds argument causing string errors)
+
+### 1.3.16
+
+* Added:    String/Template now supports $keepPlaceHolders
 
 ### 1.3.15
 

@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\Http;
 
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\PhpContext;
 use Rhubarb\Crown\Request\Request;
 
@@ -57,15 +58,24 @@ class HttpResponse
     /**
      * @param string $name Cookie name
      * @param string $value Cookie value
-     * @param int $expirySecondsFromNow Time the cookie should last for in seconds. Defaults to 2 weeks.
+     * @param int $expirySecondsFromNow Time the cookie should last for in seconds. Defaults to 2 weeks. Pass null to make this a session cookie.
      * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
      * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
      */
     public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
     {
-        setcookie($name, $value, time() + $expirySecondsFromNow, $path, $domain);
+        if ($expirySecondsFromNow != null){
+            $expirySecondsFromNow = time() + $expirySecondsFromNow;
+        } else {
+            $expirySecondsFromNow = 0;
+        }
+
+        if (!Application::current()->unitTesting) {
+            setcookie($name, $value, $expirySecondsFromNow, $path, $domain);
+        }
+
         $request = Request::current();
-        $request->cookie($name, $value);
+        $request->cookieData[$name] = $value;
     }
 
     /**

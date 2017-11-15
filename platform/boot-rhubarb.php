@@ -36,3 +36,7 @@ if(file_exists(__DIR__."/../vendor/autoload.php")){
 include_once(VENDOR_DIR . "/autoload.php");
 
 define("APPLICATION_ROOT_DIR", realpath(VENDOR_DIR."/../"));
+
+if (!defined("PUBLIC_ROOT_DIR")) {
+    define("PUBLIC_ROOT_DIR", APPLICATION_ROOT_DIR);
+}

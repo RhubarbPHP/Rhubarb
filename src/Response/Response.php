@@ -60,7 +60,7 @@ class Response
     }
 
     /**
-     * Get's a reference to the object that generated this response.
+     * Gets a reference to the object that generated this response.
      *
      * @return \Rhubarb\Crown\Response\GeneratesResponseInterface
      */
@@ -70,7 +70,7 @@ class Response
     }
 
     /**
-     * Set's a header from a key value pair
+     * Sets a header from a key value pair
      *
      * @param string $name Header name
      * @param string $value Header value
@@ -81,7 +81,7 @@ class Response
     }
 
     /**
-     * Unsets a header by it's name.
+     * Unsets a header by its name.
      *
      * @param string $name Name of header to unset
      */
@@ -112,7 +112,7 @@ class Response
 
     private function setHeaderInPhp($header)
     {
-        if (!Application::current()->unitTesting){
+        if (!Application::current()->unitTesting) {
             header($header);
         }
     }
@@ -123,11 +123,11 @@ class Response
     private function processHeaders()
     {
         if ($this->responseCode) {
-            $this->setHeaderInPhp("HTTP/1.1 ".$this->getResponseCode()." ".$this->getResponseMessage());
+            $this->setHeaderInPhp("HTTP/1.1 " . $this->getResponseCode() . " " . $this->getResponseMessage());
         }
 
-        foreach($this->headers as $type => $value){
-            $this->setHeaderInPhp($type.": ".$value);
+        foreach ($this->headers as $type => $value) {
+            $this->setHeaderInPhp($type . ": " . $value);
         }
     }
 
@@ -184,6 +184,7 @@ class Response
 
     /**
      * Gets the current response code for the response
+     *
      * @return int
      */
     public function getResponseCode()
@@ -193,6 +194,7 @@ class Response
 
     /**
      * Sets the current response code for the response
+     *
      * @param int $responseCode
      */
     public function setResponseCode($responseCode)
@@ -218,5 +220,17 @@ class Response
     public function setResponseMessage($responseMessage)
     {
         $this->responseMessage = $responseMessage;
+    }
+
+    /**
+     * Sets headers from array. Keys should be the header names.
+     *
+     * @param string[] $headers
+     */
+    public function addHeaders($headers)
+    {
+        foreach ($headers as $name => $value) {
+            $this->setHeader($name, $value);
+        }
     }
 }
