@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.0
+
+* Added: SMS Sendable support
+
 ### 1.4.1
 
 * Changed: PhpSessionProvider now sets HttpOnly to true
