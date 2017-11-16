@@ -1,5 +1,9 @@
 # Change log
 
+### 1.4.3
+
+* Added: CredentialsFailedException so that other login exceptions can be detected
+
 ### 1.4.2
 
 * Changed: Moved LoginFailedException back as Module.RestAPI requires it
