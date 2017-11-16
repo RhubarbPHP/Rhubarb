@@ -1,5 +1,11 @@
 # Change log
 
+### 1.4.2
+
+* Changed: Moved LoginFailedException back as Module.RestAPI requires it
+* Added:   New CredentialsLoginProviderInterface so that other modules can expect a login provider that
+           has a login method.
+
 ### 1.4.1
 
 * Changed: PhpSessionProvider now sets HttpOnly to true
