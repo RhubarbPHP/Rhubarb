@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.1
+
+* Changed: RelocationResourceDeploymentProvider is easier to extend
+
 ### 1.5.0
 
 * Added:   ResourceLoader now preloads resources, tested to work with apache http2 push.
