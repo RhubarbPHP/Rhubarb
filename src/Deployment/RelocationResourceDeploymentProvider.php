@@ -34,12 +34,33 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             return $this->alreadyDeployed[$resourceFilePath];
         }
 
+        return $this->deployFile($resourceFilePath, true);
+    }
+
+    protected function deployFile($originalPath, $calculatePathOnly = false)
+    {
         // Remove the current working directory from the resource path.
         $cwd = Application::current()->applicationRootPath;
+        $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $originalPath));
+        $deployedPath = PUBLIC_ROOT_DIR.$urlPath;
 
-        $url = "/deployed/" . ltrim(str_replace("\\", "/", str_replace($cwd, "", realpath($resourceFilePath))),'/');
+        if (!$calculatePathOnly) {
+            if (!file_exists(dirname($deployedPath))) {
+                if (!mkdir(dirname($deployedPath), 0777, true)) {
+                    throw new DeploymentException("The deployment folder could not be created. Check file permissions to the '" . dirname($deployedPath) . "' folder.");
+                }
+            }
 
-        return $url;
+            if (!file_exists($deployedPath) || (filemtime($originalPath) > filemtime($deployedPath))) {
+                $result = @copy($originalPath, $deployedPath);
+
+                if (!$result) {
+                    throw new DeploymentException("The file $originalPath could not be deployed. Please check file permissions.");
+                }
+            }
+        }
+
+        return $urlPath;
     }
 
     public function deployResource($resourceFilePath)
@@ -66,25 +87,7 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
             throw new DeploymentException("The file $resourceFilePath could not be found. Please check file permissions.");
         }
 
-        // Remove the current working directory from the resource path.
-        $cwd = Application::current()->applicationRootPath;
-
-        $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $resourceFilePath));
-        $localPath = PUBLIC_ROOT_DIR.$urlPath;
-
-        if (!file_exists(dirname($localPath))) {
-            if (!mkdir(dirname($localPath), 0777, true)) {
-                throw new DeploymentException("The deployment folder could not be created. Check file permissions to the '" . dirname($localPath) . "' folder.");
-            }
-        }
-
-        if (!file_exists($localPath) || (filemtime($resourceFilePath) > filemtime($localPath))) {
-            $result = @copy($resourceFilePath, $localPath);
-
-            if (!$result) {
-                throw new DeploymentException("The file $resourceFilePath could not be deployed. Please check file permissions.");
-            }
-        }
+        $urlPath = $this->deployFile($resourceFilePath);
 
         if (preg_match('/(\.js|\.css)$/', $resourceFilePath, $match)) {
             $urlPath .= '?' . filemtime($resourceFilePath) . $match[1];
