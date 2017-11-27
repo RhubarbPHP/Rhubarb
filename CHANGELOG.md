@@ -1,8 +1,12 @@
 # Change log
 
+### 1.5.0
+
+* Added:   ResourceLoader now preloads resources, tested to work with apache http2 push.
+
 ### 1.4.3
 
-* Added: CredentialsFailedException so that other login exceptions can be detected
+* Added:   CredentialsFailedException so that other login exceptions can be detected
 
 ### 1.4.2
 

@@ -82,6 +82,10 @@ class ResourceLoader
 
         $context = Application::current()->context();
 
+        if (!$context->isXhrRequest() && !Application::current()->unitTesting){
+            header("Link: <".$urls[0].">;rel=preload;as=script", false);
+        }
+
         $preLoadedFiles = [];
 
         // CSS files are safe to load immediately and might avoid 'flicker' by so doing.
@@ -98,6 +102,11 @@ class ResourceLoader
                     $extension = strtolower($parts[sizeof($parts) - 1]);
 
                     if ($extension == "css") {
+
+                        if (!Application::current()->unitTesting) {
+                            header("Link: <" . $resource . ">;rel=preload;as=style", false);
+                        }
+
                         $html .= "
 <link type=\"text/css\" rel=\"stylesheet\" href=\"" . $resource . "\" />";
 
@@ -105,6 +114,11 @@ class ResourceLoader
                     }
 
                     if ($extension == "js") {
+
+                        if (!Application::current()->unitTesting) {
+                            header("Link: <" . $resource . ">;rel=preload;as=script", false);
+                        }
+
                         $html .= "
 <script type=\"text/javascript\" src=\"" . $resource . "\"></script>";
 
