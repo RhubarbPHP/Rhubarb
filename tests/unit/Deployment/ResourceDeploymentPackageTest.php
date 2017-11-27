@@ -45,6 +45,7 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
         $urls = $package->getDeployedUrls();
 
         $cwd = Application::current()->applicationRootPath;
+        $path = realpath(__DIR__ . "/../../../src/Deployment/Deployable.php");
 
         $this->assertEquals(
             [
@@ -52,7 +53,7 @@ class ResourceDeploymentPackageTest extends RhubarbTestCase
                 "/deployed" . str_replace(
                     "\\",
                     "/",
-                    str_replace($cwd, "", realpath(__DIR__ . "/../../../src/Deployment/Deployable.php"))
+                    str_replace($cwd, "", $path)
                 )
             ],
             $urls

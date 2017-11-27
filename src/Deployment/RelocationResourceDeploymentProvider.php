@@ -39,6 +39,9 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
     protected function deployFile($originalPath, $calculatePathOnly = false)
     {
+        // Fix relative paths.
+        $originalPath = realpath($originalPath);
+
         // Remove the current working directory from the resource path.
         $cwd = Application::current()->applicationRootPath;
         $urlPath = "/deployed" . str_replace("\\", "/", str_replace($cwd, "", $originalPath));
