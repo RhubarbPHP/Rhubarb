@@ -382,7 +382,7 @@ class CsvStream extends DataStream
         }
 
         if ($this->forceUTF8) {
-            fwrite($this->filePath, chr(0xEF).chr(0xBB).chr(0xBF));
+            fwrite($this->fileStream, chr(0xEF).chr(0xBB).chr(0xBF));
         }
         fwrite($this->fileStream, implode($this->delimiter, $enclosedData));
     }
