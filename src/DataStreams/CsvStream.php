@@ -49,6 +49,8 @@ class CsvStream extends DataStream
 
     private $remnantBuffer = "";
 
+    private $forceUTF8 = false;
+
     public $trimHeadings = true;
 
     public $trimValues = false;
@@ -305,6 +307,10 @@ class CsvStream extends DataStream
         $this->writeItem($itemData, $allCells);
     }
 
+    public function prependUTF8BOM($prepend) {
+        $this->forceUTF8 = $prepend;
+    }
+
     private function writeItem($itemData, $allCells = false)
     {
         $this->open(true);
@@ -375,6 +381,9 @@ class CsvStream extends DataStream
             }
         }
 
+        if ($this->forceUTF8) {
+            fwrite($this->filePath, chr(0xEF).chr(0xBB).chr(0xBF));
+        }
         fwrite($this->fileStream, implode($this->delimiter, $enclosedData));
     }
 }
