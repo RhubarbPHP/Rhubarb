@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.2
+
+* Added:   TEMP_DIR
+
 ### 1.5.1
 
 * Changed: RelocationResourceDeploymentProvider is easier to extend
