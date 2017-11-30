@@ -99,7 +99,25 @@ class Application extends Module
      */
     public $unitTesting = false;
 
+    /**
+     * The path to the root of the application source code.
+     *
+     * Usually set to APPLICATION_ROOT_DIR
+     *
+     * @var bool|string
+     */
     public $applicationRootPath = "";
+
+    /**
+     * The path to a folder for temporary or unimportant files.
+     *
+     * Usually set to TEMP_DIR
+     *
+     * Should end in a trailing slash.
+     *
+     * @var string
+     */
+    public $tempPath = "";
 
     /**
      * The running application

@@ -40,3 +40,7 @@ define("APPLICATION_ROOT_DIR", realpath(VENDOR_DIR."/../"));
 if (!defined("PUBLIC_ROOT_DIR")) {
     define("PUBLIC_ROOT_DIR", APPLICATION_ROOT_DIR);
 }
+
+if (!defined("TEMP_DIR")) {
+    define("TEMP_DIR", APPLICATION_ROOT_DIR."/temp/");
+}
