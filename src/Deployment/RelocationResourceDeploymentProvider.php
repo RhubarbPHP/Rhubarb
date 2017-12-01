@@ -103,12 +103,6 @@ class RelocationResourceDeploymentProvider extends ResourceDeploymentProvider
 
     public function deployResourceContent($resourceContent, $simulatedFilePath)
     {
-        if (!file_exists("deployed")) {
-            if (!mkdir("deployed", 0777, true)) {
-                throw new DeploymentException("The deployment folder could not be created. Check file permissions to the 'deployed' folder.");
-            }
-        }
-
         $urlPath = "deployed/" . $simulatedFilePath;
 
         if (!file_exists(dirname($urlPath))) {

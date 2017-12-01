@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.3
+
+* Fixed:    Fixed the issue with deployed not being creatable using relative paths 
+
 ### 1.5.2
 
 * Added:   TEMP_DIR
