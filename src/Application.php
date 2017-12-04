@@ -147,6 +147,7 @@ class Application extends Module
         $this->developerMode = false;
         $this->live = false;
         $this->applicationRootPath = APPLICATION_ROOT_DIR;
+        $this->tempPath = TEMP_DIR;
 
         $this->setAsRunningApplication();
 
