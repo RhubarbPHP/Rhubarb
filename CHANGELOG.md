@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.4
+
+* Fixed:   Fixed issue with TEMP_PATH not being set on Application objects
+
 ### 1.5.3
 
 * Fixed:    Fixed the issue with deployed not being creatable using relative paths 
