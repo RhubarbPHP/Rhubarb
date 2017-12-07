@@ -1,5 +1,10 @@
 # Change log
 
+### 1.5.5
+
+* Changed: Improved MonologLog formatting to pass more information.
+* Changed: Improved DefaultExceptionHandler to pass the exception details better.
+
 ### 1.5.4
 
 * Fixed:   Fixed issue with TEMP_PATH not being set on Application objects

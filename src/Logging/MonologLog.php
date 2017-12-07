@@ -19,8 +19,9 @@ namespace Rhubarb\Crown\Logging;
 
 use Monolog\Logger;
 
-class MonologLog extends Log
+class MonologLog extends IndentedMessageLog
 {
+
     /**
      * @var Logger $logger
      */
@@ -33,10 +34,26 @@ class MonologLog extends Log
         $this->logger = $logger;
     }
 
-
-    protected function writeEntry($level, $message, $indent, $category = "", $additionalData = [])
+    /**
+     * The logger should implement this method to perform the actual log committal.
+     *
+     * @param int $level The log level
+     * @param string $message The text message to log
+     * @param string $category The category of log message
+     * @param array $additionalData Any number of additional key value pairs which can be understood by specific
+     *                                  logs (e.g. an API log might understand what AuthenticationToken means)
+     * @return mixed
+     */
+    protected function writeFormattedEntry($level, $message, $category = "", $additionalData)
     {
-        $message = str_pad($category, 16, " ", STR_PAD_RIGHT )."\t". str_repeat("  ", $indent).$message;
+        $ip = self::getRemoteIP();
+        $category = ($category == "") ? "CORE" : $category;
+
+        $message = $category.', '.str_pad($this->uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
+            ',t='.$this->getExecutionTime().
+            ',d='.$this->getTimeSinceLastLog().
+            ',ip='.$ip.
+            ",msg=" . $message;
 
         switch($level)
         {
