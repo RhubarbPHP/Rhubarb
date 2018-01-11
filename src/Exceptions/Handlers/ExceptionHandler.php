@@ -105,6 +105,12 @@ abstract class ExceptionHandler implements ProviderInterface
                 return;
             }
 
+            $fatalErrors = [E_ERROR, E_RECOVERABLE_ERROR];
+
+            if (!in_array($code, $fatalErrors)) {
+                return;
+            }
+
             throw new ErrorException($message, 0, $code, $file, $line);
         });
 
