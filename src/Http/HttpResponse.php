@@ -62,7 +62,7 @@ class HttpResponse
      * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
      * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
      * @param bool $secure Indicates that the cookie should only be transmitted via HTTPS - defaults to false
-     * @param bool $httpOnly Indicates that the cookie should only be transmitted via the HTTP Protocol - defaults to true
+     * @param bool $httpOnly Indicates that the cookie should only be transmitted via the HTTP Protocol - defaults to false
      */
     public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null, $secure = false, $httpOnly = false)
     {
@@ -84,10 +84,12 @@ class HttpResponse
      * @param string $name Cookie name
      * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
      * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
+     * @param bool $secure Indicates that the cookie should only be transmitted via HTTPS - defaults to false
+     * @param bool $httpOnly Indicates that the cookie should only be transmitted via the HTTP Protocol - defaults to false
      */
-    public static function unsetCookie($name, $path = "/", $domain = null)
+    public static function unsetCookie($name, $path = "/", $domain = null, $secure = false, $httpOnly = false)
     {
-        self::setCookie($name, null, -1000, $path, $domain);
+        self::setCookie($name, null, -1000, $path, $domain, $secure, $httpOnly);
     }
 
     /**
