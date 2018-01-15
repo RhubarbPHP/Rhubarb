@@ -64,7 +64,7 @@ class HttpResponse
      * @param bool $secure Indicates that the cookie should only be transmitted via HTTPS - defaults to false
      * @param bool $httpOnly Indicates that the cookie should only be transmitted via the HTTP Protocol - defaults to true
      */
-    public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null, $secure = false, $httpOnly = true)
+    public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null, $secure = false, $httpOnly = false)
     {
         if ($expirySecondsFromNow != null){
             $expirySecondsFromNow = time() + $expirySecondsFromNow;
