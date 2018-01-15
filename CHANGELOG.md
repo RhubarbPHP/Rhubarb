@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.6
+
+* Changed: Added control when setting a Cookie to set the HTTP_Only and Secure flags
+
 ### 1.5.5
 
 * Changed: Improved MonologLog formatting to pass more information.
