@@ -61,8 +61,10 @@ class HttpResponse
      * @param int $expirySecondsFromNow Time the cookie should last for in seconds. Defaults to 2 weeks. Pass null to make this a session cookie.
      * @param string $path Web path the cookie should be available to - defaults to "/", the whole site
      * @param string $domain Domain the cookie should be available to - defaults to current subdomain. Set to ".domain.com" to make available to all subdomains.
+     * @param bool $secure Indicates that the cookie should only be transmitted via HTTPS - defaults to false
+     * @param bool $httpOnly Indicates that the cookie should only be transmitted via the HTTP Protocol - defaults to true
      */
-    public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null)
+    public static function setCookie($name, $value, $expirySecondsFromNow = 1209600, $path = "/", $domain = null, $secure = false, $httpOnly = true)
     {
         if ($expirySecondsFromNow != null){
             $expirySecondsFromNow = time() + $expirySecondsFromNow;
@@ -71,7 +73,7 @@ class HttpResponse
         }
 
         if (!Application::current()->unitTesting) {
-            setcookie($name, $value, $expirySecondsFromNow, $path, $domain);
+            setcookie($name, $value, $expirySecondsFromNow, $path, $domain, $secure, $httpOnly);
         }
 
         $request = Request::current();
