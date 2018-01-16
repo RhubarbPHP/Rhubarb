@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.7
+
+* Changed: Turned display_errors off
+
 ### 1.5.6
 
 * Changed: Added control when setting a Cookie to set the HTTP_Only and Secure flags
