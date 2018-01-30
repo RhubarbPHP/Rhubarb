@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.8
+
+* Changed: don't handle notices as errors
+
 ### 1.5.5
 
 * Changed: Improved MonologLog formatting to pass more information.
