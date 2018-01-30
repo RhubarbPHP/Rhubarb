@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.8
+
+* Changed: don't handle notices as errors
+
 ### 1.5.7
 
 * Changed: Turned display_errors off

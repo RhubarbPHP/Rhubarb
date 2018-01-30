@@ -34,6 +34,13 @@ abstract class ExceptionHandler implements ProviderInterface
     use SingletonProviderTrait;
 
     /**
+     * @deprecated
+     * Behaviour changed to only treat the below as errors. This is only for backwards compatibility.
+     * Will be removed in 2.0
+     */
+    protected $fatalErrors = [E_ERROR, E_RECOVERABLE_ERROR];
+
+    /**
      * Should be overriden by extends of this base class to do the actual processing with the exception
      *
      * @param RhubarbException $er
@@ -102,6 +109,10 @@ abstract class ExceptionHandler implements ProviderInterface
             // If errors are turned off or they are being suppressed with an '@' we don't do anything with
             // them. This is to allow for optimistic auto loading in the Module class.
             if ($reportingLevel == 0) {
+                return;
+            }
+
+            if (!in_array($code, $this->fatalErrors)) {
                 return;
             }
 
