@@ -31,8 +31,12 @@ class PhpSessionProvider extends SessionProvider
 {
     public function __construct()
     {
-        // Ensure session cookie is http only
-        session_set_cookie_params(0, '/', '', false, true);
+        $context = Application::current()->context();
+
+        if (!$context->isCliInvocation()) {
+            // Ensure session cookie is http only
+            session_set_cookie_params(0, '/', '', false, true);
+        }
     }
 
     public function restoreSession(Session $session)
