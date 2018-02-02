@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.9
+
+* Fixed:   PhpSessionProvider caused warnings when invoked on the CLI
+
 ### 1.5.8
 
 * Changed: don't handle notices as errors
