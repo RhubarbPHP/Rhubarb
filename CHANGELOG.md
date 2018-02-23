@@ -1,5 +1,9 @@
 # Change log
 
+### 1.5.10
+
+* Fixed:   ExceptionHandler caused exception when error handler function hit
+
 ### 1.5.9
 
 * Fixed:   PhpSessionProvider caused warnings when invoked on the CLI

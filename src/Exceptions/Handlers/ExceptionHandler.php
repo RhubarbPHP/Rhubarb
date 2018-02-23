@@ -38,7 +38,7 @@ abstract class ExceptionHandler implements ProviderInterface
      * Behaviour changed to only treat the below as errors. This is only for backwards compatibility.
      * Will be removed in 2.0
      */
-    protected $fatalErrors = [E_ERROR, E_RECOVERABLE_ERROR];
+    protected static $fatalErrors = [E_ERROR, E_RECOVERABLE_ERROR];
 
     /**
      * Should be overriden by extends of this base class to do the actual processing with the exception
@@ -112,7 +112,7 @@ abstract class ExceptionHandler implements ProviderInterface
                 return;
             }
 
-            if (!in_array($code, $this->fatalErrors)) {
+            if (!in_array($code, self::$fatalErrors)) {
                 return;
             }
 
