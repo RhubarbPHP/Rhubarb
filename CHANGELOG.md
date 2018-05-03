@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.0
+
+* Fixed:    Stopped session from outputting spurious session cookies
+
 ### 1.5.10
 
 * Fixed:   ExceptionHandler caused exception when error handler function hit

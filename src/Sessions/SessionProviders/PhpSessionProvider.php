@@ -39,12 +39,16 @@ class PhpSessionProvider extends SessionProvider
         }
     }
 
+    private $restored = false;
+
     public function restoreSession(Session $session)
     {
         $context = Application::current()->context();
 
         if (!$context->isCliInvocation()) {
-            session_start();
+            if (!$this->restored) {
+                session_start();
+            }
         }
 
         $namespace = get_class($session);
@@ -56,8 +60,12 @@ class PhpSessionProvider extends SessionProvider
         // Close the session to make sure we aren't locking other process for this user, e.g.
         // simultaneous AJAX requests.
         if (!$context->isCliInvocation()) {
-            session_write_close();
+            if (!$this->restored) {
+                session_write_close();
+            }
         }
+
+        $this->restored = true;
     }
 
     public function storeSession(Session $session)

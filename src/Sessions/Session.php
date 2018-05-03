@@ -78,7 +78,7 @@ class Session extends Settings
      */
     protected function getNewSessionProvider()
     {
-        return Container::instance(SessionProvider::class);
+        return Container::singleton(SessionProvider::class);
     }
 
     /**
