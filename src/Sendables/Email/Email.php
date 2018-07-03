@@ -233,6 +233,7 @@ abstract class Email extends Sendable
         $mime->addHeader("To", $this->getRecipientList());
         $mime->addHeader("From", $this->getSender()->getRfcFormat());
         $mime->addHeader("Subject", $this->getSubject());
+        $mime->addHeader("Reply-To", $this->getReplyToRecipient());
 
         return $mime;
     }
