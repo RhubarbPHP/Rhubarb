@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.1
+
+* Added:    Added pre-response filtering
+
 ### 1.6.0
 
 * Fixed:    Stopped session from outputting spurious session cookies
