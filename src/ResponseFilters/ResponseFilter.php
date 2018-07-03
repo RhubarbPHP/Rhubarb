@@ -36,4 +36,14 @@ abstract class ResponseFilter
     {
         return $response;
     }
+
+    /**
+     * True if the filter should be executed before the URL Handler generates the primary response.
+     *
+     * @return bool
+     */
+    public function isPreResponse()
+    {
+        return false;
+    }
 }

@@ -285,17 +285,25 @@ class Application extends Module
      *
      * @return \Rhubarb\Crown\ResponseFilters\ResponseFilter[]
      */
-    private function getAllResponseFilters()
+    private function getAllResponseFilters($preResponse = false)
     {
         $filters = [];
 
         foreach ($this->modules as $module) {
-            $filters = array_merge($filters, $module->getResponseFilters());
+
+            $moduleFilters = $module->getResponseFilters();
+
+            foreach($moduleFilters as $filter){
+                if ($preResponse && $filter->isPreResponse()){
+                    $filters[] = $filter;
+                } elseif (!$preResponse && !$filter->isPreResponse()){
+                    $filters[] = $filter;
+                }
+            }
         }
 
         return $filters;
     }
-
 
     /**
      * Generates the response content for the client.
@@ -338,9 +346,17 @@ class Application extends Module
         $response = new HtmlResponse();
         $response->setContent('');
 
-        $filterResponse = true;
-
         try {
+
+            // Run pre-response filters.
+            $preFilters = $this->getAllResponseFilters(true);
+
+            foreach($preFilters as $filter){
+                $response = $filter->processResponse($response);
+            }
+
+            $filterResponse = true;
+
             // Iterate over each handler and ask them to generate a response.
             // If they do return a response we return that and exit the loop.
             // If they return false then we assume they couldn't handle the URL

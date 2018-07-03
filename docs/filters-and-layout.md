@@ -19,6 +19,17 @@ can either return a new response or modify the one passed.
 
 The most common use of filters are for Layouts
 
+### Pre Response Filters
+
+A filter can specialise as a 'pre-response' filter. This is one which operates on the empty response object
+before URL handlers have had a chance to generate the primary response. This is a useful hook for handling
+global level features such as UI elements contained within layout classes.
+
+To specify a filter as a pre-response filter, simply override the `isResponseFilter()` method and return true.
+
+Most pre-response filters are designed to throw a ForceResponseException() to output a set response and 
+stop URL Handlers from processing the request - is certain conditions are met.
+
 ## Layouts
 
 The normal pattern for generating HTML output is to let your response generating classes create the core
