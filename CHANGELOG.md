@@ -1,5 +1,10 @@
 # Change log
 
+### 1.6.2
+
+* Added:    Information logging level
+* Added:    Module version
+
 ### 1.6.1
 
 * Added:    Added pre-response filtering

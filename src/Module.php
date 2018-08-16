@@ -67,6 +67,11 @@ abstract class Module
      */
     protected $urlHandlersRegistered = false;
 
+    /**
+     * @var int $version
+     */
+    protected $version;
+
     public function __construct()
     {
         $this->moduleName = str_ireplace("Module", "", get_class($this));
@@ -196,5 +201,14 @@ abstract class Module
     public function getCustardCommands()
     {
         return [];
+    }
+
+    /**
+     * Used to retrieve the module Version.
+     *
+     * @return int
+     */
+    public function getVersion(): int {
+        return $this->version;
     }
 }
