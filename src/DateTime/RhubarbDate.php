@@ -27,10 +27,12 @@ abstract class AbstractRhubarbDate extends RhubarbDateTime
         // Use the parent constructor to parse all accepted date formats
         parent::__construct($dateValue, $timezone);
 
+        $dateWithOutTime = $this->format('Y-m-d 00:00:00');
+
         $this->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
         // Use the parent constructor again with the parsed date, dropping the time element
-        parent::__construct($this->format('Y-m-d 00:00:00'), $timezone);
+        parent::__construct($dateWithOutTime, $timezone);
     }
 
     public static function createFromFormat($format, $time, $timezone = null)

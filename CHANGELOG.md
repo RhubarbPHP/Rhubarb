@@ -1,4 +1,7 @@
 # Change log
+### 1.6.3
+
+* Fixed    Remove time from date before processing timezone
 
 ### 1.6.2
 
