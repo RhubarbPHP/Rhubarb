@@ -29,11 +29,14 @@ use Rhubarb\Crown\Logging\Log;
  */
 class LocalStorageAssetCatalogueProvider extends AssetCatalogueProvider
 {
-    private function getRootPath()
-    {
+    protected function getRootPathSetting(){
         $settings = LocalStorageAssetCatalogueProviderSettings::singleton();
         $rootFolder = $settings->storageRootPath;
-        
+        return $rootFolder;
+    }
+    private function getRootPath()
+    {
+        $rootFolder = $this->getRootPathSetting();
         if ($rootFolder == ""){
             throw new SettingMissingException("LocalStorageAssetCatalogueSettings", "storageRootPath");
         }

@@ -1,5 +1,12 @@
 # Change log
 
+### 1.6.2
+
+* Added:    TempLocalStorageAssetCatalogueProvider for storing temp files.
+
+            If your project uses temp files + local storage use TempLocalStorageAssetCatalogueProvider           
+            If using local storage for permanent storage use the LocalStorageAssetCatalogueProvder as before
+
 ### 1.6.1
 
 * Added:    Added pre-response filtering
