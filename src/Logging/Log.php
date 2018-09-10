@@ -65,6 +65,11 @@ abstract class Log
      */
     const PERFORMANCE_LEVEL = 32;
 
+    /**
+     * Use to log general information - not as noisy as debug, but important to be logged somewhere.
+     */
+    const INFORMATION_LEVEL = 64;
+
     const ALL = 255;
 
     /**
@@ -259,6 +264,11 @@ abstract class Log
     public static function performance($message, $category = "", $additionalData = [])
     {
         self::createEntry(self::PERFORMANCE_LEVEL, $message, $category, $additionalData);
+    }
+
+    public static function info($message, $category = "", $additionalData = [])
+    {
+        self::createEntry(self::INFORMATION_LEVEL, $message, $category, $additionalData);
     }
 
     public static function bulkData($message, $category = "", $data = "")

@@ -10,6 +10,11 @@
             If your project uses temp files + local storage use TempLocalStorageAssetCatalogueProvider           
             If using local storage for permanent storage use the LocalStorageAssetCatalogueProvder as before
 
+### 1.6.2
+
+* Added:    Information logging level
+* Added:    Module version
+
 ### 1.6.1
 
 * Added:    Added pre-response filtering
