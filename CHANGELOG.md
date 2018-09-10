@@ -1,4 +1,8 @@
 # Change log
+### 1.6.4
+
+* Added:    Ability to clear UnitTestingEmail history
+
 ### 1.6.3
 
 * Fixed    Remove time from date before processing timezone

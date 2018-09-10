@@ -48,4 +48,9 @@ class UnitTestingEmailProvider extends EmailProvider
     {
         return self::$_emailHistory;
     }
+
+    public static function clearHistory()
+    {
+        self::$_emailHistory = [];
+    }
 }
