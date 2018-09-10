@@ -18,6 +18,8 @@
 
 namespace Rhubarb\Crown\Sendables\Email;
 
+use Rhubarb\Crown\Exceptions\EmailException;
+
 require_once __DIR__ . '/Email.php';
 
 /**
@@ -34,6 +36,8 @@ class SimpleEmail extends Email
     private $text;
 
     private $subject;
+
+    private $replyTo;
 
     /**
      * @return string
@@ -80,6 +84,23 @@ class SimpleEmail extends Email
         return $this;
     }
 
+    public function setReplyToRecipient($replyTo, $replyToName)
+    {
+        try {
+            $this->replyTo = new EmailRecipient($replyTo, $replyToName);
+        } catch (EmailException $e) {
+        }
+    }
+
+    public function getReplyToRecipient()
+    {
+        if ($this->replyTo) {
+            return $this->replyTo;
+        }
+
+        return parent::getReplyToRecipient();
+    }
+
     public function toDictionary()
     {
         $dataArray = [
@@ -103,6 +124,8 @@ class SimpleEmail extends Email
             $attachmentList[] = [ "path" => $attachment->path, "name" => $attachment->name ];
         }
 
+        $replyTo = $this->getReplyToRecipient();
+
         $data =
             [
                 "subject" => $this->getSubject(),
@@ -113,8 +136,8 @@ class SimpleEmail extends Email
                     "email" => $this->getSender()->email,
                     "name" => $this->getSender()->name
                 ],
-                "attachments" => $attachmentList
-
+                "attachments" => $attachmentList,
+                "ReplyTo" => ['email' => $replyTo->email, 'name' => $replyTo->name],
             ];
 
         return $data;
@@ -138,6 +161,8 @@ class SimpleEmail extends Email
         foreach($data["attachments"] as $attachment){
             $email->addAttachment($attachment["path"], $attachment["name"]);
         }
+
+        $email->setReplyToRecipient($data['ReplyTo']['email'], $data['ReplyTo']['name']);
 
         $email->setText($data["text"]);
         $email->setHtml($data["html"]);
