@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.5
+
+* Fixed:    Restored PHP 5.6 compatibility
+
 ### 1.6.4
 
 * Added:    Ability to clear UnitTestingEmail history

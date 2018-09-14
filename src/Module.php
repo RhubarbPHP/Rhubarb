@@ -208,7 +208,8 @@ abstract class Module
      *
      * @return int
      */
-    public function getVersion(): int {
+    public function getVersion()
+    {
         return $this->version;
     }
 }
