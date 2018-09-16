@@ -15,8 +15,3 @@ Rhubarb uses Composer to import additional packages into the solution including 
 Rhubarb is an open source project and as such anyone may make a contribution. Contributions can be made by forking any of the rhubarb projects and making a pull request back to the base fork.
 
 Rhubarb has a list of senior contributors who guard and protect the values of Rhubarb and make the final decision on the merits of each pull request.
-
-## Branching Strategy
-
-Rhubarb follows the gitflow branching strategy.
-
