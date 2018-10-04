@@ -135,4 +135,63 @@ class RhubarbDateTimeTest extends RhubarbTestCase
 
         $this->assertEquals("20140324", $newDate->format("Ymd"));
     }
+
+    public function testAddDays()
+    {
+        $refDate = new RhubarbDate('2018-01-10');
+        $refDate->addDays(5);
+
+        $this->assertEquals('20180115', $refDate->format("Ymd"));
+    }
+
+    public function testSubDays()
+    {
+        $refDate = new RhubarbDate('2018-01-10');
+        $refDate->subDays(5);
+
+        $this->assertEquals('20180105', $refDate->format("Ymd"));
+    }
+
+    public function testStartOfWeek()
+    {
+        $refDate = new RhubarbDateTime('2018-10-04');
+
+        $this->assertEquals('20181001', $refDate->startOfWeek()->format('Ymd'));
+    }
+
+    public function testEndOfWeek()
+    {
+        $refDate = new RhubarbDateTime('2018-10-04');
+
+        $this->assertEquals('20181007', $refDate->endOfWeek()->format('Ymd'));
+    }
+
+    public function testEnglishDayOfWeek()
+    {
+        $refDate = new RhubarbDateTime('2018-10-04');
+
+        $this->assertEquals('Thursday', $refDate->englishDayOfWeek);
+    }
+
+    public function testShortEnglishDayOfWeek()
+    {
+        $refDate = new RhubarbDateTime('2018-10-04');
+
+        $this->assertEquals('Thu', $refDate->shortEnglishDayOfWeek);
+    }
+
+    public function testParseFullDate()
+    {
+        $refDate = RhubarbDateTime::parse('2018-01-11');
+
+        $this->assertEquals('20180111', $refDate->format('Ymd'));
+    }
+
+    public function testParseStringDate()
+    {
+        $actualDate = date('Ymd', strtotime('last Sunday', strtotime('today')));
+        $testDate   = RhubarbDateTime::parse('last Sunday');
+
+        $this->assertEquals($actualDate, $testDate->format('Ymd'));
+    }
 }
