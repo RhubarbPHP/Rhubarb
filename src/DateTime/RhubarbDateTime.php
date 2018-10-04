@@ -508,6 +508,18 @@ class RhubarbDateTime extends \DateTime implements RhubarbDateTimeInterface
     }
 
     /**
+     * Get a Carbon instance for the current date and time.
+     *
+     * @param \DateTimeZone|string|null $tz
+     *
+     * @return static
+     */
+    public static function now($tz = null)
+    {
+        return new static(null, $tz);
+    }
+
+    /**
      * Applies an $interval of $unit
      *
      * @param int $interval
