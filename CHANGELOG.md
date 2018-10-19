@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.6
+
+* Updated:  JWT support 
+
 ### 1.6.5
 
 * Fixed:    Restored PHP 5.6 compatibility
