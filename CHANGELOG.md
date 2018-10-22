@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.7
+
+* Changed:  CallableUrlHandler callback can now return a response directly  
+
 ### 1.6.6
 
 * Updated:  JWT support 

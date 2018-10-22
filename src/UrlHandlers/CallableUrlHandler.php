@@ -48,7 +48,11 @@ class CallableUrlHandler extends UrlHandler
     {
         $generator = $this->createGenerator();
 
-        return $generator->generateResponse($request);
+        if ($generator instanceof Response){
+            return $generator;
+        } else {
+            return $generator->generateResponse($request);
+        }
     }
 
     /**
