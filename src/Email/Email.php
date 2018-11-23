@@ -35,6 +35,8 @@ abstract class Email
 
     private $sender;
 
+    private $replyTo;
+
     private $attachments = [];
 
     /**
@@ -94,9 +96,28 @@ abstract class Email
         return $this->sender;
     }
 
+    /**
+     * @return EmailAddress
+     */
+    public function getReplyTo()
+    {
+        if ($this->replyTo) {
+            return $this->replyTo;
+        }
+
+        return $this->getSender();
+    }
+
     public function setSender($senderEmail, $name = "")
     {
         $this->sender = new EmailAddress($senderEmail, $name);
+
+        return $this;
+    }
+
+    public function setReplyTo($senderEmail, $name = "")
+    {
+        $this->replyTo = new EmailAddress($senderEmail, $name);
 
         return $this;
     }
@@ -238,6 +259,7 @@ abstract class Email
         }
 
         $headers["From"] = (string)$this->getSender();
+        $headers["Reply-To"] = (string)$this->getReplyTo();
         $headers["Subject"] = $subject;
 
         return $headers;
