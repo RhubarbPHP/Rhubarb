@@ -17,6 +17,7 @@
 
 namespace Rhubarb\Crown\DependencyInjection;
 
+use Psr\Container\ContainerInterface;
 use ReflectionMethod;
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\ClassMappingException;
@@ -24,11 +25,28 @@ use Rhubarb\Crown\Exceptions\ClassMappingException;
 /**
  * Rhubarb's dependency container
  */
-final class Container
+final class Container implements ContainerInterface
 {
     private $concreteClassMappings = [];
 
     private $singletons = [];
+
+    public function get($id)
+    {
+        return $this->getInstance($id);
+    }
+
+    public function has($id)
+    {
+        if (!class_exists($id)){
+            // Not a class so we have to look into the mappings.
+            if (!isset($this->concreteClassMappings[$id]) && !isset($this->singletons[$id])){
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     /**
      * Returns the current container for the running application

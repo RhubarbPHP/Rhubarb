@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.8
+
+* Added:    PSR-11 support to bring Container into php-fig alignment
+
 ### 1.6.7
 
 * Changed:  CallableUrlHandler callback can now return a response directly  
