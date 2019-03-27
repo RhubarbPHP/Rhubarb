@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.9
+
+* Fixed:    Missing dependancy on psr/container
+
 ### 1.6.8
 
 * Added:    PSR-11 support to bring Container into php-fig alignment
