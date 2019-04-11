@@ -82,6 +82,11 @@ abstract class ExceptionHandler
                 return;
             }
 
+            $fatalErrors = [E_ERROR, E_RECOVERABLE_ERROR];
+            if (!in_array($code, $fatalErrors)) {
+                return;
+            }
+
             ob_start();
             debug_print_backtrace();
             throw new ErrorWithTraceException($message, 0, $code, $file, $line, ob_get_clean());
