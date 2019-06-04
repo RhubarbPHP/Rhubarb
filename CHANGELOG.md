@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.10
+
+* Added:   Microsecond support to RhubarbDateTime
+
 ### 1.6.9
 
 * Fixed:    Missing dependancy on psr/container
