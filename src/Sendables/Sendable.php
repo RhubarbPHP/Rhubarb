@@ -88,4 +88,39 @@ abstract class Sendable
 
         $this->recipients[] = $recipient;
     }
+
+    /** @var string Highest priority (default) - the user is awaiting receipt, eg password reset link/access code */
+    const PRIORITY_TRANSACTION = 'transaction';
+    /** @var string Lower priority - this sendable is important, but the user likely is not waiting for it */
+    const PRIORITY_NOTIFICATION = 'notification';
+    /** @var string Lowest priority */
+    const PRIORITY_MARKETING = 'marketing';
+    const PRIORITIES = [
+        self::PRIORITY_TRANSACTION,
+        self::PRIORITY_NOTIFICATION,
+        self::PRIORITY_MARKETING
+    ];
+
+    protected $priority = self::PRIORITY_TRANSACTION;
+
+    /**
+     * @param string $priority One of \Rhubarb\Crown\Sendables\Sendable::PRIORITIES
+     * @throws \Exception
+     */
+    public function setPriority(string $priority)
+    {
+        if (!in_array($priority, self::PRIORITIES)) {
+            throw new \Exception('invalid priority');
+        }
+
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return string One of \Rhubarb\Crown\Sendables\Sendable::PRIORITIES, default: \Rhubarb\Crown\Sendables\Sendable::PRIORITY_TRANSACTION
+     */
+    public function getPriority(): string
+    {
+        return $this->priority;
+    }
 }

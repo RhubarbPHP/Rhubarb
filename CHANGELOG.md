@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.11
+
+* Added:   Sendable priority
+
 ### 1.6.10
 
 * Added:   Microsecond support to RhubarbDateTime
