@@ -117,4 +117,59 @@ class CarbonCopyEmail extends SimpleEmail
 
         return $headers;
     }
+
+    public function toArray()
+    {
+        $ccRecipientList = [];
+        foreach($this->getCcRecipients() as $recipient) {
+            $ccRecipientList[] = [
+                "name" => $recipient->name,
+                "email" => $recipient->email
+            ];
+        }
+
+        $bccRecipientList = [];
+        foreach($this->getBccRecipients() as $recipient) {
+            $bccRecipientList[] = [
+                "name" => $recipient->name,
+                "email" => $recipient->email
+            ];
+        }
+
+        $data = parent::toArray();
+        $data["ccRecipients"] = $ccRecipientList;
+        $data["bccRecipients"] = $bccRecipientList;
+
+        return $data;
+    }
+
+    public static function fromArray($data)
+    {
+        $email = new CarbonCopyEmail();
+        $email->setSubject($data["subject"]);
+
+        foreach($data["recipients"] as $recipient){
+            $email->addRecipientByEmail($recipient["email"], $recipient["name"]);
+        }
+
+        foreach($data["ccRecipients"] as $recipient){
+            $email->addCcRecipientByEmail($recipient["email"], $recipient["name"]);
+        }
+
+        foreach($data["bccRecipients"] as $recipient){
+            $email->addBccRecipientByEmail($recipient["email"], $recipient["name"]);
+        }
+
+        foreach($data["attachments"] as $attachment){
+            $email->addAttachment($attachment["path"], $attachment["name"]);
+        }
+
+        $email->setReplyToRecipient($data['ReplyTo']['email'], $data['ReplyTo']['name']);
+
+        $email->setText($data["text"]);
+        $email->setHtml($data["html"]);
+        $email->setSender($data["sender"]["email"], $data["sender"]["name"]);
+
+        return $email;
+    }
 }
