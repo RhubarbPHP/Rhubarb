@@ -5,7 +5,6 @@ namespace Rhubarb\Crown\Sendables\Email;
 class CarbonCopyEmail extends SimpleEmail
 {
     private $ccRecipients = [];
-
     private $bccRecipients = [];
 
     public function addCcRecipient(EmailRecipient $emailRecipient)
@@ -118,6 +117,16 @@ class CarbonCopyEmail extends SimpleEmail
         return $headers;
     }
 
+    public function getRecipients()
+    {
+        $recipients = [];
+        $recipients["To:"] = parent::getRecipients();
+        $recipients["CC:"] = $this->getCcRecipients();
+        $recipients["BCC:"] = $this->getBccRecipients();
+
+        return $recipients;
+    }
+
     public function toArray()
     {
         $ccRecipientList = [];
@@ -137,8 +146,11 @@ class CarbonCopyEmail extends SimpleEmail
         }
 
         $data = parent::toArray();
-        $data["ccRecipients"] = $ccRecipientList;
-        $data["bccRecipients"] = $bccRecipientList;
+        $data["recipients"] = [
+            "To:" => $data["recipients"],
+            "CC:" => $ccRecipientList,
+            "BCC:" => $bccRecipientList,
+        ];
 
         return $data;
     }
@@ -148,15 +160,15 @@ class CarbonCopyEmail extends SimpleEmail
         $email = new CarbonCopyEmail();
         $email->setSubject($data["subject"]);
 
-        foreach($data["recipients"] as $recipient){
+        foreach($data["recipients"]["To:"] as $recipient){
             $email->addRecipientByEmail($recipient["email"], $recipient["name"]);
         }
 
-        foreach($data["ccRecipients"] as $recipient){
+        foreach($data["recipients"]["CC:"] as $recipient){
             $email->addCcRecipientByEmail($recipient["email"], $recipient["name"]);
         }
 
-        foreach($data["bccRecipients"] as $recipient){
+        foreach($data["recipients"]["BCC:"] as $recipient){
             $email->addBccRecipientByEmail($recipient["email"], $recipient["name"]);
         }
 
