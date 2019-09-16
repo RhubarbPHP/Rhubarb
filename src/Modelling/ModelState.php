@@ -39,7 +39,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      *
      * @var array
      */
-    protected $modelData = [];
+    public $modelData = [];
 
     /**
      * The dictionary of model data from the last change snapshot
