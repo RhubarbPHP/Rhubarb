@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.12
+
+* Updated:  Composer update for latest dependencies
+
 ### 1.6.11
 
 * Added:   Sendable priority
