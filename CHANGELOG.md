@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.12
+
+* Fixed:   Warning generated in CsvStream from continue used in switch
+
 ### 1.6.11
 
 * Added:   Sendable priority
