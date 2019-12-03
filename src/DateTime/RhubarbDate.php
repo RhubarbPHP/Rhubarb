@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\DateTime;
 
 use DateTimeZone;
 
-abstract class AbstractRhubarbDate extends RhubarbDateTime
+class RhubarbDate extends RhubarbDateTime
 {
     public function __construct($dateValue = '', DateTimeZone $timezone = null)
     {
@@ -40,22 +40,9 @@ abstract class AbstractRhubarbDate extends RhubarbDateTime
         $date = parent::createFromFormat($format, $time, $timezone);
         return new RhubarbDate($date);
     }
-}
 
-if (PHP_VERSION_ID >= 70100) {
-    class RhubarbDate extends AbstractRhubarbDate
+    public function setTime($hour, $minute, $second = 0, $microseconds = 0)
     {
-        public function setTime($hour, $minute, $second = 0, $microseconds = 0)
-        {
-            return parent::setTime(0, 0, 0, 0);
-        }
-    }
-} else {
-    class RhubarbDate extends AbstractRhubarbDate
-    {
-        public function setTime($hour, $minute, $second = 0)
-        {
-            return parent::setTime(0, 0, 0);
-        }
+        return parent::setTime(0, 0, 0, 0);
     }
 }

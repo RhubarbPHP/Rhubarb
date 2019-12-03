@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.0
+
+* Fixed:   Remove split RhubarbDate implementation for compatibility reasons
+
 ### 1.6.11
 
 * Added:   Sendable priority
