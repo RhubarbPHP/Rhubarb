@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.12
+
+* Fixed:   Ensure email history initialises to empty array
+
 ### 1.6.11
 
 * Added:   Sendable priority
