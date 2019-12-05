@@ -63,6 +63,15 @@ class SimpleEmail extends Email
         return $this->html;
     }
 
+    public function setSender($senderEmail, $name = null)
+    {
+        if (!$this->replyTo) {
+            $this->replyTo = new EmailRecipient($senderEmail, $name);
+        }
+
+        return parent::setSender($senderEmail, $name);
+    }
+
     public function setHtml($html)
     {
         $this->html = $html;
