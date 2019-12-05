@@ -18,7 +18,6 @@
 
 namespace Rhubarb\Crown\Tests\unit\Exceptions\Handlers;
 
-use http\Exception\RuntimeException;
 use Rhubarb\Crown\Application;
 use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Crown\Exceptions\Handlers\DefaultExceptionHandler;
