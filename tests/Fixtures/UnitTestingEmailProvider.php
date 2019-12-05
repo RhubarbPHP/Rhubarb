@@ -26,11 +26,11 @@ class UnitTestingEmailProvider extends EmailProvider
     /**
      * @var array
      */
-    private static $_emailHistory;
+    private static $_emailHistory = [];
 
     public function send(Sendable $email)
     {
-        self::$_emailHistory [] = $email;
+        self::$_emailHistory[] = $email;
     }
 
     /**
