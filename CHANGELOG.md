@@ -2,7 +2,8 @@
 
 ### 1.6.12
 
-* Fixed:   Warning generated in CsvStream from continue used in switch
+* Fixed:   Warning generated in CsvStream from continue used in switch. Bring setSender() in SimpleEmail.php in line with what was expected by the
+           unit tests. Fix some tests.
 
 ### 1.6.11
 
