@@ -3,6 +3,7 @@
 ### 1.6.12
 
 * Updated:  Composer update for latest dependencies
+* Fixed:   Ensure email history initialises to empty array
 
 ### 1.6.11
 
