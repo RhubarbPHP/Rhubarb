@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.13
+
+* Added:   Added function onUrlFragmentMatched() to offer and opportunity to augment behaviour of the URL Handler
+
 ### 1.6.12
 
 * Updated:  Composer update for latest dependencies
