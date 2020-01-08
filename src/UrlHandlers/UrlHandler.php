@@ -296,7 +296,11 @@ abstract class UrlHandler implements GeneratesResponseInterface
         $context = new PhpContext();
         $context->UrlHandler = $this;
 
+        $this->onBeforeUrlFragmentMatched($request, $currentUrlFragment);
+
         $this->matchingUrl = $this->getMatchingUrlFragment($request, $currentUrlFragment);
+
+        $this->onAfterUrlFragmentMatched($request, $currentUrlFragment);
 
         if ($this->parentHandler) {
             $this->handledUrl = $this->parentHandler->handledUrl . $this->matchingUrl;
@@ -363,6 +367,28 @@ abstract class UrlHandler implements GeneratesResponseInterface
         }
 
         return false;
+    }
+
+    /**
+     * Opportunity to add additional logic before getMatchingUrlFragment is executed
+     *
+     * @param Request $request
+     * @param string $currentUrlFragment
+     */
+    protected function onBeforeUrlFragmentMatched(Request $request, $currentUrlFragment = "")
+    {
+
+    }
+
+    /**
+     * Opportunity to add additional logic after getMatchingUrlFragment is executed
+     *
+     * @param Request $request
+     * @param string $currentUrlFragment
+     */
+    protected function onAfterUrlFragmentMatched(Request $request, $currentUrlFragment = "")
+    {
+
     }
 
     /**

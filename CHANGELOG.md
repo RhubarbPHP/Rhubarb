@@ -1,5 +1,10 @@
 # Change log
 
+### 1.6.13
+
+* Added:   Added functions onBeforeUrlFragmentMatched() and onAfterUrlFragmentMatched() to allow an opportunity to add custom
+           logic before a matching URL is found from a URL Handler
+
 ### 1.6.12
 
 * Updated:  Composer update for latest dependencies
