@@ -54,9 +54,9 @@ abstract class LoginProvider extends Session implements ProviderInterface
     {
         $this->loggedIn = false;
 
-        $this->onLogOut();
-
         $this->storeSession();
+
+        $this->onLogOut();
     }
 
     /**
