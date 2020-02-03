@@ -1,5 +1,10 @@
 # Change log
 
+### 1.6.15
+
+* Fixed:   Warning generated in CsvStream from continue used in switch. Bring setSender() in SimpleEmail.php in line with what was expected by the
+           unit tests. Fix some tests.
+
 ### 1.6.14
 
 * Fixed:   Ensure session is stored before onLogOut() called in LoginProvider

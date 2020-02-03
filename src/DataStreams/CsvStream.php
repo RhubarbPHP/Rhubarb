@@ -196,7 +196,6 @@ class CsvStream extends RecordStream
                 switch ($byte) {
                     case $this->enclosure:
                         $inEnclosure = !$inEnclosure;
-                        continue;
                         break;
                     case $this->delimiter:
                         if (!$inEnclosure) {

@@ -205,8 +205,7 @@ class UnitTestPhpErrorHandler extends UrlHandler
 {
     protected function generateResponseForRequest($request = null)
     {
-        // This will throw a run time error that we should be able to catch and handle.
-        $x = 9 / 0;
+        throw new \ErrorException("Division by zero");
     }
 }
 
