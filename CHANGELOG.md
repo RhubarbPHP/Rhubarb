@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.14
+
+* Fixed:   Ensure session is stored before onLogOut() called in LoginProvider
+
 ### 1.6.13
 
 * Added:   Added function onUrlFragmentMatched() to offer and opportunity to augment behaviour of the URL Handler
