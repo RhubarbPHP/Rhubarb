@@ -1,9 +1,22 @@
 # Change log
 
-### 1.6.12
+### 1.6.15
 
 * Fixed:   Warning generated in CsvStream from continue used in switch. Bring setSender() in SimpleEmail.php in line with what was expected by the
            unit tests. Fix some tests.
+
+### 1.6.14
+
+* Fixed:   Ensure session is stored before onLogOut() called in LoginProvider
+
+### 1.6.13
+
+* Added:   Added function onUrlFragmentMatched() to offer and opportunity to augment behaviour of the URL Handler
+
+### 1.6.12
+
+* Updated:  Composer update for latest dependencies
+* Fixed:   Ensure email history initialises to empty array
 
 ### 1.6.11
 

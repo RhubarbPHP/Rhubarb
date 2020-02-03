@@ -359,10 +359,23 @@ abstract class UrlHandler implements GeneratesResponseInterface
         }
 
         if (stripos($currentUrlFragment, $this->url) === 0) {
+            $this->onUrlFragmentMatched($request, $currentUrlFragment);
+
             return $this->url;
         }
 
         return false;
+    }
+
+    /**
+     * Opportunity to add additional logic if the URL fragment is matched
+     *
+     * @param Request $request
+     * @param string $currentUrlFragment
+     */
+    protected function onUrlFragmentMatched(Request $request, $currentUrlFragment = "")
+    {
+
     }
 
     /**
