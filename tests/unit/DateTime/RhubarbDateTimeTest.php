@@ -49,24 +49,27 @@ class RhubarbDateTimeTest extends RhubarbTestCase
 
     public function testInvalidDates()
     {
-        $date = new RhubarbDateTime();
+        $assertInvalidDateTime = function($dateValue = '', $dateTimeZone = null) {
+            $date = new RhubarbDateTime($dateValue, $dateTimeZone);
+            $this->assertFalse($date->isValidDateTime());
+        };
 
-        $this->assertFalse($date->isValidDateTime());
-
-        $date = new RhubarbDateTime("now");
-
+        $date = new RhubarbDateTime('now');
         $this->assertTrue($date->isValidDateTime());
 
-        $date = new RhubarbDateTime("czcvz-23-122");
+        $assertInvalidDateTime();
+        $assertInvalidDateTime('czcvz-23-122');
+        $assertInvalidDateTime('0000-00-00');
+        $assertInvalidDateTime('0000-00-00 00:00:00');
+        $assertInvalidDateTime(RhubarbDateTime::INVALID_DATE);
 
-        $this->assertFalse($date->isValidDateTime());
+        // There's a different path for validating objects created with a datetime as the param
+        $assertInvalidDateTime(new RhubarbDateTime(RhubarbDateTime::INVALID_DATE));
 
-        $date = new RhubarbDateTime("0000-00-00");
+        $assertInvalidDateTime(RhubarbDateTime::INVALID_DATE, new \DateTimeZone('Europe/Berlin'));
 
-        $this->assertFalse($date->isValidDateTime());
-
-        $date = new RhubarbDateTime("0000-00-00 00:00:00");
-
+        $date = new RhubarbDateTime(RhubarbDateTime::INVALID_DATE, new \DateTimeZone('Europe/Berlin'));
+        $date->setTimezone(new \DateTimeZone('Europe/London'));
         $this->assertFalse($date->isValidDateTime());
 
         ob_start();

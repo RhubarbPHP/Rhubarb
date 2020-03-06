@@ -1,5 +1,12 @@
 # Change log
 
+### 1.6.16
+
+* Changed: RhubarbDateTime now tracks time validity (non-zero years) instead of comparing to an invalid time string.
+* Fixed:   Timezone changes applied to `0000-00-00` times are now correctly identified as invalid times.
+* Added:   Support for LMT>GMT switch in locale settings which results in a difference of 75 seconds between UTC and 
+Europe/London time prior to 1847 https://www.timeanddate.com/time/change/uk/london?year=1847
+
 ### 1.6.15
 
 * Fixed:   Warning generated in CsvStream from continue used in switch. Bring setSender() in SimpleEmail.php in line with what was expected by the
