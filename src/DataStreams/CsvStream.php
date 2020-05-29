@@ -146,7 +146,7 @@ class CsvStream extends RecordStream
         $this->lastItemLength = 0;
 
         $addValue = function (&$value) use (&$values, $trimValues) {
-            $values[] = utf8_encode($trimValues ? trim($value) : $value);
+            $values[] = $trimValues ? trim($value) : $value;
             $value = "";
         };
 
