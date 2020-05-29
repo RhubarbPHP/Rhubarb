@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.17
+
+* Fixed:   CsvStream was double UT8 encoding files that contained genuine UTF8 characters.
+
 ### 1.6.16
 
 * Changed: RhubarbDateTime now tracks time validity (non-zero years) instead of comparing to an invalid time string.
