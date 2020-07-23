@@ -1,5 +1,9 @@
 # Change log
 
+### 1.6.18
+
+* Added:  StringTools::explodeIgnoringBlanks() added for symmetry with implode ignoring blanks
+
 ### 1.6.17
 
 * Fixed:   CsvStream was double UT8 encoding files that contained genuine UTF8 characters.
