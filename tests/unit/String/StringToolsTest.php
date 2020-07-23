@@ -56,4 +56,49 @@ class StringToolsTest extends RhubarbTestCase
             $this->assertEquals($plural, StringTools::makePlural($singular));
         }
     }
+
+    public function testExplodingString()
+    {
+        $string = "/my/string/with/slashes/";
+
+        $result = StringTools::explodeIgnoringBlanks("/", $string);
+
+        $this->assertEquals(4, count($result));
+    }
+
+    public function testExplodingStringWithNoTrailingGlue()
+    {
+        $string = "/my/string/with/slashes";
+
+        $result = StringTools::explodeIgnoringBlanks("/", $string);
+
+        $this->assertEquals(4, count($result));
+    }
+
+    public function testExplodingStringWithNoLeadingGlue()
+    {
+        $string = "my/string/with/slashes/";
+
+        $result = StringTools::explodeIgnoringBlanks("/", $string);
+
+        $this->assertEquals(4, count($result));
+    }
+
+    public function testNoEmptyStringsReturned()
+    {
+        $string = "my/string//slashes/";
+
+        $result = StringTools::explodeIgnoringBlanks("/", $string);
+
+        $this->assertEquals(3, count($result));
+    }
+
+    public function testExplodeWithLimit()
+    {
+        $string = "my/string/with/slashes/and/stuff/";
+
+        $result = StringTools::explodeIgnoringBlanks("/", $string, 2);
+
+        $this->assertEquals(2, count($result));
+    }
 }

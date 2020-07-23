@@ -69,6 +69,20 @@ class StringTools
     }
 
     /**
+     * Explodes a string ignoring empty elements
+     *
+     * @param string $delimiter The glue of the string we wish to split on
+     * @param string $string The string to process
+     * @param int|null $limit Optional limit
+     *
+     * @return false|string[]
+     */
+    public static function explodeIgnoringBlanks($delimiter, $string, $limit = null)
+    {
+        return preg_split("@$delimiter@", $string, $limit, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
      * Turns StringLikeThis into String Like This
      */
     public static function wordifyStringByUpperCase($string)
