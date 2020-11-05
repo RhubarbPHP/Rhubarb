@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.0
+
+* Added:  Added type hinting to Container.php to match interface
+
 ### 1.6.18
 
 * Added:  StringTools::explodeIgnoringBlanks() added for symmetry with implode ignoring blanks
