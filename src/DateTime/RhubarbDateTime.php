@@ -45,7 +45,12 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
 
                 $this->setTimezone($dateValue->getTimezone());
                 $this->setDate($dateValue->format("Y"), $dateValue->format("m"), $dateValue->format("d"));
-                $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"), $dateValue->format("u"));
+
+                if (PHP_VERSION_ID >= 70100) {
+                    $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"), $dateValue->format("u"));
+                } else {
+                    $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"));
+                }
 
                 if ($timezone !== null) {
                     $this->setTimezone($timezone);

@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.1
+
+* Fix@    PHP 7.0 support restored in RhubarbDateTime
+
 ### 1.7.0
 
 * Added:  Added type hinting to Container.php to match interface
