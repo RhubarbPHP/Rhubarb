@@ -1,5 +1,10 @@
 # Change log
 
+### 1.7.2
+
+* Added:  Reversed type hinting to Container.php to match interface - PSR package wasn't 
+          officially released yet.
+
 ### 1.7.1
 
 * Fix@    PHP 7.0 support restored in RhubarbDateTime

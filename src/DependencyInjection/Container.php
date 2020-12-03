@@ -31,12 +31,12 @@ final class Container implements ContainerInterface
 
     private $singletons = [];
 
-    public function get(string $id)
+    public function get($id)
     {
         return $this->getInstance($id);
     }
 
-    public function has(string $id)
+    public function has($id)
     {
         if (!class_exists($id)){
             // Not a class so we have to look into the mappings.
