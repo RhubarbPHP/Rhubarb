@@ -1,5 +1,10 @@
 # Change log
 
+### 1.7.3
+
+* Added: Function getContentType() in Email.php to allow customisation of the Content-Type email header.
+
+
 ### 1.7.2
 
 * Added:  Reversed type hinting to Container.php to match interface - PSR package wasn't 

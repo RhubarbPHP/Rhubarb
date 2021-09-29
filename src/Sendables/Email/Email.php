@@ -182,6 +182,8 @@ abstract class Email extends Sendable
         $text = $this->getText();
         $subject = $this->getSubject();
 
+        $contentType = $this->getContentType();
+
         /**
          * @var string|bool Tracks which part should contain the text and html parts.
          */
@@ -203,6 +205,11 @@ abstract class Email extends Sendable
 
         if ($html != "") {
             $htmlPart = new MimePartText("text/html");
+
+            if($contentType != ""){
+                $htmlPart->addHeader("Content-Type", $contentType);
+            }
+
             $htmlPart->setTransformedBody($html);
         }
 
@@ -236,6 +243,15 @@ abstract class Email extends Sendable
         $mime->addHeader("Reply-To", $this->getReplyToRecipient());
 
         return $mime;
+    }
+
+    /**
+     * Returns a string value which will set the Content-Type header for the html part of the email.
+     *
+     * @return string
+     */
+    protected function getContentType(){
+        return "";
     }
 
     public function getBodyRaw()
