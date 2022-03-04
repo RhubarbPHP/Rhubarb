@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.4
+
+* Added: PHP Sessions now set secure flag if appropriate
+
 ### 1.7.3
 
 * Added: Function getContentType() in Email.php to allow customisation of the Content-Type email header.
