@@ -33,6 +33,8 @@ use Rhubarb\Crown\Settings;
 class EmailSettings extends Settings
 {
     public $onlyRecipient = false;
+    public $onlyCcRecipient = false;
+    public $onlyBccRecipient = false;
 
     public $defaultSender;
 
