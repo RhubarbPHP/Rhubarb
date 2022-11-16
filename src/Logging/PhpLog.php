@@ -40,7 +40,7 @@ class PhpLog extends IndentedMessageLog
         $ip = self::getRemoteIP();
         $category = ($category == "") ? "CORE" : $category;
 
-        $data = sizeof($additionalData) > 0 ? print_r($additionalData, true) : "";
+        $data = $additionalData ? print_r($additionalData, true) : "";
 
         error_log(str_pad($category, 8, ' ', STR_PAD_RIGHT) .
             str_pad($this->uniqueIdentifier, 14, ' ', STR_PAD_LEFT) .
