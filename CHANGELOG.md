@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.4
+
+* Fixed: Fatal error when trying to use sizeof() function on a string value in PhpLog.php.
+
 ### 1.7.3
 
 * Added: Function getContentType() in Email.php to allow customisation of the Content-Type email header.
