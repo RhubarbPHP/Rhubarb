@@ -34,8 +34,9 @@ class PhpSessionProvider extends SessionProvider
         $context = Application::current()->context();
 
         if (!$context->isCliInvocation()) {
-            // Ensure session cookie is http only
-            session_set_cookie_params(0, '/', '', false, true);
+            // Ensure session cookie is http only and secure if we're on https
+            $onSsl = ($_SERVER["REQUEST_SCHEME"] === "https" || (isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] === "https"));
+            session_set_cookie_params(0, '/', '', $onSsl, true);
         }
     }
 

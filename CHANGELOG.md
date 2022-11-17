@@ -1,8 +1,12 @@
 # Change log
 
-### 1.7.4
+### 1.7.5
 
 * Fixed: Fatal error when trying to use sizeof() function on a string value in PhpLog.php.
+
+### 1.7.4
+
+* Added: PHP Sessions now set secure flag if appropriate
 
 ### 1.7.3
 
