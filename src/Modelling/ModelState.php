@@ -473,7 +473,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->$offset);
     }
@@ -487,7 +487,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * </p>
      * @return mixed Can return all value types.
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->__get($offset);
     }
@@ -504,7 +504,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * </p>
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->__set($offset, $value);
     }
@@ -518,7 +518,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * </p>
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         $this->modelData[$offset] = null;
     }
@@ -530,7 +530,7 @@ class ModelState implements \ArrayAccess, JsonSerializable
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->getSerializableForm();
     }
