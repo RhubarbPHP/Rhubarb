@@ -39,6 +39,8 @@ class CsvStream extends DataStream
 
     private $fileStream = null;
 
+    private $externalStream = false;
+
     private $writable = false;
 
     private $headers = null;
@@ -48,8 +50,6 @@ class CsvStream extends DataStream
     private $needToWriteHeaders = true;
 
     private $remnantBuffer = "";
-
-    private $forceUTF8 = false;
 
     public $trimHeadings = true;
 
@@ -80,9 +80,16 @@ class CsvStream extends DataStream
      */
     public $escapeCharacter = null;
 
-    public function __construct($filePath)
+    public function __construct($filePathOrStream)
     {
-        $this->filePath = $filePath;
+        if (is_resource($filePathOrStream)) {
+            $this->externalStream = true;
+            $this->fileStream = $filePathOrStream;
+            $data = stream_get_meta_data($filePathOrStream);
+            $this->writable = ($data["mode"] == "a" || $data["mode"] = "w" || $data["mode"] = "w+" || $data["mode"] == "a+");
+        } else {
+            $this->filePath = $filePathOrStream;
+        }
 
         parent::__construct();
     }
@@ -100,14 +107,22 @@ class CsvStream extends DataStream
 
     public function readHeaders()
     {
-        $this->close();
-
-        if (!file_exists($this->filePath)) {
-            $this->needToWriteHeaders = true;
-            return $this->headers = [];
+        if ($this->headers !== null) {
+            return $this->headers;
         }
 
-        $this->fileStream = fopen($this->filePath, "r");
+        if (!$this->externalStream) {
+            $this->close();
+
+            if (!$this->fileStream) {
+                if (!file_exists($this->filePath)) {
+                    $this->needToWriteHeaders = true;
+                    return $this->headers = [];
+                }
+
+                $this->fileStream = fopen($this->filePath, "r");
+            }
+        }
 
         $rawCsvData = $this->readCsvLine($this->trimHeadings);
 
@@ -128,8 +143,10 @@ class CsvStream extends DataStream
 
         $values = [];
 
+        $this->lastItemLength = 0;
+
         $addValue = function (&$value) use (&$values, $trimValues) {
-            $values[] = utf8_encode($trimValues ? trim($value) : $value);
+            $values[] = $trimValues ? trim($value) : $value;
             $value = "";
         };
 
@@ -179,7 +196,6 @@ class CsvStream extends DataStream
                 switch ($byte) {
                     case $this->enclosure:
                         $inEnclosure = !$inEnclosure;
-                        continue;
                         break;
                     case $this->delimiter:
                         if (!$inEnclosure) {
@@ -197,6 +213,8 @@ class CsvStream extends DataStream
                             if (($csvDataLength > $i) && ($csvData[$i] == "\r" || $csvData[$i] == "\n")) {
                                 $i++;
                             }
+
+                            $this->lastItemLength = $i;
 
                             $this->remnantBuffer = substr($csvData, $i);
 
@@ -234,8 +252,6 @@ class CsvStream extends DataStream
         if ($this->fileStream !== null) {
             if ($allowWriting && !$this->writable) {
                 $this->close();
-            } else {
-                return $this->fileStream;
             }
         }
 
@@ -244,7 +260,7 @@ class CsvStream extends DataStream
             // so we must read headers first.
             $this->readHeaders();
 
-            if ($allowWriting) {
+            if ($allowWriting && !$this->externalStream) {
                 // For writing we need to reclose and open the stream in write mode.
                 $this->close();
             } else {
@@ -253,11 +269,16 @@ class CsvStream extends DataStream
             }
         }
 
+        if ($this->fileStream) {
+            return $this->fileStream;
+        }
+
         $mode = ($allowWriting) ? "a+" : "r";
 
         $this->remnantBuffer = "";
         $this->fileStream = fopen($this->filePath, $mode);
         $this->writable = $allowWriting;
+
         return $this->fileStream;
     }
 
@@ -305,10 +326,6 @@ class CsvStream extends DataStream
         }
 
         $this->writeItem($itemData, $allCells);
-    }
-
-    public function prependUTF8BOM($prepend) {
-        $this->forceUTF8 = $prepend;
     }
 
     private function writeItem($itemData, $allCells = false)
@@ -361,6 +378,13 @@ class CsvStream extends DataStream
         fwrite($this->fileStream, "\n" . implode($this->delimiter, $enclosedData));
     }
 
+    private $lastItemLength = 0;
+
+    public function getLastItemLength()
+    {
+        return $this->lastItemLength;
+    }
+
     private function writeHeaders()
     {
         $this->open(true);
@@ -381,9 +405,8 @@ class CsvStream extends DataStream
             }
         }
 
-        if ($this->forceUTF8) {
-            fwrite($this->fileStream, chr(0xEF).chr(0xBB).chr(0xBF));
-        }
         fwrite($this->fileStream, implode($this->delimiter, $enclosedData));
+
+        $this->needToWriteHeaders = false;
     }
 }
