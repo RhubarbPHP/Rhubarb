@@ -30,19 +30,28 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
 {
     const INVALID_DATE = "0000-01-01 00:00:00";
 
+    private $isValid = true;
+
     public function __construct($dateValue = '', DateTimeZone $timezone = null)
     {
         if ($dateValue instanceof \DateTime) {
             $formattedDate = $dateValue->format("Y-m-d H:i:s");
 
             if ($formattedDate == "" || $formattedDate == self::INVALID_DATE) {
+                $this->isValid = false;
                 parent::__construct(self::INVALID_DATE, $timezone);
             } else {
                 parent::__construct("now");
 
                 $this->setTimezone($dateValue->getTimezone());
                 $this->setDate($dateValue->format("Y"), $dateValue->format("m"), $dateValue->format("d"));
-                $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"));
+
+                if (PHP_VERSION_ID >= 70100) {
+                    $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"),
+                        $dateValue->format("u"));
+                } else {
+                    $this->setTime($dateValue->format("H"), $dateValue->format("i"), $dateValue->format("s"));
+                }
 
                 if ($timezone !== null) {
                     $this->setTimezone($timezone);
@@ -52,7 +61,8 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
             parent::__construct("now", $timezone);
             $this->setTimestamp($dateValue);
         } else {
-            if ($dateValue == "" || $dateValue == "0000-00-00 00:00:00" || $dateValue == "0000-00-00") {
+            if ($dateValue == "" || $dateValue == "0000-00-00 00:00:00" || $dateValue == "0000-00-00" || $dateValue == RhubarbDateTime::INVALID_DATE) {
+                $this->isValid = false;
                 parent::__construct(self::INVALID_DATE, $timezone);
                 return;
             }
@@ -60,6 +70,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
             try {
                 parent::__construct($dateValue, $timezone);
             } catch (\Exception $er) {
+                $this->isValid = false;
                 parent::__construct(self::INVALID_DATE, $timezone);
                 return;
             }
@@ -75,7 +86,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
 
     public function isValidDateTime()
     {
-        return (parent::format("Y-m-d H:i:s") != self::INVALID_DATE);
+        return $this->isValid;
     }
 
     public function format($format)
