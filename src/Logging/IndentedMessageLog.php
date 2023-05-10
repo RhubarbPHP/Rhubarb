@@ -45,5 +45,5 @@ abstract class IndentedMessageLog extends Log
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    abstract protected function writeFormattedEntry($level, $message, $category = "", $additionalData);
+    abstract protected function writeFormattedEntry($level, $message, $category, $additionalData);
 }

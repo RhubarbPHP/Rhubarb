@@ -35,7 +35,7 @@ class PhpLog extends IndentedMessageLog
      *                                  logs (e.g. an API log might understand what AuthenticationToken means)
      * @return mixed
      */
-    protected function writeFormattedEntry($level, $message, $category = "", $additionalData)
+    protected function writeFormattedEntry($level, $message, $category, $additionalData)
     {
         $ip = self::getRemoteIP();
         $category = ($category == "") ? "CORE" : $category;
