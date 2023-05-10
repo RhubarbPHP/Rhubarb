@@ -94,7 +94,7 @@ class SimpleXmlTranscoder
      *
      * @return \DOMElement
      */
-    private static function createTypeElement(\DOMDocument $document, $parentElement = null, $type)
+    private static function createTypeElement(\DOMDocument $document, $parentElement, $type)
     {
         if ($parentElement->parentNode === null) {
             $typeElement = $document->createElementNS(
