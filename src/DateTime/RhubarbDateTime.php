@@ -1,19 +1,19 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
+/**
+ * Copyright (c) 2016 RhubarbPHP.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 namespace Rhubarb\Crown\DateTime;
@@ -77,6 +77,12 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         }
     }
 
+    public function setDate($year, $month, $day)
+    {
+        $this->isValid = $year > 0;
+        return parent::setDate($year, $month, $day);
+    }
+
     public function diff($datetime2, $absolute = false)
     {
         $interval = parent::diff($datetime2, $absolute);
@@ -98,13 +104,17 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         return parent::format($format);
     }
 
-    function __toString()
+    public function __toString()
     {
         return $this->format("d-M-Y");
     }
 
     public function jsonSerialize()
     {
+        if (!$this->isValidDateTime()) {
+            return null;
+        }
+
         return $this->format(DateTime::ISO8601);
     }
 
@@ -114,7 +124,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      * This is often used as a handle on the week commencing date
      *
      * @param RhubarbDateTime $referenceDate The date to find the previous Monday of. Today if null.
-     * @return RhubarbDate
+     * @return RhubarbDateTime
      */
     public static function previousMonday($referenceDate = null)
     {
@@ -122,12 +132,9 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
             $referenceDate = new RhubarbDateTime("today");
         }
 
-        $dow = $referenceDate->format("N");
-        $dow--;
+        $dayOfWeek = $referenceDate->format("N") - 1;
 
-        $dow = -$dow;
-
-        $referenceDate->modify($dow . " days");
+        $referenceDate->modify(-$dayOfWeek . " days");
 
         return $referenceDate;
     }
@@ -137,7 +144,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      *
      * @param string $format Format accepted by date().
      * @param string $time String representing the time.
-     * @param \DateTimeZone $timezone A DateTimeZone object representing the desired time zone.
+     * @param $timezone A DateTimeZone object representing the desired time zone.
      *
      * @return RhubarbDateTime
      */
