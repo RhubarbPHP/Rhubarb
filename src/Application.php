@@ -249,10 +249,10 @@ class Application extends Module
             $bPriority = $b->getPriority();
 
             if ($aPriority == $bPriority) {
-                return ($a->getCreationOrder() > $b->getCreationOrder());
+                return ($a->getCreationOrder() - $b->getCreationOrder());
             }
 
-            return ($aPriority <= $bPriority);
+            return ($aPriority - $bPriority);
         });
 
         return $filteredHandlers;
