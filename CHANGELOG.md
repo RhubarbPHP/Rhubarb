@@ -2,7 +2,10 @@
 
 ### 1.7.7
 * Fixed: More deprecated required parameter follows optional parameter warnings
-* 
+
+### v1.7.6
+* Fixed: Made uasort() php8 compatible
+
 ### 1.7.6
 
 * Fixed: Deprecated required parameter follows optional parameter warnings
