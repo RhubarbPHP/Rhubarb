@@ -35,7 +35,7 @@ abstract class AbstractRhubarbDate extends RhubarbDateTime
         parent::__construct($dateWithOutTime, $timezone);
     }
 
-    public static function createFromFormat($format, $time, $timezone = null)
+    public static function createFromFormat($format, $time, DateTimeZone $timezone = null)
     {
         $date = parent::createFromFormat($format, $time, $timezone);
         return new RhubarbDate($date);
@@ -45,7 +45,7 @@ abstract class AbstractRhubarbDate extends RhubarbDateTime
 if (PHP_VERSION_ID >= 70100) {
     class RhubarbDate extends AbstractRhubarbDate
     {
-        public function setTime($hour, $minute, $second = 0, $microseconds = 0)
+        public function setTime($hour, $minute, $second = 0, $microsecond = 0)
         {
             return parent::setTime(0, 0, 0, 0);
         }
@@ -53,7 +53,7 @@ if (PHP_VERSION_ID >= 70100) {
 } else {
     class RhubarbDate extends AbstractRhubarbDate
     {
-        public function setTime($hour, $minute, $second = 0)
+        public function setTime($hour, $minute, $second = 0, $microsecond = 0)
         {
             return parent::setTime(0, 0, 0);
         }
