@@ -4,6 +4,7 @@
 * Fixed: More deprecated required parameter follows optional parameter warnings
 * 
 ### 1.7.6
+
 * Fixed: Deprecated required parameter follows optional parameter warnings
 
 ### 1.7.5
