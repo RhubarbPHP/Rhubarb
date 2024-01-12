@@ -77,13 +77,13 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         }
     }
 
-    public function setDate($year, $month, $day)
+    public function setDate(int $year, int $month, int $day)
     {
         $this->isValid = $year > 0;
         return parent::setDate($year, $month, $day);
     }
 
-    public function diff($datetime2, $absolute = false)
+    public function diff(DateTimeInterface $datetime2, bool $absolute = false)
     {
         $interval = parent::diff($datetime2, $absolute);
 
@@ -95,7 +95,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         return $this->isValid;
     }
 
-    public function format($format)
+    public function format(string $format)
     {
         if (!$this->isValidDateTime()) {
             return "";
@@ -109,7 +109,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         return $this->format("d-M-Y");
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         if (!$this->isValidDateTime()) {
             return null;
@@ -148,7 +148,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      *
      * @return RhubarbDateTime
      */
-    public static function createFromFormat($format, $time, $timezone = null)
+    public static function createFromFormat(string $format, string $time, DateTimeZone $timezone = null)
     {
         if ($timezone == null) {
             $dateTime = DateTime::createFromFormat($format, $time);
