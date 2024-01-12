@@ -33,7 +33,7 @@ abstract class AbstractRhubarbDate extends RhubarbDateTime
         parent::__construct($this->format('Y-m-d 00:00:00'), $timezone);
     }
 
-    public static function createFromFormat($format, $time, DateTimeZone $timezone = null): \DateTime|false
+    public static function createFromFormat($format, $time, DateTimeZone $timezone = null): \DateTime
     {
         $date = parent::createFromFormat($format, $time, $timezone);
         return new RhubarbDate($date);

@@ -150,7 +150,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      *
      * @return RhubarbDateTime
      */
-    public static function createFromFormat($format, $time, DateTimeZone $timezone = null): DateTime|false
+    public static function createFromFormat($format, $time, DateTimeZone $timezone = null): DateTime
     {
         if ($timezone == null) {
             $dateTime = DateTime::createFromFormat($format, $time);
