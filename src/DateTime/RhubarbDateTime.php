@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Crown\DateTime;
 
+use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
@@ -84,7 +85,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
         return parent::setDate($year, $month, $day);
     }
 
-    public function diff(DateTimeInterface $datetime2, bool $absolute = false)
+    public function diff(DateTimeInterface $datetime2, bool $absolute = false): DateInterval
     {
         $interval = parent::diff($datetime2, $absolute);
 
