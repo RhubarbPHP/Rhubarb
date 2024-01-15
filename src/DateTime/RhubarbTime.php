@@ -19,6 +19,7 @@
 namespace Rhubarb\Crown\DateTime;
 
 use DateTimeZone;
+use DateTime;
 
 /**
  * Models a time, and always sets the date to be the same.
@@ -45,7 +46,7 @@ class RhubarbTime extends RhubarbDateTime
      *
      * @return \DateTime
      */
-    public function setDate($year, $month, $day)
+    public function setDate($year, $month, $day): DateTime
     {
         return parent::setDate(self::$yearMustAlwaysBe, self::$monthMustAlwaysBe, self::$dayMustAlwaysBe);
     }
