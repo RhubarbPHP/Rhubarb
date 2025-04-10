@@ -72,7 +72,7 @@ class WebRequest extends Request
 
         $this->Host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
         $this->URI = isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : '';
-        $this->UrlPath = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+        $this->UrlPath = filter_var(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 
     /**
