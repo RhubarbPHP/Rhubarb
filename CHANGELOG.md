@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.11
+
+* Updated: Remove the return at the end of the setUp() method.
+
 ### 1.7.10
 
 * Updated: setUp() and tearDown() with return type declarations for PHPUnit 9.x compatability.
