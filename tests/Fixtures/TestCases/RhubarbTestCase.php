@@ -41,7 +41,7 @@ class RhubarbTestCase extends Unit
      */
     protected $application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // This shim bridges support between codeception and phpstorm.
         $meta = $this->getMetadata();
@@ -62,7 +62,7 @@ class RhubarbTestCase extends Unit
         return parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
     }
 }
