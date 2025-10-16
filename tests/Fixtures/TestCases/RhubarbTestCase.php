@@ -59,7 +59,7 @@ class RhubarbTestCase extends Unit
 
         ExceptionHandler::disableExceptionTrapping();
 
-        return parent::setUp();
+        parent::setUp();
     }
 
     protected function tearDown() : void
