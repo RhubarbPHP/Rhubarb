@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.10
+
+* Updated: setUp() and tearDown() with return type declarations for PHPUnit 9.x compatability.
+
 ### 1.7.9
 
 * Updated: setCookie() function in HttpResponse.php to allow for the SameSite attribute to be set with new php 
