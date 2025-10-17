@@ -1,5 +1,10 @@
 # Change log
 
+### 1.7.12
+
+* Removed: Code for compatibility with running PHPUnit tests with PHPstorm. This caused issues with 
+            running tests in other environments Eg pipeline jobs.
+
 ### 1.7.11
 
 * Updated: Remove the return at the end of the setUp() method.
