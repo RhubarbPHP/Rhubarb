@@ -29,10 +29,11 @@ use Rhubarb\Crown\Tests\Fixtures\Modules\UnitTestingModule;
  */
 class RhubarbTestCase extends Unit
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+    // Commented out as it causes errors with codeception updates.
+//    /**
+//     * @var \UnitTester
+//     */
+//    protected $tester;
 
     protected static $rolesModule;
 
@@ -43,13 +44,15 @@ class RhubarbTestCase extends Unit
 
     protected function setUp(): void
     {
+        // Commenting this out as I no longer think it is required and since a Codeception update it now throws errors
+        // when running the tests in the pipeline jobs.
         // This shim bridges support between codeception and phpstorm.
-        $meta = $this->getMetadata();
-        $meta->setServices(
-            [
-                "di" => new Di()
-            ]
-        );
+//        $meta = $this->getMetadata();
+//        $meta->setServices(
+//            [
+//                "di" => new Di()
+//            ]
+//        );
 
         $this->application = new Application();
         $this->application->unitTesting = true;
