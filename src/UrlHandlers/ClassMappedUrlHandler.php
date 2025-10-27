@@ -46,7 +46,7 @@ class ClassMappedUrlHandler extends UrlHandler
         return $object;
     }
 
-    public function generateResponseForRequest($request = null)
+    public function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         $object = $this->createHandlingClass();
 

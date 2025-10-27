@@ -83,7 +83,7 @@ class GreedyUrlHandler extends CallableUrlHandler
         return $generator;
     }
 
-    protected function generateResponseForRequest($request = null)
+    protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         if (!$this->matched){
             return false;

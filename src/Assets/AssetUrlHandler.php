@@ -76,12 +76,13 @@ class AssetUrlHandler extends UrlHandler
     /**
      * Return the response if appropriate or false if no response could be generated.
      *
-     * @param mixed $request
+     * @param null $request
+     * @param string $currentUrlFragment
      * @return bool|Response
      * @throws AssetExposureException
      * @throws StopGeneratingResponseException
      */
-    protected function generateResponseForRequest($request = null)
+    protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         try {
             if (!$this->isPermitted()) {

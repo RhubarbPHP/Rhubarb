@@ -24,7 +24,7 @@ class UrlCapturedDataUrlHandler extends ClassMappedUrlHandler
 {
     private $capturedData = null;
 
-    public function generateResponseForRequest($request = null)
+    public function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         $object = $this->createHandlingClass();
 

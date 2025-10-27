@@ -242,7 +242,7 @@ abstract class UrlHandler implements GeneratesResponseInterface
      * @param mixed $request
      * @return bool|Response
      */
-    abstract protected function generateResponseForRequest($request = null);
+    abstract protected function generateResponseForRequest($request = null, $currentUrlFragment = "");
 
     /**
      * Takes a URL fragment understood by a child handler and adds back the parents URL fragment to form a complete URL.

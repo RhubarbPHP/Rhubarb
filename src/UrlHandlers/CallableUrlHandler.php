@@ -44,9 +44,13 @@ class CallableUrlHandler extends UrlHandler
      * @param mixed $request
      * @return bool|Response
      */
-    protected function generateResponseForRequest($request = null)
+    protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         $generator = $this->createGenerator();
+
+        if ($generator === false) {
+            return false;
+        }
 
         if ($generator instanceof Response){
             return $generator;

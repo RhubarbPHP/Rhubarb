@@ -52,7 +52,7 @@ class StaticResourceUrlHandler extends UrlHandler
         }
     }
 
-    protected function generateResponseForRequest($request = false)
+    protected function generateResponseForRequest($request = null, $currentUrlFragment = "")
     {
         if ($this->staticFile !== false) {
             $response = new Response();
