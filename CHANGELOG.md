@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.13
+
+* Fixed: Method signatures for UrlHandler abstract/override method implementation
+
 ### 1.7.12
 
 * Removed: Code for compatibility with running PHPUnit tests with PHPstorm. This caused issues with 
