@@ -252,7 +252,7 @@ class Application extends Module
                 return ($a->getCreationOrder() - $b->getCreationOrder());
             }
 
-            return ($aPriority - $bPriority);
+            return ($bPriority - $aPriority);
         });
 
         return $filteredHandlers;
