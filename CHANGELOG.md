@@ -1,5 +1,9 @@
 # Change log
 
+### 1.7.14
+
+* Fixed: Swapped the order in which the UrlHandler priority is sorted. Somehow this has swapped with the PHP8 upgrade.
+
 ### 1.7.13
 
 * Fixed: Method signatures for UrlHandler abstract/override method implementation
