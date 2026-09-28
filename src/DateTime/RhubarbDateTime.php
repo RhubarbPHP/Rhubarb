@@ -34,7 +34,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
 
     private $isValid = true;
 
-    public function __construct($dateValue = '', DateTimeZone $timezone = null)
+    public function __construct($dateValue = '', ?DateTimeZone $timezone = null)
     {
         if ($dateValue instanceof \DateTime) {
             $formattedDate = $dateValue->format("Y-m-d H:i:s");
@@ -150,7 +150,7 @@ class RhubarbDateTime extends \DateTime implements \JsonSerializable
      *
      * @return RhubarbDateTime
      */
-    public static function createFromFormat($format, $time, DateTimeZone $timezone = null): DateTime
+    public static function createFromFormat($format, $time, ?DateTimeZone $timezone = null): DateTime
     {
         if ($timezone == null) {
             $dateTime = DateTime::createFromFormat($format, $time);

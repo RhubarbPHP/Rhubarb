@@ -23,7 +23,7 @@ use Rhubarb\Crown\Exceptions\RhubarbException;
 
 class LoginFailedException extends RhubarbException
 {
-    public function __construct($privateMessage = "", \Exception $previous = null)
+    public function __construct($privateMessage = "", ?\Exception $previous = null)
     {
         parent::__construct($privateMessage, $previous);
 

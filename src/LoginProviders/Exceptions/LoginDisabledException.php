@@ -20,7 +20,7 @@ namespace Rhubarb\Crown\LoginProviders\Exceptions;
 
 class LoginDisabledException extends LoginFailedException
 {
-    public function __construct($privateMessage = "", \Exception $previous = null)
+    public function __construct($privateMessage = "", ?\Exception $previous = null)
     {
         parent::__construct($privateMessage, $previous);
 

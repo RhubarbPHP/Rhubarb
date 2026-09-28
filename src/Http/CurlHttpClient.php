@@ -78,8 +78,6 @@ class CurlHttpClient extends HttpClient
 
         $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        curl_close($curl);
-
         $httpResponse = new HttpResponse();
         $httpResponse->setResponseBody($response);
         $httpResponse->setResponseCode($responseCode);

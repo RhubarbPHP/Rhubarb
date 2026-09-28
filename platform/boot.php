@@ -24,7 +24,7 @@ use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Module;
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 
 // As we preform our own exception handling we need to stop fatal errors from showing stack traces.
 ini_set("display_errors", "off");

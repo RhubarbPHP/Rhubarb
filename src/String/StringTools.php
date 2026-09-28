@@ -429,7 +429,7 @@ class StringTools
      * @param bool $openLinksInNewWindow  If $formatHashTag is not set, created links will open in new browser window
      * @return string
      */
-    public static function detectUrls($text, callable $formatLink = null, $openLinksInNewWindow = true)
+    public static function detectUrls($text, ?callable $formatLink = null, $openLinksInNewWindow = true)
     {
         if ($formatLink == null) {
             $formatLink = function ($url) use ($openLinksInNewWindow) {
@@ -461,7 +461,7 @@ class StringTools
      * @param bool $openLinksInNewWindow  If $formatHashTag is not set, created links will open in new browser window
      * @return string
      */
-    public static function detectHashTags($text, callable $formatHashTag = null, $url = '', $openLinksInNewWindow = true)
+    public static function detectHashTags($text, ?callable $formatHashTag = null, $url = '', $openLinksInNewWindow = true)
     {
         if ($formatHashTag == null) {
             $formatHashTag = function ($hashTag) use ($url, $openLinksInNewWindow) {

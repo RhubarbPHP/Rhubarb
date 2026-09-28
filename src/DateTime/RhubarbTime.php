@@ -30,7 +30,7 @@ class RhubarbTime extends RhubarbDateTime
     private static $monthMustAlwaysBe = 1;
     private static $dayMustAlwaysBe = 1;
 
-    public function __construct($dateValue = '', DateTimeZone $timezone = null)
+    public function __construct($dateValue = '', ?DateTimeZone $timezone = null)
     {
         parent::__construct($dateValue, $timezone);
 

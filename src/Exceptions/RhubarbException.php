@@ -23,7 +23,7 @@ class RhubarbException extends \Exception
     protected $publicMessage = "Sorry, something went wrong and we couldn't complete your request. The developers have
 been notified.";
 
-    public function __construct($privateMessage = "", \Exception $previous = null)
+    public function __construct($privateMessage = "", ?\Exception $previous = null)
     {
         parent::__construct($privateMessage, 0, $previous);
     }
