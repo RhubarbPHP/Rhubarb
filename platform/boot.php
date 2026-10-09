@@ -24,7 +24,10 @@ use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\Handlers\ExceptionHandler;
 use Rhubarb\Crown\Module;
 
-error_reporting(E_ALL);
+// Report everything, except that whether deprecations are reported is left to php.ini's error_reporting.
+// Deprecations raised while composer loads its "files" autoloads happen before an application can configure
+// anything, so this is the only point a server can turn them off.
+error_reporting((E_ALL & ~(E_DEPRECATED | E_USER_DEPRECATED)) | (error_reporting() & (E_DEPRECATED | E_USER_DEPRECATED)));
 
 // As we preform our own exception handling we need to stop fatal errors from showing stack traces.
 ini_set("display_errors", "off");
