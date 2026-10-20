@@ -47,7 +47,15 @@ class FileResponse extends Response
         $this->setHeader('Expires', '0');
         $this->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
         $this->setHeader('Pragma', 'public');
-        $this->setHeader('Content-Length', filesize($filePath));
+
+        // A missing file (e.g. an export with no rows, so nothing was ever written) has no size. A false header
+        // value is sent as a bare "Content-Length" line, which mod_php drops but php-fpm passes on and Apache's
+        // proxy_fcgi rejects as a malformed header - turning the empty download into a 500.
+        $size = file_exists($filePath) ? filesize($filePath) : false;
+
+        if ($size !== false) {
+            $this->setHeader('Content-Length', $size);
+        }
     }
 
     protected function printContent()
@@ -56,10 +64,12 @@ class FileResponse extends Response
             ob_end_clean();
         }
 
-        readfile($this->filePath);
+        if (file_exists($this->filePath)) {
+            readfile($this->filePath);
 
-        if ($this->deleteOnCompletion) {
-            unlink($this->filePath);
+            if ($this->deleteOnCompletion) {
+                unlink($this->filePath);
+            }
         }
     }
 }
